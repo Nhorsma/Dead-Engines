@@ -47,7 +47,7 @@ public class CameraMovement : MonoBehaviour
 
         Vector3 mpos = Input.mousePosition;
 
-        if ((mpos.x <= (Screen.width*widthRatio) || Input.GetKey(Left)) && rb.velocity.x > -speedlimit)
+            if ((mpos.x <= (Screen.width*widthRatio) || Input.GetKey(Left)) && rb.velocity.x > -speedlimit)
             {
                 //left
                 rb.AddForce(new Vector3(-camspeed, 0, 0), ForceMode.VelocityChange);
