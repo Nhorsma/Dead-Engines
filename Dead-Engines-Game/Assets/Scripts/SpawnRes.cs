@@ -128,4 +128,10 @@ public class SpawnRes : MonoBehaviour
 			}
 		}
 	}
+
+
+    public GameObject[] GetResources()
+    {
+        return new GameObject[] { res1, res2, res3 };
+    }
 }

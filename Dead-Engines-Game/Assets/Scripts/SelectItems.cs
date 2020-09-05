@@ -16,8 +16,8 @@ public class SelectItems : MonoBehaviour
     public Material selectedMaterial;
 
     [System.NonSerialized]
-    public List<GameObject> selectedUnits = new List<GameObject>();
-    public GameObject[] allUnits;
+ //   public List<GameObject> selectedUnits = new List<GameObject>();
+ //   public GameObject[] allUnits;
 
     GameObject highlightThisUnit;
 
@@ -27,19 +27,15 @@ public class SelectItems : MonoBehaviour
     Vector3 TL, TR, BL, BR;
     bool hasCreatedSquare;
 
- //   public Transform sphere1;
- //   public Transform sphere2;
-
-
-  //  public Image first, second;
-    NavMeshAgent nv;
+ //   NavMeshAgent nv;
     Vector3 clickSpot;
-    GameObject selected;
+ //   GameObject selected;
+    RaycastHit hit;
 
     private void Start()
     {
         hasCreatedSquare = false;
-        allUnits = GameObject.FindGameObjectsWithTag("Friendly");
+     //   allUnits = GameObject.FindGameObjectsWithTag("Friendly");
         selectionSquareTrans = selectionSquare.rectTransform;
         mouseSecond = mouseFirst = (Input.mousePosition);
     }
@@ -48,7 +44,7 @@ public class SelectItems : MonoBehaviour
     {
         Highlight();
         LeftClick();
-        RightClick();
+  //      RightClick();
 
     }
 
@@ -71,26 +67,17 @@ public class SelectItems : MonoBehaviour
         }
     }
 
-    void RightClick()
-    {
-        if (Input.GetMouseButtonDown(1) && selectedUnits.Count>0)
-        {
-            MoveAllSelected();   
-        }
-    }
-
 
     void Select()
     {
-        RaycastHit hit;
             if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit, 100))
             {
                 if (!hasCreatedSquare)
                 {
                     ClearAll();
-                    if (hit.collider.CompareTag("Friendly") && !selectedUnits.Contains(hit.collider.gameObject))
+                    if (hit.collider.CompareTag("Friendly") && !UnitManager.selectedUnits.Contains(hit.collider.gameObject))
                     {
-                        selectedUnits.Add(hit.collider.gameObject);
+                        UnitManager.selectedUnits.Add(hit.collider.gameObject);
                         hit.collider.gameObject.GetComponent<MeshRenderer>().material = selectedMaterial;
                     }
                 }
@@ -102,25 +89,34 @@ public class SelectItems : MonoBehaviour
             }
     }
 
-
-    void MoveAllSelected()
+    /*
+    void RightClick()
     {
-        if(selectedUnits.Count!=0)
-        for (int i = 0; i < selectedUnits.Count; i++)
+        if (Input.GetMouseButtonDown(1) && selectedUnits.Count>0)
         {
-            MoveObject(selectedUnits[i]);
+            MoveAllSelected();   
         }
     }
+*/
+    /*
+        void MoveAllSelected()
+        {
+            if(selectedUnits.Count!=0)
+            for (int i = 0; i < selectedUnits.Count; i++)
+            {
+                MoveObject(selectedUnits[i]);
+            }
+        }
 
 
-    void MoveObject(GameObject selected)
-    {
-        nv = selected.GetComponent<NavMeshAgent>();
-        RaycastHit hit;
-        if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit, 100))
-            nv.destination = hit.point;
-    }
-
+        void MoveObject(GameObject selected)
+        {
+            nv = selected.GetComponent<NavMeshAgent>();
+            RaycastHit hit;
+            if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit, 100))
+                nv.destination = hit.point;
+        }
+    */
 
     void Highlight()
     {
@@ -129,9 +125,9 @@ public class SelectItems : MonoBehaviour
         {
             //But make sure the unit we want to change material on is not selected
             bool isSelected = false;
-            for (int i = 0; i < selectedUnits.Count; i++)
+            for (int i = 0; i < UnitManager.selectedUnits.Count; i++)
             {
-                if (selectedUnits[i] == highlightThisUnit)
+                if (UnitManager.selectedUnits[i] == highlightThisUnit)
                 {
                     isSelected = true;
                     break;
@@ -146,9 +142,6 @@ public class SelectItems : MonoBehaviour
             highlightThisUnit = null;
         }
 
-        //Fire a ray from the mouse position to get the unit we want to highlight
-        RaycastHit hit;
-
         //Fire ray from camera
         if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit))
         {
@@ -160,9 +153,9 @@ public class SelectItems : MonoBehaviour
 
                 //Highlight this unit if it's not selected
                 bool isSelected = false;
-                for (int i = 0; i < selectedUnits.Count; i++)
+                for (int i = 0; i < UnitManager.selectedUnits.Count; i++)
                 {
-                    if (selectedUnits[i] == currentObj)
+                    if (UnitManager.selectedUnits[i] == currentObj)
                     {
                         isSelected = true;
                         break;
@@ -220,15 +213,15 @@ public class SelectItems : MonoBehaviour
 
     void GroupSelect()
     {
-        for (int i = 0; i < allUnits.Length; i++)
+        for (int i = 0; i < UnitManager.unitsGM.Length; i++)
         {
-            GameObject currentUnit = allUnits[i];
+            GameObject currentUnit = UnitManager.unitsGM[i];
 
             //Is this unit within the square
             if (InRect(currentUnit.transform.position))
             {
                 currentUnit.GetComponent<MeshRenderer>().material = selectedMaterial;
-                selectedUnits.Add(currentUnit);
+                UnitManager.selectedUnits.Add(currentUnit);
             }
             //Otherwise deselect the unit if it's not in the square
             else
@@ -272,11 +265,17 @@ public class SelectItems : MonoBehaviour
 
     void ClearAll()
     {
-        for(int i=0;i<selectedUnits.Count;i++)
+        for(int i=0;i< UnitManager.selectedUnits.Count;i++)
         {
-            selectedUnits[i].GetComponent<MeshRenderer>().material = normalMaterial;
+            UnitManager.selectedUnits[i].GetComponent<MeshRenderer>().material = normalMaterial;
         }
-        selectedUnits.Clear();
+        UnitManager.selectedUnits.Clear();
+    }
+
+
+    public List<GameObject> GetSelected()
+    {
+        return UnitManager.selectedUnits;
     }
 
 }
