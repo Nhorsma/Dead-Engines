@@ -8,6 +8,7 @@ public class UnitManager : MonoBehaviour
     public SelectItems si;
     public ResourceHandling rh;
     public Vector3 robotPos;
+    public float stoppingDistance;
 
     public static GameObject[] unitsGM;         //the gameobjects
     public static Unit[] units;                 //the 'unit' info attached to the gameobjects
@@ -19,16 +20,36 @@ public class UnitManager : MonoBehaviour
     {
         unitsGM = GameObject.FindGameObjectsWithTag("Friendly");
         units = new Unit[unitsGM.Length];
+        SetUpUnits();
     }
 
     void Update()
     {
         RightClick();
+        RunAllJobs();
     }
 
     //-----------------------------------------------------------------------------------------
     //-----------------------------------------------------------------------------------------
 
+
+    void SetUpUnits()
+    {
+        for(int i=0;i<unitsGM.Length;i++)
+        {
+            unitsGM[i].GetComponent<NavMeshAgent>().stoppingDistance = stoppingDistance;
+            units[i] = new Unit();
+        }
+    }
+
+
+    RaycastHit Hit()
+    {
+        RaycastHit hit;
+        if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit, 100))
+            return hit;
+        return hit;
+    }
 
     void RightClick()
     {
@@ -39,7 +60,16 @@ public class UnitManager : MonoBehaviour
              * then units must move back and forth from those deposits, when they reach it they must
              * deplete the deposit's quantity by one per trip, deposits are in the ResrouceHandler class
              * something like "find ID of deposit clicked, unit starts couroutine until depleted, etc)
-             */ 
+             */
+
+
+            //right click on anything that has units do a job
+            if (Hit().collider.gameObject.tag == "Metal" ||
+                Hit().collider.gameObject.tag == "Electronics" ||
+                Hit().collider.gameObject.tag == "Enemy")
+                SetJobOfSelected();
+            else
+                MoveAllSelected();
 
         }
     }
@@ -59,34 +89,72 @@ public class UnitManager : MonoBehaviour
         nv.destination = Hit().point;
     }
 
-
-    RaycastHit Hit()
+    void RunAllJobs()
     {
-        RaycastHit hit;
-        if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit, 100))
-            return hit;
-        return hit;
+        foreach (Unit unit in units)
+        {
+            if (!unit.GetJob().Equals("none"))
+            {
+                if(!unit.GetJob().Equals("Combat"))
+                {
+                    Extraction(GetUnitID(unit), GetResourceID(unit.GetJobPos()),unit.GetJob());
+                }
+                Combat();
+            }
+        }
     }
-
 
     void SetJobOfSelected()
     {
         GameObject thing = Hit().collider.gameObject;
-        if (thing.tag=="Metal")
+        if (thing.tag == "Metal" ||
+            thing.tag == "Electronics")
         {
-            //extract resource
-            int i = rh.GetNumber(thing);
-            
-            //this is not finished, I am having a brain fart and will
-            //come back to it to finish assigning jobs
+            int ri = GetResourceID(thing);
+            foreach (GameObject unit in selectedUnits)
+            {
+                int ui = GetUnitID(unit);
+                units[ui].SetJob("Extraction");
+                units[ui].SetJobPos(thing);
+                TravelTo(unitsGM[ui].GetComponent<NavMeshAgent>(), rh.resDeposits[ri].transform.position);
+            }
         }
-        
+        else if(thing.tag == "Enemy")
+        {
+            int ri = GetResourceID(thing);
+            foreach (GameObject unit in selectedUnits)
+            {
+                int ui = GetUnitID(unit);
+                units[ui].SetJob("Combat");
+                units[ui].SetJobPos(thing);
+            }
+        }
     }
 
-    int GetID(GameObject gm)
+    int GetResourceID(GameObject gm)
     {
         int i = 0;
-        while(i<unitsGM.Length && !unitsGM[i].Equals(gm))
+        while(i<rh.resDeposits.Length && !rh.resDeposits[i].Equals(gm))
+        {
+            i++;
+        }
+        return i;
+    }
+
+    int GetUnitID(GameObject gm)
+    {
+        int i = 0;
+        while (i < unitsGM.Length && !unitsGM[i].Equals(gm))
+        {
+            i++;
+        }
+        return i;
+    }
+
+    int GetUnitID(Unit gm)
+    {
+        int i = 0;
+        while (i < units.Length && !units[i].Equals(gm))
         {
             i++;
         }
@@ -94,28 +162,52 @@ public class UnitManager : MonoBehaviour
     }
 
 
-/*
-    public GameObject SelectedDeposit()
+    void Extraction(int ui, int ri, string resource)
     {
-        return Hit().collider.gameObject;
+        Vector3 depPos = rh.resDeposits[ri].transform.position;
+        Vector3 uPos = unitsGM[ui].transform.position;
+
+        //TravelTo(unitsGM[ui].GetComponent<NavMeshAgent>(), rh.resDeposits[ri].transform.position);
+        if (unitsGM[ui].GetComponent<NavMeshAgent>().speed<=0.1f 
+            && Mathf.Abs(uPos.x - depPos.x) < Mathf.Abs(uPos.x - robotPos.x)
+            && Mathf.Abs(uPos.y - depPos.y) < Mathf.Abs(uPos.y - robotPos.y))
+        {
+            Extract(ri);
+            TravelTo(unitsGM[ui].GetComponent<NavMeshAgent>(), robotPos);
+        }
+        else if(unitsGM[ui].GetComponent<NavMeshAgent>().speed <= 0.1f)
+        {
+            if (resource == "Metal")
+                AddMetal();
+            else if (resource == "Electronics")
+                AddElectronics();
+            TravelTo(unitsGM[ui].GetComponent<NavMeshAgent>(), rh.resDeposits[ri].transform.position);
+        }
     }
 
-    public void Extract(GameObject dep)
+    void Combat()
     {
-        rh.Extract(dep);
+        //To be Implemented
     }
 
-    GameObject[] GetSelected()
+    void TravelTo(NavMeshAgent a, Vector3 place)
     {
-        return selectedUnits.ToArray();
+        a.SetDestination(place);
     }
 
-    void StartResourceCollection(GameObject[] selected, GameObject dep)
+    void Extract(int id)
     {
-        Vector3 depPos = dep.transform.position;
-        
-        //set back-and-forth movement of selected units
+        rh.resQuantities[id] -= 1;
     }
-    */
+    
+    void AddMetal()
+    {
+        ResourceHandling.metal++;
+    }
+
+    void AddElectronics()
+    {
+        ResourceHandling.electronics++;
+    }
 
 }

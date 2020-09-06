@@ -8,32 +8,28 @@ public class ResourceHandling : MonoBehaviour
     public static int electronics;
     public int startQuantity;
 
-    GameObject[] selected;
-    GameObject[] resDeposits;
-    int[] resQuantities;
+    public GameObject[] resDeposits;
+    public int[] resQuantities;
     public SpawnRes spawn;
 
     void Start()
     {
-        resDeposits = spawn.GetResources();
+        resDeposits = new GameObject[spawn.GetResources().Length];
         resQuantities = new int[resDeposits.Length];
-        StartQuantities();
-    }
-
-    void Update()
-    {
-        
+        SetUpResources();
     }
 
     //-----------------------------------------------------------------------------------------
     //-----------------------------------------------------------------------------------------
 
-    void StartQuantities()
+    void SetUpResources()
     {
         for (int i = 0; i < resQuantities.Length; i++)
         {
             resQuantities[i] = startQuantity;
+            
         }
+        resDeposits = spawn.GetResources();
     }
 
     void UpdateQuantities(GameObject deposit)

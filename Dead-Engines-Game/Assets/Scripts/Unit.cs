@@ -5,14 +5,14 @@ using UnityEngine;
 public class Unit : MonoBehaviour
 {
     private string job;
+    private GameObject posOfJob;
     private int health;
-    private bool selected;
 
     public Unit()
     {
-        job = "";
+        job = "none";
+        posOfJob = null;
         health = 3;
-        selected = false;
     }
 
     public string GetJob()
@@ -33,6 +33,16 @@ public class Unit : MonoBehaviour
     public void SetHealth(int newhealth)
     {
         health = newhealth;
+    }
+
+     public GameObject GetJobPos()
+    {
+        return posOfJob;
+    }
+
+    public void SetJobPos(GameObject pos)
+    {
+        posOfJob = pos;
     }
 
 }

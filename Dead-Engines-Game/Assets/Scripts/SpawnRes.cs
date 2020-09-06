@@ -14,7 +14,7 @@ public class SpawnRes : MonoBehaviour
 	public Transform t_res1, t_res2, t_res3;			// transforms used to calculate the above distances
 	public int howMany;									// how many enemies to spawn
 
-    void Start()
+    void Awake()
     {
 		// must call in order else null reference
 		SpawnResource(1);
