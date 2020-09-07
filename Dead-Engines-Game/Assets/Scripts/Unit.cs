@@ -7,12 +7,14 @@ public class Unit : MonoBehaviour
     private string job;
     private GameObject posOfJob;
     private int health;
+    private bool justDroppedOff;
 
     public Unit()
     {
         job = "none";
         posOfJob = null;
         health = 3;
+        justDroppedOff = false;
     }
 
     public string GetJob()
@@ -43,6 +45,16 @@ public class Unit : MonoBehaviour
     public void SetJobPos(GameObject pos)
     {
         posOfJob = pos;
+    }
+
+    public bool GetDroppedOff()
+    {
+        return justDroppedOff;
+    }
+
+    public void SetDroppedOff(bool b)
+    {
+        justDroppedOff = b;
     }
 
 }

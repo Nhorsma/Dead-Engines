@@ -7,6 +7,7 @@ public class SpawnRes : MonoBehaviour
 {
 
 	public GameObject res1, res2, res3, enemy;			// resource + enemy game objects (prefabs)
+    public GameObject r1, r2, r3;                       // the clones/instanciations of the resources (to be returned)
 	public Transform startPos;							// where the robot body is located
 	public int s_maxDistance, s_minDistance;			// max/min distance from the start position
 	public int r_maxDistance, r_minDistance;			// max/min distance from an unspecified resource
@@ -48,8 +49,8 @@ public class SpawnRes : MonoBehaviour
 				x = Random.Range(-4, 5);
 				z = Random.Range(-4, 5);
 			} while (Vector3.Distance(new Vector3(x, 0, z), startPos.position) >= s_maxDistance || Vector3.Distance(new Vector3(x, 0, z), startPos.position) <= s_minDistance);
-			Debug.Log("Spawned res1");
-			var r1 = Instantiate(res1, new Vector3(x, -.025f, z), Quaternion.identity);
+		//	Debug.Log("Spawned res1");
+			r1 = Instantiate(res1, new Vector3(x, -.025f, z), Quaternion.identity);
 			t_res1 = r1.transform;
 		}
 		if (resNum == 2)
@@ -60,8 +61,8 @@ public class SpawnRes : MonoBehaviour
 				z = Random.Range(-4, 5);
 			} while (Vector3.Distance(new Vector3(x, 0, z), startPos.position) >= s_maxDistance || Vector3.Distance(new Vector3(x, 0, z), startPos.position) <= s_minDistance 
 				|| Vector3.Distance(new Vector3(x, 0, z), t_res1.position) >= r_maxDistance || Vector3.Distance(new Vector3(x, 0, z), t_res1.position) <= r_minDistance);
-			Debug.Log("Spawned res2");
-			var r2 = Instantiate(res2, new Vector3(x, -.025f, z), Quaternion.identity);
+		//	Debug.Log("Spawned res2");
+			r2 = Instantiate(res2, new Vector3(x, -.025f, z), Quaternion.identity);
 			t_res2 = r2.transform;
 		}
 		if (resNum == 3)
@@ -73,8 +74,8 @@ public class SpawnRes : MonoBehaviour
 			} while (Vector3.Distance(new Vector3(x, 0, z), startPos.position) >= s_maxDistance || Vector3.Distance(new Vector3(x, 0, z), startPos.position) <= s_minDistance 
 				|| Vector3.Distance(new Vector3(x, 0, z), t_res1.position) >= r_maxDistance || Vector3.Distance(new Vector3(x, 0, z), t_res1.position) <= r_minDistance 
 				|| Vector3.Distance(new Vector3(x, 0, z), t_res2.position) >= r_maxDistance || Vector3.Distance(new Vector3(x, 0, z), t_res2.position) <= r_minDistance);
-			Debug.Log("Spawned res3");
-			var r3 = Instantiate(res3, new Vector3(x, -.025f, z), Quaternion.identity);
+		//	Debug.Log("Spawned res3");
+			r3 = Instantiate(res3, new Vector3(x, -.025f, z), Quaternion.identity);
 			t_res3 = r3.transform;
 		}
 		else return;
@@ -99,7 +100,7 @@ public class SpawnRes : MonoBehaviour
 				} while (Vector3.Distance(new Vector3(x, 0, z), startPos.position) >= s_maxDistance || Vector3.Distance(new Vector3(x, 0, z), startPos.position) <= s_minDistance
 				|| Vector3.Distance(new Vector3(x, 0, z), t_res1.position) >= e_maxDistance || Vector3.Distance(new Vector3(x, 0, z), t_res1.position) <= e_minDistance
 				);
-				Debug.Log("Spawned enemy");
+			//	Debug.Log("Spawned enemy");
 				var e = Instantiate(enemy, new Vector3(x, -.025f, z), Quaternion.identity);
 			}
 			if (i == 1)
@@ -111,7 +112,7 @@ public class SpawnRes : MonoBehaviour
 				} while (Vector3.Distance(new Vector3(x, 0, z), startPos.position) >= s_maxDistance || Vector3.Distance(new Vector3(x, 0, z), startPos.position) <= s_minDistance
 				|| Vector3.Distance(new Vector3(x, 0, z), t_res2.position) >= e_maxDistance || Vector3.Distance(new Vector3(x, 0, z), t_res2.position) <= e_minDistance
 				);
-				Debug.Log("Spawned enemy");
+			//	Debug.Log("Spawned enemy");
 				var e = Instantiate(enemy, new Vector3(x, -.025f, z), Quaternion.identity);
 			}
 			if (i == 2)
@@ -123,7 +124,7 @@ public class SpawnRes : MonoBehaviour
 				} while (Vector3.Distance(new Vector3(x, 0, z), startPos.position) >= s_maxDistance || Vector3.Distance(new Vector3(x, 0, z), startPos.position) <= s_minDistance
 				|| Vector3.Distance(new Vector3(x, 0, z), t_res3.position) >= e_maxDistance || Vector3.Distance(new Vector3(x, 0, z), t_res3.position) <= e_minDistance
 				);
-				Debug.Log("Spawned enemy");
+			//	Debug.Log("Spawned enemy");
 				var e = Instantiate(enemy, new Vector3(x, -.025f, z), Quaternion.identity);
 			}
 		}
@@ -132,6 +133,6 @@ public class SpawnRes : MonoBehaviour
 
     public GameObject[] GetResources()
     {
-        return new GameObject[] { res1, res2, res3 };
+        return new GameObject[] { r1, r2, r3 };
     }
 }
