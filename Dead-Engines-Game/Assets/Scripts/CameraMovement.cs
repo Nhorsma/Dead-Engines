@@ -5,8 +5,9 @@ using UnityEngine;
 public class CameraMovement : MonoBehaviour
 {
     public Camera maincam;
-    public float scrollspeed, closestScroll, furthestScroll, camspeed;
+    public float scrollspeed, closestScroll, furthestScroll, camspeed, startSpeed, endSpeed;
     public float heightRatio, widthRatio;
+    private float speedMulti;
 
     /*
      * Attach to Main Camera
@@ -28,13 +29,13 @@ public class CameraMovement : MonoBehaviour
 
     private void Start()
     {
+        speedMulti = startSpeed;
         rb = GetComponent<Rigidbody>();
         DefaultKeys();
     }
 
     void Update()
     {
-        DetermineSpeedLimit();
         MouseCameraMovement();
         Scroll();
 
@@ -42,39 +43,53 @@ public class CameraMovement : MonoBehaviour
     }
 
     void MouseCameraMovement()
-    { 
+    {
         //In this method, I've implemented skeleton code for when we can do key-binding
-
+        DetermineSpeedLimit();
         Vector3 mpos = Input.mousePosition;
 
             if ((mpos.x <= (Screen.width*widthRatio) || Input.GetKey(Left)) && rb.velocity.x > -speedlimit)
             {
-                //left
-                rb.AddForce(new Vector3(-camspeed, 0, 0), ForceMode.VelocityChange);
+            //left
+            StartCoroutine(IncreaseCamSpeed());
+            rb.AddForce(new Vector3(-camspeed, 0, 0), ForceMode.VelocityChange);
             }
             else if ((mpos.x >= Screen.width-(Screen.width*widthRatio) || Input.GetKey(Right)) && rb.velocity.x < speedlimit)
             {
-                //right
-                rb.AddForce(new Vector3(camspeed, 0, 0), ForceMode.VelocityChange);
+            //right
+            StartCoroutine(IncreaseCamSpeed());
+            rb.AddForce(new Vector3(camspeed, 0, 0), ForceMode.VelocityChange);
             }
             else
             {
                 rb.AddForce(new Vector3(-rb.velocity.x*5f, 0, 0), ForceMode.Acceleration);
+            if (rb.velocity == new Vector3(0, 0, 0))
+            {
+                StopCoroutine(IncreaseCamSpeed());
+                speedMulti = startSpeed;
             }
+        }
 
         if ((mpos.y <= (Screen.height*heightRatio) || Input.GetKey(Down)) && rb.velocity.z > -speedlimit)
         {
             //down
+            StartCoroutine(IncreaseCamSpeed());
             rb.AddForce(new Vector3(0, 0, -camspeed), ForceMode.VelocityChange);
         }
         else if ((mpos.y >= Screen.height - (Screen.height*heightRatio) || Input.GetKey(Up)) && rb.velocity.z < speedlimit)
         {
             //up
+            StartCoroutine(IncreaseCamSpeed());
             rb.AddForce(new Vector3(0, 0, camspeed), ForceMode.VelocityChange);
         }
         else
         {
             rb.AddForce(new Vector3(0, 0, -rb.velocity.z * 5f), ForceMode.Acceleration);
+            if (rb.velocity == new Vector3(0, 0, 0))
+            {
+                StopCoroutine(IncreaseCamSpeed());
+                speedMulti = startSpeed;
+            }
         }
     }
 
@@ -103,10 +118,16 @@ public class CameraMovement : MonoBehaviour
 
     void DetermineSpeedLimit()
     {
-        speedlimit = pos.y + 5f;
+        speedlimit = pos.y + speedMulti;
         scrolllimit = pos.y / closestScroll * 10f;
     }
 
+    IEnumerator IncreaseCamSpeed()
+    {
+//        speedMulti = -1f;
+        yield return new WaitForSeconds(1.5f);
+        speedMulti = endSpeed;
+    }
 
     //overwrite this later when we add keybindings
     void DefaultKeys()
