@@ -9,15 +9,12 @@ public class SelectItems : MonoBehaviour
     public Image selectionSquare;
     RectTransform selectionSquareTrans;
     public float dragLimit;
+    public UnitManager um;
 
     //The materials
     public Material normalMaterial;
     public Material highlightMaterial;
     public Material selectedMaterial;
-
-    [System.NonSerialized]
- //   public List<GameObject> selectedUnits = new List<GameObject>();
- //   public GameObject[] allUnits;
 
     GameObject highlightThisUnit;
 
@@ -27,15 +24,13 @@ public class SelectItems : MonoBehaviour
     Vector3 TL, TR, BL, BR;
     bool hasCreatedSquare;
 
- //   NavMeshAgent nv;
     Vector3 clickSpot;
- //   GameObject selected;
     RaycastHit hit;
 
     private void Start()
     {
         hasCreatedSquare = false;
-     //   allUnits = GameObject.FindGameObjectsWithTag("Friendly");
+        um = this.gameObject.GetComponent<UnitManager>();
         selectionSquareTrans = selectionSquare.rectTransform;
         mouseSecond = mouseFirst = (Input.mousePosition);
     }
@@ -213,9 +208,9 @@ public class SelectItems : MonoBehaviour
 
     void GroupSelect()
     {
-        for (int i = 0; i < UnitManager.unitsGM.Length; i++)
+        for (int i = 0; i < um.unitsGM.Length; i++)
         {
-            GameObject currentUnit = UnitManager.unitsGM[i];
+            GameObject currentUnit = um.unitsGM[i];
 
             //Is this unit within the square
             if (InRect(currentUnit.transform.position))

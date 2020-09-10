@@ -8,6 +8,7 @@ public class Unit : MonoBehaviour
     private GameObject posOfJob;
     private int health;
     private bool justDroppedOff;
+    private int id;
 
     public Unit()
     {
@@ -15,6 +16,16 @@ public class Unit : MonoBehaviour
         posOfJob = null;
         health = 3;
         justDroppedOff = false;
+        id = -1;
+    }
+
+    public Unit(int dec)
+    {
+        job = "none";
+        posOfJob = null;
+        health = 3;
+        justDroppedOff = false;
+        id = dec;
     }
 
     public string GetJob()
@@ -55,6 +66,16 @@ public class Unit : MonoBehaviour
     public void SetDroppedOff(bool b)
     {
         justDroppedOff = b;
+    }
+
+    public int ID()
+    {
+        return id;
+    }
+
+    public void Setid(int newone)
+    {
+        id = newone;
     }
 
 }

@@ -10,8 +10,8 @@ public class UnitManager : MonoBehaviour
     public Vector3 robotPos;
     public float stoppingDistance;
 
-    public static GameObject[] unitsGM;         //the gameobjects
-    public static Unit[] units;                 //the 'unit' info attached to the gameobjects
+    public GameObject[] unitsGM;         //the gameobjects
+    public Unit[] units;                 //the 'unit' info attached to the gameobjects
     [System.NonSerialized]
     public static List<GameObject> selectedUnits = new List<GameObject>();
     NavMeshAgent nv;
@@ -37,8 +37,7 @@ public class UnitManager : MonoBehaviour
     {
         for(int i=0;i<unitsGM.Length;i++)
         {
-         //   unitsGM[i].GetComponent<NavMeshAgent>().stoppingDistance = stoppingDistance;
-            units[i] = new Unit();
+            units[i] = new Unit(i);
         }
     }
 
@@ -106,7 +105,7 @@ public class UnitManager : MonoBehaviour
                 }
                 else if(unit.GetJob().Equals("Extraction"))
                 {
-                    Extraction(GetUnitID(unit), GetResourceID(unit.GetJobPos()), unit.GetJob());
+                    Extraction(unit, GetResourceID(unit.GetJobPos()), unit.GetJob());
                 }
             }
         }
@@ -114,30 +113,30 @@ public class UnitManager : MonoBehaviour
 
     void SetJobOfSelected(GameObject thing)
     {
-        if (thing.Equals(null))
+        if (thing==null)
             return;
 
         if (thing.tag == "Metal" ||
             thing.tag == "Electronics")
         {
             int ri = GetResourceID(thing);
-            foreach (GameObject unit in selectedUnits)
+            foreach (GameObject gm in selectedUnits)
             {
-                int ui = GetUnitID(unit);
-                units[ui].SetJob("Extraction");
-                units[ui].SetJobPos(thing);
-                units[ui].SetDroppedOff(true);
-                TravelTo(unitsGM[ui].GetComponent<NavMeshAgent>(), units[ui].GetJobPos().transform.position);
+                Unit unit = GetUnit(gm);
+                unit.SetJob("Extraction");
+                unit.SetJobPos(thing);
+                unit.SetDroppedOff(true);
+                TravelTo(unitsGM[unit.ID()].GetComponent<NavMeshAgent>(), unit.GetJobPos().transform.position);
             }
         }
         else if(thing.tag == "Enemy")
         {
             int ri = GetResourceID(thing);
-            foreach (GameObject unit in selectedUnits)
+            foreach (GameObject gm in selectedUnits)
             {
-                int ui = GetUnitID(unit);
-                units[ui].SetJob("Combat");
-                units[ui].SetJobPos(thing);
+                Unit unit = GetUnit(gm);
+                unit.SetJob("Combat");
+                unit.SetJobPos(thing);
             }
         }
     }
@@ -146,59 +145,53 @@ public class UnitManager : MonoBehaviour
     {
         for(int i=0;i<rh.resDeposits.Length;i++)
         {
-            if (rh.resDeposits[i].Equals(gm))
+            if (rh.resDeposits[i]==gm)
                 return i;
         }
         return -1;
     }
 
-    int GetUnitID(GameObject gm)
-    {
-        int i = 0;
-        while (i < unitsGM.Length && !unitsGM[i].Equals(gm))
-        {
-            i++;
-        }
-        return i;
+    GameObject GetUnitObject(Unit unit)
+    { 
+        return unitsGM[unit.ID()];
     }
 
-    int GetUnitID(Unit gm)
+    Unit GetUnit(GameObject gm)
     {
-        int i = 0;
-        while (i < units.Length && !units[i].Equals(gm))
+        for (int i = 0; i < unitsGM.Length; i++)
         {
-            i++;
+            if (unitsGM[i]==gm)
+                return units[i];
         }
-        return i;
+        return null;
     }
 
 
-    void Extraction(int ui, int ri, string resource)
+    void Extraction(Unit unit, int ri, string resource)
     {
-        if (units[ui].GetJobPos().Equals(null))
+        if (unit.GetJobPos()==null)
             return;
 
+        GameObject gm = GetUnitObject(unit);
         Vector3 depPos = rh.resDeposits[ri].transform.position;
-        Vector3 uPos = unitsGM[ui].transform.position;
+        Vector3 uPos = gm.transform.position;
 
-        Debug.Log("job: " + units[ui].GetJobPos());
-        Debug.Log("jobpos: " + units[ui].GetJobPos().transform.position);
-        if (Vector3.Distance(unitsGM[ui].transform.position,units[ui].GetJobPos().transform.position)<3f
-            && units[ui].GetDroppedOff())
+        if (Vector3.Distance(gm.transform.position, unit.GetJobPos().transform.position)<3f
+            && unit.GetDroppedOff())
         {
             Extract(ri);
-            units[ui].SetDroppedOff(false);
-            TravelTo(unitsGM[ui].GetComponent<NavMeshAgent>(), robotPos);
+            unit.SetDroppedOff(false);
+            TravelTo(gm.GetComponent<NavMeshAgent>(), robotPos);
         }
-        else if(Vector3.Distance(unitsGM[ui].transform.position, robotPos) < 3f && !units[ui].GetDroppedOff())
+        else if(Vector3.Distance(gm.transform.position, robotPos) < 3f && !unit.GetDroppedOff())
         {
             if (resource == "Metal")
                 AddMetal();
             else if (resource == "Electronics")
                 AddElectronics();
 
-            units[ui].SetDroppedOff(true);
-            TravelTo(unitsGM[ui].GetComponent<NavMeshAgent>(), units[ui].GetJobPos().transform.position);
+            unit.SetDroppedOff(true);
+            TravelTo(gm.GetComponent<NavMeshAgent>(), unit.GetJobPos().transform.position);
         }
     }
 
