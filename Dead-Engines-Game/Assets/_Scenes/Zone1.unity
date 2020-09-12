@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 2138677392}
-  m_IndirectSpecularColor: {r: 0.28502667, g: 0.3713932, b: 0.49600998, a: 1}
+  m_IndirectSpecularColor: {r: 0.28502697, g: 0.37139347, b: 0.49601266, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -320,7 +320,7 @@ MonoBehaviour:
   res1: {fileID: 5843277777104625251, guid: d4b0a7922f6d12043bd2d214c5eeda0f, type: 3}
   res2: {fileID: 6625301941321825569, guid: babc57232b4ad00408ed5e64c5faf108, type: 3}
   res3: {fileID: 6918073762920412359, guid: 8ac11d87adbfa564391425271f158bc9, type: 3}
-  enemy: {fileID: 0}
+  enemy: {fileID: 3095501986510504359, guid: 67d77ea79edff4841a2a9aa6009a82bd, type: 3}
   r1: {fileID: 0}
   r2: {fileID: 0}
   r3: {fileID: 0}
@@ -334,7 +334,7 @@ MonoBehaviour:
   t_res1: {fileID: 1966065398}
   t_res2: {fileID: 495966466}
   t_res3: {fileID: 0}
-  howMany: 0
+  howMany: 2
 --- !u!114 &128660100
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -349,6 +349,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   selectionSquare: {fileID: 686704900}
   dragLimit: 0
+  um: {fileID: 0}
   normalMaterial: {fileID: 2100000, guid: 80d99d111da86da41951967e4aad5f9e, type: 2}
   highlightMaterial: {fileID: 2100000, guid: 95ccc95e68534fa4b92d3c0d16d17b2a, type: 2}
   selectedMaterial: {fileID: 2100000, guid: 64d79bbb5de2c4740a8b70494ce6c403, type: 2}
@@ -382,6 +383,7 @@ MonoBehaviour:
   rh: {fileID: 128660103}
   robotPos: {x: 10, y: 3, z: 8}
   stoppingDistance: 3
+  unitsGM: []
 --- !u!114 &128660103
 MonoBehaviour:
   m_ObjectHideFlags: 0

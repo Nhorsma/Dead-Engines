@@ -5,77 +5,64 @@ using UnityEngine;
 public class Unit
 {
     private string job;
-    private GameObject posOfJob;
+    private GameObject jobPos;
     private int health;
-    private bool justDroppedOff;
+    private bool justDroppedOff, justShot;
     private int id;
 
     public Unit()
     {
         job = "none";
-        posOfJob = null;
+        jobPos = null;
         health = 3;
         justDroppedOff = false;
         id = -1;
+        justShot = false;
     }
 
     public Unit(int dec)
     {
         job = "none";
-        posOfJob = null;
+        jobPos = null;
         health = 3;
         justDroppedOff = false;
         id = dec;
     }
 
-    public string GetJob()
+    public string Job
     {
-        return job;
+        get { return job; }   
+        set { job = value; }
     }
 
-    public int GetHealth()
+    public GameObject JobPos
     {
-        return health;
+        get { return jobPos; }   
+        set { jobPos = value; }
     }
 
-    public void SetJob(string newJob)
+    public int Health
     {
-        job = newJob;
+        get { return health; }   
+        set { health = value; }
     }
 
-    public void SetHealth(int newhealth)
+    public bool JustDroppedOff
     {
-        health = newhealth;
+        get { return justDroppedOff; }
+        set { justDroppedOff = value; }
     }
 
-     public GameObject GetJobPos()
+    public bool JustShot
     {
-        return posOfJob;
+        get { return justShot; }
+        set { justShot = value; }
     }
 
-    public void SetJobPos(GameObject pos)
+    public int Id
     {
-        posOfJob = pos;
-    }
-
-    public bool GetDroppedOff()
-    {
-        return justDroppedOff;
-    }
-
-    public void SetDroppedOff(bool b)
-    {
-        justDroppedOff = b;
-    }
-
-    public int ID()
-    {
-        return id;
-    }
-
-    public void Setid(int newone)
-    {
-        id = newone;
+        get { return id; }
+        set { id = value; }
     }
 
 }

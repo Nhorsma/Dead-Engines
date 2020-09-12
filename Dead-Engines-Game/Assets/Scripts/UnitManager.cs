@@ -54,14 +54,6 @@ public class UnitManager : MonoBehaviour
     {
         if (Input.GetMouseButtonDown(1) && selectedUnits.Count > 0)
         {
-            /* Ok, so, there needs to be methods that choose the job of selected units,
-             * then there must be methods that determine which deposit those units are working on,
-             * then units must move back and forth from those deposits, when they reach it they must
-             * deplete the deposit's quantity by one per trip, deposits are in the ResrouceHandler class
-             * something like "find ID of deposit clicked, unit starts couroutine until depleted, etc)
-             */
-
-
             //right click on anything that has units do a job
             if (Hit().collider.gameObject.tag == "Metal" ||
                 Hit().collider.gameObject.tag == "Electronics" ||
@@ -83,12 +75,15 @@ public class UnitManager : MonoBehaviour
         if (selectedUnits.Count != 0)
             for (int i = 0; i < selectedUnits.Count; i++)
             {
+                units[i].Job=("none");
+                units[i].JobPos=(null);
                 MoveObject(selectedUnits[i]);
             }
     }
 
     void MoveObject(GameObject selected)
     {
+        selected.GetComponent<NavMeshAgent>().stoppingDistance = 0;
         nv = selected.GetComponent<NavMeshAgent>();
         nv.destination = Hit().point;
     }
@@ -97,15 +92,15 @@ public class UnitManager : MonoBehaviour
     {
         foreach (Unit unit in units)
         {
-            if (!unit.GetJob().Equals("none") && !unit.GetJobPos().Equals(null))
+            if (!unit.Job.Equals("none") && !unit.JobPos.Equals(null))
             {
-                if(unit.GetJob().Equals("Combat"))
+                if(unit.Job.Equals("Combat"))
                 {
-                    Combat();
+                    Combat(unit);
                 }
-                else if(unit.GetJob().Equals("Extraction"))
+                else if(unit.Job.Equals("Extraction"))
                 {
-                    Extraction(unit, GetResourceID(unit.GetJobPos()), unit.GetJob());
+                    Extraction(unit, GetResourceID(unit.JobPos), unit.Job);
                 }
             }
         }
@@ -122,11 +117,12 @@ public class UnitManager : MonoBehaviour
             int ri = GetResourceID(thing);
             foreach (GameObject gm in selectedUnits)
             {
+                gm.GetComponent<NavMeshAgent>().stoppingDistance = 0;
                 Unit unit = GetUnit(gm);
-                unit.SetJob("Extraction");
-                unit.SetJobPos(thing);
-                unit.SetDroppedOff(true);
-                TravelTo(unitsGM[unit.ID()].GetComponent<NavMeshAgent>(), unit.GetJobPos().transform.position);
+                unit.Job=("Extraction");
+                unit.JobPos=(thing);
+                unit.JustDroppedOff=(true);
+                TravelTo(unitsGM[unit.Id].GetComponent<NavMeshAgent>(), unit.JobPos.transform.position);
             }
         }
         else if(thing.tag == "Enemy")
@@ -134,9 +130,10 @@ public class UnitManager : MonoBehaviour
             int ri = GetResourceID(thing);
             foreach (GameObject gm in selectedUnits)
             {
+                gm.GetComponent<NavMeshAgent>().stoppingDistance = stoppingDistance;
                 Unit unit = GetUnit(gm);
-                unit.SetJob("Combat");
-                unit.SetJobPos(thing);
+                unit.Job="Combat";
+                unit.JobPos=thing;
             }
         }
     }
@@ -153,7 +150,7 @@ public class UnitManager : MonoBehaviour
 
     GameObject GetUnitObject(Unit unit)
     { 
-        return unitsGM[unit.ID()];
+        return unitsGM[unit.Id];
     }
 
     Unit GetUnit(GameObject gm)
@@ -169,35 +166,66 @@ public class UnitManager : MonoBehaviour
 
     void Extraction(Unit unit, int ri, string resource)
     {
-        if (unit.GetJobPos()==null)
+        if (unit.JobPos==null)
             return;
 
         GameObject gm = GetUnitObject(unit);
         Vector3 depPos = rh.resDeposits[ri].transform.position;
         Vector3 uPos = gm.transform.position;
 
-        if (Vector3.Distance(gm.transform.position, unit.GetJobPos().transform.position)<3f
-            && unit.GetDroppedOff())
+        if (Vector3.Distance(gm.transform.position, unit.JobPos.transform.position)<3f
+            && unit.JustDroppedOff)
         {
             Extract(ri);
-            unit.SetDroppedOff(false);
+            unit.JustDroppedOff=false;
             TravelTo(gm.GetComponent<NavMeshAgent>(), robotPos);
         }
-        else if(Vector3.Distance(gm.transform.position, robotPos) < 3f && !unit.GetDroppedOff())
+        else if(Vector3.Distance(gm.transform.position, robotPos) < 3f && !unit.JustDroppedOff)
         {
             if (resource == "Metal")
                 AddMetal();
             else if (resource == "Electronics")
                 AddElectronics();
 
-            unit.SetDroppedOff(true);
-            TravelTo(gm.GetComponent<NavMeshAgent>(), unit.GetJobPos().transform.position);
+            unit.JustDroppedOff=(true);
+            TravelTo(gm.GetComponent<NavMeshAgent>(), unit.JobPos.transform.position);
         }
     }
 
-    void Combat()
+    void Combat(Unit unit)
     {
-        //To be Implemented
+        GameObject gm = GetUnitObject(unit);
+        NavMeshAgent nv = GetUnitObject(unit).GetComponent<NavMeshAgent>();
+        TravelTo(nv, unit.JobPos.transform.position);
+
+        Vector3 direction = unit.JobPos.transform.position - GetUnitObject(unit).transform.position;
+        Debug.DrawRay(GetUnitObject(unit).transform.position, direction, Color.black);
+
+        if (Vector3.Distance(gm.transform.position, unit.JobPos.transform.position) < stoppingDistance + 1f
+            && !unit.JustShot)
+        {
+            Fire(unit);
+            StartCoroutine(FireCoolDown(unit));
+        }
+    }
+
+    IEnumerator FireCoolDown(Unit unit)
+    {
+        unit.JustShot = true;
+        yield return new WaitForSeconds(1f);
+        unit.JustShot = false;
+    }
+
+    void Fire(Unit unit)
+    {
+        Vector3 direction = GetUnitObject(unit).transform.position - unit.JobPos.transform.position;
+        RaycastHit hit;
+        if(Physics.Raycast(GetUnitObject(unit).transform.position, direction, out hit, 100f))
+        {
+            Debug.DrawRay(GetUnitObject(unit).transform.position, direction, Color.black);
+            if (hit.collider.tag == "Enemy")
+                Debug.Log("Gotem!");
+        }
     }
 
     void TravelTo(NavMeshAgent a, Vector3 place)
