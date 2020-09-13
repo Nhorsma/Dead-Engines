@@ -198,9 +198,6 @@ public class UnitManager : MonoBehaviour
         NavMeshAgent nv = GetUnitObject(unit).GetComponent<NavMeshAgent>();
         TravelTo(nv, unit.JobPos.transform.position);
 
-        Vector3 direction = unit.JobPos.transform.position - GetUnitObject(unit).transform.position;
-        Debug.DrawRay(GetUnitObject(unit).transform.position, direction, Color.black);
-
         if (Vector3.Distance(gm.transform.position, unit.JobPos.transform.position) < stoppingDistance + 1f
             && !unit.JustShot)
         {
@@ -218,13 +215,17 @@ public class UnitManager : MonoBehaviour
 
     void Fire(Unit unit)
     {
-        Vector3 direction = GetUnitObject(unit).transform.position - unit.JobPos.transform.position;
+        Vector3 direction = unit.JobPos.transform.position - GetUnitObject(unit).transform.position;
+
         RaycastHit hit;
         if(Physics.Raycast(GetUnitObject(unit).transform.position, direction, out hit, 100f))
         {
-            Debug.DrawRay(GetUnitObject(unit).transform.position, direction, Color.black);
             if (hit.collider.tag == "Enemy")
-                Debug.Log("Gotem!");
+            {
+                //access's the enemy via the enemyHandler, and reduces the enemie's health by one
+                gameObject.GetComponent<EnemyHandler>().GetEnemy(hit.collider.gameObject).Health--;
+                Debug.Log(gameObject.GetComponent<EnemyHandler>().GetEnemy(hit.collider.gameObject).Health);
+            }
         }
     }
 
