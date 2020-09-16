@@ -42,6 +42,18 @@ public class EncampmentHandler : MonoBehaviour
         }
     }
 
+
+    public Encampment GetEncampment(GameObject gm)
+    {
+        for (int i = 0; i < eGM.Length; i++)
+        {
+            if (eGM[i] == gm)
+                return encamps[i];
+        }
+        return null;
+    }
+
+
     void BeDestroyed()
     {
         for (int i = 0; i < encamps.Length; i++)
@@ -62,13 +74,13 @@ public class EncampmentHandler : MonoBehaviour
             int hit = Random.Range(1, 10);
             if(hit < e.Chance)
             {
-                Debug.Log("Spawn");
+            //    Debug.Log("Spawn");
                 SpawnEnemy(e);
                 e.Chance = 0;
             }
             else
             {
-                Debug.Log(e.Chance + "0%");
+            //    Debug.Log(e.Chance + "0%");
                 e.Chance++;
             }
             StartCoroutine(ChangeSpawnChance(e));

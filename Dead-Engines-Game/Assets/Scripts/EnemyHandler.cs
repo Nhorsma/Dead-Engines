@@ -1,13 +1,14 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class EnemyHandler : MonoBehaviour
 {
     SpawnRes spawn;
     public List<GameObject> enemiesGM;
     public List<Enemy> enemies;
-    public float stoppingDistance;
+    public float stoppingDistance, persueRange;
 
 
     private void Start()
@@ -21,6 +22,12 @@ public class EnemyHandler : MonoBehaviour
     {
         
     }
+
+
+    //-----------------------------------------------------------------------------------------
+    //-----------------------------------------------------------------------------------------
+
+
 
     public GameObject GetEnemyObject(Enemy ene)
     {
@@ -43,10 +50,26 @@ public class EnemyHandler : MonoBehaviour
 
     }
 
-    void Persue()
+    void Persue(Enemy e, GameObject gm)
     {
-
+        e.Target = gm;
+        TravelTo(GetEnemyObject(e), e.Target.transform.position);
     }
+
+    void CheckPersue()
+    {
+        /*
+        GameObject[] u = GetComponent<UnitManager>().unitsGM;
+        foreach(GameObject unit in u)
+        {
+            foreach(GameObject enemy in enemiesGM)
+            {
+                if(Vector3())
+            }
+        }
+        */
+    }
+
 
     IEnumerator FireCoolDown(Enemy ene)
     {
@@ -64,6 +87,15 @@ public class EnemyHandler : MonoBehaviour
         {
             if (hit.collider.tag == "Friendly")
                 Debug.Log("Bang!");
+        }
+    }
+
+    void TravelTo(GameObject a, Vector3 place)
+    {
+        if (a != null && a.GetComponent<NavMeshAgent>() != null)
+        {
+            a.GetComponent<NavMeshAgent>().stoppingDistance = stoppingDistance;
+            a.GetComponent<NavMeshAgent>().SetDestination(place);
         }
     }
 
