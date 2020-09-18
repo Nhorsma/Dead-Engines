@@ -252,12 +252,12 @@ public class UnitManager : MonoBehaviour
     
     void AddMetal()
     {
-        ResourceHandling.metal++;
+		this.GetComponent<ResourceHandling>().metal++;
     }
 
     void AddElectronics()
     {
-        ResourceHandling.electronics++;
-    }
+		this.GetComponent<ResourceHandling>().electronics++;
+	}
 
 }

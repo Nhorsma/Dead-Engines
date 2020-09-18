@@ -9,14 +9,19 @@ public class AutomatonUI : MonoBehaviour
 	public GameObject auto_main;
 	public List<GameObject> tabs = new List<GameObject>();
 
+	public GameObject logic;
+	private int met;
+	private int elec;
+
     void Start()
     {
-        
+		met = logic.GetComponent<ResourceHandling>().metal;
+		elec = logic.GetComponent<ResourceHandling>().electronics;
     }
 
     void Update()
     {
-		Debug.Log(auto_main.activeSelf);
+		
     }
 
 	private void OnMouseDown()
@@ -31,6 +36,8 @@ public class AutomatonUI : MonoBehaviour
 			t.SetActive(false);
 		}
 		tabs[0].SetActive(true);
+		Debug.Log("metal: " + met);
+		Debug.Log("electronics: " + elec);
 	}
 
 	public void OpenTab2()
