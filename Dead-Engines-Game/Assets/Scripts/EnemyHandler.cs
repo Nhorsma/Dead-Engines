@@ -50,7 +50,7 @@ public class EnemyHandler : MonoBehaviour
         if(enemies.Count>0)
         foreach (Enemy e in enemies)
         {
-            Debug.Log(e.Protect);
+            //Debug.Log(e.Protect);
             TravelTo(GetEnemyObject(e), e.Protect.transform.position, false);
 
         }

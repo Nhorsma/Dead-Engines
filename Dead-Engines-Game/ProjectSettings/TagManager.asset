@@ -9,6 +9,7 @@ TagManager:
   - Metal
   - Enemy
   - Encampment
+  - Electronics
   layers:
   - Default
   - TransparentFX

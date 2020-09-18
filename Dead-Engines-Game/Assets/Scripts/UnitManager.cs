@@ -100,9 +100,9 @@ public class UnitManager : MonoBehaviour
                 {
                     Combat(unit);
                 }
-                else if(unit.Job.Equals("Extraction"))
+                else if(unit.Job.Equals("ExtractionMetal") || unit.Job.Equals("ExtractionElectronics"))
                 {
-                    Extraction(unit, GetResourceID(unit.JobPos), unit.Job);
+                    Extraction(unit, GetResourceID(unit.JobPos), unit.Job);///////////////////////////////////////////////////////////////////////
                 }
             }
         }
@@ -121,7 +121,7 @@ public class UnitManager : MonoBehaviour
             {
                 gm.GetComponent<NavMeshAgent>().stoppingDistance = 0;
                 Unit unit = GetUnit(gm);
-                unit.Job=("Extraction");
+                unit.Job=("Extraction" + thing.tag); //////////////////////////////////////////////////////////////////////////////////////////////
                 unit.JobPos=(thing);
                 unit.JustDroppedOff=(true);
                 TravelTo(unitsGM[unit.Id].GetComponent<NavMeshAgent>(), unit.JobPos.transform.position);
@@ -185,11 +185,17 @@ public class UnitManager : MonoBehaviour
         }
         else if(Vector3.Distance(gm.transform.position, robotPos) < 3f && !unit.JustDroppedOff)
         {
-            if (resource == "Metal")
-                AddMetal();
-            else if (resource == "Electronics")
-                AddElectronics();
-
+            if (resource.Equals("ExtractionMetal"))
+			{
+				AddMetal();
+				Debug.Log("Got metal");
+			}
+            else if (resource.Equals("ExtractionElectronics"))
+			{
+				AddElectronics();
+				Debug.Log("Got electronics");
+			}
+            
             unit.JustDroppedOff=(true);
             TravelTo(gm.GetComponent<NavMeshAgent>(), unit.JobPos.transform.position);
         }
@@ -252,12 +258,12 @@ public class UnitManager : MonoBehaviour
     
     void AddMetal()
     {
-		this.GetComponent<ResourceHandling>().metal++;
+		ResourceHandling.metal++;
     }
 
     void AddElectronics()
     {
-		this.GetComponent<ResourceHandling>().electronics++;
+		ResourceHandling.electronics++;
 	}
 
 }
