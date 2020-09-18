@@ -636,6 +636,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enemiesGM: []
   stoppingDistance: 3
+  persueRange: 0
 --- !u!1 &156167812
 GameObject:
   m_ObjectHideFlags: 0

@@ -54,6 +54,12 @@ public class EncampmentHandler : MonoBehaviour
     }
 
 
+    public GameObject GetEncampmentGM(Encampment e)
+    {
+        return eGM[e.Id];
+    }
+
+
     void BeDestroyed()
     {
         for (int i = 0; i < encamps.Length; i++)
@@ -98,11 +104,27 @@ public class EncampmentHandler : MonoBehaviour
     {
         Vector3 spawnPlace = eGM[e.Id].transform.position + new Vector3(Random.Range(1, 3), 0, Random.Range(1, 3));
         var gm = Instantiate(Resources.Load("Enemy"), spawnPlace, transform.rotation);
+        Enemy enemy = new Enemy();
+        enemy.Protect = GetClosestResource(e);
+        enemy.Id = eh.enemiesGM.Count;
         eh.enemiesGM.Add((GameObject)gm);
-        eh.enemies.Add(new Enemy(eh.enemiesGM.Count));
+        eh.enemies.Add(enemy);
     }
 
-
+    GameObject GetClosestResource(Encampment camp)
+    {
+        float distance = Mathf.Infinity;
+        GameObject chosen = new GameObject();
+        foreach(GameObject rec in GetComponent<SpawnRes>().GetResources())
+        {
+            if(Vector3.Distance(rec.transform.position, GetEncampmentGM(camp).transform.position) < distance)
+            {
+                distance = Vector3.Distance(rec.transform.position, GetEncampmentGM(camp).transform.position);
+                chosen = rec;
+            }
+        }
+        return chosen;
+    }
 
     //as the player explores and finds new encampments, new encampments should be entered into
     //the array, we might need to make the array a list if it gets too big.

@@ -20,7 +20,7 @@ public class EnemyHandler : MonoBehaviour
 
     private void Update()
     {
-        
+        Wander();
     }
 
 
@@ -47,13 +47,19 @@ public class EnemyHandler : MonoBehaviour
 
     void Wander()
     {
+        if(enemies.Count>0)
+        foreach (Enemy e in enemies)
+        {
+            Debug.Log(e.Protect);
+            TravelTo(GetEnemyObject(e), e.Protect.transform.position, false);
 
+        }
     }
 
     void Persue(Enemy e, GameObject gm)
     {
         e.Target = gm;
-        TravelTo(GetEnemyObject(e), e.Target.transform.position);
+        TravelTo(GetEnemyObject(e), e.Target.transform.position, true);
     }
 
     void CheckPersue()
@@ -90,11 +96,12 @@ public class EnemyHandler : MonoBehaviour
         }
     }
 
-    void TravelTo(GameObject a, Vector3 place)
+    void TravelTo(GameObject a, Vector3 place, bool stop)
     {
         if (a != null && a.GetComponent<NavMeshAgent>() != null)
         {
-            a.GetComponent<NavMeshAgent>().stoppingDistance = stoppingDistance;
+            if(stop)
+                a.GetComponent<NavMeshAgent>().stoppingDistance = stoppingDistance;
             a.GetComponent<NavMeshAgent>().SetDestination(place);
         }
     }
