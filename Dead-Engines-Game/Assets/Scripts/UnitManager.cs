@@ -57,7 +57,8 @@ public class UnitManager : MonoBehaviour
             //right click on anything that has units do a job
             if (Hit().collider.gameObject.tag == "Metal" ||
                 Hit().collider.gameObject.tag == "Electronics" ||
-                Hit().collider.gameObject.tag == "Enemy")
+                Hit().collider.gameObject.tag == "Enemy" ||
+                Hit().collider.gameObject.tag == "Encampment")
             {
                 SetJobOfSelected(Hit().collider.gameObject);
 
@@ -86,6 +87,7 @@ public class UnitManager : MonoBehaviour
         selected.GetComponent<NavMeshAgent>().stoppingDistance = 0;
         nv = selected.GetComponent<NavMeshAgent>();
         nv.destination = Hit().point;
+        Debug.Log("Moving");
     }
 
     void RunAllJobs()
@@ -125,7 +127,7 @@ public class UnitManager : MonoBehaviour
                 TravelTo(unitsGM[unit.Id].GetComponent<NavMeshAgent>(), unit.JobPos.transform.position);
             }
         }
-        else if(thing.tag == "Enemy")
+        else if(thing.tag == "Enemy" || thing.tag == "Encampment")
         {
             int ri = GetResourceID(thing);
             foreach (GameObject gm in selectedUnits)
@@ -134,6 +136,7 @@ public class UnitManager : MonoBehaviour
                 Unit unit = GetUnit(gm);
                 unit.Job="Combat";
                 unit.JobPos=thing;
+                TravelTo(unitsGM[unit.Id].GetComponent<NavMeshAgent>(), unit.JobPos.transform.position);
             }
         }
     }
@@ -196,10 +199,8 @@ public class UnitManager : MonoBehaviour
     {
         GameObject gm = GetUnitObject(unit);
         NavMeshAgent nv = GetUnitObject(unit).GetComponent<NavMeshAgent>();
-        TravelTo(nv, unit.JobPos.transform.position);
-
-        Vector3 direction = unit.JobPos.transform.position - GetUnitObject(unit).transform.position;
-        Debug.DrawRay(GetUnitObject(unit).transform.position, direction, Color.black);
+        nv.stoppingDistance = stoppingDistance;
+        TravelTo(unitsGM[unit.Id].GetComponent<NavMeshAgent>(), unit.JobPos.transform.position);
 
         if (Vector3.Distance(gm.transform.position, unit.JobPos.transform.position) < stoppingDistance + 1f
             && !unit.JustShot)
@@ -218,13 +219,23 @@ public class UnitManager : MonoBehaviour
 
     void Fire(Unit unit)
     {
-        Vector3 direction = GetUnitObject(unit).transform.position - unit.JobPos.transform.position;
+        Vector3 direction = unit.JobPos.transform.position - GetUnitObject(unit).transform.position;
+
         RaycastHit hit;
         if(Physics.Raycast(GetUnitObject(unit).transform.position, direction, out hit, 100f))
         {
-            Debug.DrawRay(GetUnitObject(unit).transform.position, direction, Color.black);
             if (hit.collider.tag == "Enemy")
-                Debug.Log("Gotem!");
+            {
+                //access's the enemy via the enemyHandler, and reduces the enemie's health by one
+                gameObject.GetComponent<EnemyHandler>().GetEnemy(hit.collider.gameObject).Health--;
+
+                Debug.Log("enemy: " + gameObject.GetComponent<EnemyHandler>().GetEnemy(hit.collider.gameObject).Health);
+            }
+            else if(hit.collider.tag=="Encampment")
+            {
+                gameObject.GetComponent<EncampmentHandler>().GetEncampment(hit.collider.gameObject).Health--;
+                Debug.Log("camp: "+gameObject.GetComponent<EncampmentHandler>().GetEncampment(hit.collider.gameObject).Health);
+            }
         }
     }
 
