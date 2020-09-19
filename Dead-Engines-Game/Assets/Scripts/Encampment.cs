@@ -8,6 +8,7 @@ public class Encampment
     private int chance;
     private int id;
     private int health;
+    private GameObject closestRec;
 
     public Encampment(int newid)
     {
@@ -41,5 +42,10 @@ public class Encampment
         set { health = value; }
     }
 
+    public GameObject ClosestRec
+    {
+        get { return closestRec;}
+        set { closestRec = value; }
+    }
 
 }

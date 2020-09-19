@@ -39,6 +39,7 @@ public class EncampmentHandler : MonoBehaviour
         for (int i = 0; i < encamps.Length; i++)
         {
             encamps[i] = new Encampment(i);
+            encamps[i].ClosestRec = GetClosestResource(encamps[i]);
         }
     }
 
@@ -104,9 +105,11 @@ public class EncampmentHandler : MonoBehaviour
     {
         Vector3 spawnPlace = eGM[e.Id].transform.position + new Vector3(Random.Range(1, 3), 0, Random.Range(1, 3));
         var gm = Instantiate(Resources.Load("Enemy"), spawnPlace, transform.rotation);
+
         Enemy enemy = new Enemy();
-        enemy.Protect = GetClosestResource(e);
+        enemy.Protect = e.ClosestRec;
         enemy.Id = eh.enemiesGM.Count;
+
         eh.enemiesGM.Add((GameObject)gm);
         eh.enemies.Add(enemy);
     }

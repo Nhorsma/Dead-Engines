@@ -8,7 +8,7 @@ public class EnemyHandler : MonoBehaviour
     SpawnRes spawn;
     public List<GameObject> enemiesGM;
     public List<Enemy> enemies;
-    public float stoppingDistance, persueRange;
+    public float stoppingDistance, persueRange, patrolRange;
 
 
     private void Start()
@@ -20,7 +20,7 @@ public class EnemyHandler : MonoBehaviour
 
     private void Update()
     {
-        Wander();
+
     }
 
 
@@ -45,14 +45,12 @@ public class EnemyHandler : MonoBehaviour
     }
 
 
-    void Wander()
+    void GoToResource()
     {
         if(enemies.Count>0)
         foreach (Enemy e in enemies)
         {
-            Debug.Log(e.Protect);
             TravelTo(GetEnemyObject(e), e.Protect.transform.position, false);
-
         }
     }
 
@@ -62,18 +60,21 @@ public class EnemyHandler : MonoBehaviour
         TravelTo(GetEnemyObject(e), e.Target.transform.position, true);
     }
 
-    void CheckPersue()
+    void Patrol(Enemy e, float range)
     {
-        /*
-        GameObject[] u = GetComponent<UnitManager>().unitsGM;
-        foreach(GameObject unit in u)
+        GameObject egm = GetEnemyObject(e);
+        if(Vector3.Distance(egm.transform.position,e.Protect.transform.position)<range)
         {
-            foreach(GameObject enemy in enemiesGM)
-            {
-                if(Vector3())
-            }
+            
         }
-        */
+    }
+
+    Vector3 SetRoute(GameObject gm, float range)
+    {
+        Vector3 f = gm.transform.forward;
+        float x = Mathf.Cos(60) * range;
+        float z = Mathf.Sin(60) * range;
+        return f += new Vector3(x, 0, z);
     }
 
 
