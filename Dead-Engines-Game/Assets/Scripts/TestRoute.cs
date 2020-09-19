@@ -6,7 +6,7 @@ using UnityEngine.AI;
 public class TestRoute : MonoBehaviour
 {
 
-    public GameObject center;
+    public GameObject center, pivot;
     public NavMeshAgent nv;
     public float range;
 
@@ -22,6 +22,7 @@ public class TestRoute : MonoBehaviour
         {
             Debug.Log("Turn");
             nv.SetDestination(SetRoute(center, range));
+            Instantiate(Resources.Load(pivot.name), SetRoute(center, range), transform.rotation);
         }
     }
 
