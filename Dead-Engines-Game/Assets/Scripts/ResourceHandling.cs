@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class ResourceHandling : MonoBehaviour
 {
-    public int metal;
-    public int electronics;
+    public static int metal;
+    public static int electronics;
     public int startQuantity;
 
     public GameObject[] resDeposits;
