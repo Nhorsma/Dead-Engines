@@ -20,7 +20,7 @@ public class EnemyHandler : MonoBehaviour
 
     private void Update()
     {
-
+        RunJobs();
     }
 
 
@@ -34,6 +34,7 @@ public class EnemyHandler : MonoBehaviour
         return enemiesGM[ene.Id];
     }
 
+
     public  Enemy GetEnemy(GameObject gm)
     {
         for (int i = 0; i < enemiesGM.Count; i++)
@@ -45,13 +46,27 @@ public class EnemyHandler : MonoBehaviour
     }
 
 
-    void GoToResource()
+    void RunJobs()
     {
-        if(enemies.Count>0)
         foreach (Enemy e in enemies)
         {
-            TravelTo(GetEnemyObject(e), e.Protect.transform.position, false);
+            if (DetectTargets(e)!=null)
+            {
+                e.Target = DetectTargets(e);
+                Fire(e);
+            }
+            else
+            {
+                GoToResource(e);
+            }
         }
+    }
+
+
+    void GoToResource(Enemy e)
+    {
+        Vector3 rand = new Vector3(Random.Range(1, 3), Random.Range(1, 3), Random.Range(1, 3));
+        TravelTo(GetEnemyObject(e), e.Protect.transform.position+rand, true);
     }
 
     void Persue(Enemy e, GameObject gm)
@@ -60,21 +75,19 @@ public class EnemyHandler : MonoBehaviour
         TravelTo(GetEnemyObject(e), e.Target.transform.position, true);
     }
 
-    void Patrol(Enemy e, float range)
+    GameObject DetectTargets(Enemy e)
     {
-        GameObject egm = GetEnemyObject(e);
-        if(Vector3.Distance(egm.transform.position,e.Protect.transform.position)<range)
+        Collider range = GetEnemyObject(e).GetComponentInChildren<Collider>();
+        if(range == null)
         {
-            
+            Debug.Log("its null");
+            return null;
         }
-    }
-
-    Vector3 SetRoute(GameObject gm, float range)
-    {
-        Vector3 f = gm.transform.forward;
-        float x = Mathf.Cos(60) * range;
-        float z = Mathf.Sin(60) * range;
-        return f += new Vector3(x, 0, z);
+        if(range != null && range.gameObject.tag.Equals("Friendly"))
+        {
+            return range.gameObject;
+        }
+        return null;
     }
 
 
