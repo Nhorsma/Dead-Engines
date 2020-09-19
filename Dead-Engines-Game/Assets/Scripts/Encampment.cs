@@ -4,11 +4,10 @@ using UnityEngine;
 
 public class Encampment
 {
-    private bool canSpawn;
-    private int chance;
-    private int id;
-    private int health;
+    private bool canSpawn, playerInRange;
+    private int id, health, chance;
     private GameObject closestRec;
+    private string[] deployment;
 
     public Encampment(int newid)
     {
@@ -16,6 +15,8 @@ public class Encampment
         chance = 0;
         id = newid;
         health = 100;
+        playerInRange = false;
+        deployment = new string[]{"gunner", "gunner", "gunner"};
     }
 
     public int Id
@@ -46,6 +47,18 @@ public class Encampment
     {
         get { return closestRec;}
         set { closestRec = value; }
+    }
+
+    public bool PlayerInRange
+    {
+        get { return playerInRange;}
+        set { playerInRange = value; }
+    }
+
+    public string[] Deployment
+    {
+        get { return deployment; }
+        set { deployment = value; }
     }
 
 }

@@ -6,16 +6,19 @@ using UnityEngine.AI;
 public class EnemyHandler : MonoBehaviour
 {
     SpawnRes spawn;
+    UnitManager um;
     public List<GameObject> enemiesGM;
     public List<Enemy> enemies;
-    public float stoppingDistance, persueRange, patrolRange;
+    public float stoppingDistance, shootingRange, tresspassingRange;
 
 
     private void Start()
     {
+        um = GetComponent<UnitManager>();
         enemiesGM = new List<GameObject>();
         enemies = new List<Enemy>();
         spawn = GetComponent<SpawnRes>();
+
     }
 
     private void Update()
@@ -50,44 +53,77 @@ public class EnemyHandler : MonoBehaviour
     {
         foreach (Enemy e in enemies)
         {
-            if (DetectTargets(e)!=null)
+            if(e.Target!=null)
             {
-                e.Target = DetectTargets(e);
-                Fire(e);
+                Persue(e);
             }
             else
             {
-                GoToResource(e);
+                Protect(e);
             }
         }
     }
 
 
-    void GoToResource(Enemy e)
+    public void FindSpot(Enemy e)
     {
-        Vector3 rand = new Vector3(Random.Range(1, 3), Random.Range(1, 3), Random.Range(1, 3));
-        TravelTo(GetEnemyObject(e), e.Protect.transform.position+rand, true);
+        int chance = Random.Range(0, 2);
+        if(chance==1)
+        {
+            Vector3 rand = new Vector3(Random.Range(-3, 3), Random.Range(-3, 3), Random.Range(-3, 3));
+            TravelTo(GetEnemyObject(e), e.Rec.transform.position + rand, true);
+        }
+        else
+        {
+            Vector3 rand = new Vector3(Random.Range(-3, 3), Random.Range(-3, 3), Random.Range(-3, 3));
+            TravelTo(GetEnemyObject(e), e.Camp.transform.position + rand, true);
+        }
     }
 
-    void Persue(Enemy e, GameObject gm)
+
+    //i was hoping i wouldn't have to loop through every friendly game object to see if they were in range...
+    //...but you leave me no choice
+
+    /*
+    * if tresspassing, move to firing range
+    * if in firing range and still in tresspassing, shoot and follow
+    * if in firing range but not tresspassing, shoot
+    * if not in firing range nor tresspassing, find spot
+    */
+
+
+    void Protect(Enemy e)
     {
-        e.Target = gm;
-        TravelTo(GetEnemyObject(e), e.Target.transform.position, true);
+        foreach (Unit u in um.units)
+        {
+            if (Vector3.Distance(um.GetUnitObject(u).transform.position, e.Rec.transform.position) < tresspassingRange
+                || Vector3.Distance(um.GetUnitObject(u).transform.position, e.Camp.transform.position) < tresspassingRange)
+            {
+                e.Target = um.GetUnitObject(u);
+                TravelTo(GetEnemyObject(e), um.GetUnitObject(u).transform.position, true);
+                break;
+            }
+        }
     }
 
-    GameObject DetectTargets(Enemy e)
+    void Persue(Enemy e)
     {
-        Collider range = GetEnemyObject(e).GetComponentInChildren<Collider>();
-        if(range == null)
+        float dis = Vector3.Distance(GetEnemyObject(e).transform.position, e.Target.transform.position);
+
+        if(dis<shootingRange && !e.JustShot)
         {
-            Debug.Log("its null");
-            return null;
+            Fire(e);
+            StartCoroutine(FireCoolDown(e));
         }
-        if(range != null && range.gameObject.tag.Equals("Friendly"))
+        else if(dis>shootingRange && dis<tresspassingRange)
         {
-            return range.gameObject;
+            TravelTo(GetEnemyObject(e), e.Target.transform.position, true);
         }
-        return null;
+        else if(dis>tresspassingRange && dis>shootingRange)
+        {
+            FindSpot(e);
+            e.Target = null;
+        }
     }
 
 
@@ -119,5 +155,4 @@ public class EnemyHandler : MonoBehaviour
             a.GetComponent<NavMeshAgent>().SetDestination(place);
         }
     }
-
 }

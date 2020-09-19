@@ -13,7 +13,7 @@ public class EncampmentHandler : MonoBehaviour
     public EnemyHandler eh;
 
     public SpawnRes spawn;
-    public float spawnTime;
+    public float spawnTime, spawnDistance;
 
     void Start()
     {
@@ -34,6 +34,10 @@ public class EncampmentHandler : MonoBehaviour
     //-----------------------------------------------------------------------------------------
     //-----------------------------------------------------------------------------------------
 
+
+
+    //this will establish that spawned enemies travel to this resource...
+    //as well as will attack player units that get too close to it.
     void SetUpCamps()
     {
         for (int i = 0; i < encamps.Length; i++)
@@ -101,17 +105,22 @@ public class EncampmentHandler : MonoBehaviour
         e.CanSpawn = true;
     }
 
+
+    //implement Deployment at some point
     void SpawnEnemy(Encampment e)
     {
         Vector3 spawnPlace = eGM[e.Id].transform.position + new Vector3(Random.Range(1, 3), 0, Random.Range(1, 3));
         var gm = Instantiate(Resources.Load("Enemy"), spawnPlace, transform.rotation);
 
         Enemy enemy = new Enemy();
-        enemy.Protect = e.ClosestRec;
+        enemy.Rec = e.ClosestRec;
+        enemy.Camp = GetEncampmentGM(e);
         enemy.Id = eh.enemiesGM.Count;
 
         eh.enemiesGM.Add((GameObject)gm);
         eh.enemies.Add(enemy);
+
+        eh.FindSpot(enemy);
     }
 
     GameObject GetClosestResource(Encampment camp)
@@ -128,6 +137,7 @@ public class EncampmentHandler : MonoBehaviour
         }
         return chosen;
     }
+
 
     //as the player explores and finds new encampments, new encampments should be entered into
     //the array, we might need to make the array a list if it gets too big.

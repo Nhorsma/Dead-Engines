@@ -7,7 +7,7 @@ public class Enemy
     private int health;
     private int id;
     private GameObject target;
-    private GameObject protect;
+    private GameObject rec, camp;
     private bool justShot;
 
     public Enemy()
@@ -51,10 +51,17 @@ public class Enemy
         set { justShot = value; }
     }
 
-    public GameObject Protect
+    public GameObject Rec
     {
-        get { return protect; }
-        set { protect = value; }
+        get { return rec; }
+        set { rec = value; }
+    }
+
+    public GameObject Camp
+    {
+        get { return camp; }
+        set { camp = value; }
+
     }
 
 }

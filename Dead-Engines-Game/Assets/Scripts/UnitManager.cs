@@ -151,12 +151,12 @@ public class UnitManager : MonoBehaviour
         return -1;
     }
 
-    GameObject GetUnitObject(Unit unit)
+    public GameObject GetUnitObject(Unit unit)
     { 
         return unitsGM[unit.Id];
     }
 
-    Unit GetUnit(GameObject gm)
+    public Unit GetUnit(GameObject gm)
     {
         for (int i = 0; i < unitsGM.Length; i++)
         {

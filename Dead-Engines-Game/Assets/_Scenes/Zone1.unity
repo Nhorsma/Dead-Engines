@@ -622,6 +622,7 @@ MonoBehaviour:
   eh: {fileID: 0}
   spawn: {fileID: 128660099}
   spawnTime: 3
+  spawnDistance: 0
 --- !u!114 &128660105
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -636,8 +637,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enemiesGM: []
   stoppingDistance: 3
-  persueRange: 0
-  patrolRange: 0
+  shootingRange: 6
+  tresspassingRange: 4
 --- !u!1 &156167812
 GameObject:
   m_ObjectHideFlags: 0
