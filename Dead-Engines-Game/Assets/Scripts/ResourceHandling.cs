@@ -11,9 +11,11 @@ public class ResourceHandling : MonoBehaviour
     public GameObject[] resDeposits;
     public int[] resQuantities;
     public SpawnRes spawn;
+    public int recsLeft;
 
     void Start()
     {
+        recsLeft = 3;   //represents how many deposits have not been fully depleted
         resDeposits = new GameObject[spawn.GetResources().Length];
         resQuantities = new int[resDeposits.Length];
         SetUpResources();

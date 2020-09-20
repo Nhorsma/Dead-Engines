@@ -80,22 +80,20 @@ public class EncampmentHandler : MonoBehaviour
 
     void CheckSpawnEnemy(Encampment e)
     {
-        if(e.CanSpawn)
-        {
-            int hit = Random.Range(1, 10);
-            if(hit < e.Chance)
+            if (e.CanSpawn)
             {
-            //    Debug.Log("Spawn");
-                SpawnEnemy(e);
-                e.Chance = 0;
+                int hit = Random.Range(1, 10);
+                if (e.OnField<e.Deployment.Count && hit < e.Chance)
+                {
+                    SpawnEnemy(e);
+                    e.Chance = 0;
+                }
+                else
+                {
+                    e.Chance++;
+                }
+                StartCoroutine(ChangeSpawnChance(e));
             }
-            else
-            {
-            //    Debug.Log(e.Chance + "0%");
-                e.Chance++;
-            }
-            StartCoroutine(ChangeSpawnChance(e));
-        }
     }
 
     IEnumerator ChangeSpawnChance(Encampment e)
@@ -109,8 +107,9 @@ public class EncampmentHandler : MonoBehaviour
     //implement Deployment at some point
     void SpawnEnemy(Encampment e)
     {
+        CheckDeployment(e);
         Vector3 spawnPlace = eGM[e.Id].transform.position + new Vector3(Random.Range(1, 3), 0, Random.Range(1, 3));
-        var gm = Instantiate(Resources.Load("Enemy"), spawnPlace, transform.rotation);
+        var gm = Instantiate(Resources.Load(e.Deployment[e.OnField]), spawnPlace, transform.rotation);
 
         Enemy enemy = new Enemy();
         enemy.Rec = e.ClosestRec;
@@ -121,7 +120,84 @@ public class EncampmentHandler : MonoBehaviour
         eh.enemies.Add(enemy);
 
         eh.FindSpot(enemy);
+        e.OnField++;
     }
+
+
+    //adds "gun", "APC", or "Mech"
+    void CheckDeployment(Encampment e)
+    {
+        ResourceHandling r = GetComponent<ResourceHandling>();
+        int recAmount = r.GetNumber(e.ClosestRec);
+
+        if(recAmount<=0)
+        {
+            e.Deployment.Clear();
+            return;
+        }
+
+        if (r.recsLeft == 3)
+        {
+            if (recAmount <= 76)
+            {
+                e.Deployment.Add("gun");
+
+                if (recAmount <= 51)
+                {
+                    e.Deployment.Add("APC");
+
+                    if (recAmount <= 26)
+                    {
+                        e.Deployment.Add("gun");
+                    }
+                }
+            }
+        }
+        else if(r.recsLeft==2)
+        {
+            e.Deployment.Add("APC");
+
+            if (recAmount <= 76)
+            {
+                e.Deployment.Add("APC");
+
+                if (recAmount <= 51)
+                {
+                    e.Deployment.Remove("gun");
+
+                    if (recAmount <= 26)
+                    {
+                        e.Deployment.Remove("APC");
+                        e.Deployment.Remove("APC");
+                        e.Deployment.Add("Mech");
+                    }
+                }
+            }
+        }
+        else if(r.recsLeft==1)
+        {
+            e.Deployment.Add("APC");
+
+            if (recAmount <= 76)
+            {
+                e.Deployment.Add("APC");
+
+                if (recAmount <= 51)
+                {
+                    e.Deployment.Remove("gun");
+
+                    if (recAmount <= 26)
+                    {
+                        e.Deployment.Remove("APC");
+                        e.Deployment.Remove("APC");
+                        e.Deployment.Add("Mech");
+                    }
+                }
+            }
+        }
+
+    }
+
 
     GameObject GetClosestResource(Encampment camp)
     {
