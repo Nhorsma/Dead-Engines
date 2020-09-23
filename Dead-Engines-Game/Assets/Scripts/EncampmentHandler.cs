@@ -15,6 +15,10 @@ public class EncampmentHandler : MonoBehaviour
     public SpawnRes spawn;
     public float spawnTime, spawnDistance;
 
+    string[] depRec3 = { "gun", "gun", "gun" };
+    string[] depRec2 = { "gun", "gun", "APC" };
+    string[] depRec1 = { "gun", "gun", "APC", "APC" };
+
     void Start()
     {
         eh = GetComponent<EnemyHandler>();
@@ -27,7 +31,7 @@ public class EncampmentHandler : MonoBehaviour
     {
         foreach(Encampment e in encamps)
         {
-            CheckSpawnEnemy(e);
+            CheckUnitNear(e);
         }
     }
 
@@ -78,11 +82,24 @@ public class EncampmentHandler : MonoBehaviour
     }
 
 
+    void CheckUnitNear(Encampment e)
+    {
+        foreach (GameObject u in GetComponent<UnitManager>().unitsGM)
+        {
+            if (Vector3.Distance(u.transform.position, GetEncampmentGM(e).transform.position) < eh.tresspassingRange ||
+                Vector3.Distance(u.transform.position, e.ClosestRec.transform.position) < eh.tresspassingRange)
+            {
+                CheckSpawnEnemy(e);
+            }
+        }
+    }
+
+
     void CheckSpawnEnemy(Encampment e)
     {
             if (e.CanSpawn)
             {
-                int hit = Random.Range(1, 10);
+                int hit = Random.Range(1, 5);
                 if (e.OnField<e.Deployment.Count && hit < e.Chance)
                 {
                     SpawnEnemy(e);
@@ -92,6 +109,7 @@ public class EncampmentHandler : MonoBehaviour
                 {
                     e.Chance++;
                 }
+            Debug.Log(e.Chance + "0%");
                 StartCoroutine(ChangeSpawnChance(e));
             }
     }
@@ -155,8 +173,6 @@ public class EncampmentHandler : MonoBehaviour
         }
         else if(r.recsLeft==2)
         {
-            e.Deployment.Add("APC");
-
             if (recAmount <= 76)
             {
                 e.Deployment.Add("APC");
@@ -195,7 +211,6 @@ public class EncampmentHandler : MonoBehaviour
                 }
             }
         }
-
     }
 
 
@@ -212,6 +227,31 @@ public class EncampmentHandler : MonoBehaviour
             }
         }
         return chosen;
+    }
+
+
+    void SetDeployment(Encampment e, int recsLeft)
+    {
+        if(recsLeft==2)
+        {
+            e.Deployment.Clear();
+            for(int i=0;i<depRec2.Length;i++)
+            {
+                e.Deployment.Add(depRec2[i]);
+            }
+        }
+        else if (recsLeft == 1)
+        {
+            e.Deployment.Clear();
+            for (int i = 0; i < depRec2.Length; i++)
+            {
+                e.Deployment.Add(depRec1[i]);
+            }
+        }
+        else
+        {
+            Debug.Log("huh, weird");
+        }
     }
 
 

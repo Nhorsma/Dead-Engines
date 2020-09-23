@@ -5,6 +5,9 @@ using UnityEngine;
 public class Enemy
 {
     private int health;
+    private int attack;
+    private float fireSpeed;
+
     private int id;
     private GameObject target;
     private GameObject rec, camp;
@@ -31,6 +34,18 @@ public class Enemy
     {
         get { return health; }
         set { health = value; }
+    }
+
+    public int Attack
+    {
+        get { return attack; }
+        set { attack = value; }
+    }
+
+    public float FireSpeed
+    {
+        get { return fireSpeed; }
+        set { fireSpeed = value; }
     }
 
     public int Id
