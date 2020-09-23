@@ -150,9 +150,19 @@ public class EnemyHandler : MonoBehaviour
     {
         if (a != null && a.GetComponent<NavMeshAgent>() != null)
         {
-            if(stop)
-                a.GetComponent<NavMeshAgent>().stoppingDistance = stoppingDistance;
-            a.GetComponent<NavMeshAgent>().SetDestination(place);
+            NavMeshAgent nv = a.GetComponent<NavMeshAgent>();
+            if (stop)
+                nv.stoppingDistance = stoppingDistance;
+
+            nv.SetDestination(place);
+        }
+        else if(a.GetComponent<NavMeshAgent>() == null)
+        {
+            //code for the APC since it bugs out
+
+//            Vector3 d = a.transform.position - place;
+            a.transform.position = Vector3.MoveTowards(a.transform.position, place, Time.deltaTime * 2f);
+
         }
     }
 }

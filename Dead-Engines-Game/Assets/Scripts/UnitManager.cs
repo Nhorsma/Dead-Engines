@@ -84,10 +84,13 @@ public class UnitManager : MonoBehaviour
 
     void MoveObject(GameObject selected)
     {
+        /*
         selected.GetComponent<NavMeshAgent>().stoppingDistance = 0;
         nv = selected.GetComponent<NavMeshAgent>();
         nv.destination = Hit().point;
         Debug.Log("Moving");
+        */
+        TravelTo(selected, Hit().point, false);
     }
 
     void RunAllJobs()
@@ -124,7 +127,7 @@ public class UnitManager : MonoBehaviour
                 unit.Job=("Extraction" + thing.tag); //////////////////////////////////////////////////////////////////////////////////////////////
                 unit.JobPos=(thing);
                 unit.JustDroppedOff=(true);
-                TravelTo(unitsGM[unit.Id].GetComponent<NavMeshAgent>(), unit.JobPos.transform.position);
+                TravelTo(unitsGM[unit.Id], unit.JobPos.transform.position,true);
             }
         }
         else if(thing.tag == "Enemy" || thing.tag == "Encampment")
@@ -136,7 +139,7 @@ public class UnitManager : MonoBehaviour
                 Unit unit = GetUnit(gm);
                 unit.Job="Combat";
                 unit.JobPos=thing;
-                TravelTo(unitsGM[unit.Id].GetComponent<NavMeshAgent>(), unit.JobPos.transform.position);
+                TravelTo(unitsGM[unit.Id], unit.JobPos.transform.position, true);
             }
         }
     }
@@ -181,7 +184,7 @@ public class UnitManager : MonoBehaviour
         {
             Extract(ri);
             unit.JustDroppedOff=false;
-            TravelTo(gm.GetComponent<NavMeshAgent>(), robotPos);
+            TravelTo(gm, robotPos, true);
         }
         else if(Vector3.Distance(gm.transform.position, robotPos) < 3f && !unit.JustDroppedOff)
         {
@@ -197,7 +200,7 @@ public class UnitManager : MonoBehaviour
 			}
             
             unit.JustDroppedOff=(true);
-            TravelTo(gm.GetComponent<NavMeshAgent>(), unit.JobPos.transform.position);
+            TravelTo(gm, unit.JobPos.transform.position, true);
         }
     }
 
@@ -205,8 +208,7 @@ public class UnitManager : MonoBehaviour
     {
         GameObject gm = GetUnitObject(unit);
         NavMeshAgent nv = GetUnitObject(unit).GetComponent<NavMeshAgent>();
-        nv.stoppingDistance = stoppingDistance;
-        TravelTo(unitsGM[unit.Id].GetComponent<NavMeshAgent>(), unit.JobPos.transform.position);
+        TravelTo(unitsGM[unit.Id], unit.JobPos.transform.position, true);
 
         if (Vector3.Distance(gm.transform.position, unit.JobPos.transform.position) < stoppingDistance + 1f
             && !unit.JustShot)
@@ -245,10 +247,24 @@ public class UnitManager : MonoBehaviour
         }
     }
 
-    void TravelTo(NavMeshAgent a, Vector3 place)
+    void TravelTo(GameObject b, Vector3 place, bool stop)
     {
-        if(a!=null)
+        NavMeshAgent a = b.GetComponent<NavMeshAgent>();
+        if (b.GetComponent<NavMeshAgent>() != null)
+        {
+            if (stop)
+                a.stoppingDistance = stoppingDistance;
+
             a.SetDestination(place);
+        }
+        else if(b.GetComponent<NavMeshAgent>() == null)
+        {
+            //code for the APC since it bugs out
+
+            //            Vector3 d = a.transform.position - place;
+            b.transform.position = Vector3.MoveTowards(b.transform.position, place, Time.deltaTime * 2f);
+
+        }
     }
 
     void Extract(int id)
