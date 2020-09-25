@@ -6,6 +6,15 @@ public class ResourceHandling : MonoBehaviour
 {
     public static int metal;
     public static int electronics;
+
+	public static int plate;
+	public static int bolt;
+	public static int part;
+
+	public static int wire;
+	public static int chip;
+	public static int board;
+		
     public int startQuantity;
 
     public GameObject[] resDeposits;
@@ -20,6 +29,16 @@ public class ResourceHandling : MonoBehaviour
         resQuantities = new int[resDeposits.Length];
         SetUpResources();
     }
+
+	void Update()
+	{
+		//debug stuff
+		if (Input.GetKeyDown(KeyCode.Alpha0))
+		{
+			metal += 100;
+			electronics += 100;
+		}
+	}
 
     //-----------------------------------------------------------------------------------------
     //-----------------------------------------------------------------------------------------

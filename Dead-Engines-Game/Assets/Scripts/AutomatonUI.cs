@@ -8,7 +8,7 @@ public class AutomatonUI : MonoBehaviour
 
 	public GameObject auto_main;
 	public List<GameObject> tabs = new List<GameObject>();
-
+	public RoomManager roomManager;
 
     public Text metalText;
 	public Text electronicsText;
@@ -45,6 +45,12 @@ public class AutomatonUI : MonoBehaviour
 		{
 			t.SetActive(false);
 		}
+		foreach (GameObject m in roomManager.miniTabs)
+		{
+			m.SetActive(false);
+		}
+		roomManager.ctrlMiniTab.gameObject.SetActive(false);
+		roomManager.genMiniTab.gameObject.SetActive(false);
 		tabs[1].SetActive(true);
 	}
 
