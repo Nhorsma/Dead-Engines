@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 2138677392}
-  m_IndirectSpecularColor: {r: 0.2850269, g: 0.3713935, b: 0.49601045, a: 1}
+  m_IndirectSpecularColor: {r: 0.28502697, g: 0.37139347, b: 0.49601266, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -582,6 +582,7 @@ GameObject:
   - component: {fileID: 128660104}
   - component: {fileID: 128660105}
   - component: {fileID: 128660106}
+  - component: {fileID: 128660107}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -743,6 +744,28 @@ MonoBehaviour:
   auto: {fileID: 927384140}
   miniTabs:
   - {fileID: 590680891}
+--- !u!114 &128660107
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 128660098}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2d6af31204c0b45449c2fb191c6e6a48, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maincam: {fileID: 1457351889}
+  scrollspeed: 10
+  closestScroll: 4
+  furthestScroll: 50
+  camspeed: 2
+  startSpeed: -8
+  endSpeed: 5
+  heightRatio: 0.05
+  widthRatio: 0.05
+  ui: {fileID: 927384140}
 --- !u!1 &156167812
 GameObject:
   m_ObjectHideFlags: 0
@@ -7014,7 +7037,6 @@ GameObject:
   - component: {fileID: 1457351889}
   - component: {fileID: 1457351888}
   - component: {fileID: 1457351887}
-  - component: {fileID: 1457351886}
   - component: {fileID: 1457351891}
   m_Layer: 0
   m_Name: Main Camera
@@ -7023,27 +7045,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1457351886
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1457351885}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2d6af31204c0b45449c2fb191c6e6a48, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  maincam: {fileID: 1457351889}
-  scrollspeed: 10
-  closestScroll: 4
-  furthestScroll: 50
-  camspeed: 2
-  startSpeed: -8
-  endSpeed: 5
-  heightRatio: 0.05
-  widthRatio: 0.05
 --- !u!114 &1457351887
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10839,6 +10840,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_NavMeshLayer
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4013801925313436967, guid: 01ab1810f6a7b8a488dda24bcfea197d,
+        type: 3}
+      propertyPath: m_TagString
+      value: Robot
       objectReference: {fileID: 0}
     - target: {fileID: 8687733333570277354, guid: 01ab1810f6a7b8a488dda24bcfea197d,
         type: 3}

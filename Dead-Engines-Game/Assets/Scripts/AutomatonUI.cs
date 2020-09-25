@@ -9,7 +9,8 @@ public class AutomatonUI : MonoBehaviour
 	public GameObject auto_main;
 	public List<GameObject> tabs = new List<GameObject>();
 
-	public Text metalText;
+
+    public Text metalText;
 	public Text electronicsText;
 
 	void Start()

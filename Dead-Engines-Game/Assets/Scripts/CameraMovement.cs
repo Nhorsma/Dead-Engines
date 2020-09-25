@@ -26,20 +26,24 @@ public class CameraMovement : MonoBehaviour
     Rigidbody rb;
     Vector3 pos;
     public static KeyCode Left, Right, Down, Up, RotateLeft, RotateRight, Pause;
+    public AutomatonUI ui;
 
     private void Start()
     {
         speedMulti = startSpeed;
-        rb = GetComponent<Rigidbody>();
+        rb = maincam.GetComponent<Rigidbody>();
         DefaultKeys();
     }
 
     void Update()
     {
-        MouseCameraMovement();
-        Scroll();
+        if (!ui.auto_main.activeInHierarchy)
+        {
+            MouseCameraMovement();
+            Scroll();
 
-        pos = maincam.transform.position;
+            pos = maincam.transform.position;
+        }
     }
 
     void MouseCameraMovement()
@@ -51,13 +55,15 @@ public class CameraMovement : MonoBehaviour
             if ((mpos.x <= (Screen.width*widthRatio) || Input.GetKey(Left)) && rb.velocity.x > -speedlimit)
             {
             //left
-            StartCoroutine(IncreaseCamSpeed());
+            StartCoroutine(IncreaseCamSpeed(true));
+        //    SpeedTimer(true);
             rb.AddForce(new Vector3(-camspeed, 0, 0), ForceMode.VelocityChange);
             }
             else if ((mpos.x >= Screen.width-(Screen.width*widthRatio) || Input.GetKey(Right)) && rb.velocity.x < speedlimit)
             {
             //right
-            StartCoroutine(IncreaseCamSpeed());
+            StartCoroutine(IncreaseCamSpeed(true));
+        //    SpeedTimer(true); ;
             rb.AddForce(new Vector3(camspeed, 0, 0), ForceMode.VelocityChange);
             }
             else
@@ -65,7 +71,9 @@ public class CameraMovement : MonoBehaviour
                 rb.AddForce(new Vector3(-rb.velocity.x*5f, 0, 0), ForceMode.Acceleration);
             if (rb.velocity == new Vector3(0, 0, 0))
             {
-                StopCoroutine(IncreaseCamSpeed());
+            //    StopCoroutine(IncreaseCamSpeed(false));
+                StartCoroutine(IncreaseCamSpeed(true));
+            //    SpeedTimer(false);
                 speedMulti = startSpeed;
             }
         }
@@ -73,13 +81,15 @@ public class CameraMovement : MonoBehaviour
         if ((mpos.y <= (Screen.height*heightRatio) || Input.GetKey(Down)) && rb.velocity.z > -speedlimit)
         {
             //down
-            StartCoroutine(IncreaseCamSpeed());
+            StartCoroutine(IncreaseCamSpeed(true));
+            //SpeedTimer(true);
             rb.AddForce(new Vector3(0, 0, -camspeed), ForceMode.VelocityChange);
         }
         else if ((mpos.y >= Screen.height - (Screen.height*heightRatio) || Input.GetKey(Up)) && rb.velocity.z < speedlimit)
         {
             //up
-            StartCoroutine(IncreaseCamSpeed());
+            StartCoroutine(IncreaseCamSpeed(true));
+            //SpeedTimer(true);
             rb.AddForce(new Vector3(0, 0, camspeed), ForceMode.VelocityChange);
         }
         else
@@ -87,7 +97,9 @@ public class CameraMovement : MonoBehaviour
             rb.AddForce(new Vector3(0, 0, -rb.velocity.z * 5f), ForceMode.Acceleration);
             if (rb.velocity == new Vector3(0, 0, 0))
             {
-                StopCoroutine(IncreaseCamSpeed());
+            //    StopCoroutine(IncreaseCamSpeed(false));
+                StartCoroutine(IncreaseCamSpeed(true));
+                //SpeedTimer(false);
                 speedMulti = startSpeed;
             }
         }
@@ -122,11 +134,40 @@ public class CameraMovement : MonoBehaviour
         scrolllimit = pos.y / closestScroll * 10f;
     }
 
-    IEnumerator IncreaseCamSpeed()
+    IEnumerator IncreaseCamSpeed(bool start)
     {
-//        speedMulti = -1f;
-        yield return new WaitForSeconds(1.5f);
-        speedMulti = endSpeed;
+        //        speedMulti = -1f;
+        if (start)
+        {
+            yield return new WaitForSeconds(1.5f);
+            speedMulti = endSpeed;
+        }
+        else
+        {
+            speedMulti = startSpeed;
+        }
+    }
+
+    void SpeedTimer(bool start)
+    {
+        if (start)
+        {
+            float clock = Time.deltaTime;
+            Debug.Log(clock);
+            if (clock >= 1.5f)
+            {
+                Debug.Log("faster");
+                speedMulti = endSpeed;
+                if(clock >=10f)
+                {
+                    clock = 1.5f;
+                }
+            }
+        }
+        else
+        {
+            speedMulti = startSpeed;
+        }
     }
 
     //overwrite this later when we add keybindings
