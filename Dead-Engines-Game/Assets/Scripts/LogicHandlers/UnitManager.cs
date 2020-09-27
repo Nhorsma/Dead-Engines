@@ -8,6 +8,7 @@ public class UnitManager : MonoBehaviour
     public SelectItems si;
     public ResourceHandling rh;
     public Vector3 robotPos;
+    public GameObject robot;
     public float stoppingDistance;
 
     public GameObject[] unitsGM;         //the gameobjects
@@ -18,6 +19,7 @@ public class UnitManager : MonoBehaviour
 
     void Start()
     {
+        robotPos = robot.transform.position;
         unitsGM = GameObject.FindGameObjectsWithTag("Friendly");
         units = new Unit[unitsGM.Length];
         SetUpUnits();
@@ -76,20 +78,15 @@ public class UnitManager : MonoBehaviour
         if (selectedUnits.Count != 0)
             for (int i = 0; i < selectedUnits.Count; i++)
             {
-                units[i].Job=("none");
+                units[i].Job="none";
                 units[i].JobPos=(null);
-                MoveObject(selectedUnits[i]);
+                TravelTo(selectedUnits[i], Hit().point, false);
+                //MoveObject(selectedUnits[i]);
             }
     }
 
     void MoveObject(GameObject selected)
     {
-        /*
-        selected.GetComponent<NavMeshAgent>().stoppingDistance = 0;
-        nv = selected.GetComponent<NavMeshAgent>();
-        nv.destination = Hit().point;
-        Debug.Log("Moving");
-        */
         TravelTo(selected, Hit().point, false);
     }
 
@@ -122,12 +119,11 @@ public class UnitManager : MonoBehaviour
             int ri = GetResourceID(thing);
             foreach (GameObject gm in selectedUnits)
             {
-                gm.GetComponent<NavMeshAgent>().stoppingDistance = 0;
                 Unit unit = GetUnit(gm);
                 unit.Job=("Extraction" + thing.tag); //////////////////////////////////////////////////////////////////////////////////////////////
                 unit.JobPos=(thing);
                 unit.JustDroppedOff=(true);
-                TravelTo(unitsGM[unit.Id], unit.JobPos.transform.position,true);
+                TravelTo(unitsGM[unit.Id], unit.JobPos.transform.position, false);
             }
         }
         else if(thing.tag == "Enemy" || thing.tag == "Encampment")
@@ -179,14 +175,15 @@ public class UnitManager : MonoBehaviour
         Vector3 depPos = rh.resDeposits[ri].transform.position;
         Vector3 uPos = gm.transform.position;
 
-        if (Vector3.Distance(gm.transform.position, unit.JobPos.transform.position)<3f
-            && unit.JustDroppedOff)
+        //reaches resource
+        if (unit.JustDroppedOff && Vector3.Distance(gm.transform.position, unit.JobPos.transform.position)<stoppingDistance)
         {
             Extract(ri);
             unit.JustDroppedOff=false;
-            TravelTo(gm, robotPos, true);
+            TravelTo(gm, robotPos, false);
+            Debug.Log(unit.Job + " at " + unit.JobPos.transform.position);
         }
-        else if(Vector3.Distance(gm.transform.position, robotPos) < 3f && !unit.JustDroppedOff)
+        else if (!unit.JustDroppedOff && Vector3.Distance(gm.transform.position, robotPos) < stoppingDistance) //reaches robot
         {
             if (resource.Equals("ExtractionMetal"))
 			{
@@ -200,7 +197,8 @@ public class UnitManager : MonoBehaviour
 			}
             
             unit.JustDroppedOff=(true);
-            TravelTo(gm, unit.JobPos.transform.position, true);
+            TravelTo(gm, unit.JobPos.transform.position, false);
+            Debug.Log(unit.Job + " at "+unit.JobPos.transform.position);
         }
     }
 
