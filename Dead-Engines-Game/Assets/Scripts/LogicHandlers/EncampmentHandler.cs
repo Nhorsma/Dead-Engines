@@ -109,7 +109,7 @@ public class EncampmentHandler : MonoBehaviour
                 {
                     e.Chance++;
                 }
-            Debug.Log(e.Chance + "0%");
+            //Debug.Log(e.Chance + "0%");
                 StartCoroutine(ChangeSpawnChance(e));
             }
     }
