@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 2138677392}
-  m_IndirectSpecularColor: {r: 0.2850269, g: 0.3713935, b: 0.49601045, a: 1}
+  m_IndirectSpecularColor: {r: 0.28502667, g: 0.3713932, b: 0.49600998, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -1320,16 +1320,18 @@ MonoBehaviour:
   r2: {fileID: 0}
   r3: {fileID: 0}
   startPos: {fileID: 981165201}
-  s_maxDistance: 15
-  s_minDistance: 5
-  r_maxDistance: 15
-  r_minDistance: 5
-  e_maxDistance: 15
-  e_minDistance: 5
+  s_maxDistance: 100
+  s_minDistance: 50
+  r_maxDistance: 200
+  r_minDistance: 50
+  e_maxDistance: 20
+  e_minDistance: 10
   t_res1: {fileID: 1966065398}
   t_res2: {fileID: 495966466}
   t_res3: {fileID: 0}
   howMany: 1
+  low_range: 200
+  high_range: 200
 --- !u!114 &128660100
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7420,7 +7422,7 @@ Transform:
   m_GameObject: {fileID: 702784496}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 1.78, y: -0.09, z: 1.36}
-  m_LocalScale: {x: 7.4861193, y: 1, z: 6.2669415}
+  m_LocalScale: {x: 20, y: 1, z: 20}
   m_Children: []
   m_Father: {fileID: 1515195784}
   m_RootOrder: 0

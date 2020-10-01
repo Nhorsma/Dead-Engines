@@ -13,7 +13,9 @@ public class SpawnRes : MonoBehaviour
 	public int r_maxDistance, r_minDistance;			// max/min distance from an unspecified resource
 	public float e_maxDistance, e_minDistance;			// max/min distance from an enemy camp
 	public Transform t_res1, t_res2, t_res3;			// transforms used to calculate the above distances
-	public int howMany;									// how many enemies to spawn
+	public int howMany;                                 // how many enemies to spawn
+	public int low_range;
+	public int high_range;
 
     void Awake()
     {
@@ -46,8 +48,8 @@ public class SpawnRes : MonoBehaviour
 		{
 			do
 			{
-				x = Random.Range(-4, 5);
-				z = Random.Range(-4, 5);
+				x = Random.Range(-(low_range-1), (high_range));
+				z = Random.Range(-(low_range - 1), (high_range));
 			} while (Vector3.Distance(new Vector3(x, 0, z), startPos.position) >= s_maxDistance || Vector3.Distance(new Vector3(x, 0, z), startPos.position) <= s_minDistance);
 		//	Debug.Log("Spawned res1");
 			r1 = Instantiate(res1, new Vector3(x, -.025f, z), Quaternion.identity);
@@ -57,8 +59,8 @@ public class SpawnRes : MonoBehaviour
 		{
 			do
 			{
-				x = Random.Range(-4, 5);
-				z = Random.Range(-4, 5);
+				x = Random.Range(-(low_range - 1), (high_range));
+				z = Random.Range(-(low_range - 1), (high_range));
 			} while (Vector3.Distance(new Vector3(x, 0, z), startPos.position) >= s_maxDistance || Vector3.Distance(new Vector3(x, 0, z), startPos.position) <= s_minDistance 
 				|| Vector3.Distance(new Vector3(x, 0, z), t_res1.position) >= r_maxDistance || Vector3.Distance(new Vector3(x, 0, z), t_res1.position) <= r_minDistance);
 		//	Debug.Log("Spawned res2");
@@ -69,8 +71,8 @@ public class SpawnRes : MonoBehaviour
 		{
 			do
 			{
-				x = Random.Range(-4, 5);
-				z = Random.Range(-4, 5);
+				x = Random.Range(-(low_range - 1), (high_range));
+				z = Random.Range(-(low_range - 1), (high_range));
 			} while (Vector3.Distance(new Vector3(x, 0, z), startPos.position) >= s_maxDistance || Vector3.Distance(new Vector3(x, 0, z), startPos.position) <= s_minDistance 
 				|| Vector3.Distance(new Vector3(x, 0, z), t_res1.position) >= r_maxDistance || Vector3.Distance(new Vector3(x, 0, z), t_res1.position) <= r_minDistance 
 				|| Vector3.Distance(new Vector3(x, 0, z), t_res2.position) >= r_maxDistance || Vector3.Distance(new Vector3(x, 0, z), t_res2.position) <= r_minDistance);
@@ -95,8 +97,8 @@ public class SpawnRes : MonoBehaviour
 			{
 				do
 				{
-					x = Random.Range(-4, 5);
-					z = Random.Range(-4, 5);
+					x = Random.Range(-(low_range - 1), (high_range));
+					z = Random.Range(-(low_range - 1), (high_range));
 				} while (Vector3.Distance(new Vector3(x, 0, z), startPos.position) >= s_maxDistance || Vector3.Distance(new Vector3(x, 0, z), startPos.position) <= s_minDistance
 				|| Vector3.Distance(new Vector3(x, 0, z), t_res1.position) >= e_maxDistance || Vector3.Distance(new Vector3(x, 0, z), t_res1.position) <= e_minDistance
 				);
@@ -107,8 +109,8 @@ public class SpawnRes : MonoBehaviour
 			{
 				do
 				{
-					x = Random.Range(-4, 5);
-					z = Random.Range(-4, 5);
+					x = Random.Range(-(low_range - 1), (high_range));
+					z = Random.Range(-(low_range - 1), (high_range));
 				} while (Vector3.Distance(new Vector3(x, 0, z), startPos.position) >= s_maxDistance || Vector3.Distance(new Vector3(x, 0, z), startPos.position) <= s_minDistance
 				|| Vector3.Distance(new Vector3(x, 0, z), t_res2.position) >= e_maxDistance || Vector3.Distance(new Vector3(x, 0, z), t_res2.position) <= e_minDistance
 				);
@@ -119,8 +121,8 @@ public class SpawnRes : MonoBehaviour
 			{
 				do
 				{
-					x = Random.Range(-4, 5);
-					z = Random.Range(-4, 5);
+					x = Random.Range(-(low_range - 1), (high_range));
+					z = Random.Range(-(low_range - 1), (high_range));
 				} while (Vector3.Distance(new Vector3(x, 0, z), startPos.position) >= s_maxDistance || Vector3.Distance(new Vector3(x, 0, z), startPos.position) <= s_minDistance
 				|| Vector3.Distance(new Vector3(x, 0, z), t_res3.position) >= e_maxDistance || Vector3.Distance(new Vector3(x, 0, z), t_res3.position) <= e_minDistance
 				);
