@@ -98,6 +98,22 @@ public class RoomManager : MonoBehaviour
 		miniTabs[slot].GetComponent<MiniTabHolder>().func3.onClick.RemoveAllListeners();
 		miniTabs[slot].GetComponent<MiniTabHolder>().func3.onClick.AddListener(delegate { Refine("part"); }); ///////////////////////////////
 		miniTabs[slot].GetComponent<MiniTabHolder>().func3.gameObject.SetActive(true);
+
+		miniTabs[slot].GetComponent<MiniTabHolder>().func4.GetComponentInChildren<Text>().text = "Refine Wire";
+		miniTabs[slot].GetComponent<MiniTabHolder>().func5.GetComponentInChildren<Text>().text = "Refine Chip";
+		miniTabs[slot].GetComponent<MiniTabHolder>().func6.GetComponentInChildren<Text>().text = "Refine Board";
+
+		miniTabs[slot].GetComponent<MiniTabHolder>().func4.onClick.RemoveAllListeners();
+		miniTabs[slot].GetComponent<MiniTabHolder>().func4.onClick.AddListener(delegate { Refine("wire"); }); ///////////////////////////////
+		miniTabs[slot].GetComponent<MiniTabHolder>().func4.gameObject.SetActive(true);
+
+		miniTabs[slot].GetComponent<MiniTabHolder>().func5.onClick.RemoveAllListeners();
+		miniTabs[slot].GetComponent<MiniTabHolder>().func5.onClick.AddListener(delegate { Refine("chip"); }); ///////////////////////////////
+		miniTabs[slot].GetComponent<MiniTabHolder>().func5.gameObject.SetActive(true);
+
+		miniTabs[slot].GetComponent<MiniTabHolder>().func6.onClick.RemoveAllListeners();
+		miniTabs[slot].GetComponent<MiniTabHolder>().func6.onClick.AddListener(delegate { Refine("board"); }); ///////////////////////////////
+		miniTabs[slot].GetComponent<MiniTabHolder>().func6.gameObject.SetActive(true);
 	}
 
 	void SetupStorage(int slot)

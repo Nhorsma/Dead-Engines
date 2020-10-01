@@ -7,12 +7,12 @@ public class SpawnRes : MonoBehaviour
 {
 
 	public GameObject res1, res2, res3, enemy;			// resource + enemy game objects (prefabs)
-    public GameObject r1, r2, r3;                       // the clones/instanciations of the resources (to be returned)
+    private GameObject r1, r2, r3;                      // the clones/instantiations of the resources (to be returned)
 	public Transform startPos;							// where the robot body is located
 	public int s_maxDistance, s_minDistance;			// max/min distance from the start position
 	public int r_maxDistance, r_minDistance;			// max/min distance from an unspecified resource
 	public float e_maxDistance, e_minDistance;			// max/min distance from an enemy camp
-	public Transform t_res1, t_res2, t_res3;			// transforms used to calculate the above distances
+	private Transform t_res1, t_res2, t_res3;			// transforms used to calculate the above distances
 	public int howMany;                                 // how many enemies to spawn
 	public int low_range;
 	public int high_range;
