@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 2138677392}
-  m_IndirectSpecularColor: {r: 0.28502667, g: 0.3713932, b: 0.49600998, a: 1}
+  m_IndirectSpecularColor: {r: 0.28502697, g: 0.37139347, b: 0.49601266, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -1690,7 +1690,7 @@ MonoBehaviour:
   rh: {fileID: 128660103}
   robotPos: {x: 10, y: 3, z: 8}
   robot: {fileID: 1616910867}
-  stoppingDistance: 3
+  stoppingDistance: 5
   unitsGM: []
 --- !u!114 &128660103
 MonoBehaviour:
@@ -1725,6 +1725,7 @@ MonoBehaviour:
   eGM: []
   eh: {fileID: 0}
   spawn: {fileID: 128660099}
+  rh: {fileID: 0}
   spawnTime: 3
   spawnDistance: 0
 --- !u!114 &128660105
@@ -12532,6 +12533,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Unit_B
       objectReference: {fileID: 0}
+    - target: {fileID: 2018405002262938516, guid: c45838c4ef7d15a408b7d18511289dd1,
+        type: 3}
+      propertyPath: m_Speed
+      value: 10
+      objectReference: {fileID: 0}
     - target: {fileID: 2018405002262938520, guid: c45838c4ef7d15a408b7d18511289dd1,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -16370,8 +16376,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1438434338}
   m_HandleRect: {fileID: 1438434337}
   m_Direction: 2
-  m_Value: 1.0000004
-  m_Size: 0.6723129
+  m_Value: 1
+  m_Size: 0.67231286
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -26700,6 +26706,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Unit_C
       objectReference: {fileID: 0}
+    - target: {fileID: 2018405002262938516, guid: c45838c4ef7d15a408b7d18511289dd1,
+        type: 3}
+      propertyPath: m_Speed
+      value: 10
+      objectReference: {fileID: 0}
     - target: {fileID: 2018405002262938520, guid: c45838c4ef7d15a408b7d18511289dd1,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -27528,6 +27539,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Unit_A
+      objectReference: {fileID: 0}
+    - target: {fileID: 2018405002262938516, guid: c45838c4ef7d15a408b7d18511289dd1,
+        type: 3}
+      propertyPath: m_Speed
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 2018405002262938520, guid: c45838c4ef7d15a408b7d18511289dd1,
         type: 3}

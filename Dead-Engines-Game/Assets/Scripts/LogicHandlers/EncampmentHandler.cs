@@ -13,14 +13,24 @@ public class EncampmentHandler : MonoBehaviour
     public EnemyHandler eh;
 
     public SpawnRes spawn;
+    public ResourceHandling rh;
     public float spawnTime, spawnDistance;
 
-    string[] depRec3 = { "gun", "gun", "gun" };
-    string[] depRec2 = { "gun", "gun", "APC" };
-    string[] depRec1 = { "gun", "gun", "APC", "APC" };
+    string[] depRec33 = { "gun", "gun", "gun" };
+    string[] depRec23 = { "gun", "gun", "APC" };
+    string[] depRec13 = { "gun", "gun", "APC", "APC" };
+
+    string[] depRec32 = { "gun", "gun", "APC" };
+    string[] depRec22 = { "gun", "gun", "APC", "APC"};
+    string[] depRec12 = { "APC", "APC", "Mech" };
+
+    string[] depRec31 = { "gun", "gun", "gun", "APC"};
+    string[] depRec21 = { "gun", "gun", "APC", "APC", "Mech" };
+    string[] depRec11 = { "gun", "gun", "gun", "APC", "APC", "Mech", "Mech" };
 
     void Start()
     {
+        rh = GetComponent<ResourceHandling>();
         eh = GetComponent<EnemyHandler>();
         eGM = GameObject.FindGameObjectsWithTag("Encampment");
         encamps = new Encampment[eGM.Length];
@@ -29,9 +39,9 @@ public class EncampmentHandler : MonoBehaviour
 
     void Update()
     {
-        foreach(Encampment e in encamps)
+        for(int i =0;i<encamps.Length;i++)
         {
-            CheckUnitNear(e);
+            CheckUnitNear(encamps[i]);
         }
     }
 
@@ -48,6 +58,7 @@ public class EncampmentHandler : MonoBehaviour
         {
             encamps[i] = new Encampment(i);
             encamps[i].ClosestRec = GetClosestResource(encamps[i]);
+            encamps[i].Deployment = depRec33;
         }
     }
 
@@ -100,7 +111,7 @@ public class EncampmentHandler : MonoBehaviour
             if (e.CanSpawn)
             {
                 int hit = Random.Range(1, 5);
-                if (e.OnField<e.Deployment.Count && hit < e.Chance)
+                if (e.OnField<e.Deployment.Length && hit < e.Chance)
                 {
                     SpawnEnemy(e);
                     e.Chance = 0;
@@ -127,6 +138,9 @@ public class EncampmentHandler : MonoBehaviour
     {
         CheckDeployment(e);
         Vector3 spawnPlace = eGM[e.Id].transform.position + new Vector3(Random.Range(1, 3), 0, Random.Range(1, 3));
+
+        for(int i=0;i<e.Deployment.Length;i++)
+            Debug.Log(e.Deployment[i] +" : "+e.OnField);
         var gm = Instantiate(Resources.Load(e.Deployment[e.OnField]), spawnPlace, transform.rotation);
 
         Enemy enemy = new Enemy();
@@ -145,72 +159,65 @@ public class EncampmentHandler : MonoBehaviour
     //adds "gun", "APC", or "Mech"
     void CheckDeployment(Encampment e)
     {
-        ResourceHandling r = GetComponent<ResourceHandling>();
-        int recAmount = r.GetNumber(e.ClosestRec);
+        int quant = rh.resQuantities[rh.GetNumber(e.ClosestRec)];
 
-        if(recAmount<=0)
+        if (quant<=0)
         {
-            e.Deployment.Clear();
+            e.Deployment = new string[50];
+            Debug.Log("whoops");
             return;
         }
 
-        if (r.recsLeft == 3)
+        if (rh.recsLeft == 3)
         {
-            if (recAmount <= 76)
+            if(e.Health>75 || quant>rh.startQuantity-(rh.startQuantity/4))
             {
-                e.Deployment.Add("gun");
-
-                if (recAmount <= 51)
-                {
-                    e.Deployment.Add("APC");
-
-                    if (recAmount <= 26)
-                    {
-                        e.Deployment.Add("gun");
-                    }
-                }
+                e.Deployment = depRec33;
+            }
+            else if(e.Health > 50 || quant > (rh.startQuantity / 2))
+            {
+                e.Deployment = depRec23;
+            }
+            else if(e.Health > 25 || quant > rh.startQuantity/4)
+            {
+                e.Deployment = depRec13;
             }
         }
-        else if(r.recsLeft==2)
+        else if(rh.recsLeft == 2)
         {
-            if (recAmount <= 76)
+            if (e.Health > 75 || quant > rh.startQuantity - (rh.startQuantity / 4))
             {
-                e.Deployment.Add("APC");
-
-                if (recAmount <= 51)
-                {
-                    e.Deployment.Remove("gun");
-
-                    if (recAmount <= 26)
-                    {
-                        e.Deployment.Remove("APC");
-                        e.Deployment.Remove("APC");
-                        e.Deployment.Add("Mech");
-                    }
-                }
+                e.Deployment = depRec32;
+            }
+            else if (e.Health > 50 || quant > (rh.startQuantity / 2))
+            {
+                e.Deployment = depRec22;
+            }
+            else if (e.Health > 25 || quant > rh.startQuantity / 4)
+            {
+                e.Deployment = depRec12;
             }
         }
-        else if(r.recsLeft==1)
+        else if(rh.recsLeft == 1)
         {
-            e.Deployment.Add("APC");
-
-            if (recAmount <= 76)
+            if (e.Health > 75 || quant > rh.startQuantity - (rh.startQuantity / 4))
             {
-                e.Deployment.Add("APC");
-
-                if (recAmount <= 51)
-                {
-                    e.Deployment.Remove("gun");
-
-                    if (recAmount <= 26)
-                    {
-                        e.Deployment.Remove("APC");
-                        e.Deployment.Remove("APC");
-                        e.Deployment.Add("Mech");
-                    }
-                }
+                e.Deployment = depRec31;
+            }
+            else if (e.Health > 50 || quant > (rh.startQuantity / 2))
+            {
+                e.Deployment = depRec21;
+            }
+            else if (e.Health > 25 || quant > rh.startQuantity / 4)
+            {
+                e.Deployment = depRec11;
             }
         }
+        else
+        {
+            return;
+        }
+        
     }
 
 
@@ -232,27 +239,9 @@ public class EncampmentHandler : MonoBehaviour
 
     void SetDeployment(Encampment e, int recsLeft)
     {
-        if(recsLeft==2)
-        {
-            e.Deployment.Clear();
-            for(int i=0;i<depRec2.Length;i++)
-            {
-                e.Deployment.Add(depRec2[i]);
-            }
-        }
-        else if (recsLeft == 1)
-        {
-            e.Deployment.Clear();
-            for (int i = 0; i < depRec2.Length; i++)
-            {
-                e.Deployment.Add(depRec1[i]);
-            }
-        }
-        else
-        {
-            Debug.Log("huh, weird");
-        }
+        
     }
+    
 
 
     //as the player explores and finds new encampments, new encampments should be entered into

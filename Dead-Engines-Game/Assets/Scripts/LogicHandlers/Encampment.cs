@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Encampment
 {
-    private List<string> deployment;
+    private string[] deployment;
     private bool canSpawn, playerInRange;
     private int id, health, chance, onField;
     private GameObject closestRec;
@@ -18,11 +18,8 @@ public class Encampment
         health = 100;
         onField = 0;
         playerInRange = false;
-
-        deployment = new List<string>();
-        deployment.Add("APC");
-        deployment.Add("gun");
-        deployment.Add("Mech");
+        deployment = new string[] { "hellow" };
+      
     }
 
     public int Id
@@ -67,7 +64,7 @@ public class Encampment
         set { playerInRange = value; }
     }
 
-    public List<string> Deployment
+    public string[] Deployment
     {
         get { return deployment; }
         set { deployment = value; }

@@ -14,11 +14,12 @@ public class UnitManager : MonoBehaviour
     public GameObject[] unitsGM;         //the gameobjects
     public Unit[] units;                 //the 'unit' info attached to the gameobjects
     [System.NonSerialized]
-    public static List<GameObject> selectedUnits = new List<GameObject>();
+    public static List<GameObject> selectedUnits;
     NavMeshAgent nv;
 
     void Start()
     {
+        selectedUnits = new List<GameObject>();
         robotPos = robot.transform.position;
         unitsGM = GameObject.FindGameObjectsWithTag("Friendly");
         units = new Unit[unitsGM.Length];
@@ -47,17 +48,18 @@ public class UnitManager : MonoBehaviour
     RaycastHit Hit()
     {
         RaycastHit hit;
-        if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit, 100))
+        if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit, Mathf.Infinity))
             return hit;
         return hit;
     }
 
     void RightClick()
     {
-        if (Input.GetMouseButtonDown(1) && selectedUnits.Count > 0)
+        if (Input.GetMouseButtonDown(1) && Hit().point != null && selectedUnits.Count > 0)
         {
             //right click on anything that has units do a job
-            if (Hit().collider.gameObject.tag == "Metal" ||
+            if (Hit().collider != null && 
+                Hit().collider.gameObject.tag == "Metal" ||
                 Hit().collider.gameObject.tag == "Electronics" ||
                 Hit().collider.gameObject.tag == "Enemy" ||
                 Hit().collider.gameObject.tag == "Encampment")
@@ -81,7 +83,6 @@ public class UnitManager : MonoBehaviour
                 units[i].Job="none";
                 units[i].JobPos=(null);
                 TravelTo(selectedUnits[i], Hit().point, false);
-                //MoveObject(selectedUnits[i]);
             }
     }
 
@@ -131,11 +132,11 @@ public class UnitManager : MonoBehaviour
             int ri = GetResourceID(thing);
             foreach (GameObject gm in selectedUnits)
             {
-                gm.GetComponent<NavMeshAgent>().stoppingDistance = stoppingDistance;
+            //    gm.GetComponent<NavMeshAgent>().stoppingDistance = stoppingDistance;
                 Unit unit = GetUnit(gm);
                 unit.Job="Combat";
                 unit.JobPos=thing;
-                TravelTo(unitsGM[unit.Id], unit.JobPos.transform.position, true);
+            //   TravelTo(unitsGM[unit.Id], unit.JobPos.transform.position, true);
             }
         }
     }
@@ -235,12 +236,12 @@ public class UnitManager : MonoBehaviour
                 //access's the enemy via the enemyHandler, and reduces the enemie's health by one
                 gameObject.GetComponent<EnemyHandler>().GetEnemy(hit.collider.gameObject).Health--;
 
-                Debug.Log("enemy: " + gameObject.GetComponent<EnemyHandler>().GetEnemy(hit.collider.gameObject).Health);
+                //Debug.Log("enemy: " + gameObject.GetComponent<EnemyHandler>().GetEnemy(hit.collider.gameObject).Health);
             }
             else if(hit.collider.tag=="Encampment")
             {
                 gameObject.GetComponent<EncampmentHandler>().GetEncampment(hit.collider.gameObject).Health--;
-                Debug.Log("camp: "+gameObject.GetComponent<EncampmentHandler>().GetEncampment(hit.collider.gameObject).Health);
+                //Debug.Log("camp: "+gameObject.GetComponent<EncampmentHandler>().GetEncampment(hit.collider.gameObject).Health);
             }
         }
     }
