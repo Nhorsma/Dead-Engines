@@ -1,7 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.AI;
 using UnityEngine.UI;
 
 public class SelectItems : MonoBehaviour
@@ -27,20 +26,30 @@ public class SelectItems : MonoBehaviour
     Vector3 clickSpot;
     RaycastHit hit;
 
+    HealthUI hui;
+
     private void Start()
     {
         hasCreatedSquare = false;
         um = this.gameObject.GetComponent<UnitManager>();
         selectionSquareTrans = selectionSquare.rectTransform;
         mouseSecond = mouseFirst = (Input.mousePosition);
+        hui = GetComponent<HealthUI>();
+        hui.toDisplay = new List<GameObject>();
+        hui.hoverHPs = new List<Image>();
     }
 
     private void Update()
     {
         Highlight();
         LeftClick();
-  //      RightClick();
 
+
+        if(Input.GetKeyDown(KeyCode.Space))
+        {
+            hui.DeleteHovers();
+            Debug.Log("space");
+        }
     }
 
     //Help From http://totologic.blogspot.se/2014/01/accurate-point-in-triangle-test.html
@@ -78,40 +87,12 @@ public class SelectItems : MonoBehaviour
                 }
                 else //group select
                 {
-                ClearAll();
-                GroupSelect();
+                    ClearAll();
+                    GroupSelect();
                 }
             }
     }
 
-    /*
-    void RightClick()
-    {
-        if (Input.GetMouseButtonDown(1) && selectedUnits.Count>0)
-        {
-            MoveAllSelected();   
-        }
-    }
-*/
-    /*
-        void MoveAllSelected()
-        {
-            if(selectedUnits.Count!=0)
-            for (int i = 0; i < selectedUnits.Count; i++)
-            {
-                MoveObject(selectedUnits[i]);
-            }
-        }
-
-
-        void MoveObject(GameObject selected)
-        {
-            nv = selected.GetComponent<NavMeshAgent>();
-            RaycastHit hit;
-            if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit, 100))
-                nv.destination = hit.point;
-        }
-    */
 
     void Highlight()
     {
@@ -160,9 +141,14 @@ public class SelectItems : MonoBehaviour
                 if (!isSelected)
                 {
                     highlightThisUnit = currentObj;
-
                     highlightThisUnit.GetComponent<MeshRenderer>().material = highlightMaterial;
+                    hui.AddToList(currentObj);
+                    hui.HoverHealth();
                 }
+            }
+            else
+            {
+              //  hui.DeleteHovers();
             }
         }
     }

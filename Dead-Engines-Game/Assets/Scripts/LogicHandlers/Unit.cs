@@ -14,7 +14,7 @@ public class Unit
     {
         job = "none";
         jobPos = null;
-        health = 3;
+        health = 100;
         justDroppedOff = false;
         id = -1;
         justShot = false;
