@@ -80,16 +80,11 @@ public class UnitManager : MonoBehaviour
             {
                 units[i].Job="none";
                 units[i].JobPos=(null);
-<<<<<<< Updated upstream
-                TravelTo(selectedUnits[i], Hit().point, false);
-                //MoveObject(selectedUnits[i]);
-=======
 
                 if (i == 1)
                     TravelTo(selectedUnits[i], Hit().point, false, false);
                 else if (i > 1)
                     TravelTo(selectedUnits[i], Hit().point, true, true);
->>>>>>> Stashed changes
             }
     }
 
@@ -141,17 +136,9 @@ public class UnitManager : MonoBehaviour
             int ri = GetResourceID(thing);
             foreach (GameObject gm in selectedUnits)
             {
-<<<<<<< Updated upstream
-                gm.GetComponent<NavMeshAgent>().stoppingDistance = stoppingDistance;
                 Unit unit = GetUnit(gm);
                 unit.Job="Combat";
                 unit.JobPos=thing;
-                TravelTo(unitsGM[unit.Id], unit.JobPos.transform.position, true);
-=======
-                Unit unit = GetUnit(gm);
-                unit.Job="Combat";
-                unit.JobPos=thing;
->>>>>>> Stashed changes
             }
         }
     }
