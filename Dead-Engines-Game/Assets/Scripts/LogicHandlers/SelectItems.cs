@@ -26,7 +26,7 @@ public class SelectItems : MonoBehaviour
     Vector3 clickSpot;
     RaycastHit hit;
 
-    HealthUI hui;
+    //HealthUI hui;
 
     private void Start()
     {
@@ -34,9 +34,9 @@ public class SelectItems : MonoBehaviour
         um = this.gameObject.GetComponent<UnitManager>();
         selectionSquareTrans = selectionSquare.rectTransform;
         mouseSecond = mouseFirst = (Input.mousePosition);
-        hui = GetComponent<HealthUI>();
-        hui.toDisplay = new List<GameObject>();
-        hui.hoverHPs = new List<Image>();
+        //hui = GetComponent<HealthUI>();
+		//hui.toDisplay = new List<GameObject>();
+        //hui.hoverHPs = new List<Image>();
     }
 
     private void Update()
@@ -47,7 +47,7 @@ public class SelectItems : MonoBehaviour
 
         if(Input.GetKeyDown(KeyCode.Space))
         {
-            hui.DeleteHovers();
+            //hui.DeleteHovers();
             Debug.Log("space");
         }
     }
@@ -142,8 +142,8 @@ public class SelectItems : MonoBehaviour
                 {
                     highlightThisUnit = currentObj;
                     highlightThisUnit.GetComponent<MeshRenderer>().material = highlightMaterial;
-                    hui.AddToList(currentObj);
-                    hui.HoverHealth();
+                    //hui.AddToList(currentObj);
+                    //hui.HoverHealth();
                 }
             }
             else

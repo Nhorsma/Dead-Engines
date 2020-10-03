@@ -74,4 +74,8 @@ public class HealthUI:MonoBehaviour
             Destroy(floatingCan.transform.GetChild(i));
         }
     }
+
+	
+
+
 }
