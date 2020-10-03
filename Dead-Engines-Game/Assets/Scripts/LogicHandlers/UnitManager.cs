@@ -80,15 +80,25 @@ public class UnitManager : MonoBehaviour
             {
                 units[i].Job="none";
                 units[i].JobPos=(null);
+<<<<<<< Updated upstream
                 TravelTo(selectedUnits[i], Hit().point, false);
                 //MoveObject(selectedUnits[i]);
+=======
+
+                if (i == 1)
+                    TravelTo(selectedUnits[i], Hit().point, false, false);
+                else if (i > 1)
+                    TravelTo(selectedUnits[i], Hit().point, true, true);
+>>>>>>> Stashed changes
             }
     }
 
+/*
     void MoveObject(GameObject selected)
     {
-        TravelTo(selected, Hit().point, false);
+        TravelTo(selected, Hit().point, false, false);
     }
+*/
 
     void RunAllJobs()
     {
@@ -123,7 +133,7 @@ public class UnitManager : MonoBehaviour
                 unit.Job=("Extraction" + thing.tag); //////////////////////////////////////////////////////////////////////////////////////////////
                 unit.JobPos=(thing);
                 unit.JustDroppedOff=(true);
-                TravelTo(unitsGM[unit.Id], unit.JobPos.transform.position, false);
+                TravelTo(unitsGM[unit.Id], unit.JobPos.transform.position, false, false);
             }
         }
         else if(thing.tag == "Enemy" || thing.tag == "Encampment")
@@ -131,11 +141,17 @@ public class UnitManager : MonoBehaviour
             int ri = GetResourceID(thing);
             foreach (GameObject gm in selectedUnits)
             {
+<<<<<<< Updated upstream
                 gm.GetComponent<NavMeshAgent>().stoppingDistance = stoppingDistance;
                 Unit unit = GetUnit(gm);
                 unit.Job="Combat";
                 unit.JobPos=thing;
                 TravelTo(unitsGM[unit.Id], unit.JobPos.transform.position, true);
+=======
+                Unit unit = GetUnit(gm);
+                unit.Job="Combat";
+                unit.JobPos=thing;
+>>>>>>> Stashed changes
             }
         }
     }
@@ -180,7 +196,7 @@ public class UnitManager : MonoBehaviour
         {
             Extract(ri);
             unit.JustDroppedOff=false;
-            TravelTo(gm, robotPos, false);
+            TravelTo(gm, robotPos, false, false);
             Debug.Log(unit.Job + " at " + unit.JobPos.transform.position);
         }
         else if (!unit.JustDroppedOff && Vector3.Distance(gm.transform.position, robotPos) < stoppingDistance) //reaches robot
@@ -197,7 +213,7 @@ public class UnitManager : MonoBehaviour
 			}
             
             unit.JustDroppedOff=(true);
-            TravelTo(gm, unit.JobPos.transform.position, false);
+            TravelTo(gm, unit.JobPos.transform.position, false,false);
             Debug.Log(unit.Job + " at "+unit.JobPos.transform.position);
         }
     }
@@ -206,7 +222,7 @@ public class UnitManager : MonoBehaviour
     {
         GameObject gm = GetUnitObject(unit);
         NavMeshAgent nv = GetUnitObject(unit).GetComponent<NavMeshAgent>();
-        TravelTo(unitsGM[unit.Id], unit.JobPos.transform.position, true);
+        TravelTo(unitsGM[unit.Id], unit.JobPos.transform.position, true, true);
 
         if (Vector3.Distance(gm.transform.position, unit.JobPos.transform.position) < stoppingDistance + 1f
             && !unit.JustShot)
@@ -245,7 +261,7 @@ public class UnitManager : MonoBehaviour
         }
     }
 
-    void TravelTo(GameObject b, Vector3 place, bool stop)
+    void TravelTo(GameObject b, Vector3 place, bool stop, bool randomize)
     {
         NavMeshAgent a = b.GetComponent<NavMeshAgent>();
         if (b.GetComponent<NavMeshAgent>() != null)
@@ -253,15 +269,12 @@ public class UnitManager : MonoBehaviour
             if (stop)
                 a.stoppingDistance = stoppingDistance;
 
+            if(randomize)
+            {
+                place += new Vector3(Random.Range(-stoppingDistance, stoppingDistance), 0, Random.Range(-stoppingDistance, stoppingDistance));
+            }
+
             a.SetDestination(place);
-        }
-        else if(b.GetComponent<NavMeshAgent>() == null)
-        {
-            //code for the APC since it bugs out
-
-            //            Vector3 d = a.transform.position - place;
-            b.transform.position = Vector3.MoveTowards(b.transform.position, place, Time.deltaTime * 2f);
-
         }
     }
 

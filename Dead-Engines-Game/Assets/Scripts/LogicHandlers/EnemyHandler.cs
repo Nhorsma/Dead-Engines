@@ -71,12 +71,12 @@ public class EnemyHandler : MonoBehaviour
         if(chance==1)
         {
             Vector3 rand = new Vector3(Random.Range(-3, 3), Random.Range(-3, 3), Random.Range(-3, 3));
-            TravelTo(GetEnemyObject(e), e.Rec.transform.position + rand, true);
+            TravelTo(GetEnemyObject(e), e.Rec.transform.position + rand, true, false);
         }
         else
         {
             Vector3 rand = new Vector3(Random.Range(-3, 3), Random.Range(-3, 3), Random.Range(-3, 3));
-            TravelTo(GetEnemyObject(e), e.Camp.transform.position + rand, true);
+            TravelTo(GetEnemyObject(e), e.Camp.transform.position + rand, true, false);
         }
     }
 
@@ -100,7 +100,7 @@ public class EnemyHandler : MonoBehaviour
                 || Vector3.Distance(um.GetUnitObject(u).transform.position, e.Camp.transform.position) < tresspassingRange)
             {
                 e.Target = um.GetUnitObject(u);
-                TravelTo(GetEnemyObject(e), um.GetUnitObject(u).transform.position, true);
+                TravelTo(GetEnemyObject(e), um.GetUnitObject(u).transform.position, true, true);
                 break;
             }
         }
@@ -117,7 +117,7 @@ public class EnemyHandler : MonoBehaviour
         }
         else if(dis>shootingRange && dis<tresspassingRange)
         {
-            TravelTo(GetEnemyObject(e), e.Target.transform.position, true);
+            TravelTo(GetEnemyObject(e), e.Target.transform.position, true, true);
         }
         else if(dis>tresspassingRange && dis>shootingRange)
         {
@@ -146,23 +146,20 @@ public class EnemyHandler : MonoBehaviour
         }
     }
 
-    void TravelTo(GameObject a, Vector3 place, bool stop)
+    void TravelTo(GameObject a, Vector3 place, bool stop, bool randomize)
     {
         if (a != null && a.GetComponent<NavMeshAgent>() != null)
         {
             NavMeshAgent nv = a.GetComponent<NavMeshAgent>();
             if (stop)
                 nv.stoppingDistance = stoppingDistance;
+            if (randomize)
+            {
+                place += new Vector3(Random.Range(-stoppingDistance, stoppingDistance), 0, Random.Range(-stoppingDistance, stoppingDistance));
+            }
+
 
             nv.SetDestination(place);
-        }
-        else if(a.GetComponent<NavMeshAgent>() == null)
-        {
-            //code for the APC since it bugs out
-
-//            Vector3 d = a.transform.position - place;
-            a.transform.position = Vector3.MoveTowards(a.transform.position, place, Time.deltaTime * 2f);
-
         }
     }
 }
