@@ -17,6 +17,10 @@ public class ResourceHandling : MonoBehaviour
 		
     public int startQuantity;
 
+    public GameObject fuel;
+    public bool fuelTaken;
+    public bool fuelDropped;
+
     public GameObject[] resDeposits;
     public int[] resQuantities;
     public SpawnRes spawn;
@@ -28,6 +32,8 @@ public class ResourceHandling : MonoBehaviour
         resDeposits = new GameObject[spawn.GetResources().Length];
         resQuantities = new int[resDeposits.Length];
         SetUpResources();
+
+        fuelDropped = fuelTaken = false;
     }
 
 	void Update()
@@ -78,6 +84,21 @@ public class ResourceHandling : MonoBehaviour
     {
         int i = GetNumber(gm);
         resQuantities[i] -= 1;
+    }
+
+    //called when Fuel resource has been seized and
+    //on-route to the automoton
+    public void TakenFuel()
+    {
+        fuelTaken = true;
+    }
+
+    //called when fuel resource has arrived at automoton
+    //"fuelDropped" activates the ability to upgrade the generator
+    public void DroppedOffFuel()
+    {
+        if (fuelTaken)
+            fuelDropped = true;
     }
 
 
