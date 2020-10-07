@@ -30,8 +30,6 @@ public class RoomManager : MonoBehaviour
 	public int studyCost_M;
 	public int studyCost_E;
 
-	public UnitManager unitManager;
-
 	void Start()
     {
 		for (int i = 0; i < 7; i++)
@@ -346,32 +344,81 @@ public class RoomManager : MonoBehaviour
 
 	public void Assign(string where, Room r)
 	{
-		Debug.Log("Fix me! [Assign] to [" + r.Type + "] [" + r.Slot + "]");
+		
+		if (um.ReturnJoblessUnit() == null)
+		{
+			Debug.Log("No worker available");
+			return;
+		}
+		else
+		{
+			Unit who = um.ReturnJoblessUnit();
+			Debug.Log("Assigned [" + who.UnitName + "] to[" + r.Type + "][" + r.Slot + "]");
+			who.Job = where;
+			who.JobPos = autoObj;
+			um.SetJobFromRoom(who, where);
+			r.Workers.Add(who);
+			r.WorkMultiplier = r.Workers.Count;
 
-        Unit who = um.ReturnJoblessUnit();
-        if(who==null)
-        {
-            Debug.Log("no worker available");
-            return;
-        }
-        who.Job = where;
-        who.JobPos = autoObj;
-        um.SetJobFromRoom(who, where);
-        //r.workers.Add(who);
-        //r.work_multiplier = r.workers.Count;
+			if (r.Type == "shrine")
+			{
+				Worship();
+			}
+			else if (r.Type == "study")
+			{
+				Research();
+			}
 
-        // method does not exist yet
-        //info.UpdateUnitViewer();
-    }
-
-    public void Worship()
-	{
-
+			//method does not exist yet
+			//info.UpdateUnitViewer();
+		}
 	}
 
-	public void Study()
+	//worship and research methods only need to be called when their multiplier changes, or when a unit is assigned successfully
+	//this will definitely save on horsepower
+	public void Worship()
 	{
-        
+		int combinedMultiplier = 0;
+		foreach (Room r in rooms)
+		{
+			if (r.Type == "shrine" && r.Workers.Count > 0)
+			{
+				Debug.Log("Shrine[" + r.Slot + "]: " + r.WorkMultiplier + "x boost");
+				combinedMultiplier += r.WorkMultiplier; //case for multiples of the same room
+			}
+		}
+		Debug.Log("Total Shrine Multiplier: " + combinedMultiplier);
+
+
+		//calculate effects
+		//if (activeEffect == "none"){
+		//return;
+		//}
+		//else if (activeEffect == "effectString"){ //-----------------------> effectString will be set by a button that is activated once room is upgraded
+		//effectVar *= combinedMultiplier           //-----------------------> need to set the activeEffect to multiplier 0 BEFORE it is set to the new effectString, ie only the active effect gets boosted
+		//}
+	}
+
+	public void Research()
+	{
+		int combinedMultiplier = 0;
+		foreach (Room r in rooms)
+		{
+			if (r.Type == "study" && r.Workers.Count > 0)
+			{
+				Debug.Log("Study[" + r.Slot + "]: " + r.WorkMultiplier + "x boost");
+				combinedMultiplier += r.WorkMultiplier; //case for multiples of the same room
+			}
+		}
+		Debug.Log("Total Study Multiplier: " + combinedMultiplier);
+
+		//calculate effect
+		//if (activeEffect == "none"){
+		//return;
+		//}
+		//else if (activeEffect == "effectString"){ //-----------------------> effectString will be set by a button that is activated once room is upgraded
+		//effectVar *= combinedMultiplier           //-----------------------> need to set the activeEffect to multiplier 0 BEFORE it is set to the new effectString, ie only the active effect gets boosted
+		//}
 	}
 
 	public void UpdateRoomDisplay()

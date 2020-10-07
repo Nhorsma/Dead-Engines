@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Unit
 {
+	private string unitName;
     private string job;
     private GameObject jobPos;
     private int health;
@@ -27,6 +28,7 @@ public class Unit
         health = 3;
         justDroppedOff = false;
         id = dec;
+		unitName = "U" + id.ToString();
     }
 
     public string Job
@@ -64,5 +66,11 @@ public class Unit
         get { return id; }
         set { id = value; }
     }
+
+	public string UnitName
+	{
+		get { return unitName; }
+		set { unitName = value; }
+	}
 
 }
