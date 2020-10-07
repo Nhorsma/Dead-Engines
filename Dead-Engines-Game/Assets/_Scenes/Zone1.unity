@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 2138677392}
-  m_IndirectSpecularColor: {r: 0.28502697, g: 0.37139347, b: 0.49601266, a: 1}
+  m_IndirectSpecularColor: {r: 0.28502667, g: 0.3713932, b: 0.49600998, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -1780,6 +1780,14 @@ MonoBehaviour:
   - {fileID: 2072137231}
   ctrlMiniTab: {fileID: 626851393}
   genMiniTab: {fileID: 1130015373}
+  refineryCost_M: 10
+  refineryCost_E: 10
+  storageCost_M: 50
+  storageCost_E: 50
+  shrineCost_M: 100
+  shrineCost_E: 100
+  studyCost_M: 100
+  studyCost_E: 100
 --- !u!114 &128660107
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2273,6 +2281,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Damaged_Anteater_2
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 9d0b945a8f0c89f4ca41806b6b343ea8,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9d0b945a8f0c89f4ca41806b6b343ea8, type: 3}
@@ -16584,8 +16597,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1438434338}
   m_HandleRect: {fileID: 1438434337}
   m_Direction: 2
-  m_Value: 1
-  m_Size: 0.67231286
+  m_Value: 1.0000004
+  m_Size: 0.6723129
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -29191,7 +29204,7 @@ Transform:
   - {fileID: 4223089608823286577}
   - {fileID: 7981248580404431444}
   m_Father: {fileID: 0}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: -136.498, z: 0}
 --- !u!4 &8644367556159381162
 Transform:
@@ -29357,7 +29370,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!1001 &9152311247416029748
 PrefabInstance:
   m_ObjectHideFlags: 0

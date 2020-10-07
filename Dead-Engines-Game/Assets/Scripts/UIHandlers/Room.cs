@@ -15,9 +15,11 @@ public class Room
 		this.Type = t;
 		this.Slot = s;
 		this.Level = l;
+		//this.Workers = new List<Unit>();
 	}
 
 	public int Slot { get => slot; set => slot = value; }
 	public string Type { get => type; set => type = value; }
 	public int Level { get => level; set => level = value; }
+	//public List<Unit> Workers { get => workers; set => workers = value; }
 }

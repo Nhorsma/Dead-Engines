@@ -11,10 +11,25 @@ public class RoomManager : MonoBehaviour
 
 	public int roomSlotClicked = 0;
 	public AutomatonUI auto;
+	public GameObject autoObj;
 
 	public List<GameObject> miniTabs = new List<GameObject>();
 	public GameObject ctrlMiniTab;
 	public GameObject genMiniTab;
+
+	public int refineryCost_M;
+	public int refineryCost_E;
+
+	public int storageCost_M;
+	public int storageCost_E;
+
+	public int shrineCost_M;
+	public int shrineCost_E;
+
+	public int studyCost_M;
+	public int studyCost_E;
+
+	public UnitManager unitManager;
 
 	void Start()
     {
@@ -54,25 +69,37 @@ public class RoomManager : MonoBehaviour
 
 	public void Build(string room)
 	{
-		if (room == "refinery")
+		if (room == "refinery" && ResourceHandling.metal >= refineryCost_M && ResourceHandling.electronics >= refineryCost_E)
 		{
+			ResourceHandling.metal -= refineryCost_M;
+			ResourceHandling.electronics -= refineryCost_E;
 			rooms[roomSlotClicked] = new Room("refinery", roomSlotClicked, 1);
 			SetupRefinery(roomSlotClicked);
 		}
-		else if (room == "storage")
+		else if (room == "storage" && ResourceHandling.metal >= storageCost_M && ResourceHandling.electronics >= refineryCost_E)
 		{
+			ResourceHandling.metal -= storageCost_M;
+			ResourceHandling.electronics -= storageCost_E;
 			rooms[roomSlotClicked] = new Room("storage", roomSlotClicked, 1);
 			SetupStorage(roomSlotClicked);
 		}
-		if (room == "shrine")
+		else if (room == "shrine" && ResourceHandling.metal >= shrineCost_M && ResourceHandling.electronics >= shrineCost_E)
 		{
+			ResourceHandling.metal -= shrineCost_M;
+			ResourceHandling.electronics -= shrineCost_E;
 			rooms[roomSlotClicked] = new Room("shrine", roomSlotClicked, 1);
 			SetupShrine(roomSlotClicked);
 		}
-		if (room == "study")
+		else if (room == "study" && ResourceHandling.metal >= studyCost_M && ResourceHandling.electronics >= studyCost_E)
 		{
+			ResourceHandling.metal -= studyCost_M;
+			ResourceHandling.electronics -= studyCost_E;
 			rooms[roomSlotClicked] = new Room("study", roomSlotClicked, 1);
 			SetupStudy(roomSlotClicked);
+		}
+		else
+		{
+			Debug.Log("Not enough resources to build a " + room + ".");
 		}
 		UpdateRoomDisplay();
 	}
@@ -122,16 +149,16 @@ public class RoomManager : MonoBehaviour
 		miniTabs[slot].GetComponent<MiniTabHolder>().upgrade.gameObject.SetActive(true);
 		miniTabs[slot].GetComponent<MiniTabHolder>().roomName.text = "Storage";
 
-		miniTabs[slot].GetComponent<MiniTabHolder>().func1.GetComponentInChildren<Text>().text = "Discard This";
-		miniTabs[slot].GetComponent<MiniTabHolder>().func2.GetComponentInChildren<Text>().text = "Discard That";
+		miniTabs[slot].GetComponent<MiniTabHolder>().func1.GetComponentInChildren<Text>().text = "Discard 1 Metal";
+		miniTabs[slot].GetComponent<MiniTabHolder>().func2.GetComponentInChildren<Text>().text = "Discard 1 Electronics";
 		miniTabs[slot].GetComponent<MiniTabHolder>().func3.GetComponentInChildren<Text>().text = "Discard Other";
 
 		miniTabs[slot].GetComponent<MiniTabHolder>().func1.onClick.RemoveAllListeners();
-		miniTabs[slot].GetComponent<MiniTabHolder>().func1.onClick.AddListener(Sup); ///////////////////////////////
+		miniTabs[slot].GetComponent<MiniTabHolder>().func1.onClick.AddListener(delegate { Discard("metal", 1); }); ///////////////////////////////
 		miniTabs[slot].GetComponent<MiniTabHolder>().func1.gameObject.SetActive(true);
 
 		miniTabs[slot].GetComponent<MiniTabHolder>().func2.onClick.RemoveAllListeners();
-		miniTabs[slot].GetComponent<MiniTabHolder>().func2.onClick.AddListener(Sup); ///////////////////////////////
+		miniTabs[slot].GetComponent<MiniTabHolder>().func2.onClick.AddListener(delegate { Discard("electronics", 1); }); ///////////////////////////////
 		miniTabs[slot].GetComponent<MiniTabHolder>().func2.gameObject.SetActive(true);
 
 		miniTabs[slot].GetComponent<MiniTabHolder>().func3.onClick.RemoveAllListeners();
@@ -145,12 +172,12 @@ public class RoomManager : MonoBehaviour
 		miniTabs[slot].GetComponent<MiniTabHolder>().upgrade.gameObject.SetActive(true);
 		miniTabs[slot].GetComponent<MiniTabHolder>().roomName.text = "Shrine";
 
-		miniTabs[slot].GetComponent<MiniTabHolder>().func1.GetComponentInChildren<Text>().text = "Worship This";
+		miniTabs[slot].GetComponent<MiniTabHolder>().func1.GetComponentInChildren<Text>().text = "Assign Unit";
 		miniTabs[slot].GetComponent<MiniTabHolder>().func2.GetComponentInChildren<Text>().text = "Worship That";
 		miniTabs[slot].GetComponent<MiniTabHolder>().func3.GetComponentInChildren<Text>().text = "Worship Other";
 
 		miniTabs[slot].GetComponent<MiniTabHolder>().func1.onClick.RemoveAllListeners();
-		miniTabs[slot].GetComponent<MiniTabHolder>().func1.onClick.AddListener(Sup); ///////////////////////////////
+		miniTabs[slot].GetComponent<MiniTabHolder>().func1.onClick.AddListener(delegate { Assign("shrine", rooms[slot]); }); ///////////////////////////////
 		miniTabs[slot].GetComponent<MiniTabHolder>().func1.gameObject.SetActive(true);
 
 		miniTabs[slot].GetComponent<MiniTabHolder>().func2.onClick.RemoveAllListeners();
@@ -274,6 +301,83 @@ public class RoomManager : MonoBehaviour
 			}
 		}
 		
+	}
+
+	public void Discard(string what, int howMany)
+	{
+		if (what == "metal" && ResourceHandling.metal >= howMany)
+		{
+			ResourceHandling.metal -= howMany;
+		}
+		else if (what == "bolt" && ResourceHandling.bolt >= howMany)
+		{
+			ResourceHandling.bolt -= howMany;
+		}
+		else if (what == "plate" && ResourceHandling.plate >= howMany)
+		{
+			ResourceHandling.plate -= howMany;
+		}
+		else if (what == "part" && ResourceHandling.part >= howMany)
+		{
+			ResourceHandling.part -= howMany;
+		}
+		else if (what == "electronics" && ResourceHandling.electronics >= howMany)
+		{
+			ResourceHandling.electronics -= howMany;
+		}
+		else if (what == "wire" && ResourceHandling.wire >= howMany)
+		{
+			ResourceHandling.wire -= howMany;
+		}
+		else if (what == "chip" && ResourceHandling.chip >= howMany)
+		{
+			ResourceHandling.chip -= howMany;
+		}
+		else if (what == "board" && ResourceHandling.board >= howMany)
+		{
+			ResourceHandling.board -= howMany;
+		}
+		else
+		{
+			Debug.Log("You do not have " + howMany + " " + what + ".");
+		}
+	}
+
+	public void Assign(string where, Room r)
+	{
+		Debug.Log("Fix me! [Assign] to [" + r.Type + "] [" + r.Slot + "]");
+
+		//finding a free unit
+		// THIS NEEDS TO MOVE TO UNIT MANAGER SCRIPT
+		//for (int i = 0; i < unitManager.units.Length; i++)
+		//{
+		//	if (unitManager.units[i].Job == "none")
+		//	{
+		//		unitManager.units[i].Job = where;
+		//		unitManager.units[i].JobPos = autoObj;
+		//		break;
+		//	}
+		//}
+
+		// THIS STAYS HERE, IDEALLY:
+		//Unit who;
+		//who = unitManager.FindFreeUnit();
+		//unitManager.SetJobFromRoom(who, where);
+		//r.workers.Add(who);
+		//r.work_multiplier = r.workers.Count;
+
+		// method does not exist yet
+		//info.UpdateUnitViewer();
+	}
+
+	public void Worship()
+	{
+
+	}
+
+	public void Study()
+	{
+
 	}
 
 	public void UpdateRoomDisplay()
