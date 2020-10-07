@@ -11,6 +11,7 @@ public class RoomManager : MonoBehaviour
 
 	public int roomSlotClicked = 0;
 	public AutomatonUI auto;
+    public UnitManager um;
 	public GameObject autoObj;
 
 	public List<GameObject> miniTabs = new List<GameObject>();
@@ -347,37 +348,30 @@ public class RoomManager : MonoBehaviour
 	{
 		Debug.Log("Fix me! [Assign] to [" + r.Type + "] [" + r.Slot + "]");
 
-		//finding a free unit
-		// THIS NEEDS TO MOVE TO UNIT MANAGER SCRIPT
-		//for (int i = 0; i < unitManager.units.Length; i++)
-		//{
-		//	if (unitManager.units[i].Job == "none")
-		//	{
-		//		unitManager.units[i].Job = where;
-		//		unitManager.units[i].JobPos = autoObj;
-		//		break;
-		//	}
-		//}
+        Unit who = um.ReturnJoblessUnit();
+        if(who==null)
+        {
+            Debug.Log("no worker available");
+            return;
+        }
+        who.Job = where;
+        who.JobPos = autoObj;
+        um.SetJobFromRoom(who, where);
+        //r.workers.Add(who);
+        //r.work_multiplier = r.workers.Count;
 
-		// THIS STAYS HERE, IDEALLY:
-		//Unit who;
-		//who = unitManager.FindFreeUnit();
-		//unitManager.SetJobFromRoom(who, where);
-		//r.workers.Add(who);
-		//r.work_multiplier = r.workers.Count;
+        // method does not exist yet
+        //info.UpdateUnitViewer();
+    }
 
-		// method does not exist yet
-		//info.UpdateUnitViewer();
-	}
-
-	public void Worship()
+    public void Worship()
 	{
 
 	}
 
 	public void Study()
 	{
-
+        
 	}
 
 	public void UpdateRoomDisplay()

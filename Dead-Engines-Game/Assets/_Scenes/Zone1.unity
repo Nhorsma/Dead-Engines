@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 2138677392}
-  m_IndirectSpecularColor: {r: 0.28502667, g: 0.3713932, b: 0.49600998, a: 1}
+  m_IndirectSpecularColor: {r: 0.28502697, g: 0.37139347, b: 0.49601266, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -1770,6 +1770,8 @@ MonoBehaviour:
   - {fileID: 1234614568}
   roomSlotClicked: 0
   auto: {fileID: 1616910871}
+  um: {fileID: 128660102}
+  autoObj: {fileID: 1616910867}
   miniTabs:
   - {fileID: 590680891}
   - {fileID: 1567907509}
@@ -1784,10 +1786,11 @@ MonoBehaviour:
   refineryCost_E: 10
   storageCost_M: 50
   storageCost_E: 50
-  shrineCost_M: 100
-  shrineCost_E: 100
+  shrineCost_M: 0
+  shrineCost_E: 0
   studyCost_M: 100
   studyCost_E: 100
+  unitManager: {fileID: 0}
 --- !u!114 &128660107
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -16597,8 +16600,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1438434338}
   m_HandleRect: {fileID: 1438434337}
   m_Direction: 2
-  m_Value: 1.0000004
-  m_Size: 0.6723129
+  m_Value: 1
+  m_Size: 0.67231286
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -29018,6 +29021,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Convex
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4443492887190562411, guid: 3ba9183ed1f06ea4090fd98b2f2f7cc4,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4443492887190562422, guid: 3ba9183ed1f06ea4090fd98b2f2f7cc4,
         type: 3}

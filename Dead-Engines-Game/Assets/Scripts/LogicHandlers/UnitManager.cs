@@ -80,13 +80,19 @@ public class UnitManager : MonoBehaviour
         if (selectedUnits.Count != 0)
             for (int i = 0; i < selectedUnits.Count; i++)
             {
-                units[i].Job="none";
-                units[i].JobPos=(null);
+                //
+                //When more Room jobs are implemented, Fix This to have more Jobs
+                //
+                if (GetUnit(selectedUnits[i]).Job != "shrine" && selectedUnits[i].activeSelf)   
+                {
+                    units[i].Job = "none";
+                    units[i].JobPos = (null);
 
-                if(i==1)
-                    TravelTo(selectedUnits[i], Hit().point, false, false);
-                else if(i>1)
-                    TravelTo(selectedUnits[i], Hit().point, true, true);
+                    if (i == 0)
+                        TravelTo(selectedUnits[i], Hit().point, false, false);
+                    else if (i > 1)
+                        TravelTo(selectedUnits[i], Hit().point, true, true);
+                }
 
             }
     }
@@ -109,6 +115,22 @@ public class UnitManager : MonoBehaviour
                 else if(unit.Job.Equals("ExtractionMetal") || unit.Job.Equals("ExtractionElectronics"))
                 {
                     Extraction(unit, GetResourceID(unit.JobPos), unit.Job);///////////////////////////////////////////////////////////////////////
+                }
+                else if(unit.Job=="shrine")
+                {
+                    float jx = GetUnitObject(unit).transform.position.x;
+                    float jz = GetUnitObject(unit).transform.position.z;
+                    if (Mathf.Abs(jx-unit.JobPos.transform.position.x)<1f && Mathf.Abs(jz - unit.JobPos.transform.position.z) < 1f)
+                    {
+                        GetUnitObject(unit).SetActive(false);
+                    }
+                }
+                else
+                {
+                    //
+                    //When units stop having jobs in Robot, set them back to Active
+                    //
+                   // GetUnitObject(unit).SetActive(true);
                 }
             }
         }
@@ -145,6 +167,7 @@ public class UnitManager : MonoBehaviour
             }
         }
     }
+    
 
     int GetResourceID(GameObject gm)
     {
@@ -187,7 +210,7 @@ public class UnitManager : MonoBehaviour
             Extract(ri);
             unit.JustDroppedOff=false;
             TravelTo(gm, robotPos, false, false);
-            Debug.Log(unit.Job + " at " + unit.JobPos.transform.position);
+            //Debug.Log(unit.Job + " at " + unit.JobPos.transform.position);
         }
         else if (!unit.JustDroppedOff && Vector3.Distance(gm.transform.position, robotPos) < stoppingDistance) //reaches robot
         {
@@ -204,7 +227,7 @@ public class UnitManager : MonoBehaviour
             
             unit.JustDroppedOff=(true);
             TravelTo(gm, unit.JobPos.transform.position, false, false);
-            Debug.Log(unit.Job + " at "+unit.JobPos.transform.position);
+            //Debug.Log(unit.Job + " at "+unit.JobPos.transform.position);
         }
     }
 
@@ -253,15 +276,15 @@ public class UnitManager : MonoBehaviour
 
     void TravelTo(GameObject b, Vector3 place, bool stop, bool randomize)
     {
-        NavMeshAgent a = b.GetComponent<NavMeshAgent>();
         if (b.GetComponent<NavMeshAgent>() != null)
         {
+            NavMeshAgent a = b.GetComponent<NavMeshAgent>();
             if (stop)
                 a.stoppingDistance = stoppingDistance;
             if (randomize)
                 place += new Vector3(Random.Range(-stoppingDistance, stoppingDistance), 0, Random.Range(-stoppingDistance, stoppingDistance));
 
-            a.SetDestination(place);
+                a.SetDestination(place);
         }
     }
 
@@ -279,5 +302,22 @@ public class UnitManager : MonoBehaviour
     {
 		ResourceHandling.electronics++;
 	}
+
+    public Unit ReturnJoblessUnit()
+    {
+        foreach(Unit u in units)
+        {
+            if(u.Job=="none")
+            {
+                return u;
+            }
+        }
+        return null;
+    }
+
+    public void SetJobFromRoom(Unit unit, string roomJob)
+    {
+        TravelTo(GetUnitObject(unit), unit.JobPos.transform.position, false, false);
+    }
 
 }
