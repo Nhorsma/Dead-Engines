@@ -95,11 +95,6 @@ public class UnitManager : MonoBehaviour
                     }
                     else if (i > 0)
                     {
-                        Vector3 dif = selectedUnits[i - 1].transform.position - selectedUnits[i].transform.position;
-
-                        //**this will move the selected to the same position relative to eachother
-                        //    Vector3 newDes = selectedUnits[i - 1].GetComponent<NavMeshAgent>().destination - dif;
-
                         Vector3 prevDes = selectedUnits[i - 1].GetComponent<NavMeshAgent>().destination;
                         Vector3 newDes = new Vector3();
                         if (i % 3 > 0)
@@ -281,6 +276,9 @@ public class UnitManager : MonoBehaviour
         RaycastHit hit;
         if(Physics.Raycast(GetUnitObject(unit).transform.position, direction, out hit, 100f))
         {
+            StartCoroutine(TrailOff(0.5f, GetUnitObject(unit).transform.position, unit.JobPos.transform.position));
+
+            Debug.DrawLine(GetUnitObject(unit).transform.position, hit.point, Color.blue, 0.1f);
             if (hit.collider.tag == "Enemy")
             {
                 //access's the enemy via the enemyHandler, and reduces the enemie's health by one
@@ -342,4 +340,19 @@ public class UnitManager : MonoBehaviour
         TravelTo(GetUnitObject(unit), unit.JobPos.transform.position, false, false);
     }
 
+    GameObject BulletTrail(Vector3 start, Vector3 end)
+    {
+        Vector3 dif = (start-end)/2;
+        Quaternion angle = Quaternion.Euler(dif * 2);
+        GameObject trail = (GameObject)Instantiate(Resources.Load("BulletTrail"),start-dif, angle);
+        trail.transform.localScale = new Vector3(Vector3.Distance(start, end)/2, 0.05f, 0.05f);
+        return trail;
+    }
+    
+    IEnumerator TrailOff(float time, Vector3 start, Vector3 end)
+    {
+        GameObject t = BulletTrail(start, end);
+        yield return new WaitForSeconds(time);
+        Destroy(t);
+    }
 }
