@@ -1790,7 +1790,6 @@ MonoBehaviour:
   shrineCost_E: 0
   studyCost_M: 100
   studyCost_E: 100
-  unitManager: {fileID: 0}
 --- !u!114 &128660107
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -12827,7 +12826,7 @@ PrefabInstance:
     - target: {fileID: 2207613681716772069, guid: c45838c4ef7d15a408b7d18511289dd1,
         type: 3}
       propertyPath: m_RootOrder
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c45838c4ef7d15a408b7d18511289dd1, type: 3}
@@ -13279,9 +13278,9 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
-  - {fileID: 157052910}
   - {fileID: 763031666}
   - {fileID: 1977664482}
+  - {fileID: 157052910}
   m_Father: {fileID: 0}
   m_RootOrder: 9
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -27152,17 +27151,17 @@ PrefabInstance:
     - target: {fileID: 2207613681716772069, guid: c45838c4ef7d15a408b7d18511289dd1,
         type: 3}
       propertyPath: m_RootOrder
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2207613681716772069, guid: c45838c4ef7d15a408b7d18511289dd1,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -4.12
+      value: -6.6
       objectReference: {fileID: 0}
     - target: {fileID: 2207613681716772069, guid: c45838c4ef7d15a408b7d18511289dd1,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: -5.37
+      value: 5.37
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c45838c4ef7d15a408b7d18511289dd1, type: 3}
@@ -28240,12 +28239,17 @@ PrefabInstance:
     - target: {fileID: 2207613681716772069, guid: c45838c4ef7d15a408b7d18511289dd1,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 8.7
+      value: 23.72
       objectReference: {fileID: 0}
     - target: {fileID: 2207613681716772069, guid: c45838c4ef7d15a408b7d18511289dd1,
         type: 3}
       propertyPath: m_AnchoredPosition.x
       value: -2.949
+      objectReference: {fileID: 0}
+    - target: {fileID: 2207613681716772069, guid: c45838c4ef7d15a408b7d18511289dd1,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c45838c4ef7d15a408b7d18511289dd1, type: 3}

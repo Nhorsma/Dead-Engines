@@ -78,12 +78,13 @@ public class UnitManager : MonoBehaviour
     void MoveAllSelected()
     {
         if (selectedUnits.Count != 0)
+        {
             for (int i = 0; i < selectedUnits.Count; i++)
             {
                 //
                 //When more Room jobs are implemented, Fix This to have more Jobs
                 //
-                if (GetUnit(selectedUnits[i]).Job != "shrine" && selectedUnits[i].activeSelf)   
+                if (GetUnit(selectedUnits[i]).Job != "shrine" && selectedUnits[i].activeSelf)
                 {
                     units[i].Job = "none";
                     units[i].JobPos = null;
@@ -99,22 +100,23 @@ public class UnitManager : MonoBehaviour
                         //**this will move the selected to the same position relative to eachother
                         //    Vector3 newDes = selectedUnits[i - 1].GetComponent<NavMeshAgent>().destination - dif;
 
-                        float angle = Vector3.Angle(selectedUnits[i - 1].transform.position, selectedUnits[i].transform.position);
-                        Debug.Log(angle+" of "+ i);
-                        Vector3 alteredDes = new Vector3();
-                        alteredDes.x = selectedUnits[i - 1].transform.position.x + Mathf.Sin(angle) * stoppingDistance;
-                        alteredDes.z = selectedUnits[i - 1].transform.position.z + Mathf.Cos(angle) * stoppingDistance;
-                        Vector3 d = selectedUnits[i - 1].transform.position - alteredDes;
-
-                        Vector3 newDes = selectedUnits[i - 1].GetComponent<NavMeshAgent>().destination - d;
-                   
-                    //    Debug.Log("Go to" + alteredDes);
+                        Vector3 prevDes = selectedUnits[i - 1].GetComponent<NavMeshAgent>().destination;
+                        Vector3 newDes = new Vector3();
+                        if (i % 3 > 0)
+                        {
+                            newDes = prevDes + new Vector3(0, 0, 2);
+                        }
+                        else
+                        {
+                            newDes = selectedUnits[i - 3].GetComponent<NavMeshAgent>().destination + new Vector3(2, 0, 0);
+                        }
 
                         TravelTo(selectedUnits[i], newDes, false, false);
                     }
                 }
 
             }
+        }
     }
 
     void MoveObject(GameObject selected)
