@@ -86,12 +86,32 @@ public class UnitManager : MonoBehaviour
                 if (GetUnit(selectedUnits[i]).Job != "shrine" && selectedUnits[i].activeSelf)   
                 {
                     units[i].Job = "none";
-                    units[i].JobPos = (null);
+                    units[i].JobPos = null;
 
                     if (i == 0)
+                    {
                         TravelTo(selectedUnits[i], Hit().point, false, false);
-                    else if (i > 1)
-                        TravelTo(selectedUnits[i], Hit().point, true, true);
+                    }
+                    else if (i > 0)
+                    {
+                        Vector3 dif = selectedUnits[i - 1].transform.position - selectedUnits[i].transform.position;
+
+                        //**this will move the selected to the same position relative to eachother
+                        //    Vector3 newDes = selectedUnits[i - 1].GetComponent<NavMeshAgent>().destination - dif;
+
+                        float angle = Vector3.Angle(selectedUnits[i - 1].transform.position, selectedUnits[i].transform.position);
+                        Debug.Log(angle+" of "+ i);
+                        Vector3 alteredDes = new Vector3();
+                        alteredDes.x = selectedUnits[i - 1].transform.position.x + Mathf.Sin(angle) * stoppingDistance;
+                        alteredDes.z = selectedUnits[i - 1].transform.position.z + Mathf.Cos(angle) * stoppingDistance;
+                        Vector3 d = selectedUnits[i - 1].transform.position - alteredDes;
+
+                        Vector3 newDes = selectedUnits[i - 1].GetComponent<NavMeshAgent>().destination - d;
+                   
+                    //    Debug.Log("Go to" + alteredDes);
+
+                        TravelTo(selectedUnits[i], newDes, false, false);
+                    }
                 }
 
             }
@@ -282,7 +302,7 @@ public class UnitManager : MonoBehaviour
             if (stop)
                 a.stoppingDistance = stoppingDistance;
             if (randomize)
-                place += new Vector3(Random.Range(-stoppingDistance, stoppingDistance), 0, Random.Range(-stoppingDistance, stoppingDistance));
+                place += new Vector3(Random.Range(-stoppingDistance/2, stoppingDistance/2), 0, Random.Range(-stoppingDistance/2, stoppingDistance/2));
 
                 a.SetDestination(place);
         }
