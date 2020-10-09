@@ -259,4 +259,10 @@ public class SelectItems : MonoBehaviour
         return UnitManager.selectedUnits;
     }
 
+    public void RemoveSpecific(GameObject gm)
+    {
+        UnitManager.selectedUnits.Remove(gm);
+        gm.GetComponent<MeshRenderer>().material = normalMaterial;
+    }
+
 }

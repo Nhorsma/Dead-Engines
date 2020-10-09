@@ -141,8 +141,12 @@ public class EnemyHandler : MonoBehaviour
         RaycastHit hit;
         if (Physics.Raycast(GetEnemyObject(ene).transform.position, direction, out hit, 100f))
         {
+            StartCoroutine(TrailOff(0.05f, GetEnemyObject(ene).transform.position, ene.Target.transform.position));
             if (hit.collider.tag == "Friendly")
-                Debug.Log("Bang!");
+            {
+                um.GetUnit(hit.collider.gameObject).Health--;
+                um.UnitDown(um.GetUnit(hit.collider.gameObject));
+            }
         }
     }
 
@@ -158,5 +162,22 @@ public class EnemyHandler : MonoBehaviour
 
             nv.SetDestination(place);
         }
+    }
+
+    GameObject BulletTrail(Vector3 start, Vector3 end)
+    {
+        Vector3 dif = (start - end) / 2;
+        Quaternion angle = Quaternion.LookRotation(start - end);
+        GameObject trail = (GameObject)Instantiate(Resources.Load("BulletTrail"), start - dif, angle);
+
+        trail.transform.localScale = new Vector3(0.05f, 0.05f, Vector3.Distance(start, end));
+        return trail;
+    }
+
+    IEnumerator TrailOff(float time, Vector3 start, Vector3 end)
+    {
+        GameObject t = BulletTrail(start, end);
+        yield return new WaitForSeconds(time);
+        Destroy(t);
     }
 }

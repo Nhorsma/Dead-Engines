@@ -10,12 +10,14 @@ public class Unit
     private int health;
     private bool justDroppedOff, justShot;
     private int id;
+    private bool canSpawn;
 
     public Unit()
     {
+        canSpawn = false;
         job = "none";
         jobPos = null;
-        health = 100;
+        health = 5;
         justDroppedOff = false;
         id = -1;
         justShot = false;
@@ -72,5 +74,11 @@ public class Unit
 		get { return unitName; }
 		set { unitName = value; }
 	}
+
+    public bool CanSpawn
+    {
+        get { return canSpawn; }
+        set { canSpawn = value; }
+    }
 
 }
