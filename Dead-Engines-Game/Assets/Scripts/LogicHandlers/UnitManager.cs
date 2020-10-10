@@ -150,9 +150,11 @@ public class UnitManager : MonoBehaviour
                 {
                     if(unit.CanSpawn)
                     {
-                        GetUnitObject(unit).SetActive(true);
-                        GetUnitObject(unit).transform.position = robotPos + new Vector3(-stoppingDistance,0,-stoppingDistance);
+                        unit.Health = 10;
                         unit.Job = "none";
+                        GetUnitObject(unit).SetActive(true);
+                        //TravelTo(GetUnitObject(unit), robotPos + new Vector3(-stoppingDistance*1.5f, 0, -stoppingDistance*1.5f), false, true);
+                        GetUnitObject(unit).transform.position = robotPos + new Vector3(-stoppingDistance+Random.Range(-3,3),0,-stoppingDistance + Random.Range(-3, 3));
                         unit.CanSpawn = false;
                     }
                 } 
@@ -266,10 +268,12 @@ public class UnitManager : MonoBehaviour
         GameObject gm = GetUnitObject(unit);
         NavMeshAgent nv = GetUnitObject(unit).GetComponent<NavMeshAgent>();
 
-        if (Vector3.Distance(unit.JobPos.transform.position, GetUnitObject(unit).transform.position) > stoppingDistance)
+        if (unit.JobPos != null &&
+            Vector3.Distance(unit.JobPos.transform.position, GetUnitObject(unit).transform.position) > stoppingDistance)
             TravelTo(unitsGM[unit.Id], unit.JobPos.transform.position, true, true);
 
-        if (Vector3.Distance(gm.transform.position, unit.JobPos.transform.position) < shootingDistance
+        if (unit.JobPos != null && 
+            Vector3.Distance(gm.transform.position, unit.JobPos.transform.position) < shootingDistance
             && !unit.JustShot)
         {
             Fire(unit);
@@ -295,12 +299,13 @@ public class UnitManager : MonoBehaviour
             if (hit.collider.tag == "Enemy")
             {
                 //access's the enemy via the enemyHandler, and reduces the enemie's health by one
-                eh.GetEnemy(hit.collider.gameObject).Health--;
-                if (eh.EnemyDead(eh.GetEnemy(hit.collider.gameObject)))
+                if (eh.GetEnemy(hit.collider.gameObject).Health==1)
                 {
                     unit.Job = "none";
                     unit.JobPos = null;
                 }
+                eh.GetEnemy(hit.collider.gameObject).Health--;
+                eh.EnemyDead(eh.GetEnemy(hit.collider.gameObject));
 
                 //Debug.Log("enemy: " + gameObject.GetComponent<EnemyHandler>().GetEnemy(hit.collider.gameObject).Health);
             }
@@ -337,6 +342,7 @@ public class UnitManager : MonoBehaviour
         {
             yield return new WaitForSeconds(downTime);
             unit.CanSpawn = true;
+
         }
     }
 
@@ -389,9 +395,15 @@ public class UnitManager : MonoBehaviour
 
     GameObject BulletTrail(Vector3 start, Vector3 end)
     {
+        float x, y, z;
+        x = Random.Range(-1.2f, 1.2f);
+        y = Random.Range(-1.2f, 1.2f);
+        z = Random.Range(-1.2f, 1.2f);
+        Quaternion offset = Quaternion.Euler(x, y, z);
+
         Vector3 dif = (start-end)/2;
         Quaternion angle = Quaternion.LookRotation(start - end);
-        GameObject trail = (GameObject)Instantiate(Resources.Load("BulletTrail"),start-dif, angle);
+        GameObject trail = (GameObject)Instantiate(Resources.Load("BulletTrail"),start-dif, angle*offset);
 
         trail.transform.localScale = new Vector3(0.05f, 0.05f, Vector3.Distance(start, end));
         return trail;

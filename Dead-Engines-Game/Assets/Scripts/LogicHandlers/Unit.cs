@@ -17,7 +17,7 @@ public class Unit
         canSpawn = false;
         job = "none";
         jobPos = null;
-        health = 5;
+        health = 10;
         justDroppedOff = false;
         id = -1;
         justShot = false;

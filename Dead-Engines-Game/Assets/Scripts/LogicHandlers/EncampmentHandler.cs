@@ -16,17 +16,20 @@ public class EncampmentHandler : MonoBehaviour
     public ResourceHandling rh;
     public float spawnTime, spawnDistance;
 
-    string[] depRec33 = { "gun", "gun", "gun" };
-    string[] depRec23 = { "APC", "APC", "APC" };
-    string[] depRec13 = { "gun", "gun", "APC", "APC" };
+    string[] depRec43 = { "gun", "gun", "gun" };
+    string[] depRec33 = { "gun", "APC", "gun" };
+    string[] depRec23 = { "gun", "gun", "APC", "APC" };
+    string[] depRec13 = { "gun", "APC", "gun", "APC" };
 
-    string[] depRec32 = { "gun", "gun", "APC" };
-    string[] depRec22 = { "gun", "gun", "APC", "APC"};
-    string[] depRec12 = { "APC", "APC", "Mech" };
+    string[] depRec42 = { "gun", "gun", "APC" };
+    string[] depRec32 = { "gun", "APC", "gun", "APC"};
+    string[] depRec22 = { "APC", "APC", "Mech" };
+    string[] depRec12 = { "MECH", "APC", "Mech" };
 
-    string[] depRec31 = { "gun", "gun", "gun", "APC"};
-    string[] depRec21 = { "gun", "gun", "APC", "APC", "Mech" };
-    string[] depRec11 = { "gun", "gun", "gun", "APC", "APC", "Mech", "Mech" };
+    string[] depRec41 = { "gun", "gun", "gun", "APC"};
+    string[] depRec31 = { "gun", "gun", "APC", "APC", "Mech" };
+    string[] depRec21 = { "gun", "gun", "gun", "APC", "APC", "Mech", "Mech" };
+    string[] depRec11 = { "Mech", "gun", "gun", "APC", "APC", "Mech", "APC" };
 
     void Start()
     {
@@ -170,47 +173,59 @@ public class EncampmentHandler : MonoBehaviour
 
         if (rh.recsLeft == 3)
         {
-            if(e.Health>75 || quant>rh.startQuantity-(rh.startQuantity/4))
+            if (e.Health < 25 || quant < rh.startQuantity / 4)
             {
-                e.Deployment = depRec33;
+                e.Deployment = depRec13;
             }
-            else if(e.Health > 50 || quant > (rh.startQuantity / 2))
+            if (e.Health < 50 || quant < (rh.startQuantity / 2))
             {
                 e.Deployment = depRec23;
             }
-            else if(e.Health > 25 || quant > rh.startQuantity/4)
+            else if (e.Health < 75 || quant < rh.startQuantity*0.25f)
             {
-                e.Deployment = depRec13;
+                e.Deployment = depRec33;
+            }
+            else
+            {
+                e.Deployment = depRec43;
             }
         }
         else if(rh.recsLeft == 2)
         {
-            if (e.Health > 75 || quant > rh.startQuantity - (rh.startQuantity / 4))
+            if (e.Health < 25 || quant < rh.startQuantity / 4)
             {
-                e.Deployment = depRec32;
+                e.Deployment = depRec12;
             }
-            else if (e.Health > 50 || quant > (rh.startQuantity / 2))
+            if (e.Health < 50 || quant < (rh.startQuantity / 2))
             {
                 e.Deployment = depRec22;
             }
-            else if (e.Health > 25 || quant > rh.startQuantity / 4)
+            else if (e.Health < 75 || quant < rh.startQuantity * 0.25f)
             {
-                e.Deployment = depRec12;
+                e.Deployment = depRec32;
+            }
+            else
+            {
+                e.Deployment = depRec42;
             }
         }
         else if(rh.recsLeft == 1)
         {
-            if (e.Health > 75 || quant > rh.startQuantity - (rh.startQuantity / 4))
+            if (e.Health < 25 || quant < rh.startQuantity / 4)
             {
-                e.Deployment = depRec31;
+                e.Deployment = depRec11;
             }
-            else if (e.Health > 50 || quant > (rh.startQuantity / 2))
+            if (e.Health < 50 || quant < (rh.startQuantity / 2))
             {
                 e.Deployment = depRec21;
             }
-            else if (e.Health > 25 || quant > rh.startQuantity / 4)
+            else if (e.Health < 75 || quant < rh.startQuantity * 0.25f)
             {
-                e.Deployment = depRec11;
+                e.Deployment = depRec31;
+            }
+            else
+            {
+                e.Deployment = depRec41;
             }
         }
         else

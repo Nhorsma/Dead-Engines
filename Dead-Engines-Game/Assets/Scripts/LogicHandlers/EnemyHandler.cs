@@ -12,7 +12,6 @@ public class EnemyHandler : MonoBehaviour
     public List<Enemy> enemies;
     public float stoppingDistance, shootingRange, tresspassingRange;
 
-
     private void Start()
     {
         um = GetComponent<UnitManager>();
@@ -112,7 +111,8 @@ public class EnemyHandler : MonoBehaviour
     {
         float dis = Vector3.Distance(GetEnemyObject(e).transform.position, e.Target.transform.position);
 
-        if(dis<shootingRange && !e.JustShot)
+        if(e.Target != null)
+        if ( dis < shootingRange && !e.JustShot)
         {
             Fire(e);
             StartCoroutine(FireCoolDown(e));
@@ -138,16 +138,19 @@ public class EnemyHandler : MonoBehaviour
 
     void Fire(Enemy ene)
     {
-        Vector3 direction = ene.Target.transform.position - GetEnemyObject(ene).transform.position;
-
-        RaycastHit hit;
-        if (Physics.Raycast(GetEnemyObject(ene).transform.position, direction, out hit, 100f))
+        if (ene.Target != null)
         {
-            StartCoroutine(TrailOff(0.05f, GetEnemyObject(ene).transform.position, ene.Target.transform.position));
-            if (hit.collider.tag == "Friendly")
+            Vector3 direction = ene.Target.transform.position - GetEnemyObject(ene).transform.position;
+
+            RaycastHit hit;
+            if (Physics.Raycast(GetEnemyObject(ene).transform.position, direction, out hit, 100f))
             {
-                um.GetUnit(hit.collider.gameObject).Health--;
-                um.UnitDown(um.GetUnit(hit.collider.gameObject));
+                StartCoroutine(TrailOff(0.05f, GetEnemyObject(ene).transform.position, ene.Target.transform.position));
+                if (hit.collider.tag == "Friendly")
+                {
+                    um.GetUnit(hit.collider.gameObject).Health--;
+                    um.UnitDown(um.GetUnit(hit.collider.gameObject));
+                }
             }
         }
     }
@@ -183,7 +186,7 @@ public class EnemyHandler : MonoBehaviour
         Destroy(t);
     }
 
-    public bool EnemyDead(Enemy e)
+    public void EnemyDead(Enemy e)
     {
         if (e.Health <= 0)
         {
@@ -192,6 +195,5 @@ public class EnemyHandler : MonoBehaviour
             enemies.Remove(e);
             enemiesGM.Remove(GetEnemyObject(e));
         }
-        return e.Health <= 0;
     }
 }
