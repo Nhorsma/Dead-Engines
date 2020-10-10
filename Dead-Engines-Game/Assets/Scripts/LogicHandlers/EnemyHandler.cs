@@ -7,6 +7,7 @@ public class EnemyHandler : MonoBehaviour
 {
     SpawnRes spawn;
     UnitManager um;
+    EncampmentHandler eh;
     public List<GameObject> enemiesGM;
     public List<Enemy> enemies;
     public float stoppingDistance, shootingRange, tresspassingRange;
@@ -18,6 +19,7 @@ public class EnemyHandler : MonoBehaviour
         enemiesGM = new List<GameObject>();
         enemies = new List<Enemy>();
         spawn = GetComponent<SpawnRes>();
+        eh = GetComponent<EncampmentHandler>();
 
     }
 
@@ -179,5 +181,17 @@ public class EnemyHandler : MonoBehaviour
         GameObject t = BulletTrail(start, end);
         yield return new WaitForSeconds(time);
         Destroy(t);
+    }
+
+    public bool EnemyDead(Enemy e)
+    {
+        if (e.Health <= 0)
+        {
+            Destroy(GetEnemyObject(e));
+            eh.GetEncampment(e.Camp).OnField--;
+            enemies.Remove(e);
+            enemiesGM.Remove(GetEnemyObject(e));
+        }
+        return e.Health <= 0;
     }
 }

@@ -15,7 +15,7 @@ public class Enemy
 
     public Enemy()
     {
-        health = 100;
+        health = 5;
         id = -1;
         target = null;
         justShot = false;

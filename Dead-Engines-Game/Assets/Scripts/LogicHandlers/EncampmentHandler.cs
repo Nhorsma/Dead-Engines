@@ -17,7 +17,7 @@ public class EncampmentHandler : MonoBehaviour
     public float spawnTime, spawnDistance;
 
     string[] depRec33 = { "gun", "gun", "gun" };
-    string[] depRec23 = { "gun", "gun", "APC" };
+    string[] depRec23 = { "APC", "APC", "APC" };
     string[] depRec13 = { "gun", "gun", "APC", "APC" };
 
     string[] depRec32 = { "gun", "gun", "APC" };

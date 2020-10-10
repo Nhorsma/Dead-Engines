@@ -16,6 +16,7 @@ public class SelectItems : MonoBehaviour
     public Material selectedMaterial;
 
     GameObject highlightThisUnit;
+    public GameObject g1, g2; 
 
     Vector2 mouseFirst, mouseSecond;
     Vector3 squareStartPos;
@@ -34,16 +35,14 @@ public class SelectItems : MonoBehaviour
         um = this.gameObject.GetComponent<UnitManager>();
         selectionSquareTrans = selectionSquare.rectTransform;
         mouseSecond = mouseFirst = (Input.mousePosition);
-        //hui = GetComponent<HealthUI>();
-		//hui.toDisplay = new List<GameObject>();
-        //hui.hoverHPs = new List<Image>();
+    
+
     }
 
     private void Update()
     {
         Highlight();
         LeftClick();
-
 
         if(Input.GetKeyDown(KeyCode.Space))
         {
@@ -66,7 +65,7 @@ public class SelectItems : MonoBehaviour
         }
         else
         {
-            DrawBox(false);
+            DrawBox(false,1);
             mouseSecond = mouseFirst = (Input.mousePosition);
         }
     }
@@ -142,8 +141,6 @@ public class SelectItems : MonoBehaviour
                 {
                     highlightThisUnit = currentObj;
                     highlightThisUnit.GetComponent<MeshRenderer>().material = highlightMaterial;
-                    //hui.AddToList(currentObj);
-                    //hui.HoverHealth();
                 }
             }
             else
@@ -162,34 +159,51 @@ public class SelectItems : MonoBehaviour
         {
                 squareStartPos = mouseFirst;
                 squareEndPos = mouseSecond;
-                DrawBox(true);
                 hasCreatedSquare = true;
         }
         else
         {
-            DrawBox(false);
             hasCreatedSquare = false;
         }
     }
 
 
-    void DrawBox(bool draw)
+    void DrawBox(bool draw, float mod)
     {
         selectionSquare.enabled = hasCreatedSquare = draw;
         if (draw)
         {
-            Vector3 middle = (squareStartPos + squareEndPos) / 2f;
-
+            Vector3 middle = (squareStartPos+squareEndPos) / 2f;
             selectionSquareTrans.position = middle;
 
             float sizeX = Mathf.Abs(squareStartPos.x - squareEndPos.x);
             float sizeY = Mathf.Abs(squareStartPos.y - squareEndPos.y);
 
             //Set the size of the square
+            selectionSquareTrans.sizeDelta = new Vector2(sizeX*mod, sizeY*mod);
+
+        }
+    }
+
+    void DrawBox(bool draw, Vector3 s, Vector3 e)
+    {
+        selectionSquare.enabled = hasCreatedSquare = draw;
+        if (draw)
+        {
+            Vector3 middle = (Camera.main.WorldToScreenPoint(s) + Camera.main.WorldToScreenPoint(e)) / 2f;
+
+            selectionSquareTrans.position = middle;
+
+            float sizeX = Mathf.Abs(Camera.main.WorldToScreenPoint(s).x - Camera.main.WorldToScreenPoint(e).x);
+            float sizeY = Mathf.Abs(Camera.main.WorldToScreenPoint(s).y - Camera.main.WorldToScreenPoint(e).y);
+
+            //Set the size of the square
+            selectionSquareTrans.position = middle;
             selectionSquareTrans.sizeDelta = new Vector2(sizeX, sizeY);
 
         }
     }
+
 
 
     void GroupSelect()
@@ -226,6 +240,11 @@ public class SelectItems : MonoBehaviour
             {
                 mf = hit1.point;
                 ms = hit2.point;
+
+                //g1.transform.position = mf;
+                //g2.transform.position = ms;
+
+                DrawBox(true,0.9f);
             }
         }
 
@@ -233,9 +252,6 @@ public class SelectItems : MonoBehaviour
         ms.y = -100f;
         size = new Vector3(Mathf.Abs(mf.x - ms.x), Mathf.Abs(mf.y - ms.y), Mathf.Abs(mf.z - ms.z));
         center = new Vector3((mf.x + ms.x)/2, (mf.y + ms.y)/2, (mf.z + ms.z) / 2);
-
-    //    sphere1.position = mf;
-    //    sphere4.position = ms;
 
         Bounds b = new Bounds(center, size);
 

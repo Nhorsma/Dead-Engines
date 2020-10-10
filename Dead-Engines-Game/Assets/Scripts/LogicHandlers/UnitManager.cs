@@ -7,6 +7,7 @@ public class UnitManager : MonoBehaviour
 {
     public SelectItems si;
     public ResourceHandling rh;
+    public EnemyHandler eh;
     public Vector3 robotPos;
     public GameObject robot;
     public float stoppingDistance;
@@ -21,6 +22,7 @@ public class UnitManager : MonoBehaviour
 
     void Start()
     {
+        eh = GetComponent<EnemyHandler>();
         selectedUnits = new List<GameObject>();
         robotPos = robot.transform.position;
         unitsGM = GameObject.FindGameObjectsWithTag("Friendly");
@@ -293,7 +295,12 @@ public class UnitManager : MonoBehaviour
             if (hit.collider.tag == "Enemy")
             {
                 //access's the enemy via the enemyHandler, and reduces the enemie's health by one
-                gameObject.GetComponent<EnemyHandler>().GetEnemy(hit.collider.gameObject).Health--;
+                eh.GetEnemy(hit.collider.gameObject).Health--;
+                if (eh.EnemyDead(eh.GetEnemy(hit.collider.gameObject)))
+                {
+                    unit.Job = "none";
+                    unit.JobPos = null;
+                }
 
                 //Debug.Log("enemy: " + gameObject.GetComponent<EnemyHandler>().GetEnemy(hit.collider.gameObject).Health);
             }
