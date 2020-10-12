@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 2138677392}
-  m_IndirectSpecularColor: {r: 0.28502697, g: 0.37139347, b: 0.49601266, a: 1}
+  m_IndirectSpecularColor: {r: 0.2850269, g: 0.3713935, b: 0.49601045, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -1610,6 +1610,7 @@ GameObject:
   - component: {fileID: 128660106}
   - component: {fileID: 128660107}
   - component: {fileID: 128660109}
+  - component: {fileID: 128660108}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -1697,7 +1698,10 @@ MonoBehaviour:
   stoppingDistance: 8
   shootingDistance: 12
   downTime: 5
+  unitDamage: 0
   unitsGM: []
+  unitFireCooldown: 1
+  effConnector: {fileID: 128660108}
 --- !u!114 &128660103
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1795,6 +1799,7 @@ MonoBehaviour:
   shrineCost_E: 0
   studyCost_M: 100
   studyCost_E: 100
+  efficiency: 1
 --- !u!114 &128660107
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1817,6 +1822,22 @@ MonoBehaviour:
   heightRatio: 0.05
   widthRatio: 0.05
   ui: {fileID: 1616910871}
+--- !u!114 &128660108
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 128660098}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2d100f1630579c64aacf3fbdde398431, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  unitManager: {fileID: 128660102}
+  roomManager: {fileID: 128660106}
+  storageSpace: 25
+  hasSpace: 1
 --- !u!114 &128660109
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -16604,8 +16625,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1438434338}
   m_HandleRect: {fileID: 1438434337}
   m_Direction: 2
-  m_Value: 1
-  m_Size: 0.67231286
+  m_Value: 1.0000004
+  m_Size: 0.6723129
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:

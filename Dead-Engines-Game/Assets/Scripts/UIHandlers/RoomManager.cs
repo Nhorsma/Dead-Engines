@@ -30,6 +30,8 @@ public class RoomManager : MonoBehaviour
 	public int studyCost_M;
 	public int studyCost_E;
 
+	public double efficiency = 1;
+
 	void Start()
     {
 		for (int i = 0; i < 7; i++)
@@ -148,21 +150,21 @@ public class RoomManager : MonoBehaviour
 		miniTabs[slot].GetComponent<MiniTabHolder>().upgrade.gameObject.SetActive(true);
 		miniTabs[slot].GetComponent<MiniTabHolder>().roomName.text = "Storage";
 
-		miniTabs[slot].GetComponent<MiniTabHolder>().func1.GetComponentInChildren<Text>().text = "Discard 1 Metal";
+		miniTabs[slot].GetComponent<MiniTabHolder>().func1.GetComponentInChildren<Text>().text = "Sup";
 		miniTabs[slot].GetComponent<MiniTabHolder>().func2.GetComponentInChildren<Text>().text = "Discard 1 Electronics";
-		miniTabs[slot].GetComponent<MiniTabHolder>().func3.GetComponentInChildren<Text>().text = "Discard Other";
+		miniTabs[slot].GetComponent<MiniTabHolder>().func3.GetComponentInChildren<Text>().text = "Discard 1 Metal";
 
 		miniTabs[slot].GetComponent<MiniTabHolder>().func1.onClick.RemoveAllListeners();
-		miniTabs[slot].GetComponent<MiniTabHolder>().func1.onClick.AddListener(delegate { Discard("metal", 1); }); ///////////////////////////////
+		miniTabs[slot].GetComponent<MiniTabHolder>().func1.onClick.AddListener(Sup); ///////////////////////////////
 		miniTabs[slot].GetComponent<MiniTabHolder>().func1.gameObject.SetActive(true);
+
 
 		miniTabs[slot].GetComponent<MiniTabHolder>().func2.onClick.RemoveAllListeners();
 		miniTabs[slot].GetComponent<MiniTabHolder>().func2.onClick.AddListener(delegate { Discard("electronics", 1); }); ///////////////////////////////
-		miniTabs[slot].GetComponent<MiniTabHolder>().func2.gameObject.SetActive(true);
 
 		miniTabs[slot].GetComponent<MiniTabHolder>().func3.onClick.RemoveAllListeners();
-		miniTabs[slot].GetComponent<MiniTabHolder>().func3.onClick.AddListener(Sup); ///////////////////////////////
-		miniTabs[slot].GetComponent<MiniTabHolder>().func3.gameObject.SetActive(true);
+		miniTabs[slot].GetComponent<MiniTabHolder>().func3.onClick.AddListener(delegate { Discard("electronics", 1); }); ///////////////////////////////
+
 	}
 
 	void SetupShrine(int slot)
@@ -176,7 +178,7 @@ public class RoomManager : MonoBehaviour
 		miniTabs[slot].GetComponent<MiniTabHolder>().func3.GetComponentInChildren<Text>().text = "Worship Other";
 
 		miniTabs[slot].GetComponent<MiniTabHolder>().func1.onClick.RemoveAllListeners();
-		miniTabs[slot].GetComponent<MiniTabHolder>().func1.onClick.AddListener(delegate { Assign("shrine", rooms[slot]); }); ///////////////////////////////
+		miniTabs[slot].GetComponent<MiniTabHolder>().func1.onClick.AddListener(delegate { Assign("shrine", rooms[slot]); } ); ///////////////////////////////
 		miniTabs[slot].GetComponent<MiniTabHolder>().func1.gameObject.SetActive(true);
 
 		miniTabs[slot].GetComponent<MiniTabHolder>().func2.onClick.RemoveAllListeners();
@@ -219,6 +221,9 @@ public class RoomManager : MonoBehaviour
 
 	public void Refine(string what)
 	{
+		int eff = 0;
+		eff = Random.Range(1, 11);
+
 		if (what == "plate")
 		{
 			if (ResourceHandling.metal >= 3)
@@ -226,6 +231,17 @@ public class RoomManager : MonoBehaviour
 				ResourceHandling.plate++;
 				ResourceHandling.metal -= 3;
 				Debug.Log("Success");
+				if (eff <= efficiency)
+				{
+					if(eff % 2 == 0)
+					{
+						ResourceHandling.metal++;
+					}
+					else
+					{
+						ResourceHandling.metal += 2;
+					}
+				}
 			}
 			else
 			{
@@ -239,6 +255,13 @@ public class RoomManager : MonoBehaviour
 				ResourceHandling.bolt++;
 				ResourceHandling.metal--;
 				Debug.Log("Success");
+				if (eff <= efficiency)
+				{
+					if (eff % 2 == 0)
+					{
+						ResourceHandling.metal++;
+					}
+				}
 			}
 			else
 			{
@@ -253,6 +276,17 @@ public class RoomManager : MonoBehaviour
 				ResourceHandling.plate -= 2;
 				ResourceHandling.bolt -= 2;
 				Debug.Log("Success");
+				if (eff <= efficiency)
+				{
+					if (eff % 2 == 0)
+					{
+						ResourceHandling.bolt += 2;
+					}
+					else
+					{
+						ResourceHandling.plate++;
+					}
+				}
 			}
 			else
 			{
@@ -266,6 +300,17 @@ public class RoomManager : MonoBehaviour
 				ResourceHandling.chip++;
 				ResourceHandling.electronics -= 3;
 				Debug.Log("Success");
+				if (eff <= efficiency)
+				{
+					if (eff % 2 == 0)
+					{
+						ResourceHandling.electronics++;
+					}
+					else
+					{
+						ResourceHandling.electronics += 2;
+					}
+				}
 			}
 			else
 			{
@@ -279,6 +324,13 @@ public class RoomManager : MonoBehaviour
 				ResourceHandling.wire++;
 				ResourceHandling.electronics--;
 				Debug.Log("Success");
+				if (eff <= efficiency)
+				{
+					if (eff % 2 == 0)
+					{
+						ResourceHandling.electronics++;
+					}
+				}
 			}
 			else
 			{
@@ -293,6 +345,17 @@ public class RoomManager : MonoBehaviour
 				ResourceHandling.chip--;
 				ResourceHandling.wire -= 2;
 				Debug.Log("Success");
+				if (eff <= efficiency)
+				{
+					if (eff % 2 == 0)
+					{
+						ResourceHandling.wire += 2;
+					}
+					else
+					{
+						ResourceHandling.chip++;
+					}
+				}
 			}
 			else
 			{
@@ -362,11 +425,17 @@ public class RoomManager : MonoBehaviour
 
 			if (r.Type == "shrine")
 			{
+				r.ActiveEffect = "unitSpeed";
 				Worship();
 			}
 			else if (r.Type == "study")
 			{
+				r.ActiveEffect = "roomCost";
 				Research();
+			}
+			else if (r.Type == "refinery")
+			{
+				Produce();
 			}
 
 			//method does not exist yet
@@ -379,29 +448,42 @@ public class RoomManager : MonoBehaviour
 	public void Worship()
 	{
 		int combinedMultiplier = 0;
+		List<string> effects = new List<string>();
+		effects.Clear();
+
 		foreach (Room r in rooms)
 		{
 			if (r.Type == "shrine" && r.Workers.Count > 0)
 			{
 				Debug.Log("Shrine[" + r.Slot + "]: " + r.WorkMultiplier + "x boost");
 				combinedMultiplier += r.WorkMultiplier; //case for multiples of the same room
+				effects.Add(r.ActiveEffect);
 			}
 		}
 		Debug.Log("Total Shrine Multiplier: " + combinedMultiplier);
 
-
 		//calculate effects
-		//if (activeEffect == "none"){
-		//return;
-		//}
-		//else if (activeEffect == "effectString"){ //-----------------------> effectString will be set by a button that is activated once room is upgraded
-		//effectVar *= combinedMultiplier           //-----------------------> need to set the activeEffect to multiplier 0 BEFORE it is set to the new effectString, ie only the active effect gets boosted
-		//}
+		foreach (string e in effects)
+		{
+			if (e == "none")
+			{
+				return;
+			}
+			else if (e == "unitSpeed")	//-----------------------> r.ActiveEffect will be set by a button that is activated once room is upgraded
+			{
+				EffectConnector.unitSpeed += combinedMultiplier;
+				Debug.Log("Unit Speed: " + EffectConnector.unitSpeed);
+			}
+		}
+
 	}
 
 	public void Research()
 	{
 		int combinedMultiplier = 0;
+		List<string> effects = new List<string>();
+		effects.Clear();
+
 		foreach (Room r in rooms)
 		{
 			if (r.Type == "study" && r.Workers.Count > 0)
@@ -412,13 +494,30 @@ public class RoomManager : MonoBehaviour
 		}
 		Debug.Log("Total Study Multiplier: " + combinedMultiplier);
 
-		//calculate effect
-		//if (activeEffect == "none"){
-		//return;
-		//}
-		//else if (activeEffect == "effectString"){ //-----------------------> effectString will be set by a button that is activated once room is upgraded
-		//effectVar *= combinedMultiplier           //-----------------------> need to set the activeEffect to multiplier 0 BEFORE it is set to the new effectString, ie only the active effect gets boosted
-		//}
+		//calculate effects
+		foreach (string e in effects)
+		{
+			if (e == "none")
+			{
+				return;
+			}
+			else if (e == "roomCost")    //-----------------------> r.ActiveEffect will be set by a button that is activated once room is upgraded
+			{
+				EffectConnector.roomCost += combinedMultiplier; //////////////////////////////////////////////////////////////////////////////////////////////////////////////////GOES UP, NOT DOWN!
+			}
+		}
+	}
+
+	public void Produce()
+	{
+		foreach (Room r in rooms)
+		{
+			if (r.Type == "refinery" && r.Workers.Count > 0)
+			{
+				r.CanRefine = true;
+				Debug.Log("Refinery[" + r.Slot + "]: Running");
+			}
+		}
 	}
 
 	public void UpdateRoomDisplay()

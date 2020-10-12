@@ -41,8 +41,8 @@ public class ResourceHandling : MonoBehaviour
 		//debug stuff
 		if (Input.GetKeyDown(KeyCode.Alpha0))
 		{
-			metal += 100;
-			electronics += 100;
+			metal += 10;
+			electronics += 10;
 		}
 	}
 

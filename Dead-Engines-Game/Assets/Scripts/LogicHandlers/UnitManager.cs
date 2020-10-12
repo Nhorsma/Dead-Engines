@@ -13,12 +13,17 @@ public class UnitManager : MonoBehaviour
     public float stoppingDistance;
     public float shootingDistance;
     public float downTime;
+	public int unitDamage;
 
     public GameObject[] unitsGM;         //the gameobjects
     public Unit[] units;                 //the 'unit' info attached to the gameobjects
     [System.NonSerialized]
     public static List<GameObject> selectedUnits;
     NavMeshAgent nv;
+
+	public float unitFireCooldown = 1f;
+
+	public EffectConnector effConnector;
 
     void Start()
     {
@@ -236,31 +241,39 @@ public class UnitManager : MonoBehaviour
         Vector3 depPos = rh.resDeposits[ri].transform.position;
         Vector3 uPos = gm.transform.position;
 
-        //reaches resource
-        if (unit.JustDroppedOff && Vector3.Distance(gm.transform.position, unit.JobPos.transform.position) < stoppingDistance)
-        {
-            Extract(ri);
-            unit.JustDroppedOff = false;
-            TravelTo(gm, robotPos, false, false);
-            //Debug.Log(unit.Job + " at " + unit.JobPos.transform.position);
-        }
-        else if (!unit.JustDroppedOff && Vector3.Distance(gm.transform.position, robotPos) < stoppingDistance) //reaches robot
-        {
-            if (resource.Equals("ExtractionMetal"))
-            {
-                AddMetal();
-                Debug.Log("Got metal");
-            }
-            else if (resource.Equals("ExtractionElectronics"))
-            {
-                AddElectronics();
-                Debug.Log("Got electronics");
-            }
+		//reaches resource
+		if (unit.JustDroppedOff && Vector3.Distance(gm.transform.position, unit.JobPos.transform.position) < stoppingDistance)
+		{
+			Extract(ri);
+			unit.JustDroppedOff = false;
+			TravelTo(gm, robotPos, false, false);
+			//Debug.Log(unit.Job + " at " + unit.JobPos.transform.position);
+		}
+		else if (!unit.JustDroppedOff && Vector3.Distance(gm.transform.position, robotPos) < stoppingDistance) //reaches robot
+		{
+			if (effConnector.StockCheck() == true)
+			{
+				if (resource.Equals("ExtractionMetal"))
+				{
+					AddMetal();
+					Debug.Log("Got metal");
+				}
+				else if (resource.Equals("ExtractionElectronics"))
+				{
+					AddElectronics();
+					Debug.Log("Got electronics");
+				}
 
-            unit.JustDroppedOff = (true);
-            TravelTo(gm, unit.JobPos.transform.position, false, false);
-            //Debug.Log(unit.Job + " at "+unit.JobPos.transform.position);
-        }
+				unit.JustDroppedOff = (true);
+				TravelTo(gm, unit.JobPos.transform.position, false, false);
+				//Debug.Log(unit.Job + " at "+unit.JobPos.transform.position);
+			}
+			else
+			{
+				Debug.Log("No storage space");
+				//make unit drop in unit info
+			}
+		}
     }
 
     void Combat(Unit unit)
@@ -284,7 +297,7 @@ public class UnitManager : MonoBehaviour
     IEnumerator FireCoolDown(Unit unit)
     {
         unit.JustShot = true;
-        yield return new WaitForSeconds(1f);
+		yield return new WaitForSeconds(unitFireCooldown);
         unit.JustShot = false;
     }
 
@@ -299,19 +312,19 @@ public class UnitManager : MonoBehaviour
             if (hit.collider.tag == "Enemy")
             {
                 //access's the enemy via the enemyHandler, and reduces the enemie's health by one
-                if (eh.GetEnemy(hit.collider.gameObject).Health==1)
+                if (eh.GetEnemy(hit.collider.gameObject).Health == unitDamage)
                 {
                     unit.Job = "none";
                     unit.JobPos = null;
                 }
-                eh.GetEnemy(hit.collider.gameObject).Health--;
+				eh.GetEnemy(hit.collider.gameObject).Health -= unitDamage;
                 eh.EnemyDead(eh.GetEnemy(hit.collider.gameObject));
 
                 //Debug.Log("enemy: " + gameObject.GetComponent<EnemyHandler>().GetEnemy(hit.collider.gameObject).Health);
             }
             else if (hit.collider.tag == "Encampment")
             {
-                gameObject.GetComponent<EncampmentHandler>().GetEncampment(hit.collider.gameObject).Health--;
+                gameObject.GetComponent<EncampmentHandler>().GetEncampment(hit.collider.gameObject).Health -= unitDamage;
                 //Debug.Log("camp: "+gameObject.GetComponent<EncampmentHandler>().GetEncampment(hit.collider.gameObject).Health);
             }
         }
