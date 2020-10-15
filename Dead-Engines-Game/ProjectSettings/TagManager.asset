@@ -11,6 +11,11 @@ TagManager:
   - Encampment
   - Electronics
   - Robot
+<<<<<<< Updated upstream
+=======
+  - HoverUI
+  - Fuel
+>>>>>>> Stashed changes
   layers:
   - Default
   - TransparentFX

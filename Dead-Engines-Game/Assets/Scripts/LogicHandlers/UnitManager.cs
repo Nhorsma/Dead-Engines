@@ -194,6 +194,7 @@ public class UnitManager : MonoBehaviour
 				Debug.Log("Got metal");
 			}
             else if (resource.Equals("ExtractionElectronics"))
+<<<<<<< Updated upstream
 			{
 				AddElectronics();
 				Debug.Log("Got electronics");
@@ -202,6 +203,21 @@ public class UnitManager : MonoBehaviour
             unit.JustDroppedOff=(true);
             TravelTo(gm, unit.JobPos.transform.position, false,false);
             Debug.Log(unit.Job + " at "+unit.JobPos.transform.position);
+=======
+            {
+                AddElectronics();
+                Debug.Log("Got electronics");
+            }
+            else if(resource.Equals("FuelRods"))
+            {
+                AddFuel();
+                Debug.Log("Got FuelRods");
+            }
+
+            unit.JustDroppedOff = (true);
+            TravelTo(gm, unit.JobPos.transform.position, false, false);
+            //Debug.Log(unit.Job + " at "+unit.JobPos.transform.position);
+>>>>>>> Stashed changes
         }
     }
 
@@ -280,4 +296,51 @@ public class UnitManager : MonoBehaviour
 		ResourceHandling.electronics++;
 	}
 
+<<<<<<< Updated upstream
+=======
+    void AddFuel()
+    {
+        ResourceHandling.fuelRods++;
+    }
+
+    public Unit ReturnJoblessUnit()
+    {
+        foreach(Unit u in units)
+        {
+            if(u.Job=="none")
+            {
+                return u;
+            }
+        }
+        return null;
+    }
+
+    public void SetJobFromRoom(Unit unit, string roomJob)
+    {
+        TravelTo(GetUnitObject(unit), unit.JobPos.transform.position, false, false);
+    }
+
+    GameObject BulletTrail(Vector3 start, Vector3 end)
+    {
+        float x, y, z;
+        x = Random.Range(-1.2f, 1.2f);
+        y = Random.Range(-1.2f, 1.2f);
+        z = Random.Range(-1.2f, 1.2f);
+        Quaternion offset = Quaternion.Euler(x, y, z);
+
+        Vector3 dif = (start-end)/2;
+        Quaternion angle = Quaternion.LookRotation(start - end);
+        GameObject trail = (GameObject)Instantiate(Resources.Load("BulletTrail"),start-dif, angle*offset);
+
+        trail.transform.localScale = new Vector3(0.05f, 0.05f, Vector3.Distance(start, end));
+        return trail;
+    }
+    
+    IEnumerator TrailOff(float time, Vector3 start, Vector3 end)
+    {
+        GameObject t = BulletTrail(start, end);
+        yield return new WaitForSeconds(time);
+        Destroy(t);
+    }
+>>>>>>> Stashed changes
 }
