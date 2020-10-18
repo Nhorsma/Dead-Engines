@@ -21,6 +21,8 @@ public class UnitManager : MonoBehaviour
     public static List<GameObject> selectedUnits;
     NavMeshAgent nv;
 
+	public AutomatonUI auto;
+
 	public float unitFireCooldown = 1f;
 
 	public EffectConnector effConnector;
@@ -33,7 +35,8 @@ public class UnitManager : MonoBehaviour
         unitsGM = GameObject.FindGameObjectsWithTag("Friendly");
         units = new Unit[unitsGM.Length];
         SetUpUnits();
-    }
+		auto.UpdateInfoTab();
+	}
 
     void Update()
     {
@@ -428,4 +431,9 @@ public class UnitManager : MonoBehaviour
         yield return new WaitForSeconds(time);
         Destroy(t);
     }
+
+	public void FindUnit(Unit unit)
+	{
+		Debug.Log("No one is here");
+	}
 }

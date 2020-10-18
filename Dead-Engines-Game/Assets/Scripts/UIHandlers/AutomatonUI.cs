@@ -10,6 +10,7 @@ public class AutomatonUI : MonoBehaviour
 	public GameObject top_hud;
 	public List<GameObject> tabs = new List<GameObject>();
 	public RoomManager roomManager;
+	public UnitManager unitManager;
 
 	//tab 1 stuff
     public Text metalText;
@@ -31,6 +32,10 @@ public class AutomatonUI : MonoBehaviour
 	public Text debug2;
 	public Text debug3;
 
+	public List<GameObject> unitViewport = new List<GameObject>();
+
+	public int lastClickedID = -1;
+
 	void Start()
     {
 		metalText.text = " ";
@@ -45,18 +50,6 @@ public class AutomatonUI : MonoBehaviour
 
     void Update()
     {
-		metalText.text = "Metal: " + ResourceHandling.metal;
-		electronicsText.text = "Electronics: " + ResourceHandling.electronics;
-		boltText.text = "Bolts: " + ResourceHandling.bolt;
-		plateText.text = "Plates: " + ResourceHandling.plate;
-		partText.text = "Parts: " + ResourceHandling.part;
-		wireText.text = "Wires: " + ResourceHandling.wire;
-		chipText.text = "Chips: " + ResourceHandling.chip;
-		boardText.text = "Boards: " + ResourceHandling.board;
-
-		hudMetal.text = "Metal: " + ResourceHandling.metal;
-		hudElectronics.text = "Electronics: " + ResourceHandling.electronics;
-
 		if (Input.GetKeyDown(KeyCode.Tab))
 		{
 			debugPanel.SetActive(!debugPanel.activeSelf);
@@ -100,5 +93,35 @@ public class AutomatonUI : MonoBehaviour
 			t.SetActive(false);
 		}
 		tabs[2].SetActive(true);
+	}
+
+	public void UpdateInfoTab()
+	{
+		metalText.text = "Metal: " + ResourceHandling.metal;
+		electronicsText.text = "Electronics: " + ResourceHandling.electronics;
+		boltText.text = "Bolts: " + ResourceHandling.bolt;
+		plateText.text = "Plates: " + ResourceHandling.plate;
+		partText.text = "Parts: " + ResourceHandling.part;
+		wireText.text = "Wires: " + ResourceHandling.wire;
+		chipText.text = "Chips: " + ResourceHandling.chip;
+		boardText.text = "Boards: " + ResourceHandling.board;
+
+		hudMetal.text = "Metal: " + ResourceHandling.metal;
+		hudElectronics.text = "Electronics: " + ResourceHandling.electronics;
+
+		if (unitManager.units.Length > 0)
+		{
+			for (int i = 0; i < unitManager.units.Length; i++)
+			{
+				unitViewport[i].GetComponentInChildren<Text>().text = unitManager.units[i].UnitName;
+			}
+		}
+	}
+
+	public void FindUnit(int i)
+	{
+		Vector3 unitPos = unitManager.unitsGM[i].transform.position;
+		Debug.Log(unitPos);
+		lastClickedID = i; ////////////////////////////////////////////////
 	}
 }

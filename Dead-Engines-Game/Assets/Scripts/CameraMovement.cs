@@ -27,6 +27,9 @@ public class CameraMovement : MonoBehaviour
     Vector3 pos;
     public static KeyCode Left, Right, Down, Up, RotateLeft, RotateRight, Pause;
     public AutomatonUI ui;
+	public UnitManager unitManager;
+
+	public bool forceLock = false;
 
     private void Start()
     {
@@ -44,6 +47,16 @@ public class CameraMovement : MonoBehaviour
 
             pos = maincam.transform.position;
         }
+		//if (forceLock && ui.auto_main.activeInHierarchy)
+		//{
+		//	MoveCameraTo(ui.lastClickedID);
+		//}
+		//else if (Input.anyKeyDown)
+		//{
+		//	MouseCameraMovement();
+		//	Scroll();
+		//	forceLock = false;
+		//}
     }
 
     void MouseCameraMovement()
@@ -178,4 +191,10 @@ public class CameraMovement : MonoBehaviour
         Down = KeyCode.DownArrow;
         Up = KeyCode.UpArrow;
     }
+
+	//public void MoveCameraTo(int unitID)
+	//{
+	//	Vector3 unitPos = unitManager.unitsGM[unitID].transform.position;
+	//	pos = new Vector3(unitPos.x, this.gameObject.transform.position.y, unitPos.z);
+	//}
 }
