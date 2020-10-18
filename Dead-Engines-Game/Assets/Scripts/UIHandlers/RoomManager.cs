@@ -18,19 +18,34 @@ public class RoomManager : MonoBehaviour
 	public GameObject ctrlMiniTab;
 	public GameObject genMiniTab;
 
-	public int refineryCost_M;
-	public int refineryCost_E;
+	public float refineryCost_M;
+	public float refineryCost_E;
 
-	public int storageCost_M;
-	public int storageCost_E;
+	public float storageCost_M;
+	public float storageCost_E;
 
-	public int shrineCost_M;
-	public int shrineCost_E;
+	public float shrineCost_M;
+	public float shrineCost_E;
 
-	public int studyCost_M;
-	public int studyCost_E;
+	public float studyCost_M;
+	public float studyCost_E;
 
-	public double efficiency = 1;
+	//origs
+	public float refineryCost_Mo;
+	public float refineryCost_Eo;
+
+	public float storageCost_Mo;
+	public float storageCost_Eo;
+
+	public float shrineCost_Mo;
+	public float shrineCost_Eo;
+
+	public float studyCost_Mo;
+	public float studyCost_Eo;
+
+	public int efficiency = 0;
+
+	public EffectConnector effectConnector;
 
 	void Start()
     {
@@ -38,7 +53,18 @@ public class RoomManager : MonoBehaviour
 		{
 			rooms.Add(new Room("empty", i, 0));
 		}
-    }
+		refineryCost_Mo = refineryCost_M;
+		refineryCost_Eo = refineryCost_E;
+
+		storageCost_Mo = storageCost_M;
+		storageCost_Eo = storageCost_E;
+
+		shrineCost_Mo = shrineCost_M;
+		shrineCost_Eo = shrineCost_E;
+
+		studyCost_Mo = studyCost_M;
+		studyCost_Eo = studyCost_E;
+}
 
     // Update is called once per frame
     void Update()
@@ -72,29 +98,29 @@ public class RoomManager : MonoBehaviour
 	{
 		if (room == "refinery" && ResourceHandling.metal >= refineryCost_M && ResourceHandling.electronics >= refineryCost_E)
 		{
-			ResourceHandling.metal -= refineryCost_M;
-			ResourceHandling.electronics -= refineryCost_E;
+			ResourceHandling.metal -= (int)refineryCost_M;
+			ResourceHandling.electronics -= (int)refineryCost_E;
 			rooms[roomSlotClicked] = new Room("refinery", roomSlotClicked, 1);
 			SetupRefinery(roomSlotClicked);
 		}
 		else if (room == "storage" && ResourceHandling.metal >= storageCost_M && ResourceHandling.electronics >= refineryCost_E)
 		{
-			ResourceHandling.metal -= storageCost_M;
-			ResourceHandling.electronics -= storageCost_E;
+			ResourceHandling.metal -= (int)storageCost_M;
+			ResourceHandling.electronics -= (int)storageCost_E;
 			rooms[roomSlotClicked] = new Room("storage", roomSlotClicked, 1);
 			SetupStorage(roomSlotClicked);
 		}
 		else if (room == "shrine" && ResourceHandling.metal >= shrineCost_M && ResourceHandling.electronics >= shrineCost_E)
 		{
-			ResourceHandling.metal -= shrineCost_M;
-			ResourceHandling.electronics -= shrineCost_E;
+			ResourceHandling.metal -= (int)shrineCost_M;
+			ResourceHandling.electronics -= (int)shrineCost_E;
 			rooms[roomSlotClicked] = new Room("shrine", roomSlotClicked, 1);
 			SetupShrine(roomSlotClicked);
 		}
 		else if (room == "study" && ResourceHandling.metal >= studyCost_M && ResourceHandling.electronics >= studyCost_E)
 		{
-			ResourceHandling.metal -= studyCost_M;
-			ResourceHandling.electronics -= studyCost_E;
+			ResourceHandling.metal -= (int)studyCost_M;
+			ResourceHandling.electronics -= (int)studyCost_E;
 			rooms[roomSlotClicked] = new Room("study", roomSlotClicked, 1);
 			SetupStudy(roomSlotClicked);
 		}
@@ -108,6 +134,12 @@ public class RoomManager : MonoBehaviour
 	void SetupRefinery(int slot)
 	{
 		miniTabs[slot].GetComponent<MiniTabHolder>().build.gameObject.SetActive(false);
+
+		miniTabs[slot].GetComponent<MiniTabHolder>().func0.onClick.RemoveAllListeners();
+		miniTabs[slot].GetComponent<MiniTabHolder>().func0.GetComponentInChildren<Text>().text = "Assign Unit";
+		miniTabs[slot].GetComponent<MiniTabHolder>().func0.onClick.AddListener(delegate { Assign("refinery", rooms[slot]); });
+		miniTabs[slot].GetComponent<MiniTabHolder>().func0.gameObject.SetActive(true);
+
 		miniTabs[slot].GetComponent<MiniTabHolder>().upgrade.gameObject.SetActive(true);
 		miniTabs[slot].GetComponent<MiniTabHolder>().roomName.text = "Refinery";
 
@@ -174,8 +206,8 @@ public class RoomManager : MonoBehaviour
 		miniTabs[slot].GetComponent<MiniTabHolder>().roomName.text = "Shrine";
 
 		miniTabs[slot].GetComponent<MiniTabHolder>().func1.GetComponentInChildren<Text>().text = "Assign Unit";
-		miniTabs[slot].GetComponent<MiniTabHolder>().func2.GetComponentInChildren<Text>().text = "Worship That";
-		miniTabs[slot].GetComponent<MiniTabHolder>().func3.GetComponentInChildren<Text>().text = "Worship Other";
+		miniTabs[slot].GetComponent<MiniTabHolder>().func2.GetComponentInChildren<Text>().text = "Buff1";
+		miniTabs[slot].GetComponent<MiniTabHolder>().func3.GetComponentInChildren<Text>().text = "Buff2";
 
 		miniTabs[slot].GetComponent<MiniTabHolder>().func1.onClick.RemoveAllListeners();
 		miniTabs[slot].GetComponent<MiniTabHolder>().func1.onClick.AddListener(delegate { Assign("shrine", rooms[slot]); } ); ///////////////////////////////
@@ -196,12 +228,12 @@ public class RoomManager : MonoBehaviour
 		miniTabs[slot].GetComponent<MiniTabHolder>().upgrade.gameObject.SetActive(true);
 		miniTabs[slot].GetComponent<MiniTabHolder>().roomName.text = "Study";
 
-		miniTabs[slot].GetComponent<MiniTabHolder>().func1.GetComponentInChildren<Text>().text = "Study This";
-		miniTabs[slot].GetComponent<MiniTabHolder>().func2.GetComponentInChildren<Text>().text = "Study That";
-		miniTabs[slot].GetComponent<MiniTabHolder>().func3.GetComponentInChildren<Text>().text = "Study Other";
+		miniTabs[slot].GetComponent<MiniTabHolder>().func1.GetComponentInChildren<Text>().text = "Assign Unit";
+		miniTabs[slot].GetComponent<MiniTabHolder>().func2.GetComponentInChildren<Text>().text = "Buff1";
+		miniTabs[slot].GetComponent<MiniTabHolder>().func3.GetComponentInChildren<Text>().text = "Buff2";
 
 		miniTabs[slot].GetComponent<MiniTabHolder>().func1.onClick.RemoveAllListeners();
-		miniTabs[slot].GetComponent<MiniTabHolder>().func1.onClick.AddListener(Sup); ///////////////////////////////
+		miniTabs[slot].GetComponent<MiniTabHolder>().func1.onClick.AddListener(delegate { Assign("study", rooms[slot]); }); ///////////////////////////////
 		miniTabs[slot].GetComponent<MiniTabHolder>().func1.gameObject.SetActive(true);
 
 		miniTabs[slot].GetComponent<MiniTabHolder>().func2.onClick.RemoveAllListeners();
@@ -224,147 +256,155 @@ public class RoomManager : MonoBehaviour
 		int eff = 0;
 		eff = Random.Range(1, 11);
 
-		if (what == "plate")
+		if (EffectConnector.efficiency > 0)
 		{
-			if (ResourceHandling.metal >= 3)
+			if (what == "plate")
 			{
-				ResourceHandling.plate++;
-				ResourceHandling.metal -= 3;
-				Debug.Log("Success");
-				if (eff <= efficiency)
+				if (ResourceHandling.metal >= 3)
 				{
-					if(eff % 2 == 0)
+					ResourceHandling.plate++;
+					ResourceHandling.metal -= 3;
+					Debug.Log("Success");
+					if (eff <= EffectConnector.efficiency)
 					{
-						ResourceHandling.metal++;
-					}
-					else
-					{
-						ResourceHandling.metal += 2;
+						if (eff % 2 == 0)
+						{
+							ResourceHandling.metal++;
+						}
+						else
+						{
+							ResourceHandling.metal += 2;
+						}
 					}
 				}
+				else
+				{
+					Debug.Log("Failure");
+				}
 			}
-			else
+			else if (what == "bolt")
 			{
-				Debug.Log("Failure");
+				if (ResourceHandling.metal >= 1)
+				{
+					ResourceHandling.bolt++;
+					ResourceHandling.metal--;
+					Debug.Log("Success");
+					if (eff <= EffectConnector.efficiency)
+					{
+						if (eff % 2 == 0)
+						{
+							ResourceHandling.metal++;
+						}
+					}
+				}
+				else
+				{
+					Debug.Log("Failure");
+				}
+			}
+			else if (what == "part")
+			{
+				if (ResourceHandling.plate >= 2 && ResourceHandling.bolt >= 2)
+				{
+					ResourceHandling.part++;
+					ResourceHandling.plate -= 2;
+					ResourceHandling.bolt -= 2;
+					Debug.Log("Success");
+					if (eff <= EffectConnector.efficiency)
+					{
+						if (eff % 2 == 0)
+						{
+							ResourceHandling.bolt += 2;
+						}
+						else
+						{
+							ResourceHandling.plate++;
+						}
+					}
+				}
+				else
+				{
+					Debug.Log("Failure");
+				}
+			}
+			else if (what == "chip")
+			{
+				if (ResourceHandling.electronics >= 3)
+				{
+					ResourceHandling.chip++;
+					ResourceHandling.electronics -= 3;
+					Debug.Log("Success");
+					if (eff <= EffectConnector.efficiency)
+					{
+						if (eff % 2 == 0)
+						{
+							ResourceHandling.electronics++;
+						}
+						else
+						{
+							ResourceHandling.electronics += 2;
+						}
+					}
+				}
+				else
+				{
+					Debug.Log("Failure");
+				}
+			}
+			else if (what == "wire")
+			{
+				if (ResourceHandling.electronics >= 1)
+				{
+					ResourceHandling.wire++;
+					ResourceHandling.electronics--;
+					Debug.Log("Success");
+					if (eff <= EffectConnector.efficiency)
+					{
+						if (eff % 2 == 0)
+						{
+							ResourceHandling.electronics++;
+						}
+					}
+				}
+				else
+				{
+					Debug.Log("Failure");
+				}
+			}
+			else if (what == "board")
+			{
+				if (ResourceHandling.chip >= 1 && ResourceHandling.wire >= 2)
+				{
+					ResourceHandling.board++;
+					ResourceHandling.chip--;
+					ResourceHandling.wire -= 2;
+					Debug.Log("Success");
+					if (eff <= EffectConnector.efficiency)
+					{
+						if (eff % 2 == 0)
+						{
+							ResourceHandling.wire += 2;
+						}
+						else
+						{
+							ResourceHandling.chip++;
+						}
+					}
+				}
+				else
+				{
+					Debug.Log("Failure");
+				}
 			}
 		}
-		else if (what == "bolt")
+		else
 		{
-			if (ResourceHandling.metal >= 1)
-			{
-				ResourceHandling.bolt++;
-				ResourceHandling.metal--;
-				Debug.Log("Success");
-				if (eff <= efficiency)
-				{
-					if (eff % 2 == 0)
-					{
-						ResourceHandling.metal++;
-					}
-				}
-			}
-			else
-			{
-				Debug.Log("Failure");
-			}
-		}
-		else if (what == "part")
-		{
-			if (ResourceHandling.plate >= 2 && ResourceHandling.bolt >= 2)
-			{
-				ResourceHandling.part++;
-				ResourceHandling.plate -= 2;
-				ResourceHandling.bolt -= 2;
-				Debug.Log("Success");
-				if (eff <= efficiency)
-				{
-					if (eff % 2 == 0)
-					{
-						ResourceHandling.bolt += 2;
-					}
-					else
-					{
-						ResourceHandling.plate++;
-					}
-				}
-			}
-			else
-			{
-				Debug.Log("Failure");
-			}
-		}
-		else if (what == "chip")
-		{
-			if (ResourceHandling.electronics >= 3)
-			{
-				ResourceHandling.chip++;
-				ResourceHandling.electronics -= 3;
-				Debug.Log("Success");
-				if (eff <= efficiency)
-				{
-					if (eff % 2 == 0)
-					{
-						ResourceHandling.electronics++;
-					}
-					else
-					{
-						ResourceHandling.electronics += 2;
-					}
-				}
-			}
-			else
-			{
-				Debug.Log("Failure");
-			}
-		}
-		else if (what == "wire")
-		{
-			if (ResourceHandling.electronics >= 1)
-			{
-				ResourceHandling.wire++;
-				ResourceHandling.electronics--;
-				Debug.Log("Success");
-				if (eff <= efficiency)
-				{
-					if (eff % 2 == 0)
-					{
-						ResourceHandling.electronics++;
-					}
-				}
-			}
-			else
-			{
-				Debug.Log("Failure");
-			}
-		}
-		else if (what == "board")
-		{
-			if (ResourceHandling.chip >= 1 && ResourceHandling.wire >= 2)
-			{
-				ResourceHandling.board++;
-				ResourceHandling.chip--;
-				ResourceHandling.wire -= 2;
-				Debug.Log("Success");
-				if (eff <= efficiency)
-				{
-					if (eff % 2 == 0)
-					{
-						ResourceHandling.wire += 2;
-					}
-					else
-					{
-						ResourceHandling.chip++;
-					}
-				}
-			}
-			else
-			{
-				Debug.Log("Failure");
-			}
+			Debug.Log("No workers, can't refine!");
 		}
 		
 	}
 
+	//needs to be overhauled
 	public void Discard(string what, int howMany)
 	{
 		if (what == "metal" && ResourceHandling.metal >= howMany)
@@ -471,11 +511,11 @@ public class RoomManager : MonoBehaviour
 			}
 			else if (e == "unitSpeed")	//-----------------------> r.ActiveEffect will be set by a button that is activated once room is upgraded
 			{
-				EffectConnector.unitSpeed += combinedMultiplier;
-				Debug.Log("Unit Speed: " + EffectConnector.unitSpeed);
+				EffectConnector.unitSpeed = EffectConnector.unitBaseSpeed + combinedMultiplier; ////////////////////////////////////////////////////////////
+				//Debug.Log("Unit Speed: " + EffectConnector.unitSpeed);
 			}
 		}
-
+		effectConnector.Recalculate();
 	}
 
 	public void Research()
@@ -490,6 +530,7 @@ public class RoomManager : MonoBehaviour
 			{
 				Debug.Log("Study[" + r.Slot + "]: " + r.WorkMultiplier + "x boost");
 				combinedMultiplier += r.WorkMultiplier; //case for multiples of the same room
+				effects.Add(r.ActiveEffect);
 			}
 		}
 		Debug.Log("Total Study Multiplier: " + combinedMultiplier);
@@ -497,27 +538,33 @@ public class RoomManager : MonoBehaviour
 		//calculate effects
 		foreach (string e in effects)
 		{
+
 			if (e == "none")
 			{
 				return;
 			}
 			else if (e == "roomCost")    //-----------------------> r.ActiveEffect will be set by a button that is activated once room is upgraded
 			{
-				EffectConnector.roomCost += combinedMultiplier; //////////////////////////////////////////////////////////////////////////////////////////////////////////////////GOES UP, NOT DOWN!
+				Debug.Log("hit?");
+				EffectConnector.roomCost = combinedMultiplier + 1;
 			}
 		}
+		effectConnector.Recalculate();
 	}
 
 	public void Produce()
 	{
+		EffectConnector.efficiency = 0;
 		foreach (Room r in rooms)
 		{
 			if (r.Type == "refinery" && r.Workers.Count > 0)
 			{
 				r.CanRefine = true;
 				Debug.Log("Refinery[" + r.Slot + "]: Running");
+				EffectConnector.efficiency += r.Workers.Count;
 			}
 		}
+		effectConnector.Recalculate();
 	}
 
 	public void UpdateRoomDisplay()

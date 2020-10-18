@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class MiniTabHolder : MonoBehaviour
 {
-
+	public Button func0;
 	public Button func1;
 	public Button func2;
 	public Button func3;

@@ -25,12 +25,22 @@ public class AutomatonUI : MonoBehaviour
 	public Text hudMetal;
 	public Text hudElectronics;
 
+	public GameObject debugPanel;
+	public static List<Text> debugText= new List<Text>();
+	public Text debug1;
+	public Text debug2;
+	public Text debug3;
+
 	void Start()
     {
 		metalText.text = " ";
 		electronicsText.text = " ";
 		hudMetal.text = " ";
 		hudElectronics.text = " ";
+
+		debugText.Add(debug1);
+		debugText.Add(debug2);
+		debugText.Add(debug3);
     }
 
     void Update()
@@ -46,6 +56,11 @@ public class AutomatonUI : MonoBehaviour
 
 		hudMetal.text = "Metal: " + ResourceHandling.metal;
 		hudElectronics.text = "Electronics: " + ResourceHandling.electronics;
+
+		if (Input.GetKeyDown(KeyCode.Tab))
+		{
+			debugPanel.SetActive(!debugPanel.activeSelf);
+		}
 	}
 
 	private void OnMouseDown()
