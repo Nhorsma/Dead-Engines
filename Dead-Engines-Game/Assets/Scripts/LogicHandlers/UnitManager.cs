@@ -74,8 +74,8 @@ public class UnitManager : MonoBehaviour
                 Hit().collider.gameObject.tag == "Encampment")
             {
                 SetJobOfSelected(Hit().collider.gameObject);
-
-            }
+				si.UpdateUnitUI(GetUnit(selectedUnits[0])); /////////////////////////////////////////////////////////////////
+			}
             else
             {
                 MoveAllSelected();

@@ -27,7 +27,12 @@ public class SelectItems : MonoBehaviour
     Vector3 clickSpot;
     RaycastHit hit;
 
-    //HealthUI hui;
+	public GameObject unitUIPanel;
+	public Text unitName;
+	public Text unitJob;
+	public Text unitItem;
+	public Text unitHealth;
+	public Slider healthSlider;
 
     private void Start()
     {
@@ -46,7 +51,6 @@ public class SelectItems : MonoBehaviour
 
         if(Input.GetKeyDown(KeyCode.Space))
         {
-            //hui.DeleteHovers();
             Debug.Log("space");
         }
     }
@@ -67,7 +71,7 @@ public class SelectItems : MonoBehaviour
         {
             DrawBox(false,1);
             mouseSecond = mouseFirst = (Input.mousePosition);
-        }
+		}
     }
 
 
@@ -82,7 +86,8 @@ public class SelectItems : MonoBehaviour
                     {
                         UnitManager.selectedUnits.Add(hit.collider.gameObject);
                         hit.collider.gameObject.GetComponent<MeshRenderer>().material = selectedMaterial;
-                    }
+						UpdateUnitUI(um.GetUnit(hit.collider.gameObject)); //////////////////////////////////////////
+				}
                 }
                 else //group select
                 {
@@ -98,8 +103,8 @@ public class SelectItems : MonoBehaviour
         //Change material on the latest unit we highlighted
         if (highlightThisUnit != null)
         {
-            //But make sure the unit we want to change material on is not selected
-            bool isSelected = false;
+			//But make sure the unit we want to change material on is not selected
+			bool isSelected = false;
             for (int i = 0; i < UnitManager.selectedUnits.Count; i++)
             {
                 if (UnitManager.selectedUnits[i] == highlightThisUnit)
@@ -111,8 +116,8 @@ public class SelectItems : MonoBehaviour
 
             if (!isSelected)
             {
-                highlightThisUnit.GetComponent<MeshRenderer>().material = normalMaterial;
-            }
+				highlightThisUnit.GetComponent<MeshRenderer>().material = normalMaterial;
+			}
 
             highlightThisUnit = null;
         }
@@ -224,6 +229,11 @@ public class SelectItems : MonoBehaviour
                 currentUnit.GetComponent<MeshRenderer>().material = normalMaterial;
             }
         }
+		if (UnitManager.selectedUnits.Count == 1)
+		{
+			UpdateUnitUI(um.GetUnit(UnitManager.selectedUnits[0]));
+			unitUIPanel.SetActive(true);
+		}
     }
 
 
@@ -267,7 +277,8 @@ public class SelectItems : MonoBehaviour
             UnitManager.selectedUnits[i].GetComponent<MeshRenderer>().material = normalMaterial;
         }
         UnitManager.selectedUnits.Clear();
-    }
+		unitUIPanel.SetActive(false);
+	}
 
 
     public List<GameObject> GetSelected()
@@ -280,5 +291,16 @@ public class SelectItems : MonoBehaviour
         UnitManager.selectedUnits.Remove(gm);
         gm.GetComponent<MeshRenderer>().material = normalMaterial;
     }
+
+	public void UpdateUnitUI(Unit u)
+	{
+		unitUIPanel.SetActive(true);
+		unitName.text = u.UnitName;
+		unitJob.text = u.Job;
+		//unitItem.text = u.Holding;
+		unitHealth.text = u.Health.ToString();
+		healthSlider.maxValue = 3;
+		healthSlider.value = u.Health;
+	}
 
 }
