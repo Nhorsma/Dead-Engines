@@ -194,7 +194,7 @@ public class UnitManager : MonoBehaviour
 				Debug.Log("Got metal");
 			}
             else if (resource.Equals("ExtractionElectronics"))
-<<<<<<< Updated upstream
+/*<<<<<<< Updated upstream
 			{
 				AddElectronics();
 				Debug.Log("Got electronics");
@@ -203,7 +203,7 @@ public class UnitManager : MonoBehaviour
             unit.JustDroppedOff=(true);
             TravelTo(gm, unit.JobPos.transform.position, false,false);
             Debug.Log(unit.Job + " at "+unit.JobPos.transform.position);
-=======
+=======*/
             {
                 AddElectronics();
                 Debug.Log("Got electronics");
@@ -217,7 +217,6 @@ public class UnitManager : MonoBehaviour
             unit.JustDroppedOff = (true);
             TravelTo(gm, unit.JobPos.transform.position, false, false);
             //Debug.Log(unit.Job + " at "+unit.JobPos.transform.position);
->>>>>>> Stashed changes
         }
     }
 
@@ -296,8 +295,6 @@ public class UnitManager : MonoBehaviour
 		ResourceHandling.electronics++;
 	}
 
-<<<<<<< Updated upstream
-=======
     void AddFuel()
     {
         ResourceHandling.fuelRods++;
@@ -342,5 +339,4 @@ public class UnitManager : MonoBehaviour
         yield return new WaitForSeconds(time);
         Destroy(t);
     }
->>>>>>> Stashed changes
 }
