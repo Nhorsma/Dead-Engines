@@ -54,6 +54,7 @@ public class AutomatonUI : MonoBehaviour
 		{
 			debugPanel.SetActive(!debugPanel.activeSelf);
 		}
+		UpdateInfoTab();
 	}
 
 	private void OnMouseDown()
