@@ -5,7 +5,7 @@ using UnityEngine.AI;
 
 public class AutomotonAction : MonoBehaviour
 {
-    public float movementSpeed;
+    public float movementSpeed, turnSpeed;
     public bool canMove,canRotate;
     Vector3 pos, walkTo;
     NavMeshAgent nv;
@@ -52,14 +52,16 @@ public class AutomotonAction : MonoBehaviour
     {
         if(transform.rotation.eulerAngles != pos - position)
         {
-            Debug.Log("rotating");
             //Vector3 dir = Vector3.RotateTowards(transform.rotation.eulerAngles, pos - position, movementSpeed * Time.deltaTime,0.0f);
             //float num = Vector3.Angle(transform.position,position);
             //transform.eulerAngles = new Vector3(transform.eulerAngles.x,transform.eulerAngles.y + num,transform.eulerAngles.z);
 
-            Vector3 direction = position - transform.position;
-            Quaternion rotation = Quaternion.LookRotation(direction);
-            transform.up = Vector3.RotateTowards(transform.rotation.eulerAngles,direction,Time.deltaTime,0.0f);
+            //Vector3 direction = position - transform.position;
+            //Quaternion rotation = Quaternion.LookRotation(direction);
+            //transform.up = Vector3.RotateTowards(transform.rotation.eulerAngles,direction,movementSpeed*Time.deltaTime,0.0f);
+            //canRotate = false;
+            Debug.Log(Vector3.Angle(transform.position, position));
+            transform.Rotate(-Vector3.up * turnSpeed * Time.deltaTime);
         }
         else
         {
