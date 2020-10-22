@@ -6,6 +6,7 @@ using UnityEngine.AI;
 public class AutomotonAction : MonoBehaviour
 {
     public float movementSpeed, turnSpeed;
+    public float startAngle, target, ny;
     public bool canMove,canRotate;
     Vector3 pos, walkTo;
     NavMeshAgent nv;
@@ -27,15 +28,20 @@ public class AutomotonAction : MonoBehaviour
         {
             walkTo = Hit().point;
             canRotate = true;
+            startAngle = transform.rotation.eulerAngles.y;
+            SetUpRotate(walkTo);
         }
         if(canRotate && walkTo!= null)
         {
-            Rotate(walkTo);
+            Rotate();
         }
         if(canMove && walkTo!=null)
         {
             Walk(walkTo);
         }
+        if(Hit().point!=null)
+            Debug.DrawLine(transform.position, Hit().point);
+        //Debug.DrawLine(transform.position, transform.position*transform.forward);
     }
 
 
@@ -47,29 +53,70 @@ public class AutomotonAction : MonoBehaviour
         return hit;
     }
 
-
-    public void Rotate(Vector3 position)
+    public void SetUpRotate(Vector3 hit)
     {
-        if(transform.rotation.eulerAngles != pos - position)
-        {
-            //Vector3 dir = Vector3.RotateTowards(transform.rotation.eulerAngles, pos - position, movementSpeed * Time.deltaTime,0.0f);
-            //float num = Vector3.Angle(transform.position,position);
-            //transform.eulerAngles = new Vector3(transform.eulerAngles.x,transform.eulerAngles.y + num,transform.eulerAngles.z);
+        transform.LookAt(hit, Vector3.up);
+        target = transform.rotation.eulerAngles.y;  //target angle;
+        transform.rotation = Quaternion.Euler(0, startAngle, 0);
 
-            //Vector3 direction = position - transform.position;
-            //Quaternion rotation = Quaternion.LookRotation(direction);
-            //transform.up = Vector3.RotateTowards(transform.rotation.eulerAngles,direction,movementSpeed*Time.deltaTime,0.0f);
-            //canRotate = false;
-            Debug.Log(Vector3.Angle(transform.position, position));
-            transform.Rotate(-Vector3.up * turnSpeed * Time.deltaTime);
+        ny = startAngle - 180;
+        if (ny < 0)
+            ny += 360;
+    }
+
+    public void Rotate()
+    {
+
+        if(startAngle > ny)
+        {
+            if(target > startAngle && target<ny)
+            {
+                //clockwise
+                transform.Rotate(Vector3.up * turnSpeed * Time.deltaTime);
+            }
+            else
+            {
+                //counter clockwise
+                transform.Rotate(-Vector3.up * turnSpeed * Time.deltaTime);
+            }
         }
         else
         {
-            canMove = true;
-            canRotate = false;
-            Debug.Log("start walking");
-            return;
+            if(target > startAngle && target<ny)
+            {
+                //clockwise
+                transform.Rotate(Vector3.up * turnSpeed * Time.deltaTime);
+            }
+            else
+            {
+                //counter clockwise
+                transform.Rotate(-Vector3.up * turnSpeed * Time.deltaTime);
+            }
         }
+
+        /*
+            if (target < startAngle && target > ny)
+            {
+                transform.Rotate(-Vector3.up * turnSpeed * Time.deltaTime); //counter clock
+            }
+            else
+            {
+                transform.Rotate(Vector3.up * turnSpeed * Time.deltaTime); //counter clock
+            }
+
+
+            if (target < startAngle || target < ny)
+            {
+                transform.Rotate(-Vector3.up * turnSpeed * Time.deltaTime); //counter clock
+            }
+            else
+            {
+                transform.Rotate(Vector3.up * turnSpeed * Time.deltaTime); //counter clock
+            }
+*/
+
+        if (Mathf.Abs(target - transform.rotation.eulerAngles.y) < 0.5f)
+            canRotate = false;
     }
 
 
