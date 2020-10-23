@@ -8451,7 +8451,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 500325568}
   m_Direction: 2
   m_Value: 1
-  m_Size: 0.6723129
+  m_Size: 0.67231286
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -32442,8 +32442,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 57d5ecc92ed93b94ba6e895526d7ae42, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  movementSpeed: 2
+  movementSpeed: 5
   turnSpeed: 50
+  startAngle: 0
+  target: 0
+  ny: 0
   canMove: 0
   canRotate: 0
 --- !u!195 &8174211910926415695

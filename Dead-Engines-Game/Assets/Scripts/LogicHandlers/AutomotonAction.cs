@@ -15,10 +15,12 @@ public class AutomotonAction : MonoBehaviour
 
     private void Start()
     {
+        gameObject.layer = 1;
         rb = GetComponent<Rigidbody>();
         nv = GetComponent<NavMeshAgent>();
         nv.speed = movementSpeed;
         canMove = canRotate = false;
+        //Debug.Log(gameObject.layer);
     }
 
     private void Update()
@@ -27,6 +29,15 @@ public class AutomotonAction : MonoBehaviour
         if(Input.GetMouseButtonDown(1) && Hit().point != null)
         {
             walkTo = Hit().point;
+            if (Hit().collider == gameObject)
+            {
+                Physics.IgnoreLayerCollision(1,1);
+                RaycastHit hit2;
+                if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit2, Mathf.Infinity))
+                    walkTo = hit2.point;
+                Physics.IgnoreLayerCollision(1, 1,false);
+
+            }
             canRotate = true;
             startAngle = transform.rotation.eulerAngles.y;
             SetUpRotate(walkTo);
@@ -39,9 +50,7 @@ public class AutomotonAction : MonoBehaviour
         {
             Walk(walkTo);
         }
-        if(Hit().point!=null)
-            Debug.DrawLine(transform.position, Hit().point);
-        //Debug.DrawLine(transform.position, transform.position*transform.forward);
+        
     }
 
 
@@ -66,10 +75,9 @@ public class AutomotonAction : MonoBehaviour
 
     public void Rotate()
     {
-
-        if(startAngle > ny)
+        if(startAngle < 180)
         {
-            if(target > startAngle && target<ny)
+            if(startAngle < target && target < ny)
             {
                 //clockwise
                 transform.Rotate(Vector3.up * turnSpeed * Time.deltaTime);
@@ -82,7 +90,7 @@ public class AutomotonAction : MonoBehaviour
         }
         else
         {
-            if(target > startAngle && target<ny)
+            if (startAngle < target && target < 360 || target < ny)
             {
                 //clockwise
                 transform.Rotate(Vector3.up * turnSpeed * Time.deltaTime);
@@ -95,28 +103,16 @@ public class AutomotonAction : MonoBehaviour
         }
 
         /*
-            if (target < startAngle && target > ny)
-            {
-                transform.Rotate(-Vector3.up * turnSpeed * Time.deltaTime); //counter clock
-            }
-            else
-            {
-                transform.Rotate(Vector3.up * turnSpeed * Time.deltaTime); //counter clock
-            }
-
-
-            if (target < startAngle || target < ny)
-            {
-                transform.Rotate(-Vector3.up * turnSpeed * Time.deltaTime); //counter clock
-            }
-            else
-            {
-                transform.Rotate(Vector3.up * turnSpeed * Time.deltaTime); //counter clock
-            }
-*/
+         * var targetDir = Quaternion.LookRotation(target - transform.position);
+                transform.eulerAngles = new Vector3(transform.eulerAngles.x, 
+                Quaternion.Slerp(transform.rotation, targetDir, speed * Time.deltaTime).eulerAngles.y, transform.eulerAngles.z);
+         */
 
         if (Mathf.Abs(target - transform.rotation.eulerAngles.y) < 0.5f)
+        {
             canRotate = false;
+            canMove = true;
+        }
     }
 
 
@@ -124,8 +120,6 @@ public class AutomotonAction : MonoBehaviour
     {
         //rb.MovePosition(position * movementSpeed * Time.deltaTime);
         transform.position = Vector3.MoveTowards(transform.position, position, movementSpeed*Time.deltaTime);
-
-        Debug.Log("walking");
         if (Vector3.Distance(pos,position)<1)
         {
             canMove = false;
