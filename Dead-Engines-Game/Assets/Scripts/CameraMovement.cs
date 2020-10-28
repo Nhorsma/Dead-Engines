@@ -8,6 +8,7 @@ public class CameraMovement : MonoBehaviour
     public float scrollspeed, closestScroll, furthestScroll, camspeed, startSpeed, endSpeed;
     public float heightRatio, widthRatio;
     private float speedMulti;
+    public float mod;
 
     /*
      * Attach to Main Camera
@@ -47,6 +48,15 @@ public class CameraMovement : MonoBehaviour
 
             pos = maincam.transform.position;
         }
+        else
+        {
+            rb.velocity = new Vector3(0, 0, 0);
+        }
+        if(Input.GetKeyDown(KeyCode.Space))
+        {
+            TeleportToAuto(10f);
+        }
+
 		//if (forceLock && ui.auto_main.activeInHierarchy)
 		//{
 		//	MoveCameraTo(ui.lastClickedID);
@@ -67,42 +77,36 @@ public class CameraMovement : MonoBehaviour
 
             if ((mpos.x <= (Screen.width*widthRatio) || Input.GetKey(Left)) && rb.velocity.x > -speedlimit)
             {
-            //left
-            StartCoroutine(IncreaseCamSpeed(true));
-        //    SpeedTimer(true);
-            rb.AddForce(new Vector3(-camspeed, 0, 0), ForceMode.VelocityChange);
+                //left
+                StartCoroutine(IncreaseCamSpeed(true));
+                rb.AddForce(new Vector3(-camspeed, 0, 0), ForceMode.VelocityChange);
             }
             else if ((mpos.x >= Screen.width-(Screen.width*widthRatio) || Input.GetKey(Right)) && rb.velocity.x < speedlimit)
             {
-            //right
-            StartCoroutine(IncreaseCamSpeed(true));
-        //    SpeedTimer(true); ;
-            rb.AddForce(new Vector3(camspeed, 0, 0), ForceMode.VelocityChange);
+                //right
+                StartCoroutine(IncreaseCamSpeed(true));
+                rb.AddForce(new Vector3(camspeed, 0, 0), ForceMode.VelocityChange);
             }
             else
             {
                 rb.AddForce(new Vector3(-rb.velocity.x*5f, 0, 0), ForceMode.Acceleration);
-            if (rb.velocity == new Vector3(0, 0, 0))
-            {
-            //    StopCoroutine(IncreaseCamSpeed(false));
-                StartCoroutine(IncreaseCamSpeed(true));
-            //    SpeedTimer(false);
-                speedMulti = startSpeed;
+                if (rb.velocity == new Vector3(0, 0, 0))
+                {
+                    StartCoroutine(IncreaseCamSpeed(true));
+                    speedMulti = startSpeed;
+                }
             }
-        }
 
         if ((mpos.y <= (Screen.height*heightRatio) || Input.GetKey(Down)) && rb.velocity.z > -speedlimit)
         {
             //down
             StartCoroutine(IncreaseCamSpeed(true));
-            //SpeedTimer(true);
             rb.AddForce(new Vector3(0, 0, -camspeed), ForceMode.VelocityChange);
         }
         else if ((mpos.y >= Screen.height - (Screen.height*heightRatio) || Input.GetKey(Up)) && rb.velocity.z < speedlimit)
         {
             //up
             StartCoroutine(IncreaseCamSpeed(true));
-            //SpeedTimer(true);
             rb.AddForce(new Vector3(0, 0, camspeed), ForceMode.VelocityChange);
         }
         else
@@ -110,9 +114,7 @@ public class CameraMovement : MonoBehaviour
             rb.AddForce(new Vector3(0, 0, -rb.velocity.z * 5f), ForceMode.Acceleration);
             if (rb.velocity == new Vector3(0, 0, 0))
             {
-            //    StopCoroutine(IncreaseCamSpeed(false));
                 StartCoroutine(IncreaseCamSpeed(true));
-                //SpeedTimer(false);
                 speedMulti = startSpeed;
             }
         }
@@ -139,6 +141,13 @@ public class CameraMovement : MonoBehaviour
         {
             rb.velocity = new Vector3(rb.velocity.x, 0, rb.velocity.z);
         }
+    }
+
+    void TeleportToAuto(float mod)
+    {
+        //Debug.Log(rb.transform.position - ui.gameObject.transform.position);
+        rb.transform.position = ui.gameObject.transform.position + new Vector3(0f, mod, -1.25f*mod);
+       // Debug.Log(rb.transform.position - ui.gameObject.transform.position);
     }
 
     void DetermineSpeedLimit()
