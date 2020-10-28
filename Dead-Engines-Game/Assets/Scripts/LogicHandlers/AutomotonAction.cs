@@ -22,10 +22,11 @@ public class AutomotonAction : MonoBehaviour
         nv = GetComponent<NavMeshAgent>();
         nv.speed = movementSpeed;
         canMove = canRotate = isWalking = isRotating = false;
-        //Debug.Log(gameObject.layer);
+        Debug.Log(gameObject.transform);
+
     }
 
-    private void Update()
+    private void LateUpdate()
     {
         pos = transform.position;
         if(Input.GetMouseButtonDown(1) && Hit().point != null)
@@ -104,12 +105,7 @@ public class AutomotonAction : MonoBehaviour
             }
         }
 
-        /*
-         * var targetDir = Quaternion.LookRotation(target - transform.position);
-                transform.eulerAngles = new Vector3(transform.eulerAngles.x, 
-                Quaternion.Slerp(transform.rotation, targetDir, speed * Time.deltaTime).eulerAngles.y, transform.eulerAngles.z);
-         */
-
+        Debug.Log(transform.rotation);
         if (Mathf.Abs(target - transform.rotation.eulerAngles.y) < 0.5f)
         {
             canRotate = false;
@@ -124,7 +120,7 @@ public class AutomotonAction : MonoBehaviour
     {
         //rb.MovePosition(position * movementSpeed * Time.deltaTime);
         transform.position = Vector3.MoveTowards(transform.position, position, movementSpeed*Time.deltaTime);
-        Debug.Log(transform.position);
+        
         if (Vector3.Distance(pos,position)<1)
         {
             canMove = false;
