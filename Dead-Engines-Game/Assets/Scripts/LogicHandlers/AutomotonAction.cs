@@ -5,9 +5,10 @@ using UnityEngine.AI;
 
 public class AutomotonAction : MonoBehaviour
 {
+    Animator anim;
     public float movementSpeed, turnSpeed;
     public float startAngle, target, ny;
-    public bool canMove,canRotate;
+    public bool canMove,canRotate, isWalking, isRotating;
     Vector3 pos, walkTo;
     NavMeshAgent nv;
     Rigidbody rb;
@@ -15,11 +16,12 @@ public class AutomotonAction : MonoBehaviour
 
     private void Start()
     {
+        anim = GetComponent<Animator>();
         gameObject.layer = 1;
         rb = GetComponent<Rigidbody>();
         nv = GetComponent<NavMeshAgent>();
         nv.speed = movementSpeed;
-        canMove = canRotate = false;
+        canMove = canRotate = isWalking = isRotating = false;
         //Debug.Log(gameObject.layer);
     }
 
@@ -111,7 +113,9 @@ public class AutomotonAction : MonoBehaviour
         if (Mathf.Abs(target - transform.rotation.eulerAngles.y) < 0.5f)
         {
             canRotate = false;
+            anim.SetBool("isRotating", false);
             canMove = true;
+            anim.SetBool("isWalking", true);
         }
     }
 
@@ -120,9 +124,11 @@ public class AutomotonAction : MonoBehaviour
     {
         //rb.MovePosition(position * movementSpeed * Time.deltaTime);
         transform.position = Vector3.MoveTowards(transform.position, position, movementSpeed*Time.deltaTime);
+        Debug.Log(transform.position);
         if (Vector3.Distance(pos,position)<1)
         {
             canMove = false;
+            anim.SetBool("isWalking", false);
             return;
         }
 
