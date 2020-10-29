@@ -5,7 +5,7 @@ using UnityEngine.AI;
 
 public class AutomotonAction : MonoBehaviour
 {
-    Animator anim;
+    public Animator anim;
     public float movementSpeed, turnSpeed;
     public float startAngle, target, ny;
     public bool canMove,canRotate, isWalking, isRotating;
@@ -16,13 +16,11 @@ public class AutomotonAction : MonoBehaviour
 
     private void Start()
     {
-        anim = GetComponent<Animator>();
         gameObject.layer = 1;
         rb = GetComponent<Rigidbody>();
         nv = GetComponent<NavMeshAgent>();
         nv.speed = movementSpeed;
         canMove = canRotate = isWalking = isRotating = false;
-        Debug.Log(gameObject.transform);
 
     }
 
@@ -104,8 +102,6 @@ public class AutomotonAction : MonoBehaviour
                 transform.Rotate(-Vector3.up * turnSpeed * Time.deltaTime);
             }
         }
-
-        Debug.Log(transform.rotation);
         if (Mathf.Abs(target - transform.rotation.eulerAngles.y) < 0.5f)
         {
             canRotate = false;

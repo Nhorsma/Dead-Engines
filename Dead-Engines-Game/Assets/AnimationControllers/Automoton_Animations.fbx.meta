@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: c8183bbb940dd024f82249bc59c4ed9c
+guid: 67ff58d9633b43045a757562feb5dca7
 ModelImporter:
   serializedVersion: 19301
   internalIDToNameTable:
   - first:
-      74: 1827226128182048838
+      74: -1610863427237328480
     second: Walking
   - first:
       74: -3100369314251171874
@@ -39,7 +39,7 @@ ModelImporter:
     clipAnimations:
     - serializedVersion: 16
       name: Walking
-      takeName: Take 001
+      takeName: Walking
       internalID: 0
       firstFrame: 0
       lastFrame: 140
@@ -68,17 +68,17 @@ ModelImporter:
       additiveReferencePoseFrame: 0
     - serializedVersion: 16
       name: Idle
-      takeName: Take 001
+      takeName: Idle
       internalID: 0
       firstFrame: 141
-      lastFrame: 141
+      lastFrame: 142
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
       cycleOffset: 0
       loop: 0
       hasAdditiveReferencePose: 0
-      loopTime: 1
+      loopTime: 0
       loopBlend: 0
       loopBlendOrientation: 0
       loopBlendPositionY: 0
