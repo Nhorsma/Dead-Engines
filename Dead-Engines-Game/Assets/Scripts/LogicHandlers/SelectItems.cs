@@ -85,7 +85,7 @@ public class SelectItems : MonoBehaviour
                     if (hit.collider.CompareTag("Friendly") && !UnitManager.selectedUnits.Contains(hit.collider.gameObject))
                     {
                         UnitManager.selectedUnits.Add(hit.collider.gameObject);
-                        hit.collider.gameObject.GetComponent<MeshRenderer>().material = selectedMaterial;
+                        hit.collider.gameObject.GetComponentInChildren<MeshRenderer>().material = selectedMaterial;
 						UpdateUnitUI(um.GetUnit(hit.collider.gameObject)); //////////////////////////////////////////
 				}
                 }
@@ -116,7 +116,7 @@ public class SelectItems : MonoBehaviour
 
             if (!isSelected)
             {
-				highlightThisUnit.GetComponent<MeshRenderer>().material = normalMaterial;
+				highlightThisUnit.GetComponentInChildren<MeshRenderer>().material = normalMaterial;
 			}
 
             highlightThisUnit = null;
@@ -145,7 +145,7 @@ public class SelectItems : MonoBehaviour
                 if (!isSelected)
                 {
                     highlightThisUnit = currentObj;
-                    highlightThisUnit.GetComponent<MeshRenderer>().material = highlightMaterial;
+                    highlightThisUnit.GetComponentInChildren<MeshRenderer>().material = highlightMaterial;
                 }
             }
             else
@@ -220,13 +220,13 @@ public class SelectItems : MonoBehaviour
             //Is this unit within the square
             if (InRect(currentUnit.transform.position))
             {
-                currentUnit.GetComponent<MeshRenderer>().material = selectedMaterial;
+                currentUnit.GetComponentInChildren<MeshRenderer>().material = selectedMaterial;
                 UnitManager.selectedUnits.Add(currentUnit);
             }
             //Otherwise deselect the unit if it's not in the square
             else
             {
-                currentUnit.GetComponent<MeshRenderer>().material = normalMaterial;
+                currentUnit.GetComponentInChildren<MeshRenderer>().material = normalMaterial;
             }
         }
 		if (UnitManager.selectedUnits.Count == 1)
@@ -274,7 +274,7 @@ public class SelectItems : MonoBehaviour
     {
         for(int i=0;i< UnitManager.selectedUnits.Count;i++)
         {
-            UnitManager.selectedUnits[i].GetComponent<MeshRenderer>().material = normalMaterial;
+            UnitManager.selectedUnits[i].GetComponentInChildren<MeshRenderer>().material = normalMaterial;
         }
         UnitManager.selectedUnits.Clear();
 		unitUIPanel.SetActive(false);
@@ -289,7 +289,7 @@ public class SelectItems : MonoBehaviour
     public void RemoveSpecific(GameObject gm)
     {
         UnitManager.selectedUnits.Remove(gm);
-        gm.GetComponent<MeshRenderer>().material = normalMaterial;
+        gm.GetComponentInChildren<MeshRenderer>().material = normalMaterial;
     }
 
 	public void UpdateUnitUI(Unit u)
