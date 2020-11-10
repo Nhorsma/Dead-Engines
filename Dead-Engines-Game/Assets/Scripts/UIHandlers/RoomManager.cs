@@ -496,7 +496,10 @@ public class RoomManager : MonoBehaviour
 			Unit who = r.Workers[0]; //first unit
 			Debug.Log("Unassigned [" + who.UnitName + "] from [" + r.Type + "][" + r.Slot + "]");
 			who.Job = "none";
-			who.JobPos = autoObj; // set it to outside ////////////////////////////////////////////////////////////////////
+
+			//who.JobPos = autoObj; // set it to outside ////////////////////////////////////////////////////////////////////
+            um.LeaveRoomJob(who);
+
 			um.SetJobFromRoom(who, where); // set it to be Outside the 'bot doing nothing /////////////////////////////////
 			r.Workers.Remove(who);
 			r.WorkMultiplier = r.Workers.Count;

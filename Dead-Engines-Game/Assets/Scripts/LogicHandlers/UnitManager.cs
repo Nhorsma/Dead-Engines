@@ -409,6 +409,12 @@ public class UnitManager : MonoBehaviour
         TravelTo(GetUnitObject(unit), unit.JobPos.transform.position, false, false);
     }
 
+    public void LeaveRoomJob(Unit unit)
+    {
+        GetUnitObject(unit).transform.position = robotPos + new Vector3(-stoppingDistance + Random.Range(-3, 3), 0, -stoppingDistance + Random.Range(-3, 3));
+        GetUnitObject(unit).SetActive(true);
+    }
+
     GameObject BulletTrail(Vector3 start, Vector3 end)
     {
         float x, y, z;

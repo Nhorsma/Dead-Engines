@@ -254,7 +254,7 @@ public class SelectItems : MonoBehaviour
                 //g1.transform.position = mf;
                 //g2.transform.position = ms;
 
-                DrawBox(true,0.9f);
+                //DrawBox(true,0.9f);
             }
         }
 
