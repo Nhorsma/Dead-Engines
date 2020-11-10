@@ -131,7 +131,7 @@ public class RoomManager : MonoBehaviour
 		UpdateRoomDisplay();
 	}
 
-	void SetupRefinery(int slot)
+	void SetupRefinery(int slot) //////////////////////////////		miniTabs[slot].GetComponent<MiniTabHolder>().func00.GetComponentInChildren<Text>().text = "Unassign Unit";
 	{
 		miniTabs[slot].GetComponent<MiniTabHolder>().build.gameObject.SetActive(false);
 
@@ -206,7 +206,7 @@ public class RoomManager : MonoBehaviour
 		miniTabs[slot].GetComponent<MiniTabHolder>().roomName.text = "Shrine";
 
 		miniTabs[slot].GetComponent<MiniTabHolder>().func1.GetComponentInChildren<Text>().text = "Assign Unit";
-		miniTabs[slot].GetComponent<MiniTabHolder>().func2.GetComponentInChildren<Text>().text = "Buff1";
+		miniTabs[slot].GetComponent<MiniTabHolder>().func2.GetComponentInChildren<Text>().text = "Unassign Unit";
 		miniTabs[slot].GetComponent<MiniTabHolder>().func3.GetComponentInChildren<Text>().text = "Buff2";
 
 		miniTabs[slot].GetComponent<MiniTabHolder>().func1.onClick.RemoveAllListeners();
@@ -229,7 +229,7 @@ public class RoomManager : MonoBehaviour
 		miniTabs[slot].GetComponent<MiniTabHolder>().roomName.text = "Study";
 
 		miniTabs[slot].GetComponent<MiniTabHolder>().func1.GetComponentInChildren<Text>().text = "Assign Unit";
-		miniTabs[slot].GetComponent<MiniTabHolder>().func2.GetComponentInChildren<Text>().text = "Buff1";
+		miniTabs[slot].GetComponent<MiniTabHolder>().func2.GetComponentInChildren<Text>().text = "Unassign Unit";
 		miniTabs[slot].GetComponent<MiniTabHolder>().func3.GetComponentInChildren<Text>().text = "Buff2";
 
 		miniTabs[slot].GetComponent<MiniTabHolder>().func1.onClick.RemoveAllListeners();
@@ -483,6 +483,44 @@ public class RoomManager : MonoBehaviour
 		}
 	}
 
+	public void Unassign(string where, Room r)
+	{
+
+		if (r.Workers.Count == 0)
+		{
+			Debug.Log("No worker available");
+			return;
+		}
+		else
+		{
+			Unit who = r.Workers[0]; //first unit
+			Debug.Log("Unassigned [" + who.UnitName + "] from [" + r.Type + "][" + r.Slot + "]");
+			who.Job = "none";
+			who.JobPos = autoObj; // set it to outside ////////////////////////////////////////////////////////////////////
+			um.SetJobFromRoom(who, where); // set it to be Outside the 'bot doing nothing /////////////////////////////////
+			r.Workers.Remove(who);
+			r.WorkMultiplier = r.Workers.Count;
+
+			if (r.Type == "shrine")
+			{
+				r.ActiveEffect = "unitSpeed";
+				Worship();
+			}
+			else if (r.Type == "study")
+			{
+				r.ActiveEffect = "roomCost";
+				Research();
+			}
+			else if (r.Type == "refinery")
+			{
+				Produce();
+			}
+
+			//method does not exist yet
+			//info.UpdateUnitViewer();
+		}
+	}
+
 	//worship and research methods only need to be called when their multiplier changes, or when a unit is assigned successfully
 	//this will definitely save on horsepower
 	public void Worship()
@@ -566,6 +604,8 @@ public class RoomManager : MonoBehaviour
 		}
 		effectConnector.Recalculate();
 	}
+
+
 
 	public void UpdateRoomDisplay()
 	{
