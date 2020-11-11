@@ -11405,7 +11405,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 742551317}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 12.46, y: 0, z: 11.4}
+  m_LocalPosition: {x: 12.46, y: 0, z: -284.1}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1992358472}
@@ -13465,9 +13465,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   automoton: {fileID: 1423674924}
-  h1: {fileID: 8739781955447267095, guid: 9c09d69a4fd9c0c49b2be63fba8bd661, type: 3}
-  h2: {fileID: 8945042911695722535, guid: d72fcec7e6b67b04fbc0c9ac2c748627, type: 3}
-  h3: {fileID: 5679052199211047101, guid: d3c192f2d90fbb04c9bd555dcaea3cc6, type: 3}
+  h1: {fileID: 3279273732068940755, guid: f3ad217f0f39b0d469595ef5181ddd5d, type: 3}
+  h2: {fileID: 2845934144848803937, guid: 7adcec9a75964174faa9859e24918f35, type: 3}
+  h3: {fileID: 2986977932535562071, guid: f874be8518647fa479b21128d199ce7b, type: 3}
   spawnRadius: 50
   stoppingDistance: 30
   movementSpeed: 10

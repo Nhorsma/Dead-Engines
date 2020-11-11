@@ -85,7 +85,7 @@ public class HunterHandler : MonoBehaviour
 
     void SpawnHunter()
     {
-        for (int i = 0; i < 1; i++)
+        for (int i = 0; i < 3; i++)
         {
             Vector3 spawnPlace = automoton.transform.position + RandomSpawnPoint();
             var gm = Instantiate(Resources.Load(RandomHunter().name), spawnPlace, transform.rotation);
