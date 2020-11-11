@@ -4,14 +4,14 @@ using UnityEngine;
 
 public class Enemy
 {
-    private int health;
-    private int attack;
-    private float fireSpeed;
+    protected int health;
+    protected int attack;
+    protected float fireSpeed;
 
-    private int id;
-    private GameObject target;
-    private GameObject rec, camp;
-    private bool justShot;
+    protected int id;
+    protected GameObject target;
+    protected GameObject rec, camp;
+    protected bool justShot;
 
     public Enemy()
     {

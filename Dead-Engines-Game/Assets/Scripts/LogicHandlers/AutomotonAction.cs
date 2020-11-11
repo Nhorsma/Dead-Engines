@@ -26,34 +26,9 @@ public class AutomotonAction : MonoBehaviour
 
     private void LateUpdate()
     {
-        pos = transform.position;
-        if(Input.GetMouseButtonDown(1) && Hit().point != null)
-        {
-            walkTo = Hit().point;
-            if (Hit().collider == gameObject)
-            {
-                Physics.IgnoreLayerCollision(1,1);
-                RaycastHit hit2;
-                if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit2, Mathf.Infinity))
-                    walkTo = hit2.point;
-                Physics.IgnoreLayerCollision(1, 1,false);
-
-            }
-            canRotate = true;
-            startAngle = transform.rotation.eulerAngles.y;
-            SetUpRotate(walkTo);
-        }
-        if(canRotate && walkTo!= null)
-        {
-            Rotate();
-        }
-        if(canMove && walkTo!=null)
-        {
-            Walk(walkTo);
-        }
-        
+        Movement();
+        QWER();
     }
-
 
     RaycastHit Hit()
     {
@@ -111,7 +86,6 @@ public class AutomotonAction : MonoBehaviour
         }
     }
 
-
     public void Walk(Vector3 position)
     {
         //rb.MovePosition(position * movementSpeed * Time.deltaTime);
@@ -132,6 +106,51 @@ public class AutomotonAction : MonoBehaviour
         {
             nv.SetDestination(place);
         }
+
+    }
+
+    void Movement()
+    {
+        pos = transform.position;
+        if (Input.GetMouseButtonDown(1) && Hit().point != null)
+        {
+            walkTo = Hit().point;
+            if (Hit().collider == gameObject)
+            {
+                Physics.IgnoreLayerCollision(1, 1);
+                RaycastHit hit2;
+                if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit2, Mathf.Infinity))
+                    walkTo = hit2.point;
+                Physics.IgnoreLayerCollision(1, 1, false);
+
+            }
+            canRotate = true;
+            startAngle = transform.rotation.eulerAngles.y;
+            SetUpRotate(walkTo);
+        }
+        if (canRotate && walkTo != null)
+        {
+            Rotate();
+        }
+        if (canMove && walkTo != null)
+        {
+            Walk(walkTo);
+        }
+
+    }
+
+    void QWER()
+    {
+
+    }
+
+    void GroundPound()
+    {
+
+    }
+
+    void Punch()
+    {
 
     }
 }

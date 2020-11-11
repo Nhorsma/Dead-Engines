@@ -13189,6 +13189,7 @@ GameObject:
   - component: {fileID: 906018190}
   - component: {fileID: 906018189}
   - component: {fileID: 906018188}
+  - component: {fileID: 906018199}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -13451,6 +13452,29 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &906018199
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 906018187}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7c12db2259dd6644bb0347633d1dfcbb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  automoton: {fileID: 1423674924}
+  h1: {fileID: 8739781955447267095, guid: 9c09d69a4fd9c0c49b2be63fba8bd661, type: 3}
+  h2: {fileID: 8945042911695722535, guid: d72fcec7e6b67b04fbc0c9ac2c748627, type: 3}
+  h3: {fileID: 5679052199211047101, guid: d3c192f2d90fbb04c9bd555dcaea3cc6, type: 3}
+  spawnRadius: 50
+  stoppingDistance: 30
+  movementSpeed: 10
+  canSpawn: 1
+  isDeployed: 0
+  chance: 3
+  spawnTime: 1
 --- !u!1 &906857907
 GameObject:
   m_ObjectHideFlags: 0
@@ -25254,7 +25278,7 @@ Transform:
   m_GameObject: {fileID: 1883162299}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: -0.7, z: -4.65}
-  m_LocalScale: {x: 13.395, y: 1, z: 17.804}
+  m_LocalScale: {x: 197.08064, y: 1, z: 231.3452}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 2

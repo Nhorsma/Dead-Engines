@@ -136,7 +136,6 @@ public class EncampmentHandler : MonoBehaviour
     }
 
 
-    //implement Deployment at some point
     void SpawnEnemy(Encampment e)
     {
         CheckDeployment(e);
