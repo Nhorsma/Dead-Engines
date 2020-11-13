@@ -8,7 +8,7 @@ public class AutomotonAction : MonoBehaviour
     public Animator anim;
     public float movementSpeed, turnSpeed;
     public float startAngle, target, ny;
-    public bool canMove,canRotate, isWalking, isRotating;
+    public bool canMove,canRotate, isWalking, isRotatingLeft, isRotatingRight;
     Vector3 pos, walkTo;
     NavMeshAgent nv;
     Rigidbody rb;
@@ -20,7 +20,7 @@ public class AutomotonAction : MonoBehaviour
         rb = GetComponent<Rigidbody>();
         nv = GetComponent<NavMeshAgent>();
         nv.speed = movementSpeed;
-        canMove = canRotate = isWalking = isRotating = false;
+        canMove = canRotate = isWalking = isRotatingRight = isRotatingLeft = false;
 
     }
 
@@ -56,11 +56,15 @@ public class AutomotonAction : MonoBehaviour
             if(startAngle < target && target < ny)
             {
                 //clockwise
+                anim.SetBool("isRotatingLeft", true);
+                anim.SetBool("isRotatingRight", false);
                 transform.Rotate(Vector3.up * turnSpeed * Time.deltaTime);
             }
             else
             {
                 //counter clockwise
+                anim.SetBool("isRotatingRight", true);
+                anim.SetBool("isRotatingLeft", false);
                 transform.Rotate(-Vector3.up * turnSpeed * Time.deltaTime);
             }
         }
@@ -69,18 +73,23 @@ public class AutomotonAction : MonoBehaviour
             if (startAngle < target && target < 360 || target < ny)
             {
                 //clockwise
+                anim.SetBool("isRotatingLeft", true);
+                anim.SetBool("isRotatingRight", false);
                 transform.Rotate(Vector3.up * turnSpeed * Time.deltaTime);
             }
             else
             {
                 //counter clockwise
+                anim.SetBool("isRotatingRight", true);
+                anim.SetBool("isRotatingLeft", false);
                 transform.Rotate(-Vector3.up * turnSpeed * Time.deltaTime);
             }
         }
         if (Mathf.Abs(target - transform.rotation.eulerAngles.y) < 0.5f)
         {
             canRotate = false;
-            anim.SetBool("isRotating", false);
+            anim.SetBool("isRotatingRight", false);
+            anim.SetBool("isRotatingLeft", false);
             canMove = true;
             anim.SetBool("isWalking", true);
         }
