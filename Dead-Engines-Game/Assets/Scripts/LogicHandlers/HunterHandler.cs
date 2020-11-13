@@ -37,7 +37,7 @@ public class HunterHandler : MonoBehaviour
                 //find a way to get a bool if the hunter is walking backwards continuously, or get the 
                 //hunter to move back continuously without stutter
 
-                Debug.Log(Vector3.Distance(last,ho.transform.position)>0.5);
+                //Debug.Log(Vector3.Distance(last,ho.transform.position)>0.5);
                 TravelTo(ho, automoton.transform.position, true);
 
                 if(Vector3.Distance(ho.transform.position,automoton.transform.position)<stoppingDistance/2
@@ -49,7 +49,7 @@ public class HunterHandler : MonoBehaviour
                     position = (ho.transform.position - automoton.transform.position *2);
                     position += ho.transform.position;
 
-                    Debug.DrawLine(ho.transform.position, position);
+                    //Debug.DrawLine(ho.transform.position, position);
                     ho.transform.position = Vector3.MoveTowards(ho.transform.position, position, movementSpeed * Time.deltaTime);
                 }
                 last = ho.transform.position;
