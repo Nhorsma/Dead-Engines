@@ -13,6 +13,8 @@ public class AutomotonAction : MonoBehaviour
     NavMeshAgent nv;
     Rigidbody rb;
 
+    KeyCode move1, move2, move3, move4;
+
 
     private void Start()
     {
@@ -28,7 +30,6 @@ public class AutomotonAction : MonoBehaviour
     {
         Movement();
         QWER();
-        //Debug.DrawLine(transform.position, transform.up);
     }
 
     RaycastHit Hit()
@@ -108,7 +109,6 @@ public class AutomotonAction : MonoBehaviour
     {
         //rb.MovePosition(position * movementSpeed * Time.deltaTime);
         transform.position = Vector3.MoveTowards(transform.position, position, movementSpeed*Time.deltaTime);
-        
         if (Vector3.Distance(pos,position)<1)
         {
             canMove = false;

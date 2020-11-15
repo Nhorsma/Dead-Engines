@@ -13244,7 +13244,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maincam: {fileID: 2084143659}
   scrollspeed: 10
-  closestScroll: 4
+  closestScroll: 22
   furthestScroll: 50
   camspeed: 2
   startSpeed: -8
@@ -30852,8 +30852,8 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 9.618311, y: 19.669811, z: 9.249414}
-  m_Center: {x: 0.43241787, y: 9.97167, z: -0.5968828}
+  m_Size: {x: 9.618311, y: 20.327745, z: 9.249414}
+  m_Center: {x: 0.43241787, y: 9.642703, z: -0.5968828}
 --- !u!54 &8172259170838100592
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -30896,7 +30896,7 @@ NavMeshAgent:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8172259170838100588}
-  m_Enabled: 1
+  m_Enabled: 0
   m_AgentTypeID: 0
   m_Radius: 0.5
   m_Speed: 3.5
@@ -31113,7 +31113,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8172259170838100588}
   m_LocalRotation: {x: -0, y: -0.9993771, z: -0, w: 0.03529123}
-  m_LocalPosition: {x: -14.48365, y: -2.4, z: 14.444047}
+  m_LocalPosition: {x: -14.48365, y: -1.34, z: 14.444047}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 8672955385245476887}
