@@ -28,6 +28,7 @@ public class AutomotonAction : MonoBehaviour
     {
         Movement();
         QWER();
+        //Debug.DrawLine(transform.position, transform.up);
     }
 
     RaycastHit Hit()
@@ -51,20 +52,24 @@ public class AutomotonAction : MonoBehaviour
 
     public void Rotate()
     {
+        
         if(startAngle < 180)
         {
             if(startAngle < target && target < ny)
             {
                 //clockwise
-                anim.SetBool("isRotatingLeft", true);
-                anim.SetBool("isRotatingRight", false);
+                anim.SetBool("isRotatingLeft", false);
+                anim.SetBool("isRotatingRight", true);
+                anim.SetBool("isWalking", false);
                 transform.Rotate(Vector3.up * turnSpeed * Time.deltaTime);
             }
             else
             {
                 //counter clockwise
-                anim.SetBool("isRotatingRight", true);
-                anim.SetBool("isRotatingLeft", false);
+                anim.SetBool("isRotatingRight", false);
+                anim.SetBool("isRotatingLeft", true);
+                anim.SetBool("isWalking", false);
+                canMove = false;
                 transform.Rotate(-Vector3.up * turnSpeed * Time.deltaTime);
             }
         }
@@ -73,15 +78,19 @@ public class AutomotonAction : MonoBehaviour
             if (startAngle < target && target < 360 || target < ny)
             {
                 //clockwise
-                anim.SetBool("isRotatingLeft", true);
-                anim.SetBool("isRotatingRight", false);
+                anim.SetBool("isRotatingLeft", false);
+                anim.SetBool("isRotatingRight", true);
+                anim.SetBool("isWalking", false);
+                canMove = false;
                 transform.Rotate(Vector3.up * turnSpeed * Time.deltaTime);
             }
             else
             {
                 //counter clockwise
-                anim.SetBool("isRotatingRight", true);
-                anim.SetBool("isRotatingLeft", false);
+                anim.SetBool("isRotatingRight", false);
+                anim.SetBool("isRotatingLeft", true);
+                anim.SetBool("isWalking", false);
+                canMove = false;
                 transform.Rotate(-Vector3.up * turnSpeed * Time.deltaTime);
             }
         }
@@ -131,8 +140,11 @@ public class AutomotonAction : MonoBehaviour
                 if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit2, Mathf.Infinity))
                     walkTo = hit2.point;
                 Physics.IgnoreLayerCollision(1, 1, false);
+                
 
             }
+            canMove = false;
+            anim.SetBool("isWalking", false);
             canRotate = true;
             startAngle = transform.rotation.eulerAngles.y;
             SetUpRotate(walkTo);
