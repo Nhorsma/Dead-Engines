@@ -13,7 +13,7 @@ public class AutomotonAction : MonoBehaviour
     NavMeshAgent nv;
     Rigidbody rb;
 
-    KeyCode move1, move2, move3, move4;
+    KeyCode move_q, move_w, move_e, move_r;
 
 
     private void Start()
@@ -24,12 +24,12 @@ public class AutomotonAction : MonoBehaviour
         nv.speed = movementSpeed;
         canMove = canRotate = isWalking = isRotatingRight = isRotatingLeft = false;
 
+        DefaultControls();
     }
 
     private void LateUpdate()
     {
         Movement();
-        QWER();
     }
 
     RaycastHit Hit()
@@ -160,9 +160,22 @@ public class AutomotonAction : MonoBehaviour
 
     }
 
-    void QWER()
-    {
 
+    //========================================================================================
+
+
+    void DefaultControls()
+    {
+        move_q = KeyCode.Q;
+        move_w = KeyCode.W;
+        move_e = KeyCode.E;
+        move_r = KeyCode.R;
+    }
+
+
+    void Controls()
+    {
+        
     }
 
     void GroundPound()
@@ -171,6 +184,16 @@ public class AutomotonAction : MonoBehaviour
     }
 
     void Punch()
+    {
+
+    }
+
+    void Laser()
+    {
+
+    }
+
+    void GunBattery()
     {
 
     }
