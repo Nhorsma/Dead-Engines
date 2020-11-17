@@ -12,6 +12,7 @@ TagManager:
   - Electronics
   - Robot
   - HoverUI
+  - Hunter
   layers:
   - Default
   - TransparentFX

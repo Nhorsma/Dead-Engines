@@ -8,13 +8,20 @@ public class AutomotonAction : MonoBehaviour
     public Animator anim;
     public float movementSpeed, turnSpeed;
     public float startAngle, target, ny;
-    public bool canMove,canRotate, isWalking, isRotatingLeft, isRotatingRight;
+    public bool canMove,canRotate, isWalking, rotLeft, rotRight;
+    public bool tempmove, temprotate, tempwalking, tempLeft, tempRight;
     Vector3 pos, walkTo;
     NavMeshAgent nv;
     Rigidbody rb;
 
-    KeyCode move_q, move_w, move_e, move_r;
+    public static bool endPhaseOne;
+    public GameObject automoton, fog, footObject;
+    public Vector3 phaseOnePos, phaseTwoPos;
+    public Animation climbOut;
+    public AutomotonAction aa;
 
+    KeyCode move_q, move_w, move_e, move_r;
+    Collider footCollider;
 
     private void Start()
     {
@@ -22,14 +29,29 @@ public class AutomotonAction : MonoBehaviour
         rb = GetComponent<Rigidbody>();
         nv = GetComponent<NavMeshAgent>();
         nv.speed = movementSpeed;
-        canMove = canRotate = isWalking = isRotatingRight = isRotatingLeft = false;
+        canMove = canRotate = isWalking = false;
+
+        automoton.transform.position = phaseOnePos;
+        anim = automoton.GetComponent<Animator>();
+        aa = automoton.GetComponent<AutomotonAction>();
+        //aa.enabled = false;
+        endPhaseOne = false;
+
+        footCollider = footObject.GetComponent<BoxCollider>();
+        footCollider.enabled = false;
+
+        StartCoroutine(RaiseAuto());
 
         DefaultControls();
     }
 
     private void LateUpdate()
     {
-        Movement();
+        if (endPhaseOne)
+        {
+            Movement();
+            Controls();
+        }
     }
 
     RaycastHit Hit()
@@ -62,6 +84,9 @@ public class AutomotonAction : MonoBehaviour
                 anim.SetBool("isRotatingLeft", false);
                 anim.SetBool("isRotatingRight", true);
                 anim.SetBool("isWalking", false);
+                rotRight = true;
+                rotLeft = false;
+                canMove = false;
                 transform.Rotate(Vector3.up * turnSpeed * Time.deltaTime);
             }
             else
@@ -70,6 +95,8 @@ public class AutomotonAction : MonoBehaviour
                 anim.SetBool("isRotatingRight", false);
                 anim.SetBool("isRotatingLeft", true);
                 anim.SetBool("isWalking", false);
+                rotRight = false;
+                rotLeft = true;
                 canMove = false;
                 transform.Rotate(-Vector3.up * turnSpeed * Time.deltaTime);
             }
@@ -82,6 +109,8 @@ public class AutomotonAction : MonoBehaviour
                 anim.SetBool("isRotatingLeft", false);
                 anim.SetBool("isRotatingRight", true);
                 anim.SetBool("isWalking", false);
+                rotRight = true;
+                rotLeft = false;
                 canMove = false;
                 transform.Rotate(Vector3.up * turnSpeed * Time.deltaTime);
             }
@@ -91,13 +120,15 @@ public class AutomotonAction : MonoBehaviour
                 anim.SetBool("isRotatingRight", false);
                 anim.SetBool("isRotatingLeft", true);
                 anim.SetBool("isWalking", false);
+                rotRight = false;
+                rotLeft = true;
                 canMove = false;
                 transform.Rotate(-Vector3.up * turnSpeed * Time.deltaTime);
             }
         }
         if (Mathf.Abs(target - transform.rotation.eulerAngles.y) < 0.5f)
         {
-            canRotate = false;
+            canRotate = rotLeft = rotRight = false;
             anim.SetBool("isRotatingRight", false);
             anim.SetBool("isRotatingLeft", false);
             canMove = true;
@@ -164,6 +195,18 @@ public class AutomotonAction : MonoBehaviour
     //========================================================================================
 
 
+    IEnumerator RaiseAuto()
+    {
+        automoton.transform.position = phaseTwoPos;
+        anim.SetBool("StartPhaseTwo", true);
+        yield return new WaitForSeconds(1f);
+        while (anim.GetCurrentAnimatorStateInfo(0).normalizedTime < 1.0f)
+            yield return null;
+        endPhaseOne = true;
+        anim.SetBool("StartPhaseTwo", false);
+    }
+
+
     void DefaultControls()
     {
         move_q = KeyCode.Q;
@@ -175,11 +218,29 @@ public class AutomotonAction : MonoBehaviour
 
     void Controls()
     {
+        if(Input.GetKeyDown(move_q))
+        {
+            StartCoroutine(GroundPound());
+        }
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
         
     }
 
-    void GroundPound()
+    IEnumerator GroundPound()
     {
+        //play ground pound animation
+        ContinueAnimations(false);
+        Debug.Log("Preparing");
+        yield return new WaitForSeconds(0.5f);
+        footCollider.enabled = true;
+        while (anim.GetCurrentAnimatorStateInfo(0).normalizedTime < 1.0f)
+            yield return null;
+        Debug.Log("Ground Pound");
+        footCollider.enabled = false;
+        ContinueAnimations(true);
 
     }
 
@@ -196,5 +257,32 @@ public class AutomotonAction : MonoBehaviour
     void GunBattery()
     {
 
+    }
+
+    void ContinueAnimations(bool a)
+    {
+        if(!a)
+        {
+            tempmove = canMove;
+            temprotate = canRotate;
+            tempwalking = isWalking;
+            tempLeft = rotLeft;
+            tempRight = rotRight;
+            canMove = canRotate = isWalking = false;
+            anim.SetBool("isRotatingLeft", false);
+            anim.SetBool("isRotatingRight", false);
+            anim.SetBool("isWalking", false);
+        }
+        else
+        {
+            canMove = tempmove;
+            canRotate = temprotate;
+            isWalking = tempwalking;
+            rotLeft = tempLeft;
+            rotRight = tempRight;
+            anim.SetBool("isRotatingLeft", tempLeft);
+            anim.SetBool("isRotatingRight", tempRight);
+            anim.SetBool("isWalking", tempwalking);
+        }
     }
 }

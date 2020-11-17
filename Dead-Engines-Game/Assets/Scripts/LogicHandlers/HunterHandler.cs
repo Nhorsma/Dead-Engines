@@ -147,4 +147,21 @@ public class HunterHandler : MonoBehaviour
             nv.SetDestination(place);
         }
     }
+
+    public void DealHunterDamage(GameObject ho)
+    {
+        Hunter hunter = deployed[0];
+        foreach (Hunter h in deployed)
+        {
+            if (h.Obj.Equals(ho))
+            {
+                hunter = h;
+                break;
+            }
+        }
+
+        hunter.Health--;
+        Debug.Log("shots recieved");
+
+    }
 }

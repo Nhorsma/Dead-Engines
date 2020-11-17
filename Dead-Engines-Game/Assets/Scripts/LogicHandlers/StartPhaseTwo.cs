@@ -20,7 +20,7 @@ public class StartPhaseTwo : MonoBehaviour
         endPhaseOne = false;
     }
 
-    
+ /*   
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.H))
@@ -29,6 +29,7 @@ public class StartPhaseTwo : MonoBehaviour
         if (endPhaseOne == true)
             StartCoroutine(RaiseAuto());
     }
+    */
     
 
     IEnumerator RaiseAuto()
