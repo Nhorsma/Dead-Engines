@@ -5,7 +5,7 @@ using UnityEngine;
 public class Hunter : Enemy
 {
     protected GameObject obj;
-    protected bool canWalk, isWalking;
+    protected bool canWalk, walkingForward, walkingBackward, firing, isDead;
 
     public Hunter(GameObject g)
     {
@@ -29,10 +29,28 @@ public class Hunter : Enemy
         set { canWalk = value; }
     }
 
-    public bool IsWalking
+    public bool WalkingForward
     {
-        get { return isWalking; }
-        set { isWalking = value; }
+        get { return walkingForward; }
+        set { walkingForward= value; }
+    }
+
+    public bool WalkingBackward
+    {
+        get { return walkingBackward; }
+        set { walkingBackward = value; }
+    }
+
+    public bool Firing
+    {
+        get { return firing; }
+        set { firing = value; }
+    }
+
+    public bool IsDead
+    {
+        get { return isDead; }
+        set { isDead = value; }
     }
 
 

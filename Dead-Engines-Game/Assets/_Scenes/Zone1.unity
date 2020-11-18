@@ -2123,7 +2123,7 @@ MonoBehaviour:
   spawnRadius: 100
   stoppingDistance: 50
   movementSpeed: 10
-  canSpawn: 0
+  canSpawn: 1
   isDeployed: 0
   chance: 0
   spawnTime: 0
@@ -32625,6 +32625,11 @@ PrefabInstance:
       propertyPath: footObject
       value: 
       objectReference: {fileID: 1378175255}
+    - target: {fileID: 2403821763013889379, guid: 6aed38420e1689446acf764aae4161f7,
+        type: 3}
+      propertyPath: turnSpeed
+      value: 50
+      objectReference: {fileID: 0}
     - target: {fileID: 3033112247388575707, guid: 6aed38420e1689446acf764aae4161f7,
         type: 3}
       propertyPath: m_LocalPosition.x

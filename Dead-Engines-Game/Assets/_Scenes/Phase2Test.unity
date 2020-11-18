@@ -3049,6 +3049,12 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 225863631}
   m_CullTransparentMesh: 0
+--- !u!1 &226741649 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 9188639198428461334, guid: 77f0ca5f0dfdb6e48bc491bc516bf306,
+    type: 3}
+  m_PrefabInstance: {fileID: 2350065416393755359}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &232077921
 GameObject:
   m_ObjectHideFlags: 0
@@ -28225,6 +28231,16 @@ PrefabInstance:
       propertyPath: m_IsKinematic
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5905536744587997361, guid: 77f0ca5f0dfdb6e48bc491bc516bf306,
+        type: 3}
+      propertyPath: automoton
+      value: 
+      objectReference: {fileID: 8172259170838100588}
+    - target: {fileID: 5905536744587997361, guid: 77f0ca5f0dfdb6e48bc491bc516bf306,
+        type: 3}
+      propertyPath: footObject
+      value: 
+      objectReference: {fileID: 226741649}
     - target: {fileID: 5905536744587997362, guid: 77f0ca5f0dfdb6e48bc491bc516bf306,
         type: 3}
       propertyPath: auto_main
@@ -28374,6 +28390,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9188639198428461334, guid: 77f0ca5f0dfdb6e48bc491bc516bf306,
+        type: 3}
+      propertyPath: m_Name
+      value: Foot
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 77f0ca5f0dfdb6e48bc491bc516bf306, type: 3}
