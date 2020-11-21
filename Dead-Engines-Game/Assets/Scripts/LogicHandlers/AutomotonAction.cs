@@ -84,6 +84,7 @@ public class AutomotonAction : MonoBehaviour
                 anim.SetBool("isRotatingLeft", false);
                 anim.SetBool("isRotatingRight", true);
                 anim.SetBool("isWalking", false);
+                isWalking = false;
                 rotRight = true;
                 rotLeft = false;
                 canMove = false;
@@ -95,6 +96,7 @@ public class AutomotonAction : MonoBehaviour
                 anim.SetBool("isRotatingRight", false);
                 anim.SetBool("isRotatingLeft", true);
                 anim.SetBool("isWalking", false);
+                isWalking = false;
                 rotRight = false;
                 rotLeft = true;
                 canMove = false;
@@ -109,6 +111,7 @@ public class AutomotonAction : MonoBehaviour
                 anim.SetBool("isRotatingLeft", false);
                 anim.SetBool("isRotatingRight", true);
                 anim.SetBool("isWalking", false);
+                isWalking = false;
                 rotRight = true;
                 rotLeft = false;
                 canMove = false;
@@ -120,6 +123,7 @@ public class AutomotonAction : MonoBehaviour
                 anim.SetBool("isRotatingRight", false);
                 anim.SetBool("isRotatingLeft", true);
                 anim.SetBool("isWalking", false);
+                isWalking = false;
                 rotRight = false;
                 rotLeft = true;
                 canMove = false;
@@ -133,6 +137,7 @@ public class AutomotonAction : MonoBehaviour
             anim.SetBool("isRotatingLeft", false);
             canMove = true;
             anim.SetBool("isWalking", true);
+            isWalking = true;
         }
     }
 
@@ -151,7 +156,7 @@ public class AutomotonAction : MonoBehaviour
 
     void TravelTo(Vector3 place)
     {
-        if (nv != null)
+        if (nv != null && canMove)
         {
             nv.SetDestination(place);
         }
@@ -222,6 +227,10 @@ public class AutomotonAction : MonoBehaviour
         {
             StartCoroutine(GroundPound());
         }
+        if(Input.GetKeyDown(move_w))
+        {
+            StartCoroutine(Punch());
+        }
     }
 
     private void OnCollisionEnter(Collision collision)
@@ -233,20 +242,30 @@ public class AutomotonAction : MonoBehaviour
     {
         //play ground pound animation
         ContinueAnimations(false);
-        Debug.Log("Preparing");
-        yield return new WaitForSeconds(0.5f);
         footCollider.enabled = true;
+        anim.SetBool("GroundPound", true);
+        yield return new WaitForSeconds(1f);
         while (anim.GetCurrentAnimatorStateInfo(0).normalizedTime < 1.0f)
             yield return null;
         Debug.Log("Ground Pound");
         footCollider.enabled = false;
+        anim.SetBool("GroundPound", false);
         ContinueAnimations(true);
 
     }
 
-    void Punch()
+    IEnumerator Punch()
     {
-
+        ContinueAnimations(false);
+        //enable fist collider
+        anim.SetBool("Punch", true);
+        yield return new WaitForSeconds(1f);
+        while (anim.GetCurrentAnimatorStateInfo(0).normalizedTime < 1.0f)
+            yield return null;
+        Debug.Log("Punch");
+        anim.SetBool("Punch", false);
+        //disable fist collider
+        ContinueAnimations(true);
     }
 
     void Laser()
@@ -282,7 +301,7 @@ public class AutomotonAction : MonoBehaviour
             rotRight = tempRight;
             anim.SetBool("isRotatingLeft", tempLeft);
             anim.SetBool("isRotatingRight", tempRight);
-            anim.SetBool("isWalking", tempwalking);
+            anim.SetBool("isWalking", tempmove);
         }
     }
 }
