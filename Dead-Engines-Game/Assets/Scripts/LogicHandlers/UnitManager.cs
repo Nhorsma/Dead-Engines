@@ -135,6 +135,7 @@ public class UnitManager : MonoBehaviour
     {
         foreach (Unit unit in units)
         {
+            Animator anim = GetUnitObject(unit).GetComponent<Animator>();
             if (unit.Job != "none")//&& !unit.JobPos.Equals(null)
             {
                 if (unit.Job == "Combat")
@@ -173,6 +174,11 @@ public class UnitManager : MonoBehaviour
                     //
                     // GetUnitObject(unit).SetActive(true);
                 }
+            }
+            else
+            {
+                if(GetUnitObject(unit).GetComponent<NavMeshAgent>().velocity==new Vector3(0,0,0))
+                    GetUnitObject(unit).GetComponent<Animator>().SetBool("walking", false);
             }
         }
     }
@@ -338,12 +344,10 @@ public class UnitManager : MonoBehaviour
     {
         if(unit.Health<=0)
         {
+            GetUnitObject(unit).GetComponent<Animator>().SetBool("knockedOut", true);
             Debug.Log(unit+" is dead");
             unit.Job = "dead";
             unit.JobPos = null;
-            GetUnitObject(unit).SetActive(false);
-            GetUnitObject(unit).transform.position = robotPos;
-
             if(selectedUnits.Contains(GetUnitObject(unit)))
             {
                 si.RemoveSpecific(GetUnitObject(unit));
@@ -356,7 +360,11 @@ public class UnitManager : MonoBehaviour
     {
         if (!unit.CanSpawn)
         {
+            yield return new WaitForSeconds(3f);
+            GetUnitObject(unit).SetActive(false);
+            GetUnitObject(unit).transform.position = robotPos;
             yield return new WaitForSeconds(downTime);
+            GetUnitObject(unit).GetComponent<Animator>().SetBool("knockedOut", false);
             unit.CanSpawn = true;
 
         }
@@ -367,6 +375,7 @@ public class UnitManager : MonoBehaviour
         if (b.GetComponent<NavMeshAgent>() != null)
         {
             NavMeshAgent a = b.GetComponent<NavMeshAgent>();
+            b.GetComponent<Animator>().SetBool("walking", true);
             if (stop)
                 a.stoppingDistance = stoppingDistance;
             if (randomize)

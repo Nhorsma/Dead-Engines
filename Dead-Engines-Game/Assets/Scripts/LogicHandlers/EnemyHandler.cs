@@ -146,8 +146,9 @@ public class EnemyHandler : MonoBehaviour
             if (Physics.Raycast(GetEnemyObject(ene).transform.position, direction, out hit, 100f))
             {
                 StartCoroutine(TrailOff(0.05f, GetEnemyObject(ene).transform.position, ene.Target.transform.position));
-                if (hit.collider.tag == "Friendly")
+                if (hit.transform.tag == "Friendly")
                 {
+                    Debug.Log("hit");
                     um.GetUnit(hit.collider.gameObject).Health--;
                     um.UnitDown(um.GetUnit(hit.collider.gameObject));
                 }

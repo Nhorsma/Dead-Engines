@@ -31,7 +31,9 @@ public class AutomotonAction : MonoBehaviour
         nv.speed = movementSpeed;
         canMove = canRotate = isWalking = false;
 
+        phaseOnePos = automoton.transform.position;
         automoton.transform.position = phaseOnePos;
+
         anim = automoton.GetComponent<Animator>();
         aa = automoton.GetComponent<AutomotonAction>();
         //aa.enabled = false;
@@ -40,9 +42,9 @@ public class AutomotonAction : MonoBehaviour
         footCollider = footObject.GetComponent<BoxCollider>();
         footCollider.enabled = false;
 
-        StartCoroutine(RaiseAuto());
+        //StartCoroutine(RaiseAuto());
 
-        DefaultControls();
+        //DefaultControls();
     }
 
     private void LateUpdate()
