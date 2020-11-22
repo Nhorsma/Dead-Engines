@@ -46,7 +46,7 @@ public class SelectItems : MonoBehaviour
 
     private void Update()
     {
-        Highlight();
+        //Highlight();
         LeftClick();
 
         if(Input.GetKeyDown(KeyCode.Space))
@@ -85,7 +85,7 @@ public class SelectItems : MonoBehaviour
                     if (hit.collider.CompareTag("Friendly") && !UnitManager.selectedUnits.Contains(hit.collider.gameObject))
                     {
                         UnitManager.selectedUnits.Add(hit.collider.gameObject);
-                        hit.collider.gameObject.GetComponentInChildren<MeshRenderer>().material = selectedMaterial;
+                        //hit.collider.gameObject.GetComponentInChildren<MeshRenderer>().material = selectedMaterial;
 						UpdateUnitUI(um.GetUnit(hit.collider.gameObject)); //////////////////////////////////////////
 				}
                 }
@@ -220,13 +220,13 @@ public class SelectItems : MonoBehaviour
             //Is this unit within the square
             if (InRect(currentUnit.transform.position))
             {
-                currentUnit.GetComponentInChildren<MeshRenderer>().material = selectedMaterial;
+                //currentUnit.GetComponentInChildren<MeshRenderer>().material = selectedMaterial;
                 UnitManager.selectedUnits.Add(currentUnit);
             }
             //Otherwise deselect the unit if it's not in the square
             else
             {
-                currentUnit.GetComponentInChildren<MeshRenderer>().material = normalMaterial;
+                //currentUnit.GetComponentInChildren<MeshRenderer>().material = normalMaterial;
             }
         }
 		if (UnitManager.selectedUnits.Count == 1)
@@ -274,7 +274,7 @@ public class SelectItems : MonoBehaviour
     {
         for(int i=0;i< UnitManager.selectedUnits.Count;i++)
         {
-            UnitManager.selectedUnits[i].GetComponentInChildren<MeshRenderer>().material = normalMaterial;
+            //UnitManager.selectedUnits[i].GetComponentInChildren<MeshRenderer>().material = normalMaterial;
         }
         UnitManager.selectedUnits.Clear();
 		unitUIPanel.SetActive(false);

@@ -45,6 +45,8 @@ public class RoomManager : MonoBehaviour
 
 	public int efficiency = 0;
 
+	public bool isAutomatonRepaired = false;
+
 	public EffectConnector effectConnector;
 
 	void Start()
@@ -86,6 +88,12 @@ public class RoomManager : MonoBehaviour
 	public void OpenGenerator()
 	{
 		genMiniTab.gameObject.SetActive(true);
+	}
+
+	public void RepairAutomaton()
+	{
+		isAutomatonRepaired = true;
+		Debug.Log("repaired automaton");
 	}
 
 	public void TakeToBuild(int clickedSlot)
