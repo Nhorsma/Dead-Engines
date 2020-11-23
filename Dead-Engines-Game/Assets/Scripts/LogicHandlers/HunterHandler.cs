@@ -32,6 +32,9 @@ public class HunterHandler : MonoBehaviour
         if (isDeployed)
         foreach (Hunter h in deployed)
         {
+                if (h == null)
+                    break;
+
                 GameObject ho = h.Obj;
 
                 if(Vector3.Distance(ho.transform.position,automoton.transform.position)>stoppingDistance*1.5f)
@@ -121,7 +124,7 @@ public class HunterHandler : MonoBehaviour
 
     GameObject RandomHunter()
     {
-        int a = Random.Range(1, 3);
+        int a = Random.Range(1, 4);
         GameObject g = h1;
         switch (a)
         {
@@ -163,7 +166,7 @@ public class HunterHandler : MonoBehaviour
         Hunter hunter = deployed[0];
         foreach (Hunter h in deployed)
         {
-            if (h.Obj.Equals(ho))
+            if (h!=null && h.Obj.Equals(ho))
             {
                 hunter = h;
                 break;
@@ -172,6 +175,35 @@ public class HunterHandler : MonoBehaviour
 
         hunter.Health--;
         Debug.Log("shots recieved");
+        HunterDeath(hunter);
 
+    }
+
+    public void HunterDeath(Hunter h)
+    {
+        if(h.Health<=0)
+        {
+            int i = -1;
+            for(int j = 0;j<deployed.Length;j++)
+            {
+                if (deployed[j]==(h))
+                {
+                    i = j;
+                    break;
+                }
+            }
+
+            if (i == -1)
+                return;
+
+            deployed[i] = null;
+            Destroy(h.Obj);
+
+            if(deployed.Equals(new Hunter[]{null,null,null}))
+            {
+                isDeployed = false;
+                canSpawn = false;
+            }
+        }
     }
 }

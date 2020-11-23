@@ -94,6 +94,9 @@ public class RoomManager : MonoBehaviour
 	{
 		isAutomatonRepaired = true;
 		Debug.Log("repaired automaton");
+
+        //activates automoton movement script
+        StartPhaseTwo.PhaseTwo();
 	}
 
 	public void TakeToBuild(int clickedSlot)

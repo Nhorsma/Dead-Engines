@@ -15,13 +15,13 @@ public class AutomotonAction : MonoBehaviour
     Rigidbody rb;
 
     public static bool endPhaseOne;
-    public GameObject automoton, fog, footObject;
+    public GameObject automoton, fog, footObject, fistObject;
     public Vector3 phaseOnePos, phaseTwoPos;
     public Animation climbOut;
     public AutomotonAction aa;
 
     KeyCode move_q, move_w, move_e, move_r;
-    Collider footCollider;
+    Collider footCollider, fistCollider;
 
     private void Start()
     {
@@ -40,11 +40,13 @@ public class AutomotonAction : MonoBehaviour
         endPhaseOne = false;
 
         footCollider = footObject.GetComponent<BoxCollider>();
+        fistCollider = fistObject.GetComponent<BoxCollider>();
         footCollider.enabled = false;
+        fistCollider.enabled = false;
 
-        //StartCoroutine(RaiseAuto());
+        StartCoroutine(RaiseAuto());
 
-        //DefaultControls();
+        DefaultControls();
     }
 
     private void LateUpdate()
@@ -244,12 +246,14 @@ public class AutomotonAction : MonoBehaviour
     {
         //play ground pound animation
         ContinueAnimations(false);
-        footCollider.enabled = true;
         anim.SetBool("GroundPound", true);
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(2f);
+
+        //hit ground
+        footCollider.enabled = true;
+
         while (anim.GetCurrentAnimatorStateInfo(0).normalizedTime < 1.0f)
             yield return null;
-        Debug.Log("Ground Pound");
         footCollider.enabled = false;
         anim.SetBool("GroundPound", false);
         ContinueAnimations(true);
@@ -259,14 +263,16 @@ public class AutomotonAction : MonoBehaviour
     IEnumerator Punch()
     {
         ContinueAnimations(false);
-        //enable fist collider
         anim.SetBool("Punch", true);
         yield return new WaitForSeconds(1f);
+        fistCollider.enabled = true;
+
         while (anim.GetCurrentAnimatorStateInfo(0).normalizedTime < 1.0f)
             yield return null;
         Debug.Log("Punch");
         anim.SetBool("Punch", false);
-        //disable fist collider
+        fistCollider.enabled = false;
+        fistCollider.enabled = false;
         ContinueAnimations(true);
     }
 

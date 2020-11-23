@@ -11,7 +11,7 @@ public class Hunter : Enemy
     {
         canWalk = true;
         obj = g;
-        health = 5;
+        health = 1;
         id = -1;
         target = null;
         justShot = false;
