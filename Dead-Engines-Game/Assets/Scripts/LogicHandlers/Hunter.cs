@@ -6,6 +6,7 @@ public class Hunter : Enemy
 {
     protected GameObject obj;
     protected bool canWalk, walkingForward, walkingBackward, firing, isDead;
+    protected float speed;
 
     public Hunter(GameObject g)
     {
@@ -15,6 +16,7 @@ public class Hunter : Enemy
         id = -1;
         target = null;
         justShot = false;
+        speed = 10f;
     }
 
     public GameObject Obj
@@ -51,6 +53,12 @@ public class Hunter : Enemy
     {
         get { return isDead; }
         set { isDead = value; }
+    }
+
+    public float Speed
+    {
+        get { return speed; }
+        set { speed = value; }
     }
 
 

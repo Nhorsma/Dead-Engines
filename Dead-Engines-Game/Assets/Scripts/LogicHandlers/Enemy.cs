@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Enemy
 {
-    protected int health;
+    protected int health, damage;
     protected int attack;
     protected float fireSpeed;
 
@@ -19,6 +19,7 @@ public class Enemy
         id = -1;
         target = null;
         justShot = false;
+        damage = 1;
     }
 
     public Enemy(int newID)
@@ -77,6 +78,12 @@ public class Enemy
         get { return camp; }
         set { camp = value; }
 
+    }
+
+    public int Damage
+    {
+       get { return damage; }
+       set { damage = value; }
     }
 
 }

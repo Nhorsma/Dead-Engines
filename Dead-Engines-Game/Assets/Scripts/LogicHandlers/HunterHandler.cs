@@ -36,28 +36,24 @@ public class HunterHandler : MonoBehaviour
                     break;
 
                 GameObject ho = h.Obj;
+                Transform hm = ho.GetComponentInChildren<Transform>();
 
-                if(Vector3.Distance(ho.transform.position,automoton.transform.position)>stoppingDistance*1.5f)
+                if (Vector3.Distance(ho.transform.position,automoton.transform.position)>stoppingDistance*1.5f)
                     TravelTo(ho, automoton.transform.position, true);
 
                 if(Vector3.Distance(ho.transform.position,automoton.transform.position)<stoppingDistance/2
                     && h.CanWalk)
                 {
-                    Transform hm = ho.GetComponentInChildren<Transform>();
+                    
                     // mid = 2xy - xy
                     float x1 = ho.transform.position.x;
                     float y1 = ho.transform.position.z;
                     float x2 = automoton.transform.position.x;
                     float y2 = automoton.transform.position.z;
-                    Vector3 position = new Vector3((2 * x1) - x2, ho.transform.position.y, (2 * y1) - y2);
-
-                    Debug.DrawLine(ho.transform.position, position);
-                    TravelTo(ho, position, false);
-
-                    //hm.eulerAngles = automoton.transform.position;
-                    //ho.transform.position = Vector3.MoveTowards(ho.transform.position, position, movementSpeed * Time.deltaTime);
+                    Vector3 position = new Vector3(2*(2 * x1) - x2, ho.transform.position.y, 2*(2 * y1) - y2);
+                    TravelTo(ho, position, true);              
                 }
-                last = ho.transform.position;
+                hm.forward = automoton.transform.position - ho.transform.position;
             }
     }
 
@@ -93,12 +89,13 @@ public class HunterHandler : MonoBehaviour
         for (int i = 0; i < 3; i++)
         {
             Vector3 spawnPlace = automoton.transform.position + RandomSpawnPoint();
-            var gm = Instantiate(Resources.Load(RandomHunter().name), spawnPlace, transform.rotation);
+            Hunter h = SetHunter();
+            GameObject gm = (GameObject)Instantiate(Resources.Load(h.Obj.name), spawnPlace, transform.rotation);
 
-            Hunter h = new Hunter((GameObject)gm);
+            h.Obj = gm;
             deployed[i] = h;            
             h.Id = i;
-            h.Obj.GetComponent<NavMeshAgent>().speed = movementSpeed;
+            h.Obj.GetComponent<NavMeshAgent>().speed = h.Speed;
         }
     }
 
@@ -122,23 +119,33 @@ public class HunterHandler : MonoBehaviour
         }
     }
 
-    GameObject RandomHunter()
+    Hunter SetHunter()
     {
+        Hunter h = new Hunter(h1);
         int a = Random.Range(1, 4);
-        GameObject g = h1;
         switch (a)
         {
             case 1:
-                g= h1;
+                h = new Hunter(h1);
+                h.Speed = 7f;
+                h.Health = 3;
+                h.Damage = 2;
                 break;
             case 2:
-                g= h2;
+                h = new Hunter(h2);
+                h.Speed = 10f;
+                h.Health = 3;
+                h.Damage = 1;
                 break;
             case 3:
-                g= h3;
+                h = new Hunter(h3);
+                h.Speed = 3f;
+                h.Health = 5;
+                h.Damage = 3;
                 break;
         }
-        return g;
+        return h;
+        
     }
 
     void TravelTo(GameObject a, Vector3 place, bool stop)
@@ -149,7 +156,6 @@ public class HunterHandler : MonoBehaviour
             NavMeshAgent nv = a.GetComponent<NavMeshAgent>();
             if (stop)
             {
-                Debug.Log("stop");
                 nv.stoppingDistance = stoppingDistance;
             }
 
