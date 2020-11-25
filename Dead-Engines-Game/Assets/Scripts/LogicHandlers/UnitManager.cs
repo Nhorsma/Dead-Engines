@@ -35,15 +35,7 @@ public class UnitManager : MonoBehaviour
         selectedUnits = new List<GameObject>();
         robotPos = robot.transform.position;
 
-		//for (int i = 0; i < 3; i++)
-		//{
-		//	var u = Instantiate(unitPrefab, robot.transform);
-		//	unitsGM[i] = u;
-		//}
-        unitsGM = GameObject.FindGameObjectsWithTag("Friendly");
-
-        units = new Unit[unitsGM.Length];
-        SetUpUnits();
+        SetUpUnits(3);
 		auto.UpdateInfoTab();
 	}
 
@@ -57,11 +49,16 @@ public class UnitManager : MonoBehaviour
     //-----------------------------------------------------------------------------------------
 
 
-    void SetUpUnits()
+    void SetUpUnits(int num)
     {
+        unitsGM = new GameObject[num];
+        units = new Unit[num];
         for (int i = 0; i < unitsGM.Length; i++)
         {
             units[i] = new Unit(i);
+            Vector3 pos = FindSpotToSpawn();
+            GameObject u = (GameObject)Instantiate(Resources.Load("unit"), pos, robot.transform.rotation);
+            unitsGM[i] = u;
         }
     }
 
@@ -429,7 +426,7 @@ public class UnitManager : MonoBehaviour
 
     public void LeaveRoomJob(Unit unit)
     {
-        GetUnitObject(unit).transform.position = robotPos + new Vector3(-stoppingDistance + Random.Range(-3, 3), 0, -stoppingDistance + Random.Range(-3, 3));
+        GetUnitObject(unit).transform.position = FindSpotToSpawn();
         GetUnitObject(unit).SetActive(true);
     }
 
@@ -460,4 +457,9 @@ public class UnitManager : MonoBehaviour
 	{
 		Debug.Log("No one is here");
 	}
+
+    public Vector3 FindSpotToSpawn()
+    {
+        return robotPos + new Vector3(-stoppingDistance + Random.Range(-3, 3), 0, -stoppingDistance + Random.Range(-3, 3));
+    }
 }
