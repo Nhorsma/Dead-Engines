@@ -27,12 +27,21 @@ public class UnitManager : MonoBehaviour
 
 	public EffectConnector effConnector;
 
+	public GameObject unitPrefab;
+
     void Start()
     {
         eh = GetComponent<EnemyHandler>();
         selectedUnits = new List<GameObject>();
         robotPos = robot.transform.position;
+
+		//for (int i = 0; i < 3; i++)
+		//{
+		//	var u = Instantiate(unitPrefab, robot.transform);
+		//	unitsGM[i] = u;
+		//}
         unitsGM = GameObject.FindGameObjectsWithTag("Friendly");
+
         units = new Unit[unitsGM.Length];
         SetUpUnits();
 		auto.UpdateInfoTab();

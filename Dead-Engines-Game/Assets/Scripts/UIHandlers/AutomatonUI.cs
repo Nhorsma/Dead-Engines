@@ -110,11 +110,14 @@ public class AutomatonUI : MonoBehaviour
 		hudMetal.text = "Metal: " + ResourceHandling.metal;
 		hudElectronics.text = "Electronics: " + ResourceHandling.electronics;
 
-		if (unitManager.units.Length > 0)
+		if (unitManager.units != null)
 		{
-			for (int i = 0; i < unitManager.units.Length; i++)
+			if (unitManager.units.Length > 0)
 			{
-				unitViewport[i].GetComponentInChildren<Text>().text = unitManager.units[i].UnitName;
+				for (int i = 0; i < unitManager.units.Length; i++)
+				{
+					unitViewport[i].GetComponentInChildren<Text>().text = unitManager.units[i].UnitName;
+				}
 			}
 		}
 	}
