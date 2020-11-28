@@ -2116,7 +2116,7 @@ MonoBehaviour:
   endSpeed: 5
   heightRatio: 0.05
   widthRatio: 0.05
-  mod: 30
+  mod: 70
   ui: {fileID: 5905536743914566334}
   unitManager: {fileID: 128660102}
   forceLock: 0
@@ -34981,7 +34981,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   anim: {fileID: 5905536743914566306}
   movementSpeed: 6
-  turnSpeed: 50
+  turnSpeed: 80
   startAngle: 0
   target: 0
   ny: 0
