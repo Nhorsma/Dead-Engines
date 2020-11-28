@@ -43,6 +43,8 @@ public class AutomatonUI : MonoBehaviour
 		hudMetal.text = " ";
 		hudElectronics.text = " ";
 
+        //cameraM = GameObject.FindGameObjectWithTag("GameController").GetComponent<CameraMovement>();
+
 		debugText.Add(debug1);
 		debugText.Add(debug2);
 		debugText.Add(debug3);
@@ -124,5 +126,20 @@ public class AutomatonUI : MonoBehaviour
 		Vector3 unitPos = unitManager.unitsGM[i].transform.position;
 		Debug.Log(unitPos);
 		lastClickedID = i; ////////////////////////////////////////////////
+        StartCoroutine(Teleport(unitPos, 10f));
 	}
+
+
+    //It didnt like getting the CameraMovmeent for some reason
+    IEnumerator Teleport(Vector3 pos, float mod)
+    {
+        Rigidbody rb = Camera.main.GetComponent<Rigidbody>();
+        pos = pos + new Vector3(0f, mod, -mod / 1.5f);
+
+        while (Vector3.Distance(rb.transform.position, pos) > 0.1f)
+        {
+            rb.transform.position = Vector3.Lerp(rb.transform.position, pos, 10f * Time.deltaTime);
+            yield return 0;
+        }
+    }
 }

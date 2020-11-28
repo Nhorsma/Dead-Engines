@@ -54,7 +54,7 @@ public class CameraMovement : MonoBehaviour
         }
         if(Input.GetKeyDown(KeyCode.Space))
         {
-            TeleportToAuto(10f);
+            StartCoroutine(Teleport(ui.gameObject.transform.position,mod));
         }
 
 		//if (forceLock && ui.auto_main.activeInHierarchy)
@@ -143,11 +143,15 @@ public class CameraMovement : MonoBehaviour
         }
     }
 
-    void TeleportToAuto(float mod)
+    IEnumerator Teleport(Vector3 pos, float mod)
     {
-        //Debug.Log(rb.transform.position - ui.gameObject.transform.position);
-        rb.transform.position = ui.gameObject.transform.position + new Vector3(0f, mod, -1.25f*mod);
-       // Debug.Log(rb.transform.position - ui.gameObject.transform.position);
+        pos = pos + new Vector3(0f, mod, -mod / 1.5f);
+
+        while(Vector3.Distance(rb.transform.position, pos) > 0.1f)
+        {
+            rb.transform.position = Vector3.Lerp(rb.transform.position, pos, 10f * Time.deltaTime);
+            yield return 0;
+        }
     }
 
     void DetermineSpeedLimit()
