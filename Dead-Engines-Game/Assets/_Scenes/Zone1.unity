@@ -23725,6 +23725,7 @@ MonoBehaviour:
   - {fileID: 1046614913}
   roomManager: {fileID: 128660106}
   unitManager: {fileID: 128660102}
+  cameraMovement: {fileID: 0}
   metalText: {fileID: 1996089215}
   electronicsText: {fileID: 1081901288}
   boltText: {fileID: 1533970445}
@@ -35023,6 +35024,7 @@ MonoBehaviour:
   - {fileID: 1046614913}
   roomManager: {fileID: 128660106}
   unitManager: {fileID: 128660102}
+  cameraMovement: {fileID: 128660107}
   metalText: {fileID: 1996089215}
   electronicsText: {fileID: 1081901288}
   boltText: {fileID: 1533970445}

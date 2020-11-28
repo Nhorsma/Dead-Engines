@@ -126,6 +126,12 @@ public class AutomatonUI : MonoBehaviour
 	{
 		Vector3 unitPos = unitManager.unitsGM[i].transform.position;
 		Debug.Log(unitPos);
-		lastClickedID = i; ////////////////////////////////////////////////
+		lastClickedID = i;
+        Teleport(unitPos, 10f);
 	}
+
+    public void Teleport(Vector3 pos, float mod)
+    {
+        Camera.main.GetComponent<Rigidbody>().transform.position = pos + new Vector3(0f, mod, -mod);
+    }
 }

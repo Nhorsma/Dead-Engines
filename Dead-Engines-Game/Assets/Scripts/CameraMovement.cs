@@ -54,7 +54,7 @@ public class CameraMovement : MonoBehaviour
         }
         if(Input.GetKeyDown(KeyCode.Space))
         {
-            TeleportToAuto(mod);
+            Teleport(ui.gameObject.transform.position, mod);
         }
 
 		//if (forceLock && ui.auto_main.activeInHierarchy)
@@ -143,9 +143,9 @@ public class CameraMovement : MonoBehaviour
         }
     }
 
-    void TeleportToAuto(float mod)
+    public void Teleport(Vector3 pos, float mod)
     {       
-        rb.transform.position = ui.gameObject.transform.position + new Vector3(0f, mod, -mod/3);
+        rb.transform.position = pos + new Vector3(0f, mod, -mod/3);
     }
 
     void DetermineSpeedLimit()
