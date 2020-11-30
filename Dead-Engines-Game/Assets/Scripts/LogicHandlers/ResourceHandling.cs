@@ -51,12 +51,15 @@ public class ResourceHandling : MonoBehaviour
 
     void SetUpResources()
     {
-        for (int i = 0; i < resQuantities.Length; i++)
-        {
-            resQuantities[i] = startQuantity;
-            
-        }
-        resDeposits = spawn.GetResources();
+		if (spawn.isActiveAndEnabled)
+		{
+			for (int i = 0; i < resQuantities.Length; i++)
+			{
+				resQuantities[i] = startQuantity;
+
+			}
+			resDeposits = spawn.GetResources();
+		}
     }
 
     void UpdateQuantities(GameObject deposit)
