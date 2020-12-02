@@ -26181,9 +26181,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   automoton: {fileID: 5905536743914566335}
-  h1: {fileID: 2845934144848803937, guid: 7adcec9a75964174faa9859e24918f35, type: 3}
-  h2: {fileID: 3279273732068940755, guid: f3ad217f0f39b0d469595ef5181ddd5d, type: 3}
-  h3: {fileID: 2986977932535562071, guid: f874be8518647fa479b21128d199ce7b, type: 3}
+  h1: {fileID: 7984746186806774821, guid: 885c2fefa067bba4a89e61a5e1dcf802, type: 3}
+  h2: {fileID: 7816565298225748079, guid: 73c5358c9ec28d647a502447b57c808a, type: 3}
+  h3: {fileID: 2844502961085742202, guid: 280aff34cf62f864ba8eb71207a5a037, type: 3}
   spawnRadius: 100
   stoppingDistance: 50
   movementSpeed: 10
