@@ -31,6 +31,5 @@ public class StartTilePlacement : MonoBehaviour
 	public void PlaceObjects()
 	{
 		polymorphicEverything[0].transform.position = new Vector3(plane.transform.position.x, plane.transform.position.y - 45f, plane.transform.position.z);
-		spawnRes.enabled = true;
 	}
 }

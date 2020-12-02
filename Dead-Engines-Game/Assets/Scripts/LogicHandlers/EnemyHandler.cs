@@ -18,7 +18,7 @@ public class EnemyHandler : MonoBehaviour
         enemiesGM = new List<GameObject>();
         enemies = new List<Enemy>();
         spawn = GetComponent<SpawnRes>();
-        eh = GetComponent<EncampmentHandler>();
+        eh = GetComponent<EncampmentHandler>(); //
 
     }
 
@@ -192,7 +192,7 @@ public class EnemyHandler : MonoBehaviour
         if (e.Health <= 0)
         {
             Destroy(GetEnemyObject(e));
-            eh.GetEncampment(e.Camp).OnField--;
+            eh.GetEncampment(e.Camp).OnField--; //
             enemies.Remove(e);
             enemiesGM.Remove(GetEnemyObject(e));
         }

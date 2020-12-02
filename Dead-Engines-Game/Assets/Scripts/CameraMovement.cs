@@ -37,7 +37,9 @@ public class CameraMovement : MonoBehaviour
         speedMulti = startSpeed;
         rb = maincam.GetComponent<Rigidbody>();
         DefaultKeys();
-    }
+
+		Teleport(ui.gameObject.transform.position, mod);//
+	}
 
     void Update()
     {

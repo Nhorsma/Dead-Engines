@@ -35,7 +35,7 @@ public class RandomEvents : MonoBehaviour
     void Update()
     {
 		randomEventCounter += Time.deltaTime;
-		Debug.Log(randomEventCounter);
+		//Debug.Log(randomEventCounter);
 		if (randomEventCounter > randomEventHit)
 		{
 			TriggerEvent();

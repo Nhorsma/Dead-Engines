@@ -9,7 +9,7 @@ public class SpawnRes : MonoBehaviour
 	public GameObject res1, res2, res3, enemy;			// resource + enemy game objects (prefabs)
     private GameObject r1, r2, r3;                      // the clones/instantiations of the resources (to be returned)
 	public GameObject autoObj;
-	private Transform startPos;							// where the robot body is located
+	public Transform startPos;							// where the robot body is located
 	public int s_maxDistance, s_minDistance;			// max/min distance from the start position
 	public int r_maxDistance, r_minDistance;			// max/min distance from an unspecified resource
 	public float e_maxDistance, e_minDistance;			// max/min distance from an enemy camp
@@ -20,21 +20,20 @@ public class SpawnRes : MonoBehaviour
 
 	/// <summary>
 	/// still spawning at origin instead of robot pos
-	/// start() makes inf loop
-	/// waiting to set robot pos makes inf loop
-	/// too many outside dependencies
+	/// start() makes inf loop????????????????
 	/// </summary>
-    void Awake()
+    void Start()
     {
+
 		startPos = autoObj.transform;
 		Debug.Log(autoObj.transform.position);
 
 		// must call in order else null reference
-		SpawnResource(1);
-		SpawnResource(2);
-		SpawnResource(3);
+		SpawnResource(1); //HERE
+		//SpawnResource(2);
+		//SpawnResource(3);
 
-		SpawnEnemies(howMany);
+		//SpawnEnemies(howMany);
 	}
 
 	void Update()

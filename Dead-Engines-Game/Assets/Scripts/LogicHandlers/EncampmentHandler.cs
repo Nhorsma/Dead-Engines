@@ -11,6 +11,7 @@ public class EncampmentHandler : MonoBehaviour
     public GameObject[] eGM;
     public Encampment[] encamps;
     public EnemyHandler eh;
+	public UnitManager unitManager;
 
     public SpawnRes spawn;
     public ResourceHandling rh;
@@ -37,7 +38,7 @@ public class EncampmentHandler : MonoBehaviour
         eh = GetComponent<EnemyHandler>();
         eGM = GameObject.FindGameObjectsWithTag("Encampment");
         encamps = new Encampment[eGM.Length];
-        SetUpCamps();
+        SetUpCamps(); //
     }
 
     void Update()
@@ -98,7 +99,7 @@ public class EncampmentHandler : MonoBehaviour
 
     void CheckUnitNear(Encampment e)
     {
-        foreach (GameObject u in GetComponent<UnitManager>().unitsGM)
+        foreach (GameObject u in unitManager.unitsGM)
         {
             if (Vector3.Distance(u.transform.position, GetEncampmentGM(e).transform.position) < eh.tresspassingRange ||
                 Vector3.Distance(u.transform.position, e.ClosestRec.transform.position) < eh.tresspassingRange)
@@ -239,7 +240,7 @@ public class EncampmentHandler : MonoBehaviour
     {
         float distance = Mathf.Infinity;
         GameObject chosen = new GameObject();
-        foreach(GameObject rec in GetComponent<SpawnRes>().GetResources())
+        foreach(GameObject rec in spawn.GetResources())
         {
             if(Vector3.Distance(rec.transform.position, GetEncampmentGM(camp).transform.position) < distance)
             {

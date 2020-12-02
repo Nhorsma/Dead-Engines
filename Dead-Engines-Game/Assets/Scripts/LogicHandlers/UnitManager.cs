@@ -21,11 +21,11 @@ public class UnitManager : MonoBehaviour
     public static List<GameObject> selectedUnits;
     NavMeshAgent nv;
 
-	public AutomatonUI auto;
+	//public AutomatonUI auto;
 
 	public float unitFireCooldown = 1f;
 
-	public EffectConnector effConnector;
+	//public EffectConnector effConnector;
 
 	public GameObject unitPrefab;
 
@@ -36,7 +36,7 @@ public class UnitManager : MonoBehaviour
         robotPos = robot.transform.position;
 
         SetUpUnits(3);
-		auto.UpdateInfoTab();
+		//auto.UpdateInfoTab();
 	}
 
     void Update()
@@ -83,7 +83,7 @@ public class UnitManager : MonoBehaviour
                 Hit().collider.gameObject.tag == "Encampment")
             {
                 SetJobOfSelected(Hit().collider.gameObject);
-				si.UpdateUnitUI(GetUnit(selectedUnits[0])); /////////////////////////////////////////////////////////////////
+				si.UpdateUnitUI(GetUnit(selectedUnits[0])); ///////////////////////////////////////////////////////////////// //
 			}
             else
             {
@@ -266,8 +266,8 @@ public class UnitManager : MonoBehaviour
 		}
 		else if (!unit.JustDroppedOff && Vector3.Distance(gm.transform.position, robotPos) < stoppingDistance) //reaches robot
 		{
-			if (effConnector.StockCheck() == true)
-			{
+			//if (effConnector.StockCheck() == true)
+			//{
 				if (resource.Equals("ExtractionMetal"))
 				{
 					AddMetal();
@@ -282,12 +282,12 @@ public class UnitManager : MonoBehaviour
 				unit.JustDroppedOff = (true);
 				TravelTo(gm, unit.JobPos.transform.position, false, false);
 				//Debug.Log(unit.Job + " at "+unit.JobPos.transform.position);
-			}
-			else
-			{
-				Debug.Log("No storage space");
-				//make unit drop in unit info
-			}
+			//}
+			//else
+			//{
+			//	Debug.Log("No storage space");
+			//	//make unit drop in unit info
+			//}
 		}
     }
 
@@ -356,7 +356,7 @@ public class UnitManager : MonoBehaviour
             unit.JobPos = null;
             if(selectedUnits.Contains(GetUnitObject(unit)))
             {
-                si.RemoveSpecific(GetUnitObject(unit));
+                si.RemoveSpecific(GetUnitObject(unit)); //
             }
             StartCoroutine(WaitToRespawn(unit));
         }
