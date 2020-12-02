@@ -36,24 +36,24 @@ public class ScriptLoader : MonoBehaviour
 		yield return new WaitForSeconds(1f);
 		Debug.Log("buffer complete");
 
-		//block1.SetActive(true);
+		block1.SetActive(true);
 
-		//Debug.Log("start buffer");
-		//yield return new WaitForSeconds(1f);
-		//Debug.Log("buffer complete");
+		Debug.Log("start buffer");
+		yield return new WaitForSeconds(1f);
+		Debug.Log("buffer complete");
 
-		//block2.SetActive(true);
-		//automatonUI.enabled = true;
+		block2.SetActive(true);
+		automatonUI.enabled = true;
 
-		//Debug.Log("start buffer");
-		//yield return new WaitForSeconds(1f);
-		//Debug.Log("buffer complete");
+		Debug.Log("start buffer");
+		yield return new WaitForSeconds(1f);
+		Debug.Log("buffer complete");
 
-		//block3.SetActive(true);
+		block3.SetActive(true);
 
-		//Debug.Log("start buffer");
-		//yield return new WaitForSeconds(1f);
-		//Debug.Log("buffer complete");
+		Debug.Log("start buffer");
+		yield return new WaitForSeconds(1f);
+		Debug.Log("buffer complete");
 
 		Debug.Log("end loading");
 	}

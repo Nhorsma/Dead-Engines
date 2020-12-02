@@ -16387,16 +16387,16 @@ MonoBehaviour:
   res3: {fileID: 6918073762920412359, guid: 8ac11d87adbfa564391425271f158bc9, type: 3}
   enemy: {fileID: 3095501986510504359, guid: 67d77ea79edff4841a2a9aa6009a82bd, type: 3}
   autoObj: {fileID: 5905536743914566335}
-  startPos: {fileID: 0}
-  s_maxDistance: 100
-  s_minDistance: 50
-  r_maxDistance: 200
-  r_minDistance: 50
-  e_maxDistance: 20
-  e_minDistance: 10
+  startPos: {fileID: 6539084605846923269}
+  s_maxDistance: 350
+  s_minDistance: 150
+  r_maxDistance: 350
+  r_minDistance: 150
+  e_maxDistance: 60
+  e_minDistance: 30
   howMany: 1
-  low_range: 200
-  high_range: 200
+  low_range: 750
+  high_range: 750
 --- !u!114 &1102157337
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -16447,7 +16447,7 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
-  spawnRes: {fileID: 0}
+  spawnRes: {fileID: 1102157336}
 --- !u!1 &1109670163
 GameObject:
   m_ObjectHideFlags: 0
