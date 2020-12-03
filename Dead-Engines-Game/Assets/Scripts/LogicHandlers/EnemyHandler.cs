@@ -11,6 +11,8 @@ public class EnemyHandler : MonoBehaviour
     public List<GameObject> enemiesGM;
     public List<Enemy> enemies;
     public float stoppingDistance, shootingRange, tresspassingRange;
+    public AudioSource audioSource;
+    public AudioClip attackClip1, attackClip2, dieClip1, dieClip2, shootClip;
 
     private void Start()
     {
@@ -19,7 +21,6 @@ public class EnemyHandler : MonoBehaviour
         enemies = new List<Enemy>();
         spawn = GetComponent<SpawnRes>();
         eh = GetComponent<EncampmentHandler>(); //
-
     }
 
     private void Update()
@@ -172,6 +173,7 @@ public class EnemyHandler : MonoBehaviour
 
     GameObject BulletTrail(Vector3 start, Vector3 end)
     {
+        PlayClip("shoot");
         Vector3 dif = (start - end) / 2;
         Quaternion angle = Quaternion.LookRotation(start - end);
         GameObject trail = (GameObject)Instantiate(Resources.Load("BulletTrail"), start - dif, angle);
@@ -196,5 +198,25 @@ public class EnemyHandler : MonoBehaviour
             enemies.Remove(e);
             enemiesGM.Remove(GetEnemyObject(e));
         }
+    }
+
+    void PlayClip(string str)
+    {
+        if (str.Equals("attack"))
+        {
+            if (Random.Range(0, 2) == 0)
+                audioSource.PlayOneShot(attackClip1);
+            else
+                audioSource.PlayOneShot(attackClip2);
+        }
+        else if (str.Equals("die"))
+        {
+            if (Random.Range(0, 2) == 0)
+                audioSource.PlayOneShot(dieClip1);
+            else
+                audioSource.PlayOneShot(dieClip2);
+        }
+        else if (str.Equals("shoot"))
+            audioSource.PlayOneShot(shootClip);
     }
 }

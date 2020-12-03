@@ -7330,6 +7330,9 @@ MonoBehaviour:
   unitItem: {fileID: 1771740820}
   unitHealth: {fileID: 613000535}
   healthSlider: {fileID: 1539122358}
+  audioSource: {fileID: 0}
+  readyClip1: {fileID: 8300000, guid: 5c50c6726d22fdc4583834c823c61523, type: 3}
+  readyClip2: {fileID: 8300000, guid: d9de8a7be7489b34fa4c10c2f6e3f862, type: 3}
 --- !u!114 &467610732
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7347,11 +7350,19 @@ MonoBehaviour:
   eh: {fileID: 467610734}
   robotPos: {x: 10, y: 3, z: 8}
   robot: {fileID: 5905536743914566335}
-  stoppingDistance: 8
-  shootingDistance: 12
+  stoppingDistance: 30
+  pickUpDistance: 10
+  shootingDistance: 50
   downTime: 5
   unitDamage: 0
   unitsGM: []
+  goingClip1: {fileID: 8300000, guid: 7c5852769ae1a8542b517f5684cc949d, type: 3}
+  goingClip2: {fileID: 8300000, guid: 497a967409f647b49bed041dc65ae899, type: 3}
+  confirmPing: {fileID: 8300000, guid: a8cef582cb23de74cab8c8e9b3cad780, type: 3}
+  deadClip: {fileID: 8300000, guid: 82b6ed86c112ca847b46b68db095e909, type: 3}
+  shootClip: {fileID: 8300000, guid: b9c9944ad7d784d419890defc6644d04, type: 3}
+  dropOffClop: {fileID: 8300000, guid: b43b0a4db5d3f9d4795efd9bf517dcbd, type: 3}
+  pickAxeClip: {fileID: 8300000, guid: 3dde2ea3743dd104ba8c127a4018b94f, type: 3}
   unitFireCooldown: 1
   unitPrefab: {fileID: 4133695892088483390, guid: b1c2c3cf472c75946a45d3f0e6066865,
     type: 3}
@@ -7375,6 +7386,9 @@ MonoBehaviour:
   rh: {fileID: 467610735}
   spawnTime: 1
   spawnDistance: 0
+  audioSource: {fileID: 1457351892}
+  attackClip1: {fileID: 8300000, guid: 5928cf0709df648459e5156d29193f0d, type: 3}
+  attackClip2: {fileID: 0}
 --- !u!114 &467610734
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7388,9 +7402,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enemiesGM: []
-  stoppingDistance: 5
-  shootingRange: 8
-  tresspassingRange: 10
+  stoppingDistance: 10
+  shootingRange: 40
+  tresspassingRange: 52
+  audioSource: {fileID: 1457351892}
+  attackClip1: {fileID: 8300000, guid: 36b38c779753480409e3882c07bce9cb, type: 3}
+  attackClip2: {fileID: 8300000, guid: 5928cf0709df648459e5156d29193f0d, type: 3}
+  dieClip1: {fileID: 8300000, guid: dea962989df3fa2478729985a431e863, type: 3}
+  dieClip2: {fileID: 8300000, guid: 2b83e8ae179647a43b341ac011b688de, type: 3}
+  shootClip: {fileID: 8300000, guid: 0af2ba29fd2324844b3cd52d2efefcfd, type: 3}
 --- !u!114 &467610735
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -16385,7 +16405,7 @@ MonoBehaviour:
   res1: {fileID: 5843277777104625251, guid: d4b0a7922f6d12043bd2d214c5eeda0f, type: 3}
   res2: {fileID: 6625301941321825569, guid: babc57232b4ad00408ed5e64c5faf108, type: 3}
   res3: {fileID: 6918073762920412359, guid: 8ac11d87adbfa564391425271f158bc9, type: 3}
-  enemy: {fileID: 3095501986510504359, guid: 67d77ea79edff4841a2a9aa6009a82bd, type: 3}
+  enemy: {fileID: 3500671454363015440, guid: 79a02ea539ec3c54ebab16eeef8dc84f, type: 3}
   autoObj: {fileID: 5905536743914566335}
   startPos: {fileID: 6539084605846923269}
   s_maxDistance: 350
@@ -21048,6 +21068,7 @@ GameObject:
   - component: {fileID: 1457351887}
   - component: {fileID: 1457351891}
   - component: {fileID: 1457351886}
+  - component: {fileID: 1457351892}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -21180,6 +21201,102 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 112
   m_CollisionDetection: 0
+--- !u!82 &1457351892
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1457351885}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 0}
+  m_audioClip: {fileID: 0}
+  m_PlayOnAwake: 1
+  m_Volume: 1
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!1 &1473237610
 GameObject:
   m_ObjectHideFlags: 0
@@ -31474,7 +31591,7 @@ Light:
   serializedVersion: 10
   m_Type: 1
   m_Shape: 0
-  m_Color: {r: 0.8867924, g: 0.86640036, b: 0.8324136, a: 1}
+  m_Color: {r: 1, g: 0.9342992, b: 0.8160377, a: 1}
   m_Intensity: 2
   m_Range: 10
   m_SpotAngle: 30

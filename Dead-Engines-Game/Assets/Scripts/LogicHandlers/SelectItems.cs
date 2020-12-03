@@ -15,6 +15,8 @@ public class SelectItems : MonoBehaviour
     public Material highlightMaterial;
     public Material selectedMaterial;
 
+    Color normalC, highLightedC, selectedC;
+
     GameObject highlightThisUnit;
     public GameObject g1, g2; 
 
@@ -34,13 +36,21 @@ public class SelectItems : MonoBehaviour
 	public Text unitHealth;
 	public Slider healthSlider;
 
+    public AudioSource audioSource;
+    public AudioClip readyClip1, readyClip2;
+
     private void Start()
     {
         hasCreatedSquare = false;
         um = this.gameObject.GetComponent<UnitManager>();
         selectionSquareTrans = selectionSquare.rectTransform;
         mouseSecond = mouseFirst = (Input.mousePosition);
-    
+
+        normalC = new Color(0, 100, 100);
+        highLightedC = new Color(255, 0, 255);
+        selectedC = new Color(255, 255, 0);
+
+        audioSource = Camera.main.GetComponent<AudioSource>();
 
     }
 
@@ -85,18 +95,19 @@ public class SelectItems : MonoBehaviour
                     if (hit.collider.CompareTag("Friendly") && !UnitManager.selectedUnits.Contains(hit.collider.gameObject))
                     {
                         UnitManager.selectedUnits.Add(hit.collider.gameObject);
-                        //hit.collider.gameObject.GetComponentInChildren<MeshRenderer>().material = selectedMaterial;
-						UpdateUnitUI(um.GetUnit(hit.collider.gameObject)); //////////////////////////////////////////
-				}
+                        hit.collider.gameObject.GetComponentInChildren<SpriteRenderer>().color = selectedC;
+
+					    UpdateUnitUI(um.GetUnit(hit.collider.gameObject)); //////////////////////////////////////////
+                        ReadyClip();
+                    }
                 }
                 else //group select
                 {
                     ClearAll();
                     GroupSelect();
-                }
+            }
             }
     }
-
 
     void Highlight()
     {
@@ -116,8 +127,13 @@ public class SelectItems : MonoBehaviour
 
             if (!isSelected)
             {
-				highlightThisUnit.GetComponentInChildren<MeshRenderer>().material = normalMaterial;
+                //highlightThisUnit.GetComponentInChildren<MeshRenderer>().material = normalMaterial;
+                highlightThisUnit.GetComponentInChildren<SpriteRenderer>().color = highLightedC;
 			}
+            else
+            {
+                highlightThisUnit.GetComponentInChildren<SpriteRenderer>().color = selectedC;
+            }
 
             highlightThisUnit = null;
         }
@@ -145,7 +161,12 @@ public class SelectItems : MonoBehaviour
                 if (!isSelected)
                 {
                     highlightThisUnit = currentObj;
-                    highlightThisUnit.GetComponentInChildren<MeshRenderer>().material = highlightMaterial;
+                    highlightThisUnit.GetComponentInChildren<SpriteRenderer>().color = highLightedC;
+                    //highlightThisUnit.GetComponentInChildren<MeshRenderer>().material = highlightMaterial;
+                }
+                else
+                {
+                    highlightThisUnit.GetComponentInChildren<SpriteRenderer>().color = selectedC;
                 }
             }
             else
@@ -220,12 +241,15 @@ public class SelectItems : MonoBehaviour
             //Is this unit within the square
             if (InRect(currentUnit.transform.position))
             {
+                currentUnit.GetComponentInChildren<SpriteRenderer>().color = selectedC;
                 //currentUnit.GetComponentInChildren<MeshRenderer>().material = selectedMaterial;
                 UnitManager.selectedUnits.Add(currentUnit);
+                ReadyClip();
             }
             //Otherwise deselect the unit if it's not in the square
             else
             {
+                currentUnit.GetComponentInChildren<SpriteRenderer>().color = normalC;
                 //currentUnit.GetComponentInChildren<MeshRenderer>().material = normalMaterial;
             }
         }
@@ -274,6 +298,7 @@ public class SelectItems : MonoBehaviour
     {
         for(int i=0;i< UnitManager.selectedUnits.Count;i++)
         {
+            UnitManager.selectedUnits[i].GetComponentInChildren<SpriteRenderer>().color = normalC;
             //UnitManager.selectedUnits[i].GetComponentInChildren<MeshRenderer>().material = normalMaterial;
         }
         UnitManager.selectedUnits.Clear();
@@ -289,7 +314,8 @@ public class SelectItems : MonoBehaviour
     public void RemoveSpecific(GameObject gm)
     {
         UnitManager.selectedUnits.Remove(gm);
-        gm.GetComponentInChildren<MeshRenderer>().material = normalMaterial;
+        //gm.GetComponentInChildren<MeshRenderer>().material = normalMaterial;
+        gm.GetComponentInChildren<SpriteRenderer>().color = normalC;
     }
 
 	public void UpdateUnitUI(Unit u)
@@ -302,5 +328,15 @@ public class SelectItems : MonoBehaviour
 		healthSlider.maxValue = 3;
 		healthSlider.value = u.Health;
 	}
+
+    void ReadyClip()
+    {
+        //audioSource.Stop();
+        if (!audioSource.isPlaying)
+            if (Random.Range(0, 2) == 0)
+            audioSource.PlayOneShot(readyClip1);
+        else
+            audioSource.PlayOneShot(readyClip2);
+    }
 
 }

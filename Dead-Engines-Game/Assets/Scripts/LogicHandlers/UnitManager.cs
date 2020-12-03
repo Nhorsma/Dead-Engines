@@ -10,34 +10,40 @@ public class UnitManager : MonoBehaviour
     public EnemyHandler eh;
     public Vector3 robotPos;
     public GameObject robot;
-    public float stoppingDistance;
+    public float stoppingDistance, pickUpDistance;
     public float shootingDistance;
     public float downTime;
-	public int unitDamage;
+    public int unitDamage;
 
     public GameObject[] unitsGM;         //the gameobjects
     public Unit[] units;                 //the 'unit' info attached to the gameobjects
     [System.NonSerialized]
     public static List<GameObject> selectedUnits;
+
+    AudioSource audioSource;
+  //  public AudioClip goingClip1, goingClip2, confirmPing, deadClip, shootClip,
+          //              dropOffClop, pickAxeClip;
+
     NavMeshAgent nv;
 
-	//public AutomatonUI auto;
+    //public AutomatonUI auto;
 
-	public float unitFireCooldown = 1f;
+    public float unitFireCooldown = 1f;
 
-	//public EffectConnector effConnector;
+    //public EffectConnector effConnector;
 
-	public GameObject unitPrefab;
+    public GameObject unitPrefab;
 
     void Start()
     {
         eh = GetComponent<EnemyHandler>();
         selectedUnits = new List<GameObject>();
-        robotPos = robot.transform.position;
+        robotPos = new Vector3(robot.transform.position.x,0, robot.transform.position.z);
+        audioSource = Camera.main.GetComponent<AudioSource>();
 
         SetUpUnits(3);
-		//auto.UpdateInfoTab();
-	}
+        //auto.UpdateInfoTab();
+    }
 
     void Update()
     {
@@ -83,12 +89,13 @@ public class UnitManager : MonoBehaviour
                 Hit().collider.gameObject.tag == "Encampment")
             {
                 SetJobOfSelected(Hit().collider.gameObject);
-				si.UpdateUnitUI(GetUnit(selectedUnits[0])); ///////////////////////////////////////////////////////////////// //
-			}
+                si.UpdateUnitUI(GetUnit(selectedUnits[0])); ///////////////////////////////////////////////////////////////// //
+            }
             else
             {
                 MoveAllSelected();
             }
+            ReadyClip(false);
 
         }
     }
@@ -116,6 +123,7 @@ public class UnitManager : MonoBehaviour
                     if (i == 0)
                     {
                         TravelTo(selectedUnits[i], Hit().point, false, false);
+
                     }
                     else if (i > 0)
                     {
@@ -132,7 +140,6 @@ public class UnitManager : MonoBehaviour
                         TravelTo(selectedUnits[i], newDes, false, false);
                     }
                 }
-
             }
         }
     }
@@ -161,18 +168,18 @@ public class UnitManager : MonoBehaviour
                         GetUnitObject(unit).SetActive(false);
                     }
                 }
-                else if(unit.Job=="dead")
+                else if (unit.Job == "dead")
                 {
-                    if(unit.CanSpawn)
+                    if (unit.CanSpawn)
                     {
                         unit.Health = 10;
                         unit.Job = "none";
                         GetUnitObject(unit).SetActive(true);
                         //TravelTo(GetUnitObject(unit), robotPos + new Vector3(-stoppingDistance*1.5f, 0, -stoppingDistance*1.5f), false, true);
-                        GetUnitObject(unit).transform.position = robotPos + new Vector3(-stoppingDistance+Random.Range(-3,3),0,-stoppingDistance + Random.Range(-3, 3));
+                        GetUnitObject(unit).transform.position = robotPos + new Vector3(-stoppingDistance + Random.Range(-3, 3), 0, -stoppingDistance + Random.Range(-3, 3));
                         unit.CanSpawn = false;
                     }
-                } 
+                }
                 else
                 {
                     //
@@ -183,7 +190,7 @@ public class UnitManager : MonoBehaviour
             }
             else
             {
-                if(GetUnitObject(unit).GetComponent<NavMeshAgent>().velocity==new Vector3(0,0,0))
+                if (GetUnitObject(unit).GetComponent<NavMeshAgent>().velocity == new Vector3(0, 0, 0))
                     GetUnitObject(unit).GetComponent<Animator>().SetBool("walking", false);
             }
         }
@@ -218,6 +225,7 @@ public class UnitManager : MonoBehaviour
                 TravelTo(unitsGM[unit.Id], unit.JobPos.transform.position, true, true);
             }
         }
+        PlayClip("ping");
     }
 
 
@@ -256,39 +264,39 @@ public class UnitManager : MonoBehaviour
         Vector3 depPos = rh.resDeposits[ri].transform.position;
         Vector3 uPos = gm.transform.position;
 
-		//reaches resource
-		if (unit.JustDroppedOff && Vector3.Distance(gm.transform.position, unit.JobPos.transform.position) < stoppingDistance)
-		{
-			Extract(ri);
-			unit.JustDroppedOff = false;
-			TravelTo(gm, robotPos, false, false);
-			//Debug.Log(unit.Job + " at " + unit.JobPos.transform.position);
-		}
-		else if (!unit.JustDroppedOff && Vector3.Distance(gm.transform.position, robotPos) < stoppingDistance) //reaches robot
-		{
-			//if (effConnector.StockCheck() == true)
-			//{
-				if (resource.Equals("ExtractionMetal"))
-				{
-					AddMetal();
-					Debug.Log("Got metal");
-				}
-				else if (resource.Equals("ExtractionElectronics"))
-				{
-					AddElectronics();
-					Debug.Log("Got electronics");
-				}
+        //reaches resource
+        if (unit.JustDroppedOff && Vector3.Distance(gm.transform.position, unit.JobPos.transform.position) < pickUpDistance)
+        {
+            Extract(ri);
+            unit.JustDroppedOff = false;
+            TravelTo(gm, robotPos, false, false);
+            //Debug.Log(unit.Job + " at " + unit.JobPos.transform.position);
+        }
+        else if (!unit.JustDroppedOff && Vector3.Distance(gm.transform.position, robotPos) < pickUpDistance) //reaches robot
+        {
+            //if (effConnector.StockCheck() == true)
+            //{
+            if (resource.Equals("ExtractionMetal"))
+            {
+                AddMetal();
+                Debug.Log("Got metal");
+            }
+            else if (resource.Equals("ExtractionElectronics"))
+            {
+                AddElectronics();
+                Debug.Log("Got electronics");
+            }
 
-				unit.JustDroppedOff = (true);
-				TravelTo(gm, unit.JobPos.transform.position, false, false);
-				//Debug.Log(unit.Job + " at "+unit.JobPos.transform.position);
-			//}
-			//else
-			//{
-			//	Debug.Log("No storage space");
-			//	//make unit drop in unit info
-			//}
-		}
+            unit.JustDroppedOff = (true);
+            TravelTo(gm, unit.JobPos.transform.position, false, false);
+            //Debug.Log(unit.Job + " at "+unit.JobPos.transform.position);
+            //}
+            //else
+            //{
+            //	Debug.Log("No storage space");
+            //	//make unit drop in unit info
+            //}
+        }
     }
 
     void Combat(Unit unit)
@@ -300,7 +308,7 @@ public class UnitManager : MonoBehaviour
             Vector3.Distance(unit.JobPos.transform.position, GetUnitObject(unit).transform.position) > stoppingDistance)
             TravelTo(unitsGM[unit.Id], unit.JobPos.transform.position, true, true);
 
-        if (unit.JobPos != null && 
+        if (unit.JobPos != null &&
             Vector3.Distance(gm.transform.position, unit.JobPos.transform.position) < shootingDistance
             && !unit.JustShot)
         {
@@ -312,7 +320,7 @@ public class UnitManager : MonoBehaviour
     IEnumerator FireCoolDown(Unit unit)
     {
         unit.JustShot = true;
-		yield return new WaitForSeconds(unitFireCooldown);
+        yield return new WaitForSeconds(unitFireCooldown);
         unit.JustShot = false;
     }
 
@@ -332,7 +340,7 @@ public class UnitManager : MonoBehaviour
                     unit.Job = "none";
                     unit.JobPos = null;
                 }
-				eh.GetEnemy(hit.collider.gameObject).Health -= unitDamage;
+                eh.GetEnemy(hit.collider.gameObject).Health -= unitDamage;
                 eh.EnemyDead(eh.GetEnemy(hit.collider.gameObject));
 
                 //Debug.Log("enemy: " + gameObject.GetComponent<EnemyHandler>().GetEnemy(hit.collider.gameObject).Health);
@@ -348,13 +356,13 @@ public class UnitManager : MonoBehaviour
 
     public void UnitDown(Unit unit)
     {
-        if(unit.Health<=0)
+        if (unit.Health <= 0)
         {
             GetUnitObject(unit).GetComponent<Animator>().SetBool("knockedOut", true);
-            Debug.Log(unit+" is dead");
+            Debug.Log(unit + " is dead");
             unit.Job = "dead";
             unit.JobPos = null;
-            if(selectedUnits.Contains(GetUnitObject(unit)))
+            if (selectedUnits.Contains(GetUnitObject(unit)))
             {
                 si.RemoveSpecific(GetUnitObject(unit)); //
             }
@@ -366,6 +374,7 @@ public class UnitManager : MonoBehaviour
     {
         if (!unit.CanSpawn)
         {
+            ReadyClip(true);
             yield return new WaitForSeconds(3f);
             GetUnitObject(unit).SetActive(false);
             GetUnitObject(unit).transform.position = robotPos;
@@ -384,34 +393,39 @@ public class UnitManager : MonoBehaviour
             b.GetComponent<Animator>().SetBool("walking", true);
             if (stop)
                 a.stoppingDistance = stoppingDistance;
+            else
+                a.stoppingDistance = 0f;
             if (randomize)
-                place += new Vector3(Random.Range(-stoppingDistance/2, stoppingDistance/2), 0, Random.Range(-stoppingDistance/2, stoppingDistance/2));
+                place += new Vector3(Random.Range(-stoppingDistance / 2, stoppingDistance / 2), 0, Random.Range(-stoppingDistance / 2, stoppingDistance / 2));
 
-                a.SetDestination(place);
+            a.SetDestination(place);
         }
-        
+
     }
 
     void Extract(int id)
     {
         rh.resQuantities[id] -= 1;
+        PlayClip("pickaxe");
     }
-    
+
     void AddMetal()
     {
-		ResourceHandling.metal++;
+        ResourceHandling.metal++;
+        PlayClip("drop");
     }
 
     void AddElectronics()
     {
-		ResourceHandling.electronics++;
-	}
+        ResourceHandling.electronics++;
+        PlayClip("drop");
+    }
 
     public Unit ReturnJoblessUnit()
     {
-        foreach(Unit u in units)
+        foreach (Unit u in units)
         {
-            if(u.Job=="none")
+            if (u.Job == "none")
             {
                 return u;
             }
@@ -438,28 +452,86 @@ public class UnitManager : MonoBehaviour
         z = Random.Range(-1.2f, 1.2f);
         Quaternion offset = Quaternion.Euler(x, y, z);
 
-        Vector3 dif = (start-end)/2;
+        Vector3 dif = (start - end) / 2;
         Quaternion angle = Quaternion.LookRotation(start - end);
-        GameObject trail = (GameObject)Instantiate(Resources.Load("BulletTrail"),start-dif, angle*offset);
+        GameObject trail = (GameObject)Instantiate(Resources.Load("BulletTrail"), start - dif, angle * offset);
 
         trail.transform.localScale = new Vector3(0.05f, 0.05f, Vector3.Distance(start, end));
         return trail;
     }
-    
+
     IEnumerator TrailOff(float time, Vector3 start, Vector3 end)
     {
+        PlayClip("shoot");
         GameObject t = BulletTrail(start, end);
         yield return new WaitForSeconds(time);
         Destroy(t);
     }
 
-	public void FindUnit(Unit unit)
-	{
-		Debug.Log("No one is here");
-	}
+    public void FindUnit(Unit unit)
+    {
+        Debug.Log("No one is here");
+    }
 
     public Vector3 FindSpotToSpawn()
     {
         return robotPos + new Vector3(-stoppingDistance + Random.Range(-3, 3), 0, -stoppingDistance + Random.Range(-3, 3));
+    }
+
+    void ReadyClip(bool isDead)
+    {
+        if (isDead)
+        {
+            //audioSource.PlayOneShot(deadClip);
+            audioSource.PlayOneShot(AudioController.unitClips[4]);
+        }
+        else
+        {
+            if (!audioSource.isPlaying)
+                if (Random.Range(0, 2) == 0)
+                {
+                    audioSource.PlayOneShot(AudioController.unitClips[2]);
+                    // audioSource.PlayOneShot(goingClip1);
+                }
+                else
+                {
+                    audioSource.PlayOneShot(AudioController.unitClips[3]);
+                    //audioSource.PlayOneShot(goingClip2);
+                }
+        }
+    }
+
+    void PlayClip(string str)
+    {
+        if (str.Equals("ping"))
+        {
+            //audioSource.PlayOneShot(confirmPing);
+            audioSource.PlayOneShot(AudioController.otherSFX[0]);
+            if (Random.Range(0, 2) == 0)
+            {
+                //audioSource.PlayOneShot(goingClip1);
+                audioSource.PlayOneShot(AudioController.unitClips[2]);
+            }
+            else
+            {
+                //audioSource.PlayOneShot(goingClip2);
+                audioSource.PlayOneShot(AudioController.unitClips[3]);
+            }
+        }
+        else if (str.Equals("drop"))
+        {
+            //audioSource.PlayOneShot(dropOffClop);
+            audioSource.PlayOneShot(AudioController.otherSFX[1]);
+        }
+        else if (str.Equals("pickaxe"))
+        {
+            //audioSource.PlayOneShot(pickAxeClip);
+            audioSource.PlayOneShot(AudioController.otherSFX[2]);
+        }
+        else if (str.Equals("shoot"))
+        {
+            //audioSource.PlayOneShot(shootClip);
+            audioSource.PlayOneShot(AudioController.gunShots[0]);
+        }
     }
 }

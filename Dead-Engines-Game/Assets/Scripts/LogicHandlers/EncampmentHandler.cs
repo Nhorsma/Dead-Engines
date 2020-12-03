@@ -17,6 +17,9 @@ public class EncampmentHandler : MonoBehaviour
     public ResourceHandling rh;
     public float spawnTime, spawnDistance;
 
+    public AudioSource audioSource;
+    public AudioClip attackClip1, attackClip2;
+
     string[] depRec43 = { "gun", "gun", "gun" };
     string[] depRec33 = { "gun", "APC", "gun" };
     string[] depRec23 = { "gun", "gun", "APC", "APC" };
@@ -139,6 +142,7 @@ public class EncampmentHandler : MonoBehaviour
 
     void SpawnEnemy(Encampment e)
     {
+        PlayClip("attack");
         CheckDeployment(e);
         Vector3 spawnPlace = eGM[e.Id].transform.position + new Vector3(Random.Range(1, 3), 0, Random.Range(1, 3));
 
@@ -265,4 +269,15 @@ public class EncampmentHandler : MonoBehaviour
     {
 
     }
-}
+
+    void PlayClip(string str)
+    {
+        if (str.Equals("attack"))
+        {
+            if (Random.Range(0, 2) == 0)
+                audioSource.PlayOneShot(attackClip1);
+            else
+                audioSource.PlayOneShot(attackClip2);
+        }
+    }
+    }
