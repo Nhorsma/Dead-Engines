@@ -21,8 +21,8 @@ public class UnitManager : MonoBehaviour
     public static List<GameObject> selectedUnits;
 
     AudioSource audioSource;
-  //  public AudioClip goingClip1, goingClip2, confirmPing, deadClip, shootClip,
-          //              dropOffClop, pickAxeClip;
+    public AudioClip goingClip1, goingClip2, confirmPing, deadClip, shootClip,
+                        dropOffClop, pickAxeClip;
 
     NavMeshAgent nv;
 
@@ -482,21 +482,18 @@ public class UnitManager : MonoBehaviour
     {
         if (isDead)
         {
-            //audioSource.PlayOneShot(deadClip);
-            audioSource.PlayOneShot(AudioController.unitClips[4]);
+            audioSource.PlayOneShot(deadClip);
         }
         else
         {
             if (!audioSource.isPlaying)
                 if (Random.Range(0, 2) == 0)
                 {
-                    audioSource.PlayOneShot(AudioController.unitClips[2]);
-                    // audioSource.PlayOneShot(goingClip1);
+                     audioSource.PlayOneShot(goingClip1);
                 }
                 else
                 {
-                    audioSource.PlayOneShot(AudioController.unitClips[3]);
-                    //audioSource.PlayOneShot(goingClip2);
+                    audioSource.PlayOneShot(goingClip2);
                 }
         }
     }
@@ -505,33 +502,27 @@ public class UnitManager : MonoBehaviour
     {
         if (str.Equals("ping"))
         {
-            //audioSource.PlayOneShot(confirmPing);
-            audioSource.PlayOneShot(AudioController.otherSFX[0]);
+            audioSource.PlayOneShot(confirmPing);
             if (Random.Range(0, 2) == 0)
             {
-                //audioSource.PlayOneShot(goingClip1);
-                audioSource.PlayOneShot(AudioController.unitClips[2]);
+                audioSource.PlayOneShot(goingClip1);
             }
             else
             {
-                //audioSource.PlayOneShot(goingClip2);
-                audioSource.PlayOneShot(AudioController.unitClips[3]);
+                audioSource.PlayOneShot(goingClip2);
             }
         }
         else if (str.Equals("drop"))
         {
-            //audioSource.PlayOneShot(dropOffClop);
-            audioSource.PlayOneShot(AudioController.otherSFX[1]);
+            audioSource.PlayOneShot(dropOffClop);
         }
         else if (str.Equals("pickaxe"))
         {
-            //audioSource.PlayOneShot(pickAxeClip);
-            audioSource.PlayOneShot(AudioController.otherSFX[2]);
+            audioSource.PlayOneShot(pickAxeClip);
         }
         else if (str.Equals("shoot"))
         {
-            //audioSource.PlayOneShot(shootClip);
-            audioSource.PlayOneShot(AudioController.gunShots[0]);
+            audioSource.PlayOneShot(shootClip);
         }
     }
 }

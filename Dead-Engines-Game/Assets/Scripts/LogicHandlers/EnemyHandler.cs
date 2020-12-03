@@ -146,6 +146,7 @@ public class EnemyHandler : MonoBehaviour
             RaycastHit hit;
             if (Physics.Raycast(GetEnemyObject(ene).transform.position, direction, out hit, 100f))
             {
+                PlayClip(ene.Camp,"shoot");
                 StartCoroutine(TrailOff(0.05f, GetEnemyObject(ene).transform.position, ene.Target.transform.position));
                 if (hit.transform.tag == "Friendly")
                 {
@@ -173,7 +174,6 @@ public class EnemyHandler : MonoBehaviour
 
     GameObject BulletTrail(Vector3 start, Vector3 end)
     {
-        PlayClip("shoot");
         Vector3 dif = (start - end) / 2;
         Quaternion angle = Quaternion.LookRotation(start - end);
         GameObject trail = (GameObject)Instantiate(Resources.Load("BulletTrail"), start - dif, angle);
@@ -200,23 +200,24 @@ public class EnemyHandler : MonoBehaviour
         }
     }
 
-    void PlayClip(string str)
+    void PlayClip(GameObject encamp, string str)
     {
+        AudioSource tempSource = encamp.GetComponent<AudioSource>();
         if (str.Equals("attack"))
         {
             if (Random.Range(0, 2) == 0)
-                audioSource.PlayOneShot(attackClip1);
+                tempSource.PlayOneShot(attackClip1);
             else
-                audioSource.PlayOneShot(attackClip2);
+                tempSource.PlayOneShot(attackClip2);
         }
         else if (str.Equals("die"))
         {
             if (Random.Range(0, 2) == 0)
-                audioSource.PlayOneShot(dieClip1);
+                tempSource.PlayOneShot(dieClip1);
             else
-                audioSource.PlayOneShot(dieClip2);
+                tempSource.PlayOneShot(dieClip2);
         }
         else if (str.Equals("shoot"))
-            audioSource.PlayOneShot(shootClip);
+            tempSource.PlayOneShot(shootClip);
     }
 }

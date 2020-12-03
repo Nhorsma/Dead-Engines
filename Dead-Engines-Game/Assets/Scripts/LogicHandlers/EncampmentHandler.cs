@@ -142,7 +142,7 @@ public class EncampmentHandler : MonoBehaviour
 
     void SpawnEnemy(Encampment e)
     {
-        PlayClip("attack");
+        PlayClip(e,"attack");
         CheckDeployment(e);
         Vector3 spawnPlace = eGM[e.Id].transform.position + new Vector3(Random.Range(1, 3), 0, Random.Range(1, 3));
 
@@ -256,12 +256,6 @@ public class EncampmentHandler : MonoBehaviour
     }
 
 
-    void SetDeployment(Encampment e, int recsLeft)
-    {
-        
-    }
-    
-
 
     //as the player explores and finds new encampments, new encampments should be entered into
     //the array, we might need to make the array a list if it gets too big.
@@ -270,14 +264,15 @@ public class EncampmentHandler : MonoBehaviour
 
     }
 
-    void PlayClip(string str)
+    void PlayClip(Encampment encampment,string str)
     {
+        AudioSource tempSource = GetEncampmentGM(encampment).GetComponent<AudioSource>();
         if (str.Equals("attack"))
         {
             if (Random.Range(0, 2) == 0)
-                audioSource.PlayOneShot(attackClip1);
+                tempSource.PlayOneShot(attackClip1);
             else
-                audioSource.PlayOneShot(attackClip2);
+                tempSource.PlayOneShot(attackClip2);
         }
     }
     }
