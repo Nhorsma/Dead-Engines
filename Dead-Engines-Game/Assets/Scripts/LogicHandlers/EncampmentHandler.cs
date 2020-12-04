@@ -19,21 +19,22 @@ public class EncampmentHandler : MonoBehaviour
 
     public AudioSource audioSource;
     public AudioClip attackClip1, attackClip2;
+    public float volume;
 
     string[] depRec43 = { "gun", "gun", "gun" };
-    string[] depRec33 = { "gun", "APC", "gun" };
-    string[] depRec23 = { "gun", "gun", "APC", "APC" };
-    string[] depRec13 = { "gun", "APC", "gun", "APC" };
+    string[] depRec33 = { "gun", "APC_2", "gun" };
+    string[] depRec23 = { "gun", "gun", "APC_2", "APC_2" };
+    string[] depRec13 = { "gun", "APC_2", "gun", "APC_2" };
 
-    string[] depRec42 = { "gun", "gun", "APC" };
-    string[] depRec32 = { "gun", "APC", "gun", "APC"};
-    string[] depRec22 = { "APC", "APC", "Mech" };
-    string[] depRec12 = { "MECH", "APC", "Mech" };
+    string[] depRec42 = { "gun", "gun", "APC_2" };
+    string[] depRec32 = { "gun", "APC_2", "gun", "APC_2"};
+    string[] depRec22 = { "APC_2", "APC_2", "Mech 2" };
+    string[] depRec12 = { "Mech 2", "APC_2", "Mech 2" };
 
-    string[] depRec41 = { "gun", "gun", "gun", "APC"};
-    string[] depRec31 = { "gun", "gun", "APC", "APC", "Mech" };
-    string[] depRec21 = { "gun", "gun", "gun", "APC", "APC", "Mech", "Mech" };
-    string[] depRec11 = { "Mech", "gun", "gun", "APC", "APC", "Mech", "APC" };
+    string[] depRec41 = { "gun", "gun", "gun", "APC_2"};
+    string[] depRec31 = { "gun", "gun", "APC_2", "APC_2", "Mech 2" };
+    string[] depRec21 = { "gun", "gun", "gun", "APC_2", "APC_2", "Mech 2", "Mech 2" };
+    string[] depRec11 = { "Mech 2", "gun", "gun", "APC_2", "APC_2", "Mech 2", "APC_2" };
 
     void Start()
     {
@@ -146,8 +147,8 @@ public class EncampmentHandler : MonoBehaviour
         CheckDeployment(e);
         Vector3 spawnPlace = eGM[e.Id].transform.position + new Vector3(Random.Range(1, 3), 0, Random.Range(1, 3));
 
-        for(int i=0;i<e.Deployment.Length;i++)
-            Debug.Log(e.Deployment[i] +" : "+e.OnField);
+       // for(int i=0;i<e.Deployment.Length;i++)
+           // Debug.Log(e.Deployment[i] +" : "+e.OnField);
         var gm = Instantiate(Resources.Load(e.Deployment[e.OnField]), spawnPlace, transform.rotation);
 
         Enemy enemy = new Enemy();
@@ -171,7 +172,7 @@ public class EncampmentHandler : MonoBehaviour
         if (quant<=0)
         {
             e.Deployment = new string[50];
-            Debug.Log("whoops");
+            //Debug.Log("whoops");
             return;
         }
 
@@ -256,17 +257,10 @@ public class EncampmentHandler : MonoBehaviour
     }
 
 
-
-    //as the player explores and finds new encampments, new encampments should be entered into
-    //the array, we might need to make the array a list if it gets too big.
-    void ReplaceEncampment()
-    {
-
-    }
-
     void PlayClip(Encampment encampment,string str)
     {
         AudioSource tempSource = GetEncampmentGM(encampment).GetComponent<AudioSource>();
+        tempSource.volume = volume;
         if (str.Equals("attack"))
         {
             if (Random.Range(0, 2) == 0)

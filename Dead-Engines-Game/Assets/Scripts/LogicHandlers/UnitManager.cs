@@ -24,6 +24,9 @@ public class UnitManager : MonoBehaviour
     public AudioClip goingClip1, goingClip2, confirmPing, deadClip, shootClip,
                         dropOffClop, pickAxeClip;
 
+    Color enemyRed = new Color(207,67, 74);
+    Color resourceGreen = new Color(69, 207, 69);
+    Color selectedYellow = new Color(255, 255, 0);
     NavMeshAgent nv;
 
     //public AutomatonUI auto;
@@ -95,8 +98,7 @@ public class UnitManager : MonoBehaviour
             {
                 MoveAllSelected();
             }
-            ReadyClip(false);
-
+            ReadyClip();
         }
     }
 
@@ -216,7 +218,7 @@ public class UnitManager : MonoBehaviour
         }
         if (thing.tag == "Enemy" || thing.tag == "Encampment")
         {
-            int ri = GetResourceID(thing);
+            //int ri = GetResourceID(thing);
             foreach (GameObject gm in selectedUnits)
             {
                 Unit unit = GetUnit(gm);
@@ -358,6 +360,7 @@ public class UnitManager : MonoBehaviour
     {
         if (unit.Health <= 0)
         {
+            PlayClip("dead");
             GetUnitObject(unit).GetComponent<Animator>().SetBool("knockedOut", true);
             Debug.Log(unit + " is dead");
             unit.Job = "dead";
@@ -374,7 +377,6 @@ public class UnitManager : MonoBehaviour
     {
         if (!unit.CanSpawn)
         {
-            ReadyClip(true);
             yield return new WaitForSeconds(3f);
             GetUnitObject(unit).SetActive(false);
             GetUnitObject(unit).transform.position = robotPos;
@@ -478,14 +480,8 @@ public class UnitManager : MonoBehaviour
         return robotPos + new Vector3(-stoppingDistance + Random.Range(-3, 3), 0, -stoppingDistance + Random.Range(-3, 3));
     }
 
-    void ReadyClip(bool isDead)
+    void ReadyClip()
     {
-        if (isDead)
-        {
-            audioSource.PlayOneShot(deadClip);
-        }
-        else
-        {
             if (!audioSource.isPlaying)
                 if (Random.Range(0, 2) == 0)
                 {
@@ -495,7 +491,6 @@ public class UnitManager : MonoBehaviour
                 {
                     audioSource.PlayOneShot(goingClip2);
                 }
-        }
     }
 
     void PlayClip(string str)
@@ -524,5 +519,28 @@ public class UnitManager : MonoBehaviour
         {
             audioSource.PlayOneShot(shootClip);
         }
+        else if(str.Equals("dead"))
+        {
+            audioSource.PlayOneShot(deadClip);
+        }
+    }
+
+    void SetJobCircleColor(Unit unit, Color colorChange)
+    {
+        if (unit.JobPos.GetComponentInChildren<SpriteRenderer>() != null)
+        {
+            unit.JobPos.GetComponentInChildren<SpriteRenderer>().color = colorChange;
+        }
+    }
+
+    void ResetJob(Unit unit)
+    {
+        if (unit.Job == "Combat")
+            SetJobCircleColor(unit, enemyRed);
+        else if (unit.Job == "Extraction" + unit.JobPos.tag)
+            SetJobCircleColor(unit, resourceGreen);
+
+        unit.Job = "";
+        unit.JobPos = null;
     }
 }

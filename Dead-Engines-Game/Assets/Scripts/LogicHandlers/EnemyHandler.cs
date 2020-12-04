@@ -193,6 +193,7 @@ public class EnemyHandler : MonoBehaviour
     {
         if (e.Health <= 0)
         {
+            PlayClip(e.Camp, "die");
             Destroy(GetEnemyObject(e));
             eh.GetEncampment(e.Camp).OnField--; //
             enemies.Remove(e);
