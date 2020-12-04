@@ -189,7 +189,7 @@ public class EnemyHandler : MonoBehaviour
         Destroy(t);
     }
 
-    public void EnemyDead(Enemy e)
+    public bool EnemyDead(Enemy e)
     {
         if (e.Health <= 0)
         {
@@ -198,7 +198,9 @@ public class EnemyHandler : MonoBehaviour
             eh.GetEncampment(e.Camp).OnField--; //
             enemies.Remove(e);
             enemiesGM.Remove(GetEnemyObject(e));
+            return true;
         }
+        return false;
     }
 
     void PlayClip(GameObject encamp, string str)

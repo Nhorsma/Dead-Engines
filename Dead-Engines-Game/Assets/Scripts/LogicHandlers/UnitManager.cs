@@ -210,6 +210,8 @@ public class UnitManager : MonoBehaviour
             foreach (GameObject gm in selectedUnits)
             {
                 Unit unit = GetUnit(gm);
+
+                ResetJob(unit);
                 unit.Job = ("Extraction" + thing.tag); //////////////////////////////////////////////////////////////////////////////////////////////
                 unit.JobPos = (thing);
                 unit.JustDroppedOff = (true);
@@ -222,6 +224,7 @@ public class UnitManager : MonoBehaviour
             foreach (GameObject gm in selectedUnits)
             {
                 Unit unit = GetUnit(gm);
+                ResetJob(unit);
                 unit.Job = "Combat";
                 unit.JobPos = thing;
                 TravelTo(unitsGM[unit.Id], unit.JobPos.transform.position, true, true);
@@ -255,7 +258,6 @@ public class UnitManager : MonoBehaviour
         }
         return null;
     }
-
 
     void Extraction(Unit unit, int ri, string resource)
     {
@@ -343,7 +345,8 @@ public class UnitManager : MonoBehaviour
                     unit.JobPos = null;
                 }
                 eh.GetEnemy(hit.collider.gameObject).Health -= unitDamage;
-                eh.EnemyDead(eh.GetEnemy(hit.collider.gameObject));
+                if (eh.EnemyDead(eh.GetEnemy(hit.collider.gameObject)))
+                    ResetJob(unit);
 
                 //Debug.Log("enemy: " + gameObject.GetComponent<EnemyHandler>().GetEnemy(hit.collider.gameObject).Health);
             }
@@ -354,7 +357,6 @@ public class UnitManager : MonoBehaviour
             }
         }
     }
-
 
     public void UnitDown(Unit unit)
     {
@@ -527,7 +529,7 @@ public class UnitManager : MonoBehaviour
 
     void SetJobCircleColor(Unit unit, Color colorChange)
     {
-        if (unit.JobPos.GetComponentInChildren<SpriteRenderer>() != null)
+        if (unit.JobPos != null && unit.JobPos.GetComponentInChildren<SpriteRenderer>() != null)
         {
             unit.JobPos.GetComponentInChildren<SpriteRenderer>().color = colorChange;
         }
@@ -537,7 +539,7 @@ public class UnitManager : MonoBehaviour
     {
         if (unit.Job == "Combat")
             SetJobCircleColor(unit, enemyRed);
-        else if (unit.Job == "Extraction" + unit.JobPos.tag)
+        else if (unit.Job.Length>11 && unit.Job.Substring(0,10)== "Extraction")
             SetJobCircleColor(unit, resourceGreen);
 
         unit.Job = "";
