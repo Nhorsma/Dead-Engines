@@ -87,7 +87,7 @@ public class SelectItems : MonoBehaviour
 
     void Select()
     {
-            if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit, 100))
+            if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit, Mathf.Infinity))
             {
                 if (!hasCreatedSquare)
                 {

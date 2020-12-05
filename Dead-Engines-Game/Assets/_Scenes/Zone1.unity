@@ -7351,7 +7351,7 @@ MonoBehaviour:
   robotPos: {x: 10, y: 3, z: 8}
   robot: {fileID: 5905536743914566335}
   stoppingDistance: 30
-  pickUpDistance: 10
+  pickUpDistance: 20
   shootingDistance: 50
   downTime: 5
   unitDamage: 0
@@ -16403,7 +16403,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 862a106b974d5c0439cb1415926eaa5d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  res1: {fileID: 5843277777104625251, guid: d4b0a7922f6d12043bd2d214c5eeda0f, type: 3}
+  res1: {fileID: 4460762400422899061, guid: ec96bf792d7c7524f82c917806f489cb, type: 3}
   res2: {fileID: 6625301941321825569, guid: babc57232b4ad00408ed5e64c5faf108, type: 3}
   res3: {fileID: 6918073762920412359, guid: 8ac11d87adbfa564391425271f158bc9, type: 3}
   enemy: {fileID: 3500671454363015440, guid: 79a02ea539ec3c54ebab16eeef8dc84f, type: 3}
@@ -30309,7 +30309,7 @@ MonoBehaviour:
   maincam: {fileID: 1457351889}
   scrollspeed: 10
   closestScroll: 4
-  furthestScroll: 70
+  furthestScroll: 80
   camspeed: 2
   startSpeed: -8
   endSpeed: 5

@@ -106,8 +106,7 @@ public class UnitManager : MonoBehaviour
     {
         if (selectedUnits.Count == 1)
         {
-            units[0].Job = "none";
-            units[0].JobPos = null;
+            ResetJob(GetUnit(selectedUnits[0]));
             TravelTo(selectedUnits[0], Hit().point, false, false);
         }
         else if (selectedUnits.Count > 0)
@@ -124,11 +123,13 @@ public class UnitManager : MonoBehaviour
 
                     if (i == 0)
                     {
+                        ResetJob(GetUnit(selectedUnits[i]));
                         TravelTo(selectedUnits[i], Hit().point, false, false);
 
                     }
                     else if (i > 0)
                     {
+                        ResetJob(GetUnit(selectedUnits[i]));
                         Vector3 prevDes = selectedUnits[i - 1].GetComponent<NavMeshAgent>().destination;
                         Vector3 newDes = new Vector3();
                         if (i % 3 > 0)
@@ -215,6 +216,8 @@ public class UnitManager : MonoBehaviour
                 unit.Job = ("Extraction" + thing.tag); //////////////////////////////////////////////////////////////////////////////////////////////
                 unit.JobPos = (thing);
                 unit.JustDroppedOff = (true);
+
+                SetJobCircleColor(unit, selectedYellow);
                 TravelTo(unitsGM[unit.Id], unit.JobPos.transform.position, false, false);
             }
         }
@@ -227,6 +230,8 @@ public class UnitManager : MonoBehaviour
                 ResetJob(unit);
                 unit.Job = "Combat";
                 unit.JobPos = thing;
+
+                SetJobCircleColor(unit, selectedYellow);
                 TravelTo(unitsGM[unit.Id], unit.JobPos.transform.position, true, true);
             }
         }
@@ -537,12 +542,13 @@ public class UnitManager : MonoBehaviour
 
     void ResetJob(Unit unit)
     {
+        Debug.Log(unit.Job + ", " + unit.JobPos);
         if (unit.Job == "Combat")
             SetJobCircleColor(unit, enemyRed);
-        else if (unit.Job.Length>11 && unit.Job.Substring(0,10)== "Extraction")
+        else if (unit.JobPos!=null && (unit.JobPos.tag == "Metal" || unit.JobPos.tag == "Electronics"))
             SetJobCircleColor(unit, resourceGreen);
 
-        unit.Job = "";
+        unit.Job = "none";
         unit.JobPos = null;
     }
 }
