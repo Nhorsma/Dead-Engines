@@ -49,6 +49,11 @@ public class RoomManager : MonoBehaviour
 
 	public EffectConnector effectConnector;
 
+	public List<Text> refineryEntries;
+	public List<Text> refineryCosts;
+	public List<Button> refineryButtons;
+
+
 	void Start()
     {
 		for (int i = 0; i < 7; i++)
@@ -144,47 +149,75 @@ public class RoomManager : MonoBehaviour
 
 	void SetupRefinery(int slot) //////////////////////////////		miniTabs[slot].GetComponent<MiniTabHolder>().func00.GetComponentInChildren<Text>().text = "Unassign Unit";
 	{
+		GameObject con;
+
 		miniTabs[slot].GetComponent<MiniTabHolder>().build.gameObject.SetActive(false);
 
-		miniTabs[slot].GetComponent<MiniTabHolder>().func0.onClick.RemoveAllListeners();
-		miniTabs[slot].GetComponent<MiniTabHolder>().func0.GetComponentInChildren<Text>().text = "Assign Unit";
-		miniTabs[slot].GetComponent<MiniTabHolder>().func0.onClick.AddListener(delegate { Assign("refinery", rooms[slot]); });
-		miniTabs[slot].GetComponent<MiniTabHolder>().func0.gameObject.SetActive(true);
-
-		miniTabs[slot].GetComponent<MiniTabHolder>().upgrade.gameObject.SetActive(true);
 		miniTabs[slot].GetComponent<MiniTabHolder>().roomName.text = "Refinery";
 
-		miniTabs[slot].GetComponent<MiniTabHolder>().func1.GetComponentInChildren<Text>().text = "Refine Bolt";
-		miniTabs[slot].GetComponent<MiniTabHolder>().func2.GetComponentInChildren<Text>().text = "Refine Plate";
-		miniTabs[slot].GetComponent<MiniTabHolder>().func3.GetComponentInChildren<Text>().text = "Refine Part";
+		miniTabs[slot].GetComponent<MiniTabHolder>().upgrade.gameObject.SetActive(true);
 
-		miniTabs[slot].GetComponent<MiniTabHolder>().func1.onClick.RemoveAllListeners();
-		miniTabs[slot].GetComponent<MiniTabHolder>().func1.onClick.AddListener(delegate{ Refine("bolt"); }); ///////////////////////////////
-		miniTabs[slot].GetComponent<MiniTabHolder>().func1.gameObject.SetActive(true);
+		Debug.Log(rooms[slot].Type);
+		miniTabs[slot].GetComponent<MiniTabHolder>().assign.onClick.AddListener(delegate { Assign("refinery", rooms[slot]); });
+		miniTabs[slot].GetComponent<MiniTabHolder>().assign.gameObject.SetActive(true);
 
-		miniTabs[slot].GetComponent<MiniTabHolder>().func2.onClick.RemoveAllListeners();
-		miniTabs[slot].GetComponent<MiniTabHolder>().func2.onClick.AddListener(delegate { Refine("plate"); }); ///////////////////////////////
-		miniTabs[slot].GetComponent<MiniTabHolder>().func2.gameObject.SetActive(true);
+		miniTabs[slot].GetComponent<MiniTabHolder>().unassign.onClick.AddListener(delegate { Unassign("refinery", rooms[slot]); });
+		miniTabs[slot].GetComponent<MiniTabHolder>().unassign.gameObject.SetActive(true);
 
-		miniTabs[slot].GetComponent<MiniTabHolder>().func3.onClick.RemoveAllListeners();
-		miniTabs[slot].GetComponent<MiniTabHolder>().func3.onClick.AddListener(delegate { Refine("part"); }); ///////////////////////////////
-		miniTabs[slot].GetComponent<MiniTabHolder>().func3.gameObject.SetActive(true);
+		miniTabs[slot].GetComponent<MiniTabHolder>().capacity.text = "0/3";
 
-		miniTabs[slot].GetComponent<MiniTabHolder>().func4.GetComponentInChildren<Text>().text = "Refine Wire";
-		miniTabs[slot].GetComponent<MiniTabHolder>().func5.GetComponentInChildren<Text>().text = "Refine Chip";
-		miniTabs[slot].GetComponent<MiniTabHolder>().func6.GetComponentInChildren<Text>().text = "Refine Board";
+		miniTabs[slot].GetComponent<MiniTabHolder>().scroller.gameObject.SetActive(true);
 
-		miniTabs[slot].GetComponent<MiniTabHolder>().func4.onClick.RemoveAllListeners();
-		miniTabs[slot].GetComponent<MiniTabHolder>().func4.onClick.AddListener(delegate { Refine("wire"); }); ///////////////////////////////
-		miniTabs[slot].GetComponent<MiniTabHolder>().func4.gameObject.SetActive(true);
+		con = miniTabs[slot].GetComponent<MiniTabHolder>().scroller.GetComponent<ScrollRect>().content.gameObject;
 
-		miniTabs[slot].GetComponent<MiniTabHolder>().func5.onClick.RemoveAllListeners();
-		miniTabs[slot].GetComponent<MiniTabHolder>().func5.onClick.AddListener(delegate { Refine("chip"); }); ///////////////////////////////
-		miniTabs[slot].GetComponent<MiniTabHolder>().func5.gameObject.SetActive(true);
+		for (int i = 0; i < refineryEntries.Count; i++)
+		{
+			var i2 = i; // wow what bullshit thanks unity
+			Instantiate(refineryEntries[i], con.transform);
+			Instantiate(refineryCosts[i], con.transform);
 
-		miniTabs[slot].GetComponent<MiniTabHolder>().func6.onClick.RemoveAllListeners();
-		miniTabs[slot].GetComponent<MiniTabHolder>().func6.onClick.AddListener(delegate { Refine("board"); }); ///////////////////////////////
-		miniTabs[slot].GetComponent<MiniTabHolder>().func6.gameObject.SetActive(true);
+			Button craftOne = Instantiate(refineryButtons[0], con.transform);
+			craftOne.onClick.RemoveAllListeners();
+			craftOne.onClick.AddListener(delegate { Refine(refineryEntries[i2].text.ToString(), 1); });
+			Debug.Log(refineryEntries[i].text);
+
+			Button craftFive = Instantiate(refineryButtons[1], con.transform);
+			craftFive.onClick.RemoveAllListeners();
+			craftFive.onClick.AddListener(delegate { Refine(refineryEntries[i2].text.ToString(), 5); });
+		}
+
+
+		//miniTabs[slot].GetComponent<MiniTabHolder>().func1.GetComponentInChildren<Text>().text = "Refine Bolt";
+		//miniTabs[slot].GetComponent<MiniTabHolder>().func2.GetComponentInChildren<Text>().text = "Refine Plate";
+		//miniTabs[slot].GetComponent<MiniTabHolder>().func3.GetComponentInChildren<Text>().text = "Refine Part";
+
+		//miniTabs[slot].GetComponent<MiniTabHolder>().func1.onClick.RemoveAllListeners();
+		//miniTabs[slot].GetComponent<MiniTabHolder>().func1.onClick.AddListener(delegate{ Refine("bolt"); }); ///////////////////////////////
+		//miniTabs[slot].GetComponent<MiniTabHolder>().func1.gameObject.SetActive(true);
+
+		//miniTabs[slot].GetComponent<MiniTabHolder>().func2.onClick.RemoveAllListeners();
+		//miniTabs[slot].GetComponent<MiniTabHolder>().func2.onClick.AddListener(delegate { Refine("plate"); }); ///////////////////////////////
+		//miniTabs[slot].GetComponent<MiniTabHolder>().func2.gameObject.SetActive(true);
+
+		//miniTabs[slot].GetComponent<MiniTabHolder>().func3.onClick.RemoveAllListeners();
+		//miniTabs[slot].GetComponent<MiniTabHolder>().func3.onClick.AddListener(delegate { Refine("part"); }); ///////////////////////////////
+		//miniTabs[slot].GetComponent<MiniTabHolder>().func3.gameObject.SetActive(true);
+
+		//miniTabs[slot].GetComponent<MiniTabHolder>().func4.GetComponentInChildren<Text>().text = "Refine Wire";
+		//miniTabs[slot].GetComponent<MiniTabHolder>().func5.GetComponentInChildren<Text>().text = "Refine Chip";
+		//miniTabs[slot].GetComponent<MiniTabHolder>().func6.GetComponentInChildren<Text>().text = "Refine Board";
+
+		//miniTabs[slot].GetComponent<MiniTabHolder>().func4.onClick.RemoveAllListeners();
+		//miniTabs[slot].GetComponent<MiniTabHolder>().func4.onClick.AddListener(delegate { Refine("wire"); }); ///////////////////////////////
+		//miniTabs[slot].GetComponent<MiniTabHolder>().func4.gameObject.SetActive(true);
+
+		//miniTabs[slot].GetComponent<MiniTabHolder>().func5.onClick.RemoveAllListeners();
+		//miniTabs[slot].GetComponent<MiniTabHolder>().func5.onClick.AddListener(delegate { Refine("chip"); }); ///////////////////////////////
+		//miniTabs[slot].GetComponent<MiniTabHolder>().func5.gameObject.SetActive(true);
+
+		//miniTabs[slot].GetComponent<MiniTabHolder>().func6.onClick.RemoveAllListeners();
+		//miniTabs[slot].GetComponent<MiniTabHolder>().func6.onClick.AddListener(delegate { Refine("board"); }); ///////////////////////////////
+		//miniTabs[slot].GetComponent<MiniTabHolder>().func6.gameObject.SetActive(true);
 	}
 
 	void SetupStorage(int slot)
@@ -193,20 +226,20 @@ public class RoomManager : MonoBehaviour
 		miniTabs[slot].GetComponent<MiniTabHolder>().upgrade.gameObject.SetActive(true);
 		miniTabs[slot].GetComponent<MiniTabHolder>().roomName.text = "Storage";
 
-		miniTabs[slot].GetComponent<MiniTabHolder>().func1.GetComponentInChildren<Text>().text = "Sup";
-		miniTabs[slot].GetComponent<MiniTabHolder>().func2.GetComponentInChildren<Text>().text = "Discard 1 Electronics";
-		miniTabs[slot].GetComponent<MiniTabHolder>().func3.GetComponentInChildren<Text>().text = "Discard 1 Metal";
+		//miniTabs[slot].GetComponent<MiniTabHolder>().func1.GetComponentInChildren<Text>().text = "Sup";
+		//miniTabs[slot].GetComponent<MiniTabHolder>().func2.GetComponentInChildren<Text>().text = "Discard 1 Electronics";
+		//miniTabs[slot].GetComponent<MiniTabHolder>().func3.GetComponentInChildren<Text>().text = "Discard 1 Metal";
 
-		miniTabs[slot].GetComponent<MiniTabHolder>().func1.onClick.RemoveAllListeners();
-		miniTabs[slot].GetComponent<MiniTabHolder>().func1.onClick.AddListener(Sup); ///////////////////////////////
-		miniTabs[slot].GetComponent<MiniTabHolder>().func1.gameObject.SetActive(true);
+		//miniTabs[slot].GetComponent<MiniTabHolder>().func1.onClick.RemoveAllListeners();
+		//miniTabs[slot].GetComponent<MiniTabHolder>().func1.onClick.AddListener(Sup); ///////////////////////////////
+		//miniTabs[slot].GetComponent<MiniTabHolder>().func1.gameObject.SetActive(true);
 
 
-		miniTabs[slot].GetComponent<MiniTabHolder>().func2.onClick.RemoveAllListeners();
-		miniTabs[slot].GetComponent<MiniTabHolder>().func2.onClick.AddListener(delegate { Discard("electronics", 1); }); ///////////////////////////////
+		//miniTabs[slot].GetComponent<MiniTabHolder>().func2.onClick.RemoveAllListeners();
+		//miniTabs[slot].GetComponent<MiniTabHolder>().func2.onClick.AddListener(delegate { Discard("electronics", 1); }); ///////////////////////////////
 
-		miniTabs[slot].GetComponent<MiniTabHolder>().func3.onClick.RemoveAllListeners();
-		miniTabs[slot].GetComponent<MiniTabHolder>().func3.onClick.AddListener(delegate { Discard("electronics", 1); }); ///////////////////////////////
+		//miniTabs[slot].GetComponent<MiniTabHolder>().func3.onClick.RemoveAllListeners();
+		//miniTabs[slot].GetComponent<MiniTabHolder>().func3.onClick.AddListener(delegate { Discard("electronics", 1); }); ///////////////////////////////
 
 	}
 
@@ -216,21 +249,21 @@ public class RoomManager : MonoBehaviour
 		miniTabs[slot].GetComponent<MiniTabHolder>().upgrade.gameObject.SetActive(true);
 		miniTabs[slot].GetComponent<MiniTabHolder>().roomName.text = "Shrine";
 
-		miniTabs[slot].GetComponent<MiniTabHolder>().func1.GetComponentInChildren<Text>().text = "Assign Unit";
-		miniTabs[slot].GetComponent<MiniTabHolder>().func2.GetComponentInChildren<Text>().text = "Unassign Unit";
-		miniTabs[slot].GetComponent<MiniTabHolder>().func3.GetComponentInChildren<Text>().text = "Buff2";
+		//miniTabs[slot].GetComponent<MiniTabHolder>().func1.GetComponentInChildren<Text>().text = "Assign Unit";
+		//miniTabs[slot].GetComponent<MiniTabHolder>().func2.GetComponentInChildren<Text>().text = "Unassign Unit";
+		//miniTabs[slot].GetComponent<MiniTabHolder>().func3.GetComponentInChildren<Text>().text = "Buff2";
 
-		miniTabs[slot].GetComponent<MiniTabHolder>().func1.onClick.RemoveAllListeners();
-		miniTabs[slot].GetComponent<MiniTabHolder>().func1.onClick.AddListener(delegate { Assign("shrine", rooms[slot]); } ); ///////////////////////////////
-		miniTabs[slot].GetComponent<MiniTabHolder>().func1.gameObject.SetActive(true);
+		//miniTabs[slot].GetComponent<MiniTabHolder>().func1.onClick.RemoveAllListeners();
+		//miniTabs[slot].GetComponent<MiniTabHolder>().func1.onClick.AddListener(delegate { Assign("shrine", rooms[slot]); } ); ///////////////////////////////
+		//miniTabs[slot].GetComponent<MiniTabHolder>().func1.gameObject.SetActive(true);
 
-		miniTabs[slot].GetComponent<MiniTabHolder>().func2.onClick.RemoveAllListeners();
-		miniTabs[slot].GetComponent<MiniTabHolder>().func2.onClick.AddListener(Sup); ///////////////////////////////
-		miniTabs[slot].GetComponent<MiniTabHolder>().func2.gameObject.SetActive(true);
+		//miniTabs[slot].GetComponent<MiniTabHolder>().func2.onClick.RemoveAllListeners();
+		//miniTabs[slot].GetComponent<MiniTabHolder>().func2.onClick.AddListener(Sup); ///////////////////////////////
+		//miniTabs[slot].GetComponent<MiniTabHolder>().func2.gameObject.SetActive(true);
 
-		miniTabs[slot].GetComponent<MiniTabHolder>().func3.onClick.RemoveAllListeners();
-		miniTabs[slot].GetComponent<MiniTabHolder>().func3.onClick.AddListener(Sup); ///////////////////////////////
-		miniTabs[slot].GetComponent<MiniTabHolder>().func3.gameObject.SetActive(true);
+		//miniTabs[slot].GetComponent<MiniTabHolder>().func3.onClick.RemoveAllListeners();
+		//miniTabs[slot].GetComponent<MiniTabHolder>().func3.onClick.AddListener(Sup); ///////////////////////////////
+		//miniTabs[slot].GetComponent<MiniTabHolder>().func3.gameObject.SetActive(true);
 	}
 
 	void SetupStudy(int slot)
@@ -239,21 +272,21 @@ public class RoomManager : MonoBehaviour
 		miniTabs[slot].GetComponent<MiniTabHolder>().upgrade.gameObject.SetActive(true);
 		miniTabs[slot].GetComponent<MiniTabHolder>().roomName.text = "Study";
 
-		miniTabs[slot].GetComponent<MiniTabHolder>().func1.GetComponentInChildren<Text>().text = "Assign Unit";
-		miniTabs[slot].GetComponent<MiniTabHolder>().func2.GetComponentInChildren<Text>().text = "Unassign Unit";
-		miniTabs[slot].GetComponent<MiniTabHolder>().func3.GetComponentInChildren<Text>().text = "Buff2";
+		//miniTabs[slot].GetComponent<MiniTabHolder>().func1.GetComponentInChildren<Text>().text = "Assign Unit";
+		//miniTabs[slot].GetComponent<MiniTabHolder>().func2.GetComponentInChildren<Text>().text = "Unassign Unit";
+		//miniTabs[slot].GetComponent<MiniTabHolder>().func3.GetComponentInChildren<Text>().text = "Buff2";
 
-		miniTabs[slot].GetComponent<MiniTabHolder>().func1.onClick.RemoveAllListeners();
-		miniTabs[slot].GetComponent<MiniTabHolder>().func1.onClick.AddListener(delegate { Assign("study", rooms[slot]); }); ///////////////////////////////
-		miniTabs[slot].GetComponent<MiniTabHolder>().func1.gameObject.SetActive(true);
+		//miniTabs[slot].GetComponent<MiniTabHolder>().func1.onClick.RemoveAllListeners();
+		//miniTabs[slot].GetComponent<MiniTabHolder>().func1.onClick.AddListener(delegate { Assign("study", rooms[slot]); }); ///////////////////////////////
+		//miniTabs[slot].GetComponent<MiniTabHolder>().func1.gameObject.SetActive(true);
 
-		miniTabs[slot].GetComponent<MiniTabHolder>().func2.onClick.RemoveAllListeners();
-		miniTabs[slot].GetComponent<MiniTabHolder>().func2.onClick.AddListener(Sup); ///////////////////////////////
-		miniTabs[slot].GetComponent<MiniTabHolder>().func2.gameObject.SetActive(true);
+		//miniTabs[slot].GetComponent<MiniTabHolder>().func2.onClick.RemoveAllListeners();
+		//miniTabs[slot].GetComponent<MiniTabHolder>().func2.onClick.AddListener(Sup); ///////////////////////////////
+		//miniTabs[slot].GetComponent<MiniTabHolder>().func2.gameObject.SetActive(true);
 
-		miniTabs[slot].GetComponent<MiniTabHolder>().func3.onClick.RemoveAllListeners();
-		miniTabs[slot].GetComponent<MiniTabHolder>().func3.onClick.AddListener(Sup); ///////////////////////////////
-		miniTabs[slot].GetComponent<MiniTabHolder>().func3.gameObject.SetActive(true);
+		//miniTabs[slot].GetComponent<MiniTabHolder>().func3.onClick.RemoveAllListeners();
+		//miniTabs[slot].GetComponent<MiniTabHolder>().func3.onClick.AddListener(Sup); ///////////////////////////////
+		//miniTabs[slot].GetComponent<MiniTabHolder>().func3.gameObject.SetActive(true);
 	}
 
 	//this is a debug function for testing only!
@@ -262,157 +295,162 @@ public class RoomManager : MonoBehaviour
 		Debug.Log("Sup");
 	}
 
-	public void Refine(string what)
+	public void Refine(string what, int howMany)
 	{
 		int eff = 0;
 		eff = Random.Range(1, 11);
 
-		if (EffectConnector.efficiency > 0)
+		Debug.Log("ran");
+		Debug.Log(what);
+
+		for (int i = 0; i < howMany; i++)
 		{
-			if (what == "plate")
+			if (EffectConnector.efficiency > 0)
 			{
-				if (ResourceHandling.metal >= 3)
+				if (what == "plate")
 				{
-					ResourceHandling.plate++;
-					ResourceHandling.metal -= 3;
-					Debug.Log("Success");
-					if (eff <= EffectConnector.efficiency)
+					if (ResourceHandling.metal >= 3)
 					{
-						if (eff % 2 == 0)
+						ResourceHandling.plate++;
+						ResourceHandling.metal -= 3;
+						Debug.Log("Success");
+						if (eff <= EffectConnector.efficiency)
 						{
-							ResourceHandling.metal++;
-						}
-						else
-						{
-							ResourceHandling.metal += 2;
+							if (eff % 2 == 0)
+							{
+								ResourceHandling.metal++;
+							}
+							else
+							{
+								ResourceHandling.metal += 2;
+							}
 						}
 					}
+					else
+					{
+						Debug.Log("Failure");
+					}
 				}
-				else
+				else if (what == "bolt")
 				{
-					Debug.Log("Failure");
+					if (ResourceHandling.metal >= 1)
+					{
+						ResourceHandling.bolt++;
+						ResourceHandling.metal--;
+						Debug.Log("Success");
+						if (eff <= EffectConnector.efficiency)
+						{
+							if (eff % 2 == 0)
+							{
+								ResourceHandling.metal++;
+							}
+						}
+					}
+					else
+					{
+						Debug.Log("Failure");
+					}
+				}
+				else if (what == "part")
+				{
+					if (ResourceHandling.plate >= 2 && ResourceHandling.bolt >= 2)
+					{
+						ResourceHandling.part++;
+						ResourceHandling.plate -= 2;
+						ResourceHandling.bolt -= 2;
+						Debug.Log("Success");
+						if (eff <= EffectConnector.efficiency)
+						{
+							if (eff % 2 == 0)
+							{
+								ResourceHandling.bolt += 2;
+							}
+							else
+							{
+								ResourceHandling.plate++;
+							}
+						}
+					}
+					else
+					{
+						Debug.Log("Failure");
+					}
+				}
+				else if (what == "chip")
+				{
+					if (ResourceHandling.electronics >= 3)
+					{
+						ResourceHandling.chip++;
+						ResourceHandling.electronics -= 3;
+						Debug.Log("Success");
+						if (eff <= EffectConnector.efficiency)
+						{
+							if (eff % 2 == 0)
+							{
+								ResourceHandling.electronics++;
+							}
+							else
+							{
+								ResourceHandling.electronics += 2;
+							}
+						}
+					}
+					else
+					{
+						Debug.Log("Failure");
+					}
+				}
+				else if (what == "wire")
+				{
+					if (ResourceHandling.electronics >= 1)
+					{
+						ResourceHandling.wire++;
+						ResourceHandling.electronics--;
+						Debug.Log("Success");
+						if (eff <= EffectConnector.efficiency)
+						{
+							if (eff % 2 == 0)
+							{
+								ResourceHandling.electronics++;
+							}
+						}
+					}
+					else
+					{
+						Debug.Log("Failure");
+					}
+				}
+				else if (what == "board")
+				{
+					if (ResourceHandling.chip >= 1 && ResourceHandling.wire >= 2)
+					{
+						ResourceHandling.board++;
+						ResourceHandling.chip--;
+						ResourceHandling.wire -= 2;
+						Debug.Log("Success");
+						if (eff <= EffectConnector.efficiency)
+						{
+							if (eff % 2 == 0)
+							{
+								ResourceHandling.wire += 2;
+							}
+							else
+							{
+								ResourceHandling.chip++;
+							}
+						}
+					}
+					else
+					{
+						Debug.Log("Failure");
+					}
 				}
 			}
-			else if (what == "bolt")
+			else
 			{
-				if (ResourceHandling.metal >= 1)
-				{
-					ResourceHandling.bolt++;
-					ResourceHandling.metal--;
-					Debug.Log("Success");
-					if (eff <= EffectConnector.efficiency)
-					{
-						if (eff % 2 == 0)
-						{
-							ResourceHandling.metal++;
-						}
-					}
-				}
-				else
-				{
-					Debug.Log("Failure");
-				}
-			}
-			else if (what == "part")
-			{
-				if (ResourceHandling.plate >= 2 && ResourceHandling.bolt >= 2)
-				{
-					ResourceHandling.part++;
-					ResourceHandling.plate -= 2;
-					ResourceHandling.bolt -= 2;
-					Debug.Log("Success");
-					if (eff <= EffectConnector.efficiency)
-					{
-						if (eff % 2 == 0)
-						{
-							ResourceHandling.bolt += 2;
-						}
-						else
-						{
-							ResourceHandling.plate++;
-						}
-					}
-				}
-				else
-				{
-					Debug.Log("Failure");
-				}
-			}
-			else if (what == "chip")
-			{
-				if (ResourceHandling.electronics >= 3)
-				{
-					ResourceHandling.chip++;
-					ResourceHandling.electronics -= 3;
-					Debug.Log("Success");
-					if (eff <= EffectConnector.efficiency)
-					{
-						if (eff % 2 == 0)
-						{
-							ResourceHandling.electronics++;
-						}
-						else
-						{
-							ResourceHandling.electronics += 2;
-						}
-					}
-				}
-				else
-				{
-					Debug.Log("Failure");
-				}
-			}
-			else if (what == "wire")
-			{
-				if (ResourceHandling.electronics >= 1)
-				{
-					ResourceHandling.wire++;
-					ResourceHandling.electronics--;
-					Debug.Log("Success");
-					if (eff <= EffectConnector.efficiency)
-					{
-						if (eff % 2 == 0)
-						{
-							ResourceHandling.electronics++;
-						}
-					}
-				}
-				else
-				{
-					Debug.Log("Failure");
-				}
-			}
-			else if (what == "board")
-			{
-				if (ResourceHandling.chip >= 1 && ResourceHandling.wire >= 2)
-				{
-					ResourceHandling.board++;
-					ResourceHandling.chip--;
-					ResourceHandling.wire -= 2;
-					Debug.Log("Success");
-					if (eff <= EffectConnector.efficiency)
-					{
-						if (eff % 2 == 0)
-						{
-							ResourceHandling.wire += 2;
-						}
-						else
-						{
-							ResourceHandling.chip++;
-						}
-					}
-				}
-				else
-				{
-					Debug.Log("Failure");
-				}
+				Debug.Log("No workers, can't refine!");
 			}
 		}
-		else
-		{
-			Debug.Log("No workers, can't refine!");
-		}
-		
 	}
 
 	//needs to be overhauled

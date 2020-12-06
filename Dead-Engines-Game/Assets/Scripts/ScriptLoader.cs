@@ -9,7 +9,7 @@ public class ScriptLoader : MonoBehaviour
 
 	public StartTilePlacement startTilePlacement;
 	public SpawnRes spawnRes;
-	public GameObject block1, block2, block3;
+	public GameObject block1, block2, block3, block_test;
 	public AutomatonUI automatonUI;
 	public GameObject automatonObj;
 	//public AutomotonAction automatonAction;
@@ -50,6 +50,12 @@ public class ScriptLoader : MonoBehaviour
 		Debug.Log("buffer complete");
 
 		block3.SetActive(true);
+
+		Debug.Log("start buffer");
+		yield return new WaitForSeconds(1f);
+		Debug.Log("buffer complete");
+
+		block_test.SetActive(true);
 
 		Debug.Log("start buffer");
 		yield return new WaitForSeconds(1f);
