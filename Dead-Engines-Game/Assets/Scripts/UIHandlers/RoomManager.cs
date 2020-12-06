@@ -53,6 +53,18 @@ public class RoomManager : MonoBehaviour
 	public List<Text> refineryCosts;
 	public List<Button> refineryButtons;
 
+	public List<Text> storageEntries;
+	public List<Text> storageDesc;
+	public List<Button> storageButtons;
+
+	public List<Button> shrineEffectButtons;
+	public List<string> shrineEffectKeys;
+	public List<string> shrineEffectDescs;
+
+	public List<Button> studyEffectButtons;
+	public List<string> studyEffectKeys;
+	public List<string> studyEffectDescs;
+
 
 	void Start()
     {
@@ -225,6 +237,30 @@ public class RoomManager : MonoBehaviour
 		miniTabs[slot].GetComponent<MiniTabHolder>().build.gameObject.SetActive(false);
 		miniTabs[slot].GetComponent<MiniTabHolder>().upgrade.gameObject.SetActive(true);
 		miniTabs[slot].GetComponent<MiniTabHolder>().roomName.text = "Storage";
+		
+		//
+		GameObject con;
+
+		miniTabs[slot].GetComponent<MiniTabHolder>().capacity.text = "0/0";
+
+		miniTabs[slot].GetComponent<MiniTabHolder>().scroller.gameObject.SetActive(true);
+
+		con = miniTabs[slot].GetComponent<MiniTabHolder>().scroller.GetComponent<ScrollRect>().content.gameObject;
+
+		for (int i = 0; i < storageEntries.Count; i++)
+		{
+			var i2 = i; // wow what bullshit thanks unity
+			Instantiate(storageEntries[i], con.transform);
+			Instantiate(storageDesc[i], con.transform);
+
+			Button discardOne = Instantiate(storageButtons[0], con.transform);
+			discardOne.onClick.RemoveAllListeners();
+			discardOne.onClick.AddListener(delegate { Discard(storageEntries[i2].text.ToString(), 1); });
+
+			Button discardFive = Instantiate(storageButtons[1], con.transform);
+			discardFive.onClick.RemoveAllListeners();
+			discardFive.onClick.AddListener(delegate { Discard(storageEntries[i2].text.ToString(), 5); });
+		}
 
 		//miniTabs[slot].GetComponent<MiniTabHolder>().func1.GetComponentInChildren<Text>().text = "Sup";
 		//miniTabs[slot].GetComponent<MiniTabHolder>().func2.GetComponentInChildren<Text>().text = "Discard 1 Electronics";
@@ -249,6 +285,35 @@ public class RoomManager : MonoBehaviour
 		miniTabs[slot].GetComponent<MiniTabHolder>().upgrade.gameObject.SetActive(true);
 		miniTabs[slot].GetComponent<MiniTabHolder>().roomName.text = "Shrine";
 
+		//
+		GameObject con;
+
+		miniTabs[slot].GetComponent<MiniTabHolder>().assign.onClick.AddListener(delegate { Assign("shrine", rooms[slot]); });
+		miniTabs[slot].GetComponent<MiniTabHolder>().assign.gameObject.SetActive(true);
+
+		miniTabs[slot].GetComponent<MiniTabHolder>().unassign.onClick.AddListener(delegate { Unassign("shrine", rooms[slot]); });
+		miniTabs[slot].GetComponent<MiniTabHolder>().unassign.gameObject.SetActive(true);
+
+		miniTabs[slot].GetComponent<MiniTabHolder>().capacity.text = "0/3";
+
+		miniTabs[slot].GetComponent<MiniTabHolder>().scroller.gameObject.SetActive(true);
+
+		con = miniTabs[slot].GetComponent<MiniTabHolder>().scroller.GetComponent<ScrollRect>().content.gameObject;
+		con.GetComponent<GridLayoutGroup>().constraintCount = 1;
+		con.GetComponent<GridLayoutGroup>().cellSize = new Vector2(225, 50);
+
+		for (int i = 0; i < shrineEffectButtons.Count; i++)
+		{
+			var i2 = i; // wow what bullshit thanks unity
+			Button buffer = Instantiate(shrineEffectButtons[i], con.transform);
+			buffer.onClick.RemoveAllListeners();
+			buffer.onClick.AddListener(delegate { SetActiveEffect(shrineEffectKeys[i2], rooms[slot]); });
+			buffer.GetComponentInChildren<Text>().text = shrineEffectDescs[i2];
+		}
+
+		rooms[slot].ActiveEffect = "none";
+		Worship();
+
 		//miniTabs[slot].GetComponent<MiniTabHolder>().func1.GetComponentInChildren<Text>().text = "Assign Unit";
 		//miniTabs[slot].GetComponent<MiniTabHolder>().func2.GetComponentInChildren<Text>().text = "Unassign Unit";
 		//miniTabs[slot].GetComponent<MiniTabHolder>().func3.GetComponentInChildren<Text>().text = "Buff2";
@@ -272,21 +337,34 @@ public class RoomManager : MonoBehaviour
 		miniTabs[slot].GetComponent<MiniTabHolder>().upgrade.gameObject.SetActive(true);
 		miniTabs[slot].GetComponent<MiniTabHolder>().roomName.text = "Study";
 
-		//miniTabs[slot].GetComponent<MiniTabHolder>().func1.GetComponentInChildren<Text>().text = "Assign Unit";
-		//miniTabs[slot].GetComponent<MiniTabHolder>().func2.GetComponentInChildren<Text>().text = "Unassign Unit";
-		//miniTabs[slot].GetComponent<MiniTabHolder>().func3.GetComponentInChildren<Text>().text = "Buff2";
+		//
+		GameObject con;
 
-		//miniTabs[slot].GetComponent<MiniTabHolder>().func1.onClick.RemoveAllListeners();
-		//miniTabs[slot].GetComponent<MiniTabHolder>().func1.onClick.AddListener(delegate { Assign("study", rooms[slot]); }); ///////////////////////////////
-		//miniTabs[slot].GetComponent<MiniTabHolder>().func1.gameObject.SetActive(true);
+		miniTabs[slot].GetComponent<MiniTabHolder>().assign.onClick.AddListener(delegate { Assign("study", rooms[slot]); });
+		miniTabs[slot].GetComponent<MiniTabHolder>().assign.gameObject.SetActive(true);
 
-		//miniTabs[slot].GetComponent<MiniTabHolder>().func2.onClick.RemoveAllListeners();
-		//miniTabs[slot].GetComponent<MiniTabHolder>().func2.onClick.AddListener(Sup); ///////////////////////////////
-		//miniTabs[slot].GetComponent<MiniTabHolder>().func2.gameObject.SetActive(true);
+		miniTabs[slot].GetComponent<MiniTabHolder>().unassign.onClick.AddListener(delegate { Unassign("study", rooms[slot]); });
+		miniTabs[slot].GetComponent<MiniTabHolder>().unassign.gameObject.SetActive(true);
 
-		//miniTabs[slot].GetComponent<MiniTabHolder>().func3.onClick.RemoveAllListeners();
-		//miniTabs[slot].GetComponent<MiniTabHolder>().func3.onClick.AddListener(Sup); ///////////////////////////////
-		//miniTabs[slot].GetComponent<MiniTabHolder>().func3.gameObject.SetActive(true);
+		miniTabs[slot].GetComponent<MiniTabHolder>().capacity.text = "0/3";
+
+		miniTabs[slot].GetComponent<MiniTabHolder>().scroller.gameObject.SetActive(true);
+
+		con = miniTabs[slot].GetComponent<MiniTabHolder>().scroller.GetComponent<ScrollRect>().content.gameObject;
+		con.GetComponent<GridLayoutGroup>().constraintCount = 1;
+		con.GetComponent<GridLayoutGroup>().cellSize = new Vector2(225, 50);
+
+		for (int i = 0; i < studyEffectButtons.Count; i++)
+		{
+			var i2 = i; // wow what bullshit thanks unity
+			Button buffer = Instantiate(studyEffectButtons[i], con.transform);
+			buffer.onClick.RemoveAllListeners();
+			buffer.onClick.AddListener(delegate { SetActiveEffect(studyEffectKeys[i2], rooms[slot]); });
+			buffer.GetComponentInChildren<Text>().text = studyEffectDescs[i2];
+		}
+
+		rooms[slot].ActiveEffect = "none";
+		Research();
 	}
 
 	//this is a debug function for testing only!
@@ -453,7 +531,6 @@ public class RoomManager : MonoBehaviour
 		}
 	}
 
-	//needs to be overhauled
 	public void Discard(string what, int howMany)
 	{
 		if (what == "metal" && ResourceHandling.metal >= howMany)
@@ -514,12 +591,10 @@ public class RoomManager : MonoBehaviour
 
 			if (r.Type == "shrine")
 			{
-				r.ActiveEffect = "unitSpeed";
 				Worship();
 			}
 			else if (r.Type == "study")
 			{
-				r.ActiveEffect = "roomCost";
 				Research();
 			}
 			else if (r.Type == "refinery")
@@ -555,12 +630,10 @@ public class RoomManager : MonoBehaviour
 
 			if (r.Type == "shrine")
 			{
-				r.ActiveEffect = "unitSpeed";
 				Worship();
 			}
 			else if (r.Type == "study")
 			{
-				r.ActiveEffect = "roomCost";
 				Research();
 			}
 			else if (r.Type == "refinery")
@@ -583,8 +656,9 @@ public class RoomManager : MonoBehaviour
 
 		foreach (Room r in rooms)
 		{
-			if (r.Type == "shrine" && r.Workers.Count > 0)
+			if (r.Type == "shrine")
 			{
+				r.WorkMultiplier = r.Workers.Count;
 				Debug.Log("Shrine[" + r.Slot + "]: " + r.WorkMultiplier + "x boost");
 				combinedMultiplier += r.WorkMultiplier; //case for multiples of the same room
 				effects.Add(r.ActiveEffect);
@@ -595,15 +669,16 @@ public class RoomManager : MonoBehaviour
 		//calculate effects
 		foreach (string e in effects)
 		{
-			if (e == "none")
+			if (e == "unitSpeed")  //-----------------------> r.ActiveEffect will be set by a button that is activated once room is upgraded
 			{
-				return;
+				EffectConnector.unitSpeed = EffectConnector.unitBaseSpeed + combinedMultiplier;
+				//Debug.Log("EffectConnecter.unitBaseSpeed : " + EffectConnector.unitBaseSpeed + " , " + combinedMultiplier);
 			}
-			else if (e == "unitSpeed")	//-----------------------> r.ActiveEffect will be set by a button that is activated once room is upgraded
+			else if (e == "none")
 			{
-				EffectConnector.unitSpeed = EffectConnector.unitBaseSpeed + combinedMultiplier; ////////////////////////////////////////////////////////////
-				//Debug.Log("Unit Speed: " + EffectConnector.unitSpeed);
+				EffectConnector.unitSpeed = EffectConnector.unitBaseSpeed + 0; // --------------------------------------------------------------------> forseeable issues with multiple shrines
 			}
+
 		}
 		effectConnector.Recalculate();
 	}
@@ -616,7 +691,7 @@ public class RoomManager : MonoBehaviour
 
 		foreach (Room r in rooms)
 		{
-			if (r.Type == "study" && r.Workers.Count > 0)
+			if (r.Type == "study")
 			{
 				Debug.Log("Study[" + r.Slot + "]: " + r.WorkMultiplier + "x boost");
 				combinedMultiplier += r.WorkMultiplier; //case for multiples of the same room
@@ -628,18 +703,32 @@ public class RoomManager : MonoBehaviour
 		//calculate effects
 		foreach (string e in effects)
 		{
-
-			if (e == "none")
+			if (e == "roomCost")    //-----------------------> r.ActiveEffect will be set by a button that is activated once room is upgraded
 			{
-				return;
-			}
-			else if (e == "roomCost")    //-----------------------> r.ActiveEffect will be set by a button that is activated once room is upgraded
-			{
-				Debug.Log("hit?");
 				EffectConnector.roomCost = combinedMultiplier + 1;
 			}
+			else if (e == "none")
+			{
+				EffectConnector.roomCost = 1 + 0; // ------------------------------------------------------------------------------------------------> forseeable issues with multiple studies
+				return;
+			}
+
 		}
 		effectConnector.Recalculate();
+	}
+
+	public void SetActiveEffect(string buff, Room r)
+	{
+		r.ActiveEffect = buff;
+		Debug.Log("Active effect of [ " + r.Type + " " + r.Slot + " ] is now : " + r.ActiveEffect + ".");
+		if (r.Type == "shrine")
+		{
+			Worship();
+		}
+		else if (r.Type == "study")
+		{
+			Research();
+		}
 	}
 
 	public void Produce()
