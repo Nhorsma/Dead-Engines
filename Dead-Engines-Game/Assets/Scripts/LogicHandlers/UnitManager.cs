@@ -24,9 +24,9 @@ public class UnitManager : MonoBehaviour
     public AudioClip goingClip1, goingClip2, confirmPing, deadClip, shootClip,
                         dropOffClop, pickAxeClip;
 
-    Color enemyRed = new Color(207,67, 74);
-    Color resourceGreen = new Color(69, 207, 69);
-    Color selectedYellow = new Color(255, 255, 0);
+    Color enemyRed = new Color32(207,67, 74, 100);
+    Color resourceGreen = new Color32(69, 207, 69, 100);
+    Color selectedYellow = new Color32(255, 255, 0, 100);
     NavMeshAgent nv;
 
     //public AutomatonUI auto;
@@ -216,8 +216,7 @@ public class UnitManager : MonoBehaviour
                 unit.Job = ("Extraction" + thing.tag); //////////////////////////////////////////////////////////////////////////////////////////////
                 unit.JobPos = (thing);
                 unit.JustDroppedOff = (true);
-
-                SetJobCircleColor(unit, selectedYellow);
+              
                 TravelTo(unitsGM[unit.Id], unit.JobPos.transform.position, false, false);
             }
         }
@@ -230,14 +229,12 @@ public class UnitManager : MonoBehaviour
                 ResetJob(unit);
                 unit.Job = "Combat";
                 unit.JobPos = thing;
-
-                SetJobCircleColor(unit, selectedYellow);
+               
                 TravelTo(unitsGM[unit.Id], unit.JobPos.transform.position, true, true);
             }
         }
         PlayClip("ping");
     }
-
 
     int GetResourceID(GameObject gm)
     {
@@ -451,6 +448,7 @@ public class UnitManager : MonoBehaviour
     {
         GetUnitObject(unit).transform.position = FindSpotToSpawn();
         GetUnitObject(unit).SetActive(true);
+        ResetJob(unit);
     }
 
     GameObject BulletTrail(Vector3 start, Vector3 end)
@@ -532,22 +530,26 @@ public class UnitManager : MonoBehaviour
         }
     }
 
-    void SetJobCircleColor(Unit unit, Color colorChange)
+    public void SetJobCircleColor(Unit unit, Color colorChange)
     {
         if (unit.JobPos != null && unit.JobPos.GetComponentInChildren<SpriteRenderer>() != null)
         {
             unit.JobPos.GetComponentInChildren<SpriteRenderer>().color = colorChange;
+            Debug.Log(unit.JobPos.GetComponentInChildren<SpriteRenderer>().color);
         }
+    }
+
+    public void ResetColor(Unit unit)
+    {
+        if(unit.Job == "Combat")
+            SetJobCircleColor(unit, enemyRed);
+        else if (unit.JobPos != null && (unit.JobPos.tag == "Metal" || unit.JobPos.tag == "Electronics"))
+            SetJobCircleColor(unit, resourceGreen);
     }
 
     void ResetJob(Unit unit)
     {
-        Debug.Log(unit.Job + ", " + unit.JobPos);
-        if (unit.Job == "Combat")
-            SetJobCircleColor(unit, enemyRed);
-        else if (unit.JobPos!=null && (unit.JobPos.tag == "Metal" || unit.JobPos.tag == "Electronics"))
-            SetJobCircleColor(unit, resourceGreen);
-
+        ResetColor(unit);
         unit.Job = "none";
         unit.JobPos = null;
     }

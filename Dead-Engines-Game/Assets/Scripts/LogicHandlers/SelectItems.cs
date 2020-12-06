@@ -15,7 +15,12 @@ public class SelectItems : MonoBehaviour
     public Material highlightMaterial;
     public Material selectedMaterial;
 
-    Color normalC, highLightedC, selectedC;
+    Color normalC = new Color32(0, 100, 100, 100);
+    Color highLightedC = new Color32(255, 0, 255, 100);
+    Color selectedC = new Color32(255, 255, 0, 100);
+    Color enemyRed = new Color32(207, 67, 74, 100);
+    Color resourceGreen = new Color32(69, 207, 69, 100);
+    Color selectedYellow = new Color32(255, 255, 0, 100);
 
     GameObject highlightThisUnit;
     public GameObject g1, g2; 
@@ -45,10 +50,6 @@ public class SelectItems : MonoBehaviour
         um = this.gameObject.GetComponent<UnitManager>();
         selectionSquareTrans = selectionSquare.rectTransform;
         mouseSecond = mouseFirst = (Input.mousePosition);
-
-        normalC = new Color(0, 100, 100);
-        highLightedC = new Color(255, 0, 255);
-        selectedC = new Color(255, 255, 0);
 
         audioSource = Camera.main.GetComponent<AudioSource>();
 
@@ -95,7 +96,8 @@ public class SelectItems : MonoBehaviour
                     if (hit.collider.CompareTag("Friendly") && !UnitManager.selectedUnits.Contains(hit.collider.gameObject))
                     {
                         UnitManager.selectedUnits.Add(hit.collider.gameObject);
-                        hit.collider.gameObject.GetComponentInChildren<SpriteRenderer>().color = selectedC;
+                        SetColor(hit.collider.gameObject, false);
+                    //hit.collider.gameObject.GetComponentInChildren<SpriteRenderer>().color = selectedC;
 
 					    UpdateUnitUI(um.GetUnit(hit.collider.gameObject)); //////////////////////////////////////////
                         ReadyClip();
@@ -241,16 +243,17 @@ public class SelectItems : MonoBehaviour
             //Is this unit within the square
             if (InRect(currentUnit.transform.position))
             {
-                currentUnit.GetComponentInChildren<SpriteRenderer>().color = selectedC;
-                //currentUnit.GetComponentInChildren<MeshRenderer>().material = selectedMaterial;
+                //currentUnit.GetComponentInChildren<SpriteRenderer>().color = selectedC;
+                SetColor(currentUnit, false);
+
                 UnitManager.selectedUnits.Add(currentUnit);
                 ReadyClip();
             }
             //Otherwise deselect the unit if it's not in the square
             else
             {
-                currentUnit.GetComponentInChildren<SpriteRenderer>().color = normalC;
-                //currentUnit.GetComponentInChildren<MeshRenderer>().material = normalMaterial;
+                //currentUnit.GetComponentInChildren<SpriteRenderer>().color = normalC;
+                SetColor(currentUnit, true);
             }
         }
 		if (UnitManager.selectedUnits.Count == 1)
@@ -298,8 +301,8 @@ public class SelectItems : MonoBehaviour
     {
         for(int i=0;i< UnitManager.selectedUnits.Count;i++)
         {
-            UnitManager.selectedUnits[i].GetComponentInChildren<SpriteRenderer>().color = normalC;
-            //UnitManager.selectedUnits[i].GetComponentInChildren<MeshRenderer>().material = normalMaterial;
+            //UnitManager.selectedUnits[i].GetComponentInChildren<SpriteRenderer>().color = normalC;
+            SetColor(UnitManager.selectedUnits[i], true);
         }
         UnitManager.selectedUnits.Clear();
 		unitUIPanel.SetActive(false);
@@ -315,7 +318,8 @@ public class SelectItems : MonoBehaviour
     {
         UnitManager.selectedUnits.Remove(gm);
         //gm.GetComponentInChildren<MeshRenderer>().material = normalMaterial;
-        gm.GetComponentInChildren<SpriteRenderer>().color = normalC;
+        //gm.GetComponentInChildren<SpriteRenderer>().color = normalC;
+        SetColor(gm, true);
     }
 
 	public void UpdateUnitUI(Unit u)
@@ -337,6 +341,23 @@ public class SelectItems : MonoBehaviour
             audioSource.PlayOneShot(readyClip1);
         else
             audioSource.PlayOneShot(readyClip2);
+    }
+
+    void SetColor(GameObject gameObj, bool reset)
+    {
+        if (gameObj.GetComponentInChildren<SpriteRenderer>()==null)
+            return;
+        
+        if(reset)
+        {
+            gameObj.GetComponentInChildren<SpriteRenderer>().color = normalC;
+            um.ResetColor(um.GetUnit(gameObj));
+        }
+        else
+        {
+            gameObj.GetComponentInChildren<SpriteRenderer>().color = selectedC;
+            um.SetJobCircleColor(um.GetUnit(gameObj), selectedYellow);
+        }
     }
 
 }
