@@ -106,7 +106,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3500671454363015440}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -127.6712, y: -7, z: 169.56082}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 7892973958505443211}
@@ -124,8 +124,8 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 25.000416, y: 22.37087, z: 25.196716}
-  m_Center: {x: -1.1532726, y: 10.685435, z: 1.1127167}
+  m_Size: {x: 26.841562, y: 2.950243, z: 25.196716}
+  m_Center: {x: -0.2326994, y: 0.9751215, z: 1.1127167}
 --- !u!208 &8205760310627590830
 NavMeshObstacle:
   m_ObjectHideFlags: 0
@@ -136,7 +136,7 @@ NavMeshObstacle:
   m_Enabled: 1
   serializedVersion: 3
   m_Shape: 1
-  m_Extents: {x: 12.5, y: 12.5, z: 12.5}
+  m_Extents: {x: 15, y: 12.5, z: 15}
   m_MoveThreshold: 0.1
   m_Carve: 0
   m_CarveOnlyStationary: 1

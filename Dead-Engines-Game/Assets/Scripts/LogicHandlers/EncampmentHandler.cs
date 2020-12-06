@@ -145,7 +145,7 @@ public class EncampmentHandler : MonoBehaviour
     {
         PlayClip(e,"attack");
         CheckDeployment(e);
-        Vector3 spawnPlace = eGM[e.Id].transform.position + new Vector3(Random.Range(1, 3), 0, Random.Range(1, 3));
+        Vector3 spawnPlace = eGM[e.Id].transform.position + new Vector3(Random.Range(1, 5), 0, Random.Range(1, 5));
 
        // for(int i=0;i<e.Deployment.Length;i++)
            // Debug.Log(e.Deployment[i] +" : "+e.OnField);
@@ -155,6 +155,7 @@ public class EncampmentHandler : MonoBehaviour
         enemy.Rec = e.ClosestRec;
         enemy.Camp = GetEncampmentGM(e);
         enemy.Id = eh.enemiesGM.Count;
+        enemy.Obj = (GameObject)gm;
 
         eh.enemiesGM.Add((GameObject)gm);
         eh.enemies.Add(enemy);

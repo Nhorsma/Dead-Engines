@@ -20,7 +20,7 @@ public class EnemyHandler : MonoBehaviour
         enemiesGM = new List<GameObject>();
         enemies = new List<Enemy>();
         spawn = GetComponent<SpawnRes>();
-        eh = GetComponent<EncampmentHandler>(); //
+        eh = GetComponent<EncampmentHandler>();
     }
 
     private void Update()
@@ -32,11 +32,15 @@ public class EnemyHandler : MonoBehaviour
     //-----------------------------------------------------------------------------------------
     //-----------------------------------------------------------------------------------------
 
-
-
     public GameObject GetEnemyObject(Enemy ene)
-    {
+    {/*
+        if (ene.Id < 0 && ene.Id > enemies.Count)
+            return null;
+        Debug.Log(enemiesGM[ene.Id]);
         return enemiesGM[ene.Id];
+        */
+
+        return ene.Obj;
     }
 
 
@@ -45,7 +49,9 @@ public class EnemyHandler : MonoBehaviour
         for (int i = 0; i < enemiesGM.Count; i++)
         {
             if (enemiesGM[i] == gm)
+            {
                 return enemies[i];
+            }
         }
         return null;
     }
@@ -55,6 +61,16 @@ public class EnemyHandler : MonoBehaviour
     {
         foreach (Enemy e in enemies)
         {
+            if(EnemyDead(e))
+            {
+                Debug.Log(e.Id);
+                PlayClip(e.Camp, "die");
+                enemies.Remove(e);
+                enemiesGM.Remove(GetEnemyObject(e));
+                Destroy(GetEnemyObject(e));
+                eh.GetEncampment(e.Camp).OnField--; 
+                break;
+            }
             if(e.Target!=null)
             {
                 Persue(e);
@@ -110,6 +126,8 @@ public class EnemyHandler : MonoBehaviour
 
     void Persue(Enemy e)
     {
+        if (GetEnemyObject(e)==null || e.Target == null)
+            return;
         float dis = Vector3.Distance(GetEnemyObject(e).transform.position, e.Target.transform.position);
 
         if(e.Target != null)
@@ -133,7 +151,7 @@ public class EnemyHandler : MonoBehaviour
     IEnumerator FireCoolDown(Enemy ene)
     {
         ene.JustShot = true;
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(2f);
         ene.JustShot = false;
     }
 
@@ -143,18 +161,20 @@ public class EnemyHandler : MonoBehaviour
         {
             Vector3 direction = ene.Target.transform.position - GetEnemyObject(ene).transform.position;
 
-            RaycastHit hit;
-            if (Physics.Raycast(GetEnemyObject(ene).transform.position, direction, out hit, 100f))
-            {
+        //    RaycastHit hit;
+         //   if (Physics.Raycast(GetEnemyObject(ene).transform.position, direction, out hit, 100f))
+         //   {
                 PlayClip(ene.Camp,"shoot");
                 StartCoroutine(TrailOff(0.05f, GetEnemyObject(ene).transform.position, ene.Target.transform.position));
-                if (hit.transform.tag == "Friendly")
+
+                int hitChance = Random.Range(0, 2);
+                if (hitChance == 0)
                 {
                     Debug.Log("hit");
-                    um.GetUnit(hit.collider.gameObject).Health--;
-                    um.UnitDown(um.GetUnit(hit.collider.gameObject));
+                    um.GetUnit(ene.Target).Health--;
+                    um.UnitDown(um.GetUnit(ene.Target));
                 }
-            }
+        //    }
         }
     }
 
@@ -191,16 +211,8 @@ public class EnemyHandler : MonoBehaviour
 
     public bool EnemyDead(Enemy e)
     {
-        if (e.Health <= 0)
-        {
-            PlayClip(e.Camp, "die");
-            Destroy(GetEnemyObject(e));
-            eh.GetEncampment(e.Camp).OnField--; //
-            enemies.Remove(e);
-            enemiesGM.Remove(GetEnemyObject(e));
-            return true;
-        }
-        return false;
+        return e.Health <= 0;
+
     }
 
     void PlayClip(GameObject encamp, string str)

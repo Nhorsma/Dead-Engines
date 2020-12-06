@@ -8,6 +8,7 @@ public class UnitManager : MonoBehaviour
     public SelectItems si;
     public ResourceHandling rh;
     public EnemyHandler eh;
+    public EncampmentHandler encampHandle;
     public Vector3 robotPos;
     public GameObject robot;
     public float stoppingDistance, pickUpDistance;
@@ -40,6 +41,7 @@ public class UnitManager : MonoBehaviour
     void Start()
     {
         eh = GetComponent<EnemyHandler>();
+        encampHandle = GetComponent<EncampmentHandler>();
         selectedUnits = new List<GameObject>();
         robotPos = new Vector3(robot.transform.position.x,0, robot.transform.position.z);
         audioSource = Camera.main.GetComponent<AudioSource>();
@@ -134,11 +136,11 @@ public class UnitManager : MonoBehaviour
                         Vector3 newDes = new Vector3();
                         if (i % 3 > 0)
                         {
-                            newDes = prevDes + new Vector3(0, 0, 2);
+                            newDes = prevDes + new Vector3(0, 0, 3);
                         }
                         else
                         {
-                            newDes = selectedUnits[i - 3].GetComponent<NavMeshAgent>().destination + new Vector3(2, 0, 0);
+                            newDes = selectedUnits[i - 3].GetComponent<NavMeshAgent>().destination + new Vector3(3, 0, 0);
                         }
                         TravelTo(selectedUnits[i], newDes, false, false);
                     }
@@ -333,28 +335,36 @@ public class UnitManager : MonoBehaviour
     void Fire(Unit unit)
     {
         Vector3 direction = unit.JobPos.transform.position - GetUnitObject(unit).transform.position;
-
-        RaycastHit hit;
-        if (Physics.Raycast(GetUnitObject(unit).transform.position, direction, out hit, 100f))
+        PlayClip("shoot");
+        //RaycastHit hit;
+        //      if (Physics.Raycast(GetUnitObject(unit).transform.position, direction, out hit, 100f))
+        //      {
+        int hitChance = Random.Range(0, 2);
+        if (hitChance == 0)
         {
             StartCoroutine(TrailOff(0.05f, GetUnitObject(unit).transform.position, unit.JobPos.transform.position));
-            if (hit.collider.tag == "Enemy")
+            if (unit.JobPos.tag == "Enemy")
             {
                 //access's the enemy via the enemyHandler, and reduces the enemie's health by one
-                if (eh.GetEnemy(hit.collider.gameObject).Health == unitDamage)
+                Debug.Log("enemy : " + eh.GetEnemy(unit.JobPos));
+                if (eh.GetEnemy(unit.JobPos) == null || eh.GetEnemy(unit.JobPos).Health <= 0)
                 {
-                    unit.Job = "none";
-                    unit.JobPos = null;
-                }
-                eh.GetEnemy(hit.collider.gameObject).Health -= unitDamage;
-                if (eh.EnemyDead(eh.GetEnemy(hit.collider.gameObject)))
                     ResetJob(unit);
+                }
+                else
+                {
+                    eh.GetEnemy(unit.JobPos).Health -= unitDamage;
+                }
 
                 //Debug.Log("enemy: " + gameObject.GetComponent<EnemyHandler>().GetEnemy(hit.collider.gameObject).Health);
             }
-            else if (hit.collider.tag == "Encampment")
+            else if (unit.JobPos.tag == "Encampment")
             {
-                gameObject.GetComponent<EncampmentHandler>().GetEncampment(hit.collider.gameObject).Health -= unitDamage;
+                gameObject.GetComponent<EncampmentHandler>().GetEncampment(unit.JobPos).Health -= unitDamage;
+                if (encampHandle.GetEncampment(unit.JobPos).Health == unitDamage)
+                {
+                    ResetJob(unit);
+                }
                 //Debug.Log("camp: "+gameObject.GetComponent<EncampmentHandler>().GetEncampment(hit.collider.gameObject).Health);
             }
         }
@@ -381,7 +391,7 @@ public class UnitManager : MonoBehaviour
     {
         if (!unit.CanSpawn)
         {
-            yield return new WaitForSeconds(3f);
+//            yield return new WaitForSeconds(3f);
             GetUnitObject(unit).SetActive(false);
             GetUnitObject(unit).transform.position = robotPos;
             yield return new WaitForSeconds(downTime);
@@ -469,7 +479,6 @@ public class UnitManager : MonoBehaviour
 
     IEnumerator TrailOff(float time, Vector3 start, Vector3 end)
     {
-        PlayClip("shoot");
         GameObject t = BulletTrail(start, end);
         yield return new WaitForSeconds(time);
         Destroy(t);
@@ -535,7 +544,6 @@ public class UnitManager : MonoBehaviour
         if (unit.JobPos != null && unit.JobPos.GetComponentInChildren<SpriteRenderer>() != null)
         {
             unit.JobPos.GetComponentInChildren<SpriteRenderer>().color = colorChange;
-            Debug.Log(unit.JobPos.GetComponentInChildren<SpriteRenderer>().color);
         }
     }
 

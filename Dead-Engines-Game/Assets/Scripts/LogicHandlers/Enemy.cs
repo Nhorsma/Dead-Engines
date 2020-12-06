@@ -9,13 +9,13 @@ public class Enemy
     protected float fireSpeed;
 
     protected int id;
-    protected GameObject target;
+    protected GameObject target, obj;
     protected GameObject rec, camp;
     protected bool justShot;
 
     public Enemy()
     {
-        health = 5;
+        health = 3;
         id = -1;
         target = null;
         justShot = false;
@@ -86,4 +86,9 @@ public class Enemy
        set { damage = value; }
     }
 
+    public GameObject Obj
+    {
+        get { return obj; }
+        set { obj = value; }
+    }
 }

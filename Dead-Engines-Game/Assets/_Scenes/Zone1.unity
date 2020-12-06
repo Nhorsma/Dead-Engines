@@ -6991,11 +6991,12 @@ MonoBehaviour:
   si: {fileID: 467610731}
   rh: {fileID: 467610735}
   eh: {fileID: 467610734}
+  encampHandle: {fileID: 467610733}
   robotPos: {x: 10, y: 3, z: 8}
   robot: {fileID: 5905536743914566335}
-  stoppingDistance: 30
+  stoppingDistance: 65
   pickUpDistance: 20
-  shootingDistance: 50
+  shootingDistance: 75
   downTime: 5
   unitDamage: 0
   unitsGM: []
@@ -7027,11 +7028,11 @@ MonoBehaviour:
   unitManager: {fileID: 467610732}
   spawn: {fileID: 1102157336}
   rh: {fileID: 467610735}
-  spawnTime: 1
-  spawnDistance: 0
+  spawnTime: 3
+  spawnDistance: 5
   audioSource: {fileID: 1457351892}
   attackClip1: {fileID: 8300000, guid: 5928cf0709df648459e5156d29193f0d, type: 3}
-  attackClip2: {fileID: 0}
+  attackClip2: {fileID: 8300000, guid: 36b38c779753480409e3882c07bce9cb, type: 3}
   volume: 0.25
 --- !u!114 &467610734
 MonoBehaviour:
@@ -7046,9 +7047,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enemiesGM: []
-  stoppingDistance: 10
+  stoppingDistance: 30
   shootingRange: 40
-  tresspassingRange: 52
+  tresspassingRange: 80
   audioSource: {fileID: 1457351892}
   attackClip1: {fileID: 8300000, guid: 36b38c779753480409e3882c07bce9cb, type: 3}
   attackClip2: {fileID: 8300000, guid: 5928cf0709df648459e5156d29193f0d, type: 3}
