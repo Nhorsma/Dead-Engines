@@ -404,7 +404,7 @@ public class UnitManager : MonoBehaviour
 
     public void TravelTo(GameObject b, Vector3 place, bool stop, bool randomize)
     {
-        if (b.GetComponent<NavMeshAgent>() != null)
+        if (b.activeSelf == true && b.GetComponent<NavMeshAgent>() != null)
         {
             NavMeshAgent a = b.GetComponent<NavMeshAgent>();
             b.GetComponent<Animator>().SetBool("walking", true);
@@ -422,7 +422,8 @@ public class UnitManager : MonoBehaviour
 
     void Extract(int id)
     {
-        rh.resQuantities[id] -= 1;
+        //rh.resQuantities[id] -= 1;
+        rh.Extract(id, 1);
         PlayClip("pickaxe");
     }
 
@@ -459,9 +460,13 @@ public class UnitManager : MonoBehaviour
     public void LeaveRoomJob(Unit unit)
     {
         ReadyClip();
-        GetUnitObject(unit).transform.position = FindSpotToSpawn();
-        GetUnitObject(unit).SetActive(true);
         ResetJob(unit);
+
+        if (!AutomotonAction.endPhaseOne)
+        {
+            GetUnitObject(unit).transform.position = FindSpotToSpawn();
+            GetUnitObject(unit).SetActive(true);
+        }
     }
 
     GameObject BulletTrail(Vector3 start, Vector3 end)
@@ -563,5 +568,14 @@ public class UnitManager : MonoBehaviour
         ResetColor(unit);
         unit.Job = "none";
         unit.JobPos = null;
+    }
+
+
+    public void PhaseTwoUnits()
+    {
+        foreach(GameObject unitObject in unitsGM)
+        {
+            unitObject.SetActive(false);
+        }
     }
 }

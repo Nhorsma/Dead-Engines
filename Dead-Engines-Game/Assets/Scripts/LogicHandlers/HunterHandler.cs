@@ -10,6 +10,8 @@ public class HunterHandler : MonoBehaviour
     public float spawnRadius, stoppingDistance, movementSpeed;
     public bool canSpawn, isDeployed;
     public float chance, spawnTime;
+    public AudioClip attack1Clip, attack2Clip,shootClip;
+
 
     Vector3 last;
 
@@ -211,5 +213,66 @@ public class HunterHandler : MonoBehaviour
                 canSpawn = false;
             }
         }
+    }
+
+    IEnumerator FireCoolDown(Hunter hunt)
+    {
+        hunt.JustShot = true;
+        yield return new WaitForSeconds(2f);
+        hunt.JustShot = false;
+    }
+
+    void Fire(Hunter hunter)
+    {
+        if (hunter.Target != null)
+        {
+            Vector3 direction = hunter.Target.transform.position - hunter.Obj.transform.position;
+            PlayClip("shoot");
+            StartCoroutine(TrailOff(0.07f, hunter.Obj.transform.position, hunter.Target.transform.position));
+
+            int hitChance = Random.Range(0, 2);
+            if (hitChance == 0)
+            {
+                Debug.Log("hit");
+                
+            }
+        }
+    }
+
+    GameObject BulletTrail(Vector3 start, Vector3 end)
+    {
+        float x, y, z;
+        x = Random.Range(-1.2f, 1.2f);
+        y = Random.Range(-1.2f, 1.2f);
+        z = Random.Range(-1.2f, 1.2f);
+        Quaternion offset = Quaternion.Euler(x, y, z);
+
+        Vector3 dif = (start - end) / 2;
+        Quaternion angle = Quaternion.LookRotation(start - end);
+        GameObject trail = (GameObject)Instantiate(Resources.Load("RedBulletTrail"), start - dif, angle * offset);
+
+        trail.transform.localScale = new Vector3(0.05f, 0.05f, Vector3.Distance(start, end));
+        return trail;
+    }
+
+    IEnumerator TrailOff(float time, Vector3 start, Vector3 end)
+    {
+        GameObject t = BulletTrail(start, end);
+        yield return new WaitForSeconds(time);
+        Destroy(t);
+    }
+
+    void PlayClip(string str)
+    {
+        AudioSource tempSource = automoton.GetComponent<AudioSource>();
+        if (str.Equals("attack"))
+        {
+            if (Random.Range(0, 2) == 0)
+                tempSource.PlayOneShot(attack1Clip);
+            else
+                tempSource.PlayOneShot(attack2Clip);
+        }
+        else if (str.Equals("shoot"))
+            tempSource.PlayOneShot(shootClip);
     }
 }

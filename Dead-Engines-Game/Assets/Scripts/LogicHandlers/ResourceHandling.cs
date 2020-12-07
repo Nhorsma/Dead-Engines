@@ -83,10 +83,21 @@ public class ResourceHandling : MonoBehaviour
         return i;
     }
 
-    public void Extract(GameObject gm)
+    public void Extract(GameObject gm, int amount)
     {
         int i = GetNumber(gm);
-        resQuantities[i] -= 1;
+        resQuantities[i] -= amount;
+    }
+
+    public void Extract(int id, int amount)
+    {
+        resQuantities[id] -= amount;
+        Debug.Log(resQuantities[id]);   
+        if (resQuantities[id]<=0)
+        {
+            Debug.Log("out of stuff");
+            resDeposits[id].SetActive(false);
+        }
     }
 
     //called when Fuel resource has been seized and

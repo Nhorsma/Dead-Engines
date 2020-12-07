@@ -19,13 +19,19 @@ public class AutomotonAction : MonoBehaviour
     public Vector3 phaseOnePos, phaseTwoPos;
     public Animation climbOut;
     public AutomotonAction aa;
+    public UnitManager unitManager;
 
     KeyCode move_q, move_w, move_e, move_r;
     Collider footCollider, fistCollider;
+    int layerMask = 1<<8;
+
+    public int autoHealth;
+    public int startingAutoHealth;
+
 
     private void Start()
     {
-        gameObject.layer = 1;
+//        gameObject.layer = 1;
         rb = GetComponent<Rigidbody>();
         nv = GetComponent<NavMeshAgent>();
         nv.speed = movementSpeed;
@@ -37,7 +43,7 @@ public class AutomotonAction : MonoBehaviour
         anim = automoton.GetComponent<Animator>();
         aa = automoton.GetComponent<AutomotonAction>();
         //aa.enabled = false;
-        endPhaseOne = false;
+        endPhaseOne = true;
 
         footCollider = footObject.GetComponent<BoxCollider>();
         fistCollider = fistObject.GetComponent<BoxCollider>();
@@ -45,8 +51,10 @@ public class AutomotonAction : MonoBehaviour
         fistCollider.enabled = false;
 
         StartCoroutine(RaiseAuto());
-
         DefaultControls();
+        unitManager.PhaseTwoUnits();
+
+        autoHealth = startingAutoHealth;
     }
 
     private void LateUpdate()
@@ -61,8 +69,10 @@ public class AutomotonAction : MonoBehaviour
     RaycastHit Hit()
     {
         RaycastHit hit;
-        if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit, Mathf.Infinity))
+        if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit, Mathf.Infinity, 1<<8))
+        {
             return hit;
+        }
         return hit;
     }
 
@@ -173,16 +183,6 @@ public class AutomotonAction : MonoBehaviour
         if (Input.GetMouseButtonDown(1) && Hit().point != null)
         {
             walkTo = Hit().point;
-            if (Hit().collider == gameObject)
-            {
-                Physics.IgnoreLayerCollision(1, 1);
-                RaycastHit hit2;
-                if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit2, Mathf.Infinity))
-                    walkTo = hit2.point;
-                Physics.IgnoreLayerCollision(1, 1, false);
-                
-
-            }
             canMove = false;
             anim.SetBool("isWalking", false);
             canRotate = true;
@@ -310,6 +310,34 @@ public class AutomotonAction : MonoBehaviour
             anim.SetBool("isRotatingLeft", tempLeft);
             anim.SetBool("isRotatingRight", tempRight);
             anim.SetBool("isWalking", tempmove);
+        }
+    }
+
+
+    public void RecieveDamage(int amount)
+    {
+        autoHealth -= amount;
+
+        if(autoHealth >= startingAutoHealth*0.75f)
+        {
+            //something to signify no damage;
+        }
+        else if(autoHealth >= startingAutoHealth*0.5f)
+        {
+            //something to signify light damage;
+        }
+        else if (autoHealth >= startingAutoHealth * 0.25f)
+        {
+            //something to signify significant damage;
+        }
+        else if(autoHealth >= 0)
+        {
+            //something to signify mortal damage;
+        }
+        else
+        {
+            //Dead
+            Debug.Log("auto is Dead");
         }
     }
 }

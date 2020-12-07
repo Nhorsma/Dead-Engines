@@ -7,6 +7,7 @@ public class Hunter : Enemy
     protected GameObject obj;
     protected bool canWalk, walkingForward, walkingBackward, firing, isDead;
     protected float speed;
+    protected int range;
 
     public Hunter(GameObject g)
     {
@@ -16,6 +17,7 @@ public class Hunter : Enemy
         id = -1;
         target = null;
         justShot = false;
+        range = 1; //not implemented yet
         speed = 10f;
     }
 
@@ -59,6 +61,12 @@ public class Hunter : Enemy
     {
         get { return speed; }
         set { speed = value; }
+    }
+
+    public int Range
+    {
+        get { return range; }
+        set { range = value; }
     }
 
 
