@@ -31,8 +31,8 @@ public class AutomotonAction : MonoBehaviour
         nv.speed = movementSpeed;
         canMove = canRotate = isWalking = false;
 
-        phaseOnePos = automoton.transform.position;
-        automoton.transform.position = phaseOnePos;
+        phaseTwoPos = phaseOnePos = automoton.transform.position;
+        phaseTwoPos -= new Vector3(13.2f, -41.49f, 12.3f);
 
         anim = automoton.GetComponent<Animator>();
         aa = automoton.GetComponent<AutomotonAction>();

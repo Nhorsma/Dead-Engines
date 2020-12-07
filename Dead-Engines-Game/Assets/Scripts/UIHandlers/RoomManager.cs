@@ -18,6 +18,11 @@ public class RoomManager : MonoBehaviour
 	public GameObject ctrlMiniTab;
 	public GameObject genMiniTab;
 
+    public AudioSource audioSource;
+    public AudioClip wrenchClip;
+    public AudioClip hammerClip;
+    public AudioClip errorClip;
+
 	public float refineryCost_M;
 	public float refineryCost_E;
 
@@ -130,32 +135,37 @@ public class RoomManager : MonoBehaviour
 			ResourceHandling.electronics -= (int)refineryCost_E;
 			rooms[roomSlotClicked] = new Room("refinery", roomSlotClicked, 1);
 			SetupRefinery(roomSlotClicked);
-		}
+            PlayClip("wrench");
+        }
 		else if (room == "storage" && ResourceHandling.metal >= storageCost_M && ResourceHandling.electronics >= refineryCost_E)
 		{
 			ResourceHandling.metal -= (int)storageCost_M;
 			ResourceHandling.electronics -= (int)storageCost_E;
 			rooms[roomSlotClicked] = new Room("storage", roomSlotClicked, 1);
 			SetupStorage(roomSlotClicked);
-		}
+            PlayClip("wrench");
+        }
 		else if (room == "shrine" && ResourceHandling.metal >= shrineCost_M && ResourceHandling.electronics >= shrineCost_E)
 		{
 			ResourceHandling.metal -= (int)shrineCost_M;
 			ResourceHandling.electronics -= (int)shrineCost_E;
 			rooms[roomSlotClicked] = new Room("shrine", roomSlotClicked, 1);
 			SetupShrine(roomSlotClicked);
-		}
+            PlayClip("wrench");
+        }
 		else if (room == "study" && ResourceHandling.metal >= studyCost_M && ResourceHandling.electronics >= studyCost_E)
 		{
 			ResourceHandling.metal -= (int)studyCost_M;
 			ResourceHandling.electronics -= (int)studyCost_E;
 			rooms[roomSlotClicked] = new Room("study", roomSlotClicked, 1);
 			SetupStudy(roomSlotClicked);
-		}
+            PlayClip("wrench");
+        }
 		else
 		{
 			Debug.Log("Not enough resources to build a " + room + ".");
-		}
+            PlayClip("error");
+        }
 		UpdateRoomDisplay();
 	}
 
@@ -403,11 +413,13 @@ public class RoomManager : MonoBehaviour
 								ResourceHandling.metal += 2;
 							}
 						}
-					}
+                        PlayClip("hammer");
+                    }
 					else
 					{
 						Debug.Log("Failure");
-					}
+                        PlayClip("error");
+                    }
 				}
 				else if (what == "bolt")
 				{
@@ -423,11 +435,13 @@ public class RoomManager : MonoBehaviour
 								ResourceHandling.metal++;
 							}
 						}
-					}
+                        PlayClip("hammer");
+                    }
 					else
 					{
 						Debug.Log("Failure");
-					}
+                        PlayClip("error");
+                    }
 				}
 				else if (what == "part")
 				{
@@ -448,11 +462,13 @@ public class RoomManager : MonoBehaviour
 								ResourceHandling.plate++;
 							}
 						}
-					}
+                        PlayClip("hammer");
+                    }
 					else
 					{
 						Debug.Log("Failure");
-					}
+                        PlayClip("error");
+                    }
 				}
 				else if (what == "chip")
 				{
@@ -472,11 +488,13 @@ public class RoomManager : MonoBehaviour
 								ResourceHandling.electronics += 2;
 							}
 						}
-					}
+                        PlayClip("hammer");
+                    }
 					else
 					{
 						Debug.Log("Failure");
-					}
+                        PlayClip("error");
+                    }
 				}
 				else if (what == "wire")
 				{
@@ -492,11 +510,13 @@ public class RoomManager : MonoBehaviour
 								ResourceHandling.electronics++;
 							}
 						}
-					}
+                        PlayClip("hammer");
+                    }
 					else
 					{
 						Debug.Log("Failure");
-					}
+                        PlayClip("error");
+                    }
 				}
 				else if (what == "board")
 				{
@@ -517,17 +537,20 @@ public class RoomManager : MonoBehaviour
 								ResourceHandling.chip++;
 							}
 						}
-					}
+                        PlayClip("hammer");
+                    }
 					else
 					{
 						Debug.Log("Failure");
+                        PlayClip("error");
 					}
 				}
 			}
 			else
 			{
 				Debug.Log("No workers, can't refine!");
-			}
+                PlayClip("error");
+            }
 		}
 	}
 
@@ -624,10 +647,11 @@ public class RoomManager : MonoBehaviour
 			//who.JobPos = autoObj; // set it to outside ////////////////////////////////////////////////////////////////////
             um.LeaveRoomJob(who);
 
-			um.SetJobFromRoom(who, where); // set it to be Outside the 'bot doing nothing /////////////////////////////////
+            //	um.SetJobFromRoom(who, where); // set it to be Outside the 'bot doing nothing /////////////////////////////////
+            um.TravelTo(um.GetUnitObject(who), um.GetUnitObject(who).transform.position, false, false);
 			r.Workers.Remove(who);
 			r.WorkMultiplier = r.Workers.Count;
-
+/*
 			if (r.Type == "shrine")
 			{
 				Worship();
@@ -640,6 +664,7 @@ public class RoomManager : MonoBehaviour
 			{
 				Produce();
 			}
+            */
 
 			//method does not exist yet
 			//info.UpdateUnitViewer();
@@ -746,7 +771,15 @@ public class RoomManager : MonoBehaviour
 		effectConnector.Recalculate();
 	}
 
-
+    void PlayClip(string str)
+    {
+        if (str == "wrench")
+            audioSource.PlayOneShot(wrenchClip);
+        else if (str == "hammer")
+            audioSource.PlayOneShot(hammerClip);
+        else if (str == "error")
+            audioSource.PlayOneShot(errorClip);
+    }
 
 	public void UpdateRoomDisplay()
 	{
@@ -757,4 +790,9 @@ public class RoomManager : MonoBehaviour
 		Debug.Log("Updated Rooms");
 		auto.OpenTab2();
 	}
+
+    public void ActivateAutomoton()
+    {
+
+    }
 }

@@ -118,10 +118,10 @@ public class UnitManager : MonoBehaviour
                 //
                 //When more Room jobs are implemented, Fix This to have more Jobs
                 //
-                if (GetUnit(selectedUnits[i]).Job != "shrine") // && selectedUnits[i].activeSelf
+                if (GetUnit(selectedUnits[i]).Job != "shrine" || GetUnit(selectedUnits[i]).Job != "study"
+                    || GetUnit(selectedUnits[i]).Job != "refinery" || GetUnit(selectedUnits[i]).Job != "storage") // && selectedUnits[i].activeSelf
                 {
-                    GetUnit(selectedUnits[i]).Job = "none";
-                    GetUnit(selectedUnits[i]).JobPos = null;
+                    ResetJob(GetUnit(selectedUnits[i]));
 
                     if (i == 0)
                     {
@@ -164,7 +164,8 @@ public class UnitManager : MonoBehaviour
                 {
                     Extraction(unit, GetResourceID(unit.JobPos), unit.Job);///////////////////////////////////////////////////////////////////////
                 }
-                else if (unit.Job == "shrine")
+                else if (unit.Job == "shrine" || unit.Job == "refinery" 
+                    || unit.Job == "storage" || unit.Job == "study")
                 {
                     float jx = GetUnitObject(unit).transform.position.x;
                     float jz = GetUnitObject(unit).transform.position.z;
@@ -397,11 +398,11 @@ public class UnitManager : MonoBehaviour
             yield return new WaitForSeconds(downTime);
             GetUnitObject(unit).GetComponent<Animator>().SetBool("knockedOut", false);
             unit.CanSpawn = true;
-
+            ReadyClip();
         }
     }
 
-    void TravelTo(GameObject b, Vector3 place, bool stop, bool randomize)
+    public void TravelTo(GameObject b, Vector3 place, bool stop, bool randomize)
     {
         if (b.GetComponent<NavMeshAgent>() != null)
         {
@@ -451,11 +452,13 @@ public class UnitManager : MonoBehaviour
 
     public void SetJobFromRoom(Unit unit, string roomJob)
     {
-        TravelTo(GetUnitObject(unit), unit.JobPos.transform.position, false, false);
+        PlayClip("ping");
+        TravelTo(GetUnitObject(unit), robotPos/*unit.JobPos.transform.position*/, false, false);
     }
 
     public void LeaveRoomJob(Unit unit)
     {
+        ReadyClip();
         GetUnitObject(unit).transform.position = FindSpotToSpawn();
         GetUnitObject(unit).SetActive(true);
         ResetJob(unit);
@@ -491,7 +494,7 @@ public class UnitManager : MonoBehaviour
 
     public Vector3 FindSpotToSpawn()
     {
-        return robotPos + new Vector3(-stoppingDistance + Random.Range(-3, 3), 0, -stoppingDistance + Random.Range(-3, 3));
+        return robotPos + new Vector3(-pickUpDistance + Random.Range(-3, 3), 0, -pickUpDistance + Random.Range(-3, 3));
     }
 
     void ReadyClip()
