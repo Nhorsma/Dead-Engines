@@ -16,9 +16,10 @@ public class EncampmentHandler : MonoBehaviour
     public SpawnRes spawn;
     public ResourceHandling rh;
     public float spawnTime, spawnDistance;
+    public bool startSpawning;
 
     public AudioSource audioSource;
-    public AudioClip attackClip1, attackClip2;
+    public AudioClip attackClip1, attackClip2, deathClip;
     public float volume;
 
     string[] depRec43 = { "gun", "gun", "gun" };
@@ -43,10 +44,12 @@ public class EncampmentHandler : MonoBehaviour
         eGM = GameObject.FindGameObjectsWithTag("Encampment");
         encamps = new Encampment[eGM.Length];
         SetUpCamps(); //
+        startSpawning = true;
     }
 
     void Update()
     {
+        if(startSpawning)
         for(int i =0;i<encamps.Length;i++)
         {
             CheckUnitNear(encamps[i]);
@@ -88,12 +91,14 @@ public class EncampmentHandler : MonoBehaviour
     }
 
 
-    void BeDestroyed()
+    public void BeDestroyed()
     {
         for (int i = 0; i < encamps.Length; i++)
         {
             if (encamps[i].Health <= 0)
             {
+                PlayClip(encamps[i], "death");
+                startSpawning = false;
                 Destroy(eGM[i]);
                 encamps[i] = null;
             }
@@ -268,6 +273,10 @@ public class EncampmentHandler : MonoBehaviour
                 tempSource.PlayOneShot(attackClip1);
             else
                 tempSource.PlayOneShot(attackClip2);
+        }
+        else if(str.Equals("death"))
+        {
+            tempSource.PlayOneShot(deathClip);
         }
     }
     }

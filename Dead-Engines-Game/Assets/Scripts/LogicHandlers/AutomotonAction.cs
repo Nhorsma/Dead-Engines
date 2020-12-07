@@ -15,7 +15,7 @@ public class AutomotonAction : MonoBehaviour
     Rigidbody rb;
 
     public static bool endPhaseOne;
-    public GameObject automoton, fog, footObject, fistObject;
+    public GameObject automoton, fog, footObject, fistObject, dustCloud;
     public Vector3 phaseOnePos, phaseTwoPos;
     public Animation climbOut;
     public AutomotonAction aa;
@@ -237,21 +237,15 @@ public class AutomotonAction : MonoBehaviour
         }
     }
 
-    private void OnCollisionEnter(Collision collision)
-    {
-        
-    }
-
     IEnumerator GroundPound()
     {
         //play ground pound animation
         ContinueAnimations(false);
         anim.SetBool("GroundPound", true);
         yield return new WaitForSeconds(2f);
-
+        SpawnExplosion(footObject);
         //hit ground
         footCollider.enabled = true;
-
         while (anim.GetCurrentAnimatorStateInfo(0).normalizedTime < 1.0f)
             yield return null;
         footCollider.enabled = false;
@@ -339,5 +333,19 @@ public class AutomotonAction : MonoBehaviour
             //Dead
             Debug.Log("auto is Dead");
         }
+
+    }
+
+    void SpawnExplosion(GameObject obj)
+    {
+        var expl = (GameObject)Instantiate(Resources.Load(dustCloud.name), obj.transform.position+new Vector3(0,2,0), Quaternion.Euler(90,0,0));
+        StartCoroutine(TrailOff(5, expl));
+    }
+
+    IEnumerator TrailOff(float time, GameObject explosion)
+    {
+        explosion.GetComponent<ParticleSystem>().Play();
+        yield return new WaitForSeconds(time);
+        Destroy(explosion);
     }
 }

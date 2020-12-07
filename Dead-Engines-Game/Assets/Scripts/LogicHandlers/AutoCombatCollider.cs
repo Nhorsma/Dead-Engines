@@ -5,13 +5,27 @@ using UnityEngine;
 public class AutoCombatCollider : MonoBehaviour
 {
     public ResourceHandling recHandle;
+    public EncampmentHandler campHandle;
+    public EnemyHandler enemyHandle;
+    public GameObject explosion;
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.tag == "Enemy" || other.gameObject.tag == "Encampment")
-            Destroy(other.gameObject);
+        if (other.gameObject.tag == "Enemy")
+        { 
+            enemyHandle.GetEnemy(other.gameObject).Health = 0;
+        }
+        if(other.gameObject.tag == "Encampment")
+        {
+            campHandle.GetEncampment(other.gameObject).Health -= 100;
+            campHandle.BeDestroyed();
+            SpawnExplosion(other.gameObject);
+        }
         if (other.gameObject.tag == "Hunter")
+        {
             GameObject.FindGameObjectWithTag("GameController").GetComponent<HunterHandler>().DealHunterDamage(other.gameObject);
+            SpawnExplosion(other.gameObject);
+        }
         if(other.gameObject.tag == "Metal")
         {
             recHandle.Extract(other.gameObject, 50);
@@ -33,4 +47,18 @@ public class AutoCombatCollider : MonoBehaviour
 
 
     }
+
+    void SpawnExplosion(GameObject obj)
+    {
+        var expl = (GameObject)Instantiate(Resources.Load(explosion.name), new Vector3(obj.transform.position.x, -6.916667f, obj.transform.position.z), Quaternion.Euler(90, 0, 0));
+        StartCoroutine(TrailOff(5, expl));
+    }
+
+    IEnumerator TrailOff(float time, GameObject explosion)
+    {
+        explosion.GetComponent<ParticleSystem>().Play();
+        yield return new WaitForSeconds(time);
+        Destroy(explosion);
+    }
+
 }

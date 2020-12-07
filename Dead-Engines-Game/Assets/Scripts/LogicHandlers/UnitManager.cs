@@ -347,7 +347,7 @@ public class UnitManager : MonoBehaviour
             if (unit.JobPos.tag == "Enemy")
             {
                 //access's the enemy via the enemyHandler, and reduces the enemie's health by one
-                Debug.Log("enemy : " + eh.GetEnemy(unit.JobPos));
+                //Debug.Log("enemy : " + eh.GetEnemy(unit.JobPos));
                 if (eh.GetEnemy(unit.JobPos) == null || eh.GetEnemy(unit.JobPos).Health <= 0)
                 {
                     ResetJob(unit);
@@ -362,9 +362,14 @@ public class UnitManager : MonoBehaviour
             else if (unit.JobPos.tag == "Encampment")
             {
                 gameObject.GetComponent<EncampmentHandler>().GetEncampment(unit.JobPos).Health -= unitDamage;
-                if (encampHandle.GetEncampment(unit.JobPos).Health == unitDamage)
+                if (encampHandle.GetEncampment(unit.JobPos).Health <= unitDamage)
                 {
+                    gameObject.GetComponent<EncampmentHandler>().BeDestroyed();
                     ResetJob(unit);
+                }
+                else
+                {
+                    gameObject.GetComponent<EncampmentHandler>().GetEncampment(unit.JobPos).Health -= unitDamage;
                 }
                 //Debug.Log("camp: "+gameObject.GetComponent<EncampmentHandler>().GetEncampment(hit.collider.gameObject).Health);
             }

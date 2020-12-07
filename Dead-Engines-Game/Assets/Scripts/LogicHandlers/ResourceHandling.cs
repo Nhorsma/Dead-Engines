@@ -87,15 +87,17 @@ public class ResourceHandling : MonoBehaviour
     {
         int i = GetNumber(gm);
         resQuantities[i] -= amount;
+        if (resQuantities[i] <= 0)
+        {
+            resDeposits[i].SetActive(false);
+        }
     }
 
     public void Extract(int id, int amount)
     {
-        resQuantities[id] -= amount;
-        Debug.Log(resQuantities[id]);   
+        resQuantities[id] -= amount; 
         if (resQuantities[id]<=0)
         {
-            Debug.Log("out of stuff");
             resDeposits[id].SetActive(false);
         }
     }
