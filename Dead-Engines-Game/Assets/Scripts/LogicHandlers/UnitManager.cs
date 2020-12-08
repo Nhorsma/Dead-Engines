@@ -369,6 +369,7 @@ public class UnitManager : MonoBehaviour
                 }
                 else
                 {
+                    gameObject.GetComponent<EncampmentHandler>().BeDestroyed();
                     gameObject.GetComponent<EncampmentHandler>().GetEncampment(unit.JobPos).Health -= unitDamage;
                 }
                 //Debug.Log("camp: "+gameObject.GetComponent<EncampmentHandler>().GetEncampment(hit.collider.gameObject).Health);

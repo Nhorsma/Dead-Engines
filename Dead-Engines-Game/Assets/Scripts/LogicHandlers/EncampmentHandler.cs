@@ -15,7 +15,7 @@ public class EncampmentHandler : MonoBehaviour
 
     public SpawnRes spawn;
     public ResourceHandling rh;
-    public float spawnTime, spawnDistance;
+    public float startSpawnTime,spawnTime, spawnDistance;
     public bool startSpawning;
 
     public AudioSource audioSource;
@@ -45,6 +45,7 @@ public class EncampmentHandler : MonoBehaviour
         encamps = new Encampment[eGM.Length];
         SetUpCamps(); //
         startSpawning = true;
+        startSpawnTime = spawnTime;
     }
 
     void Update()
@@ -99,8 +100,23 @@ public class EncampmentHandler : MonoBehaviour
             {
                 PlayClip(encamps[i], "death");
                 startSpawning = false;
-                Destroy(eGM[i]);
+                eGM[i].SetActive(false);
                 encamps[i] = null;
+            }
+            else
+            {
+                if (encamps[i].Health >= startSpawnTime * 0.75f)
+                {
+                    spawnTime--; ;
+                }
+                if (encamps[i].Health >= startSpawnTime * 0.5f)
+                {
+                    spawnTime --;
+                }
+                else if (encamps[i].Health >= startSpawnTime * 0.25f)
+                {
+                    spawnTime --;
+                }
             }
         }
     }
