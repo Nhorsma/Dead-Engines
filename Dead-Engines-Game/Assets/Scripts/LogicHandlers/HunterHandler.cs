@@ -40,13 +40,14 @@ public class HunterHandler : MonoBehaviour
                 GameObject ho = h.Obj;
                 Transform hm = ho.GetComponentInChildren<Transform>();
 
-                if (Vector3.Distance(ho.transform.position,automoton.transform.position)>stoppingDistance*1.5f)
+                if (Vector3.Distance(ho.transform.position, automoton.transform.position) > stoppingDistance * 1.5f)
                     TravelTo(ho, automoton.transform.position, true);
+                else
+                    h.Obj.GetComponent<Animator>().SetBool("isShooting", true);
 
                 if(Vector3.Distance(ho.transform.position,automoton.transform.position)<stoppingDistance/2
                     && h.CanWalk)
                 {
-                    
                     // mid = 2xy - xy
                     float x1 = ho.transform.position.x;
                     float y1 = ho.transform.position.z;
@@ -160,7 +161,7 @@ public class HunterHandler : MonoBehaviour
             {
                 nv.stoppingDistance = stoppingDistance;
             }
-
+            a.GetComponent<Animator>().SetBool("isShooting", false);
             nv.SetDestination(place);
         }
         else

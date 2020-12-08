@@ -7,9 +7,10 @@ public class AutoCombatCollider : MonoBehaviour
     public ResourceHandling recHandle;
     public EncampmentHandler campHandle;
     public EnemyHandler enemyHandle;
+    public HunterHandler huntHandle;
     public GameObject explosion;
 
-    private void OnTriggerEnter(Collider other)
+    private void OnCollisionEnter(Collision other)
     {
         if (other.gameObject.tag == "Enemy")
         { 
@@ -23,7 +24,7 @@ public class AutoCombatCollider : MonoBehaviour
         }
         if (other.gameObject.tag == "Hunter")
         {
-            GameObject.FindGameObjectWithTag("GameController").GetComponent<HunterHandler>().DealHunterDamage(other.gameObject);
+            huntHandle.DealHunterDamage(other.gameObject);
             SpawnExplosion(other.gameObject);
         }
         if(other.gameObject.tag == "Metal")
@@ -60,5 +61,6 @@ public class AutoCombatCollider : MonoBehaviour
         yield return new WaitForSeconds(time);
         Destroy(explosion);
     }
+
 
 }
