@@ -10,7 +10,7 @@ public class HunterHandler : MonoBehaviour
     public float spawnRadius, stoppingDistance, movementSpeed;
     public bool canSpawn, isDeployed;
     public float chance, spawnTime;
-    public AudioClip attack1Clip, attack2Clip,shootClip;
+    public AudioClip attack1Clip, attack2Clip, shootClip, hitClip, destroyClip;
 
 
     Vector3 last;
@@ -21,7 +21,7 @@ public class HunterHandler : MonoBehaviour
         deployed = new Hunter[3];
     }
 
-    
+
     void Update()
     {
         CheckSpawnHunter();
@@ -32,8 +32,8 @@ public class HunterHandler : MonoBehaviour
     void HappyHunting()
     {
         if (isDeployed)
-        foreach (Hunter h in deployed)
-        {
+            foreach (Hunter h in deployed)
+            {
                 if (h == null)
                     break;
 
@@ -109,7 +109,7 @@ public class HunterHandler : MonoBehaviour
             GameObject gm = (GameObject)Instantiate(Resources.Load(h.Obj.name), spawnPlace, transform.rotation);
 
             h.Obj = gm;
-            deployed[i] = h;            
+            deployed[i] = h;
             h.Id = i;
             h.Obj.GetComponent<NavMeshAgent>().speed = h.Speed;
         }
@@ -129,7 +129,7 @@ public class HunterHandler : MonoBehaviour
         else
         {
             if (a == 3)
-                return new Vector3(spawnRadius,0, Random.Range(-spawnRadius, spawnRadius));
+                return new Vector3(spawnRadius, 0, Random.Range(-spawnRadius, spawnRadius));
             else
                 return new Vector3(-spawnRadius, 0, Random.Range(-spawnRadius, spawnRadius));
         }
@@ -162,7 +162,7 @@ public class HunterHandler : MonoBehaviour
         }
         h.Target = automoton;
         return h;
-        
+
     }
 
     void TravelTo(GameObject a, Vector3 place, bool stop)
@@ -187,13 +187,12 @@ public class HunterHandler : MonoBehaviour
         Hunter hunter = deployed[0];
         foreach (Hunter h in deployed)
         {
-            if (h!=null && h.Obj.Equals(ho))
+            if (h != null && h.Obj.Equals(ho))
             {
                 hunter = h;
                 break;
             }
         }
-
         hunter.Health--;
         Debug.Log("shots recieved");
         HunterDeath(hunter);
@@ -202,12 +201,12 @@ public class HunterHandler : MonoBehaviour
 
     public void HunterDeath(Hunter h)
     {
-        if(h.Health<=0)
+        if (h.Health <= 0)
         {
             int i = -1;
-            for(int j = 0;j<deployed.Length;j++)
+            for (int j = 0; j < deployed.Length; j++)
             {
-                if (deployed[j]==(h))
+                if (deployed[j] == (h))
                 {
                     i = j;
                     break;
@@ -218,13 +217,18 @@ public class HunterHandler : MonoBehaviour
                 return;
 
             deployed[i] = null;
+            PlayClip("death");
             Destroy(h.Obj);
 
-            if(deployed.Equals(new Hunter[]{null,null,null}))
+            if (deployed.Equals(new Hunter[] { null, null, null }))
             {
                 isDeployed = false;
                 canSpawn = false;
             }
+        }
+        else
+        {
+            PlayClip("hit");
         }
     }
 
@@ -241,15 +245,16 @@ public class HunterHandler : MonoBehaviour
         {
             Vector3 direction = hunter.Target.transform.position - hunter.Obj.transform.position;
             PlayClip("shoot");
-            StartCoroutine(TrailOff(0.07f, hunter.Obj.transform.position + new Vector3(0,5,0), 
-                hunter.Target.transform.position + new Vector3(0, 10, 0)));
 
-            int hitChance = Random.Range(0, 2);
-            if (hitChance == 0)
-            {
-                Debug.Log("hit");
-                
-            }
+            Vector3 shootFrom = hunter.Obj.transform.Find("FireFrom").position;
+            StartCoroutine(TrailOff(0.07f, shootFrom, hunter.Target.transform.position + new Vector3(0, 50, 0)));
+
+            //            int hitChance = Random.Range(0, 2);
+            //          if (hitChance == 0)
+            //        {
+            //Debug.Log("hit");
+
+            //      }
         }
     }
 
@@ -276,7 +281,7 @@ public class HunterHandler : MonoBehaviour
         Destroy(t);
     }
 
-    void PlayClip(string str)
+    public void PlayClip(string str)
     {
         AudioSource tempSource = automoton.GetComponent<AudioSource>();
         if (str.Equals("attack"))
@@ -288,5 +293,9 @@ public class HunterHandler : MonoBehaviour
         }
         else if (str.Equals("shoot"))
             tempSource.PlayOneShot(shootClip);
+        else if (str.Equals("hit"))
+            tempSource.PlayOneShot(hitClip);
+        else if (str.Equals("death"))
+            tempSource.PlayOneShot(destroyClip);
     }
 }

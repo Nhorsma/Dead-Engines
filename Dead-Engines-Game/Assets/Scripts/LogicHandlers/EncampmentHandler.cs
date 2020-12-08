@@ -11,7 +11,7 @@ public class EncampmentHandler : MonoBehaviour
     public GameObject[] eGM;
     public Encampment[] encamps;
     public EnemyHandler eh;
-	public UnitManager unitManager;
+    public UnitManager unitManager;
 
     public SpawnRes spawn;
     public ResourceHandling rh;
@@ -19,7 +19,7 @@ public class EncampmentHandler : MonoBehaviour
     public bool startSpawning;
 
     public AudioSource audioSource;
-    public AudioClip attackClip1, attackClip2, deathClip;
+    public AudioClip attackClip1, attackClip2, deathClip, destroyClip;
     public float volume;
 
     string[] depRec43 = { "gun", "gun", "gun" };
@@ -28,11 +28,11 @@ public class EncampmentHandler : MonoBehaviour
     string[] depRec13 = { "gun", "APC_2", "gun", "APC_2" };
 
     string[] depRec42 = { "gun", "gun", "APC_2" };
-    string[] depRec32 = { "gun", "APC_2", "gun", "APC_2"};
+    string[] depRec32 = { "gun", "APC_2", "gun", "APC_2" };
     string[] depRec22 = { "APC_2", "APC_2", "Mech 2" };
     string[] depRec12 = { "Mech 2", "APC_2", "Mech 2" };
 
-    string[] depRec41 = { "gun", "gun", "gun", "APC_2"};
+    string[] depRec41 = { "gun", "gun", "gun", "APC_2" };
     string[] depRec31 = { "gun", "gun", "APC_2", "APC_2", "Mech 2" };
     string[] depRec21 = { "gun", "gun", "gun", "APC_2", "APC_2", "Mech 2", "Mech 2" };
     string[] depRec11 = { "Mech 2", "gun", "gun", "APC_2", "APC_2", "Mech 2", "APC_2" };
@@ -49,11 +49,11 @@ public class EncampmentHandler : MonoBehaviour
 
     void Update()
     {
-        if(startSpawning)
-        for(int i =0;i<encamps.Length;i++)
-        {
-            CheckUnitNear(encamps[i]);
-        }
+        if (startSpawning)
+            for (int i = 0; i < encamps.Length; i++)
+            {
+                CheckUnitNear(encamps[i]);
+            }
     }
 
     //-----------------------------------------------------------------------------------------
@@ -121,21 +121,21 @@ public class EncampmentHandler : MonoBehaviour
 
     void CheckSpawnEnemy(Encampment e)
     {
-            if (e.CanSpawn)
+        if (e.CanSpawn)
+        {
+            int hit = Random.Range(1, 5);
+            if (e.OnField < e.Deployment.Length && hit < e.Chance)
             {
-                int hit = Random.Range(1, 5);
-                if (e.OnField<e.Deployment.Length && hit < e.Chance)
-                {
-                    SpawnEnemy(e);
-                    e.Chance = 0;
-                }
-                else
-                {
-                    e.Chance++;
-                }
-            //Debug.Log(e.Chance + "0%");
-                StartCoroutine(ChangeSpawnChance(e));
+                SpawnEnemy(e);
+                e.Chance = 0;
             }
+            else
+            {
+                e.Chance++;
+            }
+            //Debug.Log(e.Chance + "0%");
+            StartCoroutine(ChangeSpawnChance(e));
+        }
     }
 
     IEnumerator ChangeSpawnChance(Encampment e)
@@ -148,12 +148,12 @@ public class EncampmentHandler : MonoBehaviour
 
     void SpawnEnemy(Encampment e)
     {
-        PlayClip(e,"attack");
+        PlayClip(e, "attack");
         CheckDeployment(e);
         Vector3 spawnPlace = eGM[e.Id].transform.position + new Vector3(Random.Range(1, 5), 0, Random.Range(1, 5));
 
-       // for(int i=0;i<e.Deployment.Length;i++)
-           // Debug.Log(e.Deployment[i] +" : "+e.OnField);
+        // for(int i=0;i<e.Deployment.Length;i++)
+        // Debug.Log(e.Deployment[i] +" : "+e.OnField);
         var gm = Instantiate(Resources.Load(e.Deployment[e.OnField]), spawnPlace, transform.rotation);
 
         Enemy enemy = new Enemy();
@@ -175,7 +175,7 @@ public class EncampmentHandler : MonoBehaviour
     {
         int quant = rh.resQuantities[rh.GetNumber(e.ClosestRec)];
 
-        if (quant<=0)
+        if (quant <= 0)
         {
             e.Deployment = new string[50];
             //Debug.Log("whoops");
@@ -192,7 +192,7 @@ public class EncampmentHandler : MonoBehaviour
             {
                 e.Deployment = depRec23;
             }
-            else if (e.Health < 75 || quant < rh.startQuantity*0.25f)
+            else if (e.Health < 75 || quant < rh.startQuantity * 0.25f)
             {
                 e.Deployment = depRec33;
             }
@@ -201,7 +201,7 @@ public class EncampmentHandler : MonoBehaviour
                 e.Deployment = depRec43;
             }
         }
-        else if(rh.recsLeft == 2)
+        else if (rh.recsLeft == 2)
         {
             if (e.Health < 25 || quant < rh.startQuantity / 4)
             {
@@ -220,7 +220,7 @@ public class EncampmentHandler : MonoBehaviour
                 e.Deployment = depRec42;
             }
         }
-        else if(rh.recsLeft == 1)
+        else if (rh.recsLeft == 1)
         {
             if (e.Health < 25 || quant < rh.startQuantity / 4)
             {
@@ -243,7 +243,7 @@ public class EncampmentHandler : MonoBehaviour
         {
             return;
         }
-        
+
     }
 
 
@@ -251,9 +251,9 @@ public class EncampmentHandler : MonoBehaviour
     {
         float distance = Mathf.Infinity;
         GameObject chosen = new GameObject();
-        foreach(GameObject rec in spawn.GetResources())
+        foreach (GameObject rec in spawn.GetResources())
         {
-            if(Vector3.Distance(rec.transform.position, GetEncampmentGM(camp).transform.position) < distance)
+            if (Vector3.Distance(rec.transform.position, GetEncampmentGM(camp).transform.position) < distance)
             {
                 distance = Vector3.Distance(rec.transform.position, GetEncampmentGM(camp).transform.position);
                 chosen = rec;
@@ -263,10 +263,11 @@ public class EncampmentHandler : MonoBehaviour
     }
 
 
-    void PlayClip(Encampment encampment,string str)
+    public void PlayClip(Encampment encampment, string str)
     {
         AudioSource tempSource = GetEncampmentGM(encampment).GetComponent<AudioSource>();
-        tempSource.volume = volume;
+        Debug.Log(tempSource);
+        //tempSource.volume = volume;
         if (str.Equals("attack"))
         {
             if (Random.Range(0, 2) == 0)
@@ -274,9 +275,10 @@ public class EncampmentHandler : MonoBehaviour
             else
                 tempSource.PlayOneShot(attackClip2);
         }
-        else if(str.Equals("death"))
+        else if (str.Equals("death"))
         {
             tempSource.PlayOneShot(deathClip);
+            tempSource.PlayOneShot(destroyClip);
         }
     }
-    }
+}
