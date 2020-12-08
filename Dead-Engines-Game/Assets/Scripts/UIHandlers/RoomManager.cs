@@ -6,6 +6,8 @@ using UnityEngine.UI;
 public class RoomManager : MonoBehaviour
 {
 	public SpawnRes spawnRes;
+    public ResourceHandling recHandle;
+    public SelectItems selectItems;
 
 	public List<Room> rooms = new List<Room>();
 	public List<Text> display; //change to gameObject later
@@ -15,6 +17,7 @@ public class RoomManager : MonoBehaviour
 	public AutomatonUI auto;
     public UnitManager um;
 	public GameObject autoObj;
+    public HunterHandler huntHandler;
 
 	public List<GameObject> miniTabs = new List<GameObject>();
 	public GameObject ctrlMiniTab;
@@ -821,5 +824,9 @@ public class RoomManager : MonoBehaviour
     public void ActivateAutomoton()
     {
 		spawnRes.OpenMapRange();
+        autoObj.GetComponent<AutomotonAction>().enabled = true;
+        huntHandler.enabled = true;
+        selectItems.enabled = false;
+        recHandle.SetNewResourceDeposits(spawnRes.GetAllResources());
     }
 }

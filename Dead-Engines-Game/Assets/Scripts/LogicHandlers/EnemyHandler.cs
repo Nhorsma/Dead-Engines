@@ -119,6 +119,7 @@ public class EnemyHandler : MonoBehaviour
             {
                 e.Target = um.GetUnitObject(u);
                 TravelTo(GetEnemyObject(e), um.GetUnitObject(u).transform.position, true, true);
+                AssignAnimation(GetEnemyObject(e), "isShooting", false);
                 break;
             }
         }
@@ -133,16 +134,19 @@ public class EnemyHandler : MonoBehaviour
         if(e.Target != null)
         if ( dis < shootingRange && !e.JustShot)
         {
-            Fire(e);
+                AssignAnimation(GetEnemyObject(e), "isShooting", true);
+                Fire(e);
             StartCoroutine(FireCoolDown(e));
         }
         else if(dis>shootingRange && dis<tresspassingRange)
         {
-            TravelTo(GetEnemyObject(e), e.Target.transform.position, true, true);
+                AssignAnimation(GetEnemyObject(e), "isShooting", false);
+                TravelTo(GetEnemyObject(e), e.Target.transform.position, true, true);
         }
         else if(dis>tresspassingRange && dis>shootingRange)
         {
-            FindSpot(e);
+                AssignAnimation(GetEnemyObject(e), "isShooting", false);
+                FindSpot(e);
             e.Target = null;
         }
     }
@@ -234,5 +238,11 @@ public class EnemyHandler : MonoBehaviour
         }
         else if (str.Equals("shoot"))
             tempSource.PlayOneShot(shootClip);
+    }
+
+    void AssignAnimation(GameObject gm, string anim, bool play)
+    {
+        if (gm.GetComponent<Animator>() != null)
+            gm.GetComponent<Animator>().SetBool(anim, play);
     }
 }

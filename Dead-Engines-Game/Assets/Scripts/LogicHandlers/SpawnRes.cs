@@ -27,6 +27,7 @@ public class SpawnRes : MonoBehaviour
 
 	public int outerSpawnDensity;
 	public GameObject[] outerResources;
+    public ResourceHandling recHandle;
 
 
 	void Start()
@@ -173,8 +174,9 @@ public class SpawnRes : MonoBehaviour
 				outer_res = Instantiate(res3, new Vector3(x, -6.5f, z), Quaternion.identity);
 			}
 			outerResources[i] = outer_res;
-		}
-	}
+
+        }
+    }
 
 
 	public GameObject[] GetResources()
@@ -190,7 +192,7 @@ public class SpawnRes : MonoBehaviour
 		allResources[2] = r3;
 		for (int i = 3; i < outerSpawnDensity + 3; i++)
 		{
-			allResources[i] = outerResources[3 - i];
+			allResources[i] = outerResources[i - 3];
 		}
 
 		return allResources;
@@ -202,5 +204,5 @@ public class SpawnRes : MonoBehaviour
 		ground.GetComponent<MeshRenderer>().enabled = false;
 
 		SpawnOuterResources();
-	}
+    }
 }

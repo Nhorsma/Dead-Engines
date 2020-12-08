@@ -76,7 +76,7 @@ public class ResourceHandling : MonoBehaviour
     public int GetNumber(GameObject gm)
     {
         int i = 0;
-        while(!resDeposits[i].Equals(gm))
+        while(!resDeposits[i].Equals(gm) && i<resDeposits.Length)
         {
             i++;
         }
@@ -117,5 +117,26 @@ public class ResourceHandling : MonoBehaviour
             fuelDropped = true;
     }
 
+    public void SetNewResourceDeposits(GameObject[] newDeps)
+    {
+        GameObject[] newDeposits = newDeps;
+        int[] newQuant = new int[newDeposits.Length];
+        
+        for (int i = 0; i < newQuant.Length; i++)
+        {
+            newQuant[i] = startQuantity;
+        }
+       
+        for (int i = 0; i < resDeposits.Length; i++)
+        {
+            int id = GetNumber(resDeposits[i]);
+            int amount = resQuantities[id];
+            newQuant[id] = amount;
+        }
+
+    resDeposits = newDeposits;
+    resQuantities = newQuant;
+
+    }
 
 }

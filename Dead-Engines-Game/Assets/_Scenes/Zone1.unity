@@ -14693,6 +14693,7 @@ MonoBehaviour:
   outer_high_range: 1500
   outerSpawnDensity: 100
   outerResources: []
+  recHandle: {fileID: 467610735}
 --- !u!114 &1102157337
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -27676,6 +27677,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   spawnRes: {fileID: 1102157336}
+  recHandle: {fileID: 467610735}
+  selectItems: {fileID: 467610731}
   display:
   - {fileID: 430906750}
   - {fileID: 405261272}
@@ -27696,6 +27699,7 @@ MonoBehaviour:
   auto: {fileID: 5905536743914566334}
   um: {fileID: 467610732}
   autoObj: {fileID: 5905536743914566335}
+  huntHandler: {fileID: 1822839396}
   miniTabs:
   - {fileID: 590680891}
   - {fileID: 860571540}
@@ -31289,7 +31293,7 @@ MonoBehaviour:
   aa: {fileID: 0}
   unitManager: {fileID: 467610732}
   autoHealth: 0
-  startingAutoHealth: 20
+  startingAutoHealth: 100
 --- !u!114 &5905536743914566334
 MonoBehaviour:
   m_ObjectHideFlags: 0
