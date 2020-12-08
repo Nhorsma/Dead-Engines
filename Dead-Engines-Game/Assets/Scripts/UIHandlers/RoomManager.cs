@@ -8,6 +8,7 @@ public class RoomManager : MonoBehaviour
 
 	public List<Room> rooms = new List<Room>();
 	public List<Text> display; //change to gameObject later
+	public List<GameObject> displaySprites;
 
 	public int roomSlotClicked = 0;
 	public AutomatonUI auto;
@@ -70,6 +71,13 @@ public class RoomManager : MonoBehaviour
 	public List<string> studyEffectKeys;
 	public List<string> studyEffectDescs;
 
+	public List<Sprite> rightRoomSprites; // 4, 5, 6
+	public List<Sprite> leftRoomSprites; // 0, 1, 2, 3
+
+	public int refineryCapacity;
+	public int shrineCapacity;
+	public int studyCapacity;
+	//add generator 1 & control 1 later
 
 	void Start()
     {
@@ -88,7 +96,9 @@ public class RoomManager : MonoBehaviour
 
 		studyCost_Mo = studyCost_M;
 		studyCost_Eo = studyCost_E;
-}
+
+		UpdateRoomDisplay();
+	}
 
     // Update is called once per frame
     void Update()
@@ -208,38 +218,16 @@ public class RoomManager : MonoBehaviour
 			craftFive.onClick.AddListener(delegate { Refine(refineryEntries[i2].text.ToString(), 5); });
 		}
 
+		if (slot <= 3)
+		{
+			miniTabs[slot].GetComponent<MiniTabHolder>().pic.sprite = leftRoomSprites[0];
+		}
+		else
+		{
+			miniTabs[slot].GetComponent<MiniTabHolder>().pic.sprite = rightRoomSprites[0];
+		}
 
-		//miniTabs[slot].GetComponent<MiniTabHolder>().func1.GetComponentInChildren<Text>().text = "Refine Bolt";
-		//miniTabs[slot].GetComponent<MiniTabHolder>().func2.GetComponentInChildren<Text>().text = "Refine Plate";
-		//miniTabs[slot].GetComponent<MiniTabHolder>().func3.GetComponentInChildren<Text>().text = "Refine Part";
-
-		//miniTabs[slot].GetComponent<MiniTabHolder>().func1.onClick.RemoveAllListeners();
-		//miniTabs[slot].GetComponent<MiniTabHolder>().func1.onClick.AddListener(delegate{ Refine("bolt"); }); ///////////////////////////////
-		//miniTabs[slot].GetComponent<MiniTabHolder>().func1.gameObject.SetActive(true);
-
-		//miniTabs[slot].GetComponent<MiniTabHolder>().func2.onClick.RemoveAllListeners();
-		//miniTabs[slot].GetComponent<MiniTabHolder>().func2.onClick.AddListener(delegate { Refine("plate"); }); ///////////////////////////////
-		//miniTabs[slot].GetComponent<MiniTabHolder>().func2.gameObject.SetActive(true);
-
-		//miniTabs[slot].GetComponent<MiniTabHolder>().func3.onClick.RemoveAllListeners();
-		//miniTabs[slot].GetComponent<MiniTabHolder>().func3.onClick.AddListener(delegate { Refine("part"); }); ///////////////////////////////
-		//miniTabs[slot].GetComponent<MiniTabHolder>().func3.gameObject.SetActive(true);
-
-		//miniTabs[slot].GetComponent<MiniTabHolder>().func4.GetComponentInChildren<Text>().text = "Refine Wire";
-		//miniTabs[slot].GetComponent<MiniTabHolder>().func5.GetComponentInChildren<Text>().text = "Refine Chip";
-		//miniTabs[slot].GetComponent<MiniTabHolder>().func6.GetComponentInChildren<Text>().text = "Refine Board";
-
-		//miniTabs[slot].GetComponent<MiniTabHolder>().func4.onClick.RemoveAllListeners();
-		//miniTabs[slot].GetComponent<MiniTabHolder>().func4.onClick.AddListener(delegate { Refine("wire"); }); ///////////////////////////////
-		//miniTabs[slot].GetComponent<MiniTabHolder>().func4.gameObject.SetActive(true);
-
-		//miniTabs[slot].GetComponent<MiniTabHolder>().func5.onClick.RemoveAllListeners();
-		//miniTabs[slot].GetComponent<MiniTabHolder>().func5.onClick.AddListener(delegate { Refine("chip"); }); ///////////////////////////////
-		//miniTabs[slot].GetComponent<MiniTabHolder>().func5.gameObject.SetActive(true);
-
-		//miniTabs[slot].GetComponent<MiniTabHolder>().func6.onClick.RemoveAllListeners();
-		//miniTabs[slot].GetComponent<MiniTabHolder>().func6.onClick.AddListener(delegate { Refine("board"); }); ///////////////////////////////
-		//miniTabs[slot].GetComponent<MiniTabHolder>().func6.gameObject.SetActive(true);
+		Produce();
 	}
 
 	void SetupStorage(int slot)
@@ -272,21 +260,14 @@ public class RoomManager : MonoBehaviour
 			discardFive.onClick.AddListener(delegate { Discard(storageEntries[i2].text.ToString(), 5); });
 		}
 
-		//miniTabs[slot].GetComponent<MiniTabHolder>().func1.GetComponentInChildren<Text>().text = "Sup";
-		//miniTabs[slot].GetComponent<MiniTabHolder>().func2.GetComponentInChildren<Text>().text = "Discard 1 Electronics";
-		//miniTabs[slot].GetComponent<MiniTabHolder>().func3.GetComponentInChildren<Text>().text = "Discard 1 Metal";
-
-		//miniTabs[slot].GetComponent<MiniTabHolder>().func1.onClick.RemoveAllListeners();
-		//miniTabs[slot].GetComponent<MiniTabHolder>().func1.onClick.AddListener(Sup); ///////////////////////////////
-		//miniTabs[slot].GetComponent<MiniTabHolder>().func1.gameObject.SetActive(true);
-
-
-		//miniTabs[slot].GetComponent<MiniTabHolder>().func2.onClick.RemoveAllListeners();
-		//miniTabs[slot].GetComponent<MiniTabHolder>().func2.onClick.AddListener(delegate { Discard("electronics", 1); }); ///////////////////////////////
-
-		//miniTabs[slot].GetComponent<MiniTabHolder>().func3.onClick.RemoveAllListeners();
-		//miniTabs[slot].GetComponent<MiniTabHolder>().func3.onClick.AddListener(delegate { Discard("electronics", 1); }); ///////////////////////////////
-
+		if (slot <= 3)
+		{
+			miniTabs[slot].GetComponent<MiniTabHolder>().pic.sprite = leftRoomSprites[1];
+		}
+		else
+		{
+			miniTabs[slot].GetComponent<MiniTabHolder>().pic.sprite = rightRoomSprites[1];
+		}
 	}
 
 	void SetupShrine(int slot)
@@ -321,24 +302,17 @@ public class RoomManager : MonoBehaviour
 			buffer.GetComponentInChildren<Text>().text = shrineEffectDescs[i2];
 		}
 
+		if (slot <= 3)
+		{
+			miniTabs[slot].GetComponent<MiniTabHolder>().pic.sprite = leftRoomSprites[2];
+		}
+		else
+		{
+			miniTabs[slot].GetComponent<MiniTabHolder>().pic.sprite = rightRoomSprites[2];
+		}
+
 		rooms[slot].ActiveEffect = "none";
 		Worship();
-
-		//miniTabs[slot].GetComponent<MiniTabHolder>().func1.GetComponentInChildren<Text>().text = "Assign Unit";
-		//miniTabs[slot].GetComponent<MiniTabHolder>().func2.GetComponentInChildren<Text>().text = "Unassign Unit";
-		//miniTabs[slot].GetComponent<MiniTabHolder>().func3.GetComponentInChildren<Text>().text = "Buff2";
-
-		//miniTabs[slot].GetComponent<MiniTabHolder>().func1.onClick.RemoveAllListeners();
-		//miniTabs[slot].GetComponent<MiniTabHolder>().func1.onClick.AddListener(delegate { Assign("shrine", rooms[slot]); } ); ///////////////////////////////
-		//miniTabs[slot].GetComponent<MiniTabHolder>().func1.gameObject.SetActive(true);
-
-		//miniTabs[slot].GetComponent<MiniTabHolder>().func2.onClick.RemoveAllListeners();
-		//miniTabs[slot].GetComponent<MiniTabHolder>().func2.onClick.AddListener(Sup); ///////////////////////////////
-		//miniTabs[slot].GetComponent<MiniTabHolder>().func2.gameObject.SetActive(true);
-
-		//miniTabs[slot].GetComponent<MiniTabHolder>().func3.onClick.RemoveAllListeners();
-		//miniTabs[slot].GetComponent<MiniTabHolder>().func3.onClick.AddListener(Sup); ///////////////////////////////
-		//miniTabs[slot].GetComponent<MiniTabHolder>().func3.gameObject.SetActive(true);
 	}
 
 	void SetupStudy(int slot)
@@ -371,6 +345,15 @@ public class RoomManager : MonoBehaviour
 			buffer.onClick.RemoveAllListeners();
 			buffer.onClick.AddListener(delegate { SetActiveEffect(studyEffectKeys[i2], rooms[slot]); });
 			buffer.GetComponentInChildren<Text>().text = studyEffectDescs[i2];
+		}
+
+		if (slot <= 3)
+		{
+			miniTabs[slot].GetComponent<MiniTabHolder>().pic.sprite = leftRoomSprites[3];
+		}
+		else
+		{
+			miniTabs[slot].GetComponent<MiniTabHolder>().pic.sprite = rightRoomSprites[3];
 		}
 
 		rooms[slot].ActiveEffect = "none";
@@ -596,7 +579,6 @@ public class RoomManager : MonoBehaviour
 
 	public void Assign(string where, Room r)
 	{
-		
 		if (um.ReturnJoblessUnit() == null)
 		{
 			Debug.Log("No worker available");
@@ -605,26 +587,69 @@ public class RoomManager : MonoBehaviour
 		else
 		{
 			Unit who = um.ReturnJoblessUnit();
-			Debug.Log("Assigned [" + who.UnitName + "] to[" + r.Type + "][" + r.Slot + "]");
-			who.Job = where;
-			who.JobPos = autoObj;
-			um.SetJobFromRoom(who, where);
-			r.Workers.Add(who);
-			r.WorkMultiplier = r.Workers.Count;
 
 			if (r.Type == "shrine")
 			{
-				Worship();
+				if (r.Workers.Count >= shrineCapacity)
+				{
+					Debug.Log("Room is full");
+					return;
+				}
+				else
+				{
+					who.Job = where;
+					who.JobPos = autoObj;
+					um.SetJobFromRoom(who, where);
+					r.Workers.Add(who);
+					r.WorkMultiplier = r.Workers.Count;
+					miniTabs[r.Slot].GetComponent<MiniTabHolder>().capacity.text = r.Workers.Count.ToString() + " / " + shrineCapacity.ToString();
+
+					Worship();
+					Debug.Log("Assigned [" + who.UnitName + "] to[" + r.Type + "][" + r.Slot + "]");
+				}
 			}
 			else if (r.Type == "study")
 			{
-				Research();
+				if (r.Workers.Count >= studyCapacity)
+				{
+					Debug.Log("Room is full");
+					return;
+				}
+				else
+				{
+					who.Job = where;
+					who.JobPos = autoObj;
+					um.SetJobFromRoom(who, where);
+					r.Workers.Add(who);
+					r.WorkMultiplier = r.Workers.Count;
+					miniTabs[r.Slot].GetComponent<MiniTabHolder>().capacity.text = r.Workers.Count.ToString() + " / " + studyCapacity.ToString();
+
+					Research();
+					Debug.Log("Assigned [" + who.UnitName + "] to[" + r.Type + "][" + r.Slot + "]");
+				}
 			}
 			else if (r.Type == "refinery")
 			{
-				Produce();
+				if (r.Workers.Count >= refineryCapacity)
+				{
+					Debug.Log("Room is full");
+					return;
+				}
+				else
+				{
+					who.Job = where;
+					who.JobPos = autoObj;
+					um.SetJobFromRoom(who, where);
+					r.Workers.Add(who);
+					r.WorkMultiplier = r.Workers.Count;
+					miniTabs[r.Slot].GetComponent<MiniTabHolder>().capacity.text = r.Workers.Count.ToString() + " / " + refineryCapacity.ToString();
+
+					Produce();
+					Debug.Log("Assigned [" + who.UnitName + "] to[" + r.Type + "][" + r.Slot + "]");
+				}
 			}
 
+			//
 			//method does not exist yet
 			//info.UpdateUnitViewer();
 		}
@@ -632,7 +657,6 @@ public class RoomManager : MonoBehaviour
 
 	public void Unassign(string where, Room r)
 	{
-
 		if (r.Workers.Count == 0)
 		{
 			Debug.Log("No worker available");
@@ -651,21 +675,22 @@ public class RoomManager : MonoBehaviour
             um.TravelTo(um.GetUnitObject(who), um.GetUnitObject(who).transform.position, false, false);
 			r.Workers.Remove(who);
 			r.WorkMultiplier = r.Workers.Count;
-/*
+
 			if (r.Type == "shrine")
 			{
+				miniTabs[r.Slot].GetComponent<MiniTabHolder>().capacity.text = r.Workers.Count.ToString() + " / " + shrineCapacity.ToString();
 				Worship();
 			}
 			else if (r.Type == "study")
 			{
+				miniTabs[r.Slot].GetComponent<MiniTabHolder>().capacity.text = r.Workers.Count.ToString() + " / " + studyCapacity.ToString();
 				Research();
 			}
 			else if (r.Type == "refinery")
 			{
+				miniTabs[r.Slot].GetComponent<MiniTabHolder>().capacity.text = r.Workers.Count.ToString() + " / " + refineryCapacity.ToString();
 				Produce();
 			}
-            */
-
 			//method does not exist yet
 			//info.UpdateUnitViewer();
 		}
@@ -786,6 +811,7 @@ public class RoomManager : MonoBehaviour
 		for (int i = 0; i < rooms.Count; i++)
 		{
 			display[i].text = rooms[i].Type;
+			displaySprites[i].GetComponent<Image>().sprite = miniTabs[i].GetComponent<MiniTabHolder>().pic.sprite;
 		}
 		Debug.Log("Updated Rooms");
 		auto.OpenTab2();
