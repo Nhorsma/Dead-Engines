@@ -41,11 +41,22 @@ public class HunterHandler : MonoBehaviour
                 Transform hm = ho.GetComponentInChildren<Transform>();
 
                 if (Vector3.Distance(ho.transform.position, automoton.transform.position) > stoppingDistance * 1.5f)
+                {
                     TravelTo(ho, automoton.transform.position, true);
-                else
-                    h.Obj.GetComponent<Animator>().SetBool("isShooting", true);
+                    ho.GetComponent<Animator>().SetBool("isShooting", false);
+                }
+                else if (Vector3.Distance(ho.transform.position, automoton.transform.position) < stoppingDistance)
+                {
+                    ho.GetComponent<Animator>().SetBool("isShooting", true);
+                    if (!h.JustShot)
+                    {
+                        Fire(h);
+                        StartCoroutine(FireCoolDown(h));
+                    }
+                }
 
-                if(Vector3.Distance(ho.transform.position,automoton.transform.position)<stoppingDistance/2
+                /*
+                if (Vector3.Distance(ho.transform.position,automoton.transform.position)<stoppingDistance/3
                     && h.CanWalk)
                 {
                     // mid = 2xy - xy
@@ -54,8 +65,10 @@ public class HunterHandler : MonoBehaviour
                     float x2 = automoton.transform.position.x;
                     float y2 = automoton.transform.position.z;
                     Vector3 position = new Vector3(2*(2 * x1) - x2, ho.transform.position.y, 2*(2 * y1) - y2);
-                    TravelTo(ho, position, true);              
+                    TravelTo(ho, position, true);
+                    ho.GetComponent<Animator>().SetBool("isShooting", false);
                 }
+                */
                 hm.forward = automoton.transform.position - ho.transform.position;
             }
     }
@@ -147,6 +160,7 @@ public class HunterHandler : MonoBehaviour
                 h.Damage = 3;
                 break;
         }
+        h.Target = automoton;
         return h;
         
     }
@@ -155,13 +169,11 @@ public class HunterHandler : MonoBehaviour
     {
         if (a != null && a.GetComponent<NavMeshAgent>() != null)
         {
-            //Debug.Log("traveling");
             NavMeshAgent nv = a.GetComponent<NavMeshAgent>();
             if (stop)
             {
                 nv.stoppingDistance = stoppingDistance;
             }
-            a.GetComponent<Animator>().SetBool("isShooting", false);
             nv.SetDestination(place);
         }
         else
@@ -229,7 +241,8 @@ public class HunterHandler : MonoBehaviour
         {
             Vector3 direction = hunter.Target.transform.position - hunter.Obj.transform.position;
             PlayClip("shoot");
-            StartCoroutine(TrailOff(0.07f, hunter.Obj.transform.position, hunter.Target.transform.position));
+            StartCoroutine(TrailOff(0.07f, hunter.Obj.transform.position + new Vector3(0,5,0), 
+                hunter.Target.transform.position + new Vector3(0, 10, 0)));
 
             int hitChance = Random.Range(0, 2);
             if (hitChance == 0)

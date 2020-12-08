@@ -20024,6 +20024,7 @@ MonoBehaviour:
   recHandle: {fileID: 467610735}
   campHandle: {fileID: 467610733}
   enemyHandle: {fileID: 467610734}
+  huntHandle: {fileID: 0}
   explosion: {fileID: 3118891267616825007, guid: 33b774b5819a306478e54bab16c216bb,
     type: 3}
 --- !u!1 &1386237777
@@ -25668,7 +25669,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1822839391}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7c12db2259dd6644bb0347633d1dfcbb, type: 3}
   m_Name: 
@@ -25677,8 +25678,8 @@ MonoBehaviour:
   h1: {fileID: 7984746186806774821, guid: 885c2fefa067bba4a89e61a5e1dcf802, type: 3}
   h2: {fileID: 7816565298225748079, guid: 73c5358c9ec28d647a502447b57c808a, type: 3}
   h3: {fileID: 2844502961085742202, guid: 280aff34cf62f864ba8eb71207a5a037, type: 3}
-  spawnRadius: 100
-  stoppingDistance: 50
+  spawnRadius: 200
+  stoppingDistance: 100
   movementSpeed: 10
   canSpawn: 1
   isDeployed: 0
@@ -26212,6 +26213,7 @@ MonoBehaviour:
   recHandle: {fileID: 0}
   campHandle: {fileID: 0}
   enemyHandle: {fileID: 0}
+  huntHandle: {fileID: 0}
   explosion: {fileID: 0}
 --- !u!65 &1881537981
 BoxCollider:
@@ -33463,7 +33465,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
   m_PlayOnAwake: 1
-  m_Volume: 1
+  m_Volume: 0.25
   m_Pitch: 1
   Loop: 0
   Mute: 0
