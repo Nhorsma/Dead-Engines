@@ -6,6 +6,7 @@ using UnityEngine.AI;
 public class HunterHandler : MonoBehaviour
 {
     public GameObject automoton, h1, h2, h3;
+    public AutomotonAction autoAction;
     public Hunter[] deployed;
     public float spawnRadius, stoppingDistance, movementSpeed;
     public bool canSpawn, isDeployed;
@@ -249,6 +250,7 @@ public class HunterHandler : MonoBehaviour
             Vector3 shootFrom = hunter.Obj.transform.Find("FireFrom").position;
             StartCoroutine(TrailOff(0.07f, shootFrom, hunter.Target.transform.position + new Vector3(0, 50, 0)));
 
+            autoAction.RecieveDamage(hunter.Damage);
             //            int hitChance = Random.Range(0, 2);
             //          if (hitChance == 0)
             //        {

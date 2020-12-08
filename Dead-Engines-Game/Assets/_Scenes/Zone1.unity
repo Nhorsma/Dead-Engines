@@ -24281,6 +24281,7 @@ MonoBehaviour:
   h1: {fileID: 7984746186806774821, guid: 885c2fefa067bba4a89e61a5e1dcf802, type: 3}
   h2: {fileID: 7816565298225748079, guid: 73c5358c9ec28d647a502447b57c808a, type: 3}
   h3: {fileID: 2844502961085742202, guid: 280aff34cf62f864ba8eb71207a5a037, type: 3}
+  autoAction: {fileID: 5905536743914566333}
   spawnRadius: 200
   stoppingDistance: 100
   movementSpeed: 10
@@ -31248,6 +31249,7 @@ MonoBehaviour:
   robotSounds: {fileID: 8300000, guid: 93dbebd631da9fa4292466417219de4d, type: 3}
   confirmClip1: {fileID: 8300000, guid: 62ec5201ebe5992458c62e1ca741d7bb, type: 3}
   confirmClip2: {fileID: 8300000, guid: 9faede8e29549084783c81fa193d714a, type: 3}
+  alarmClip: {fileID: 8300000, guid: 80bbb99b2868e6b4cbdf203b7ec9ec7a, type: 3}
   audioSource: {fileID: 0}
   movementSpeed: 8
   turnSpeed: 80
@@ -31270,13 +31272,15 @@ MonoBehaviour:
   fistObject: {fileID: 1881537978}
   dustCloud: {fileID: 2331758108357925257, guid: 728940da92c71fd4181017f35bd1a5f0,
     type: 3}
+  explosion: {fileID: 3118891267616825007, guid: 33b774b5819a306478e54bab16c216bb,
+    type: 3}
   phaseOnePos: {x: 0, y: 0, z: 0}
   phaseTwoPos: {x: 0, y: 0, z: 0}
   climbOut: {fileID: 0}
   aa: {fileID: 0}
   unitManager: {fileID: 467610732}
   autoHealth: 0
-  startingAutoHealth: 0
+  startingAutoHealth: 20
 --- !u!114 &5905536743914566334
 MonoBehaviour:
   m_ObjectHideFlags: 0

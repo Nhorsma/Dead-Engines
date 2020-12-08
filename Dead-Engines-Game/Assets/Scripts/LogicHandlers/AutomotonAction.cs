@@ -6,7 +6,7 @@ using UnityEngine.AI;
 public class AutomotonAction : MonoBehaviour
 {
     public Animator anim;
-    public AudioClip hitgroundClip, robotSounds, confirmClip1, confirmClip2;
+    public AudioClip hitgroundClip, robotSounds, confirmClip1, confirmClip2, alarmClip;
     public AudioSource audioSource;
     public float movementSpeed, turnSpeed;
     public float startAngle, target, ny;
@@ -17,7 +17,7 @@ public class AutomotonAction : MonoBehaviour
     Rigidbody rb;
 
     public static bool endPhaseOne;
-    public GameObject automoton, fog, footObject, fistObject, dustCloud;
+    public GameObject automoton, fog, footObject, fistObject, dustCloud,explosion;
     public Vector3 phaseOnePos, phaseTwoPos;
     public Animation climbOut;
     public AutomotonAction aa;
@@ -61,7 +61,7 @@ public class AutomotonAction : MonoBehaviour
 
     private void LateUpdate()
     {
-        if (endPhaseOne)
+        if (endPhaseOne && autoHealth>0)
         {
             Movement();
             Controls();
@@ -248,7 +248,7 @@ public class AutomotonAction : MonoBehaviour
         ContinueAnimations(false);
         anim.SetBool("GroundPound", true);
         yield return new WaitForSeconds(2f);
-        SpawnExplosion(footObject);
+        SpawnDust(footObject);
         PlayClip("hit");
         //hit ground
         footCollider.enabled = true;
@@ -321,31 +321,38 @@ public class AutomotonAction : MonoBehaviour
 
         if(autoHealth >= startingAutoHealth*0.75f)
         {
-            //something to signify no damage;
+            
         }
         else if(autoHealth >= startingAutoHealth*0.5f)
         {
-            //something to signify light damage;
+            audioSource.PlayOneShot(alarmClip);
         }
         else if (autoHealth >= startingAutoHealth * 0.25f)
         {
-            //something to signify significant damage;
+            audioSource.PlayOneShot(alarmClip);
         }
         else if(autoHealth >= 0)
         {
-            //something to signify mortal damage;
+            audioSource.PlayOneShot(alarmClip);
         }
         else
         {
-            //Dead
+            SpawnExplosion(gameObject);
+            PlayClip("hit");
             Debug.Log("auto is Dead");
         }
 
     }
 
-    void SpawnExplosion(GameObject obj)
+    void SpawnDust(GameObject obj)
     {
         var expl = (GameObject)Instantiate(Resources.Load(dustCloud.name), obj.transform.position+new Vector3(0,2,0), Quaternion.Euler(90,0,0));
+        StartCoroutine(TrailOff(5, expl));
+    }
+
+    void SpawnExplosion(GameObject obj)
+    {
+        var expl = (GameObject)Instantiate(Resources.Load(explosion.name), obj.transform.position + new Vector3(0, 50, 0), Quaternion.Euler(90, 0, 0));
         StartCoroutine(TrailOff(5, expl));
     }
 
@@ -358,11 +365,13 @@ public class AutomotonAction : MonoBehaviour
 
     public void PlayClip(string str)
     {
-        if(str=="hit")
+        if (str == "hit")
             audioSource.PlayOneShot(hitgroundClip);
-        else if(str=="confirm1")
+        else if (str == "confirm1")
             audioSource.PlayOneShot(confirmClip1);
-        else if(str=="confirm2")
+        else if (str == "confirm2")
             audioSource.PlayOneShot(confirmClip2);
+        else if (str == "alarm")
+            audioSource.PlayOneShot(alarmClip);
     }
 }
