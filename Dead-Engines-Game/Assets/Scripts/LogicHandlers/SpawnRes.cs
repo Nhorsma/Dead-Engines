@@ -18,22 +18,31 @@ public class SpawnRes : MonoBehaviour
 	public int low_range;
 	public int high_range;
 
-	/// <summary>
-	/// still spawning at origin instead of robot pos
-	/// start() makes inf loop????????????????
-	/// </summary>
-    void Start()
+	public GameObject fogOfWar;
+	public GameObject ground;
+	public Material groundMat;
+
+	public int outer_low_range;
+	public int outer_high_range;
+
+	public int outerSpawnDensity;
+	public GameObject[] outerResources;
+
+
+	void Start()
     {
 
 		startPos = autoObj.transform;
 		Debug.Log(autoObj.transform.position);
 
 		// must call in order else null reference
-		SpawnResource(1); //HERE
+		SpawnResource(1);
 		SpawnResource(2);
 		SpawnResource(3);
 
 		SpawnEnemies(howMany);
+
+		outerResources = new GameObject[outerSpawnDensity];
 	}
 
 	void Update()
@@ -141,9 +150,57 @@ public class SpawnRes : MonoBehaviour
 		}
 	}
 
+	public void SpawnOuterResources()
+	{
+		int x, z = 0;
+		GameObject outer_res = new GameObject();
 
-    public GameObject[] GetResources()
-    {
-        return new GameObject[] { r1, r2, r3 };
-    }
+		for (int i = 0; i < outerSpawnDensity; i++)
+		{
+			x = Random.Range(-(outer_low_range - 1), (outer_high_range));
+			z = Random.Range(-(outer_low_range - 1), (outer_high_range));
+
+			if (x % 2 == 0 && z % 2 == 0)
+			{
+				outer_res = Instantiate(res1, new Vector3(x, -6.5f, z), Quaternion.identity);
+			}
+			else if (x % 2 != 0 && z % 2 != 0)
+			{
+				outer_res = Instantiate(res2, new Vector3(x, -6.5f, z), Quaternion.identity);
+			}
+			else if ((x % 2 != 0 && z % 2 == 0) || (x % 2 == 0 && z % 2 != 0))
+			{
+				outer_res = Instantiate(res3, new Vector3(x, -6.5f, z), Quaternion.identity);
+			}
+			outerResources[i] = outer_res;
+		}
+	}
+
+
+	public GameObject[] GetResources()
+	{
+		return new GameObject[] { r1, r2, r3 };
+	}
+
+	public GameObject[] GetAllResources()
+	{
+		GameObject[] allResources = new GameObject[outerSpawnDensity + 3];
+		allResources[0] = r1;
+		allResources[1] = r2;
+		allResources[2] = r3;
+		for (int i = 3; i < outerSpawnDensity + 3; i++)
+		{
+			allResources[i] = outerResources[3 - i];
+		}
+
+		return allResources;
+	}
+
+	public void OpenMapRange()
+	{
+		fogOfWar.GetComponent<MeshRenderer>().material = groundMat;
+		ground.GetComponent<MeshRenderer>().enabled = false;
+
+		SpawnOuterResources();
+	}
 }

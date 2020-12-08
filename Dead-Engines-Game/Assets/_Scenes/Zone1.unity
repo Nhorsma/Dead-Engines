@@ -2246,8 +2246,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_MethodName: RepairAutomaton
+      - m_Target: {fileID: 2075244114}
+        m_MethodName: ActivateAutomoton
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -6293,6 +6293,7 @@ MonoBehaviour:
   unitManager: {fileID: 467610732}
   spawn: {fileID: 1102157336}
   rh: {fileID: 467610735}
+  startSpawnTime: 0
   spawnTime: 3
   spawnDistance: 5
   startSpawning: 0
@@ -9986,7 +9987,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: df03f88a31fba194c853b77aa8f3b25c, type: 2}
+  - {fileID: 2100000, guid: 3ee16281754141e4a8c2bc97949d2272, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -14685,6 +14686,13 @@ MonoBehaviour:
   howMany: 1
   low_range: 750
   high_range: 750
+  fogOfWar: {fileID: 1951739293}
+  ground: {fileID: 702784496}
+  groundMat: {fileID: 2100000, guid: df03f88a31fba194c853b77aa8f3b25c, type: 2}
+  outer_low_range: 1500
+  outer_high_range: 1500
+  outerSpawnDensity: 100
+  outerResources: []
 --- !u!114 &1102157337
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -14952,7 +14960,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1130015374
 RectTransform:
   m_ObjectHideFlags: 0
@@ -27667,6 +27675,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 470fad9b36a43154c8a140fc0a07fb8e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  spawnRes: {fileID: 1102157336}
   display:
   - {fileID: 430906750}
   - {fileID: 405261272}
@@ -28709,7 +28718,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &2114653578
 RectTransform:
   m_ObjectHideFlags: 0

@@ -5,6 +5,7 @@ using UnityEngine.UI;
 
 public class RoomManager : MonoBehaviour
 {
+	public SpawnRes spawnRes;
 
 	public List<Room> rooms = new List<Room>();
 	public List<Text> display; //change to gameObject later
@@ -819,6 +820,6 @@ public class RoomManager : MonoBehaviour
 
     public void ActivateAutomoton()
     {
-
+		spawnRes.OpenMapRange();
     }
 }

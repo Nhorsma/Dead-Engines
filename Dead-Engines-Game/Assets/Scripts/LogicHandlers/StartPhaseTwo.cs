@@ -22,7 +22,6 @@ public class StartPhaseTwo : MonoBehaviour
         aa.enabled = true;
         hh.enabled = true;
         endPhaseOne = true;
-
     }
 
 }
