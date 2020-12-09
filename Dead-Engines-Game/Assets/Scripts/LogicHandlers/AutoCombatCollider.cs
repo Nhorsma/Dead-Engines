@@ -38,6 +38,7 @@ public class AutoCombatCollider : MonoBehaviour
                 ResourceHandling.metal += 50;
 
             huntHandle.PlayClip("hit");
+            huntHandle.CheckSpawnHunter();
         }
         if (other.gameObject.tag == "Electronics")
         {
@@ -49,6 +50,7 @@ public class AutoCombatCollider : MonoBehaviour
                 ResourceHandling.electronics += 50;
 
             huntHandle.PlayClip("hit");
+            huntHandle.CheckSpawnHunter();
         }
     }
 

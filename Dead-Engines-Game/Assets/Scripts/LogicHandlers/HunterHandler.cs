@@ -11,7 +11,7 @@ public class HunterHandler : MonoBehaviour
     public float spawnRadius, stoppingDistance, movementSpeed;
     public bool canSpawn, isDeployed;
     public float chance, spawnTime;
-    public AudioClip attack1Clip, attack2Clip, shootClip, hitClip, destroyClip;
+    public AudioClip attack1Clip, attack2Clip, shootClip, hitClip, destroyClip, enemyDetectedClip;
 
 
     Vector3 last;
@@ -25,7 +25,6 @@ public class HunterHandler : MonoBehaviour
 
     void Update()
     {
-        CheckSpawnHunter();
         HappyHunting();
     }
 
@@ -74,13 +73,14 @@ public class HunterHandler : MonoBehaviour
             }
     }
 
-    void CheckSpawnHunter()
+    public void CheckSpawnHunter()
     {
         if (canSpawn && !isDeployed)
         {
-            int hit = Random.Range(1, 10);
+            int hit = Random.Range(0, 2);
             if (hit < chance)
             {
+                PlayClip("enemy");
                 SpawnHunter();
                 chance = 0;
                 isDeployed = true;
@@ -145,19 +145,19 @@ public class HunterHandler : MonoBehaviour
             case 1:
                 h = new Hunter(h1);
                 h.Speed = 7f;
-                h.Health = 3;
+                h.Health = 2;
                 h.Damage = 2;
                 break;
             case 2:
                 h = new Hunter(h2);
                 h.Speed = 10f;
-                h.Health = 3;
+                h.Health = 1;
                 h.Damage = 1;
                 break;
             case 3:
                 h = new Hunter(h3);
                 h.Speed = 3f;
-                h.Health = 5;
+                h.Health = 3;
                 h.Damage = 3;
                 break;
         }
@@ -224,7 +224,6 @@ public class HunterHandler : MonoBehaviour
             if (deployed.Equals(new Hunter[] { null, null, null }))
             {
                 isDeployed = false;
-                canSpawn = false;
             }
         }
         else
@@ -251,12 +250,6 @@ public class HunterHandler : MonoBehaviour
             StartCoroutine(TrailOff(0.07f, shootFrom, hunter.Target.transform.position + new Vector3(0, 50, 0)));
 
             autoAction.RecieveDamage(hunter.Damage);
-            //            int hitChance = Random.Range(0, 2);
-            //          if (hitChance == 0)
-            //        {
-            //Debug.Log("hit");
-
-            //      }
         }
     }
 
@@ -299,5 +292,7 @@ public class HunterHandler : MonoBehaviour
             tempSource.PlayOneShot(hitClip);
         else if (str.Equals("death"))
             tempSource.PlayOneShot(destroyClip);
+        else if (str.Equals("enemy"))
+            tempSource.PlayOneShot(enemyDetectedClip);
     }
 }
