@@ -22,20 +22,20 @@ public class EncampmentHandler : MonoBehaviour
     public AudioClip attackClip1, attackClip2, deathClip, destroyClip;
     public float volume;
 
-    string[] depRec43 = { "gun", "gun", "gun" };
-    string[] depRec33 = { "gun", "APC_2", "gun" };
-    string[] depRec23 = { "gun", "gun", "APC_2", "APC_2" };
-    string[] depRec13 = { "gun", "APC_2", "gun", "APC_2" };
+    string[] depRec43 = { "gunner", "gunner", "gunner" };
+    string[] depRec33 = { "gunner", "APC_2", "gunner" };
+    string[] depRec23 = { "gunner", "gunner", "APC_2", "APC_2" };
+    string[] depRec13 = { "gunner", "APC_2", "gunner", "APC_2" };
 
-    string[] depRec42 = { "gun", "gun", "APC_2" };
-    string[] depRec32 = { "gun", "APC_2", "gun", "APC_2" };
+    string[] depRec42 = { "gunner", "gunner", "APC_2" };
+    string[] depRec32 = { "gunner", "APC_2", "gunner", "APC_2" };
     string[] depRec22 = { "APC_2", "APC_2", "Mech 2" };
     string[] depRec12 = { "Mech 2", "APC_2", "Mech 2" };
 
-    string[] depRec41 = { "gun", "gun", "gun", "APC_2" };
-    string[] depRec31 = { "gun", "gun", "APC_2", "APC_2", "Mech 2" };
-    string[] depRec21 = { "gun", "gun", "gun", "APC_2", "APC_2", "Mech 2", "Mech 2" };
-    string[] depRec11 = { "Mech 2", "gun", "gun", "APC_2", "APC_2", "Mech 2", "APC_2" };
+    string[] depRec41 = { "gunner", "gunner", "gunner", "APC_2" };
+    string[] depRec31 = { "gunner", "gunner", "APC_2", "APC_2", "Mech 2" };
+    string[] depRec21 = { "gunner", "gunner", "gunner", "APC_2", "APC_2", "Mech 2", "Mech 2" };
+    string[] depRec11 = { "Mech 2", "gunner", "gunner", "APC_2", "APC_2", "Mech 2", "APC_2" };
 
     void Start()
     {
@@ -107,7 +107,7 @@ public class EncampmentHandler : MonoBehaviour
             {
                 if (encamps[i].Health >= startSpawnTime * 0.75f)
                 {
-                    spawnTime--; ;
+                    spawnTime--;
                 }
                 if (encamps[i].Health >= startSpawnTime * 0.5f)
                 {
@@ -186,7 +186,7 @@ public class EncampmentHandler : MonoBehaviour
     }
 
 
-    //adds "gun", "APC", or "Mech"
+    //adds "gunner", "APC", or "Mech"
     void CheckDeployment(Encampment e)
     {
         int quant = rh.resQuantities[rh.GetNumber(e.ClosestRec)];
