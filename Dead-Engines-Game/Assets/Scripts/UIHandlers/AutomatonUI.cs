@@ -59,8 +59,11 @@ public class AutomatonUI : MonoBehaviour
 
 	private void OnMouseDown()
 	{
-		auto_main.SetActive(!auto_main.activeSelf);
-		top_hud.SetActive(!top_hud.activeSelf);
+		if (!Pause.paused)
+		{
+			auto_main.SetActive(!auto_main.activeSelf);
+			top_hud.SetActive(!top_hud.activeSelf);
+		}
 	}
 
 	public void OpenTab1()
@@ -110,16 +113,16 @@ public class AutomatonUI : MonoBehaviour
 		hudMetal.text = "Metal: " + ResourceHandling.metal;
 		hudElectronics.text = "Electronics: " + ResourceHandling.electronics;
 
-		if (unitManager.units != null)
-		{
-			if (unitManager.units.Length > 0)
-			{
-				for (int i = 0; i < unitManager.units.Length; i++)
-				{
-					unitViewport[i].GetComponentInChildren<Text>().text = unitManager.units[i].UnitName;
-				}
-			}
-		}
+		//if (unitManager.units != null)
+		//{
+		//	if (unitManager.units.Length > 0)
+		//	{
+		//		for (int i = 0; i < unitManager.units.Length; i++)
+		//		{
+		//			unitViewport[i].GetComponentInChildren<Text>().text = unitManager.units[i].UnitName;
+		//		}
+		//	}
+		//}
 	}
 
 	public void FindUnit(int i)

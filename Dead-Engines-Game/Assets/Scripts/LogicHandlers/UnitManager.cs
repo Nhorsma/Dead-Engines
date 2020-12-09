@@ -73,6 +73,24 @@ public class UnitManager : MonoBehaviour
         }
     }
 
+	public void TakeInUnit()
+	{
+		GameObject wanderer = (GameObject)Instantiate(Resources.Load("unit"), FindSpotToSpawn(), robot.transform.rotation);
+		Unit u = new Unit(unitsGM.Length);
+		GameObject[] tempUnitsGM = new GameObject[unitsGM.Length + 1];
+		Unit[] tempUnits = new Unit[units.Length + 1];
+		unitsGM.CopyTo(tempUnitsGM, 0);
+		units.CopyTo(tempUnits, 0);
+
+		tempUnitsGM[unitsGM.Length] = wanderer;
+		tempUnits[units.Length] = u;
+
+		unitsGM = tempUnitsGM;
+		units = tempUnits;
+
+		//unitsGM[unitsGM.Length] = wanderer;
+		//units[units.Length] = new Unit(units.Length);
+	}
 
     RaycastHit Hit()
     {

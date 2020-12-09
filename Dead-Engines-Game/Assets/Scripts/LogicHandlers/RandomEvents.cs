@@ -9,6 +9,8 @@ public class RandomEvents : MonoBehaviour
 	//if unit capacity has been met, runs every 5 mins
 	// (at least for phase 1)
 
+	public UnitManager unitManager;
+
 	public float randomEventCounter = 0f; //3 mins in seconds, 60*3
 	public float randomEventHit = 180f; //
 
@@ -70,7 +72,6 @@ public class RandomEvents : MonoBehaviour
 		{
 			//unit
 			UnitEvent();
-			
 		}
 		else if (r == 1)
 		{
@@ -86,7 +87,7 @@ public class RandomEvents : MonoBehaviour
 
 	void UnitEvent()
 	{
-		prompt = "A scraggly survivor approaches...";
+		prompt = "A scraggly survivor approaches. Should we take him in?";
 		Debug.Log(prompt);
 		//turn yes & no buttons on [contract]
 		yesButton.gameObject.SetActive(true);
@@ -144,7 +145,7 @@ public class RandomEvents : MonoBehaviour
 	void TradeEvent()
 	{
 		//change promptText.text
-		prompt = "Hi trader!";
+		prompt = "A trader has arrived. Browse his wares?";
 		Debug.Log(prompt);
 		//turn yes & no buttons on
 		//yesButton.enabled = true;
@@ -166,6 +167,7 @@ public class RandomEvents : MonoBehaviour
 		if (what == "add unit")
 		{
 			Debug.Log(what);
+			unitManager.TakeInUnit(); //no mutiny yet
 		}
 		else if (what == "dismiss unit")
 		{
@@ -173,7 +175,7 @@ public class RandomEvents : MonoBehaviour
 		}
 		else if (what == "trade")
 		{
-			//open trade box
+			//activate a scroll view?
 			Debug.Log(what);
 		}
 		else if (what == "no trade")
@@ -192,17 +194,15 @@ public class RandomEvents : MonoBehaviour
 		{
 			Debug.Log(what);
 			ResourceHandling.metal -= 10; // errrrr set to 10 for now, fix logic later
-			//turn off button
-			//turn on "okay" button -> close box
-			//change text
+			//change text to the new rumor
+			//turn off yes/no buttons & turn on okay button
 		}
 		else if (what == "paid electronics rumor")
 		{
 			Debug.Log(what);
 			ResourceHandling.electronics -= 5; // same as ^
-			//turn off button
-			//turn on "okay" button -> close box
-			//change text
+			//change text to the new rumor
+			//turn off yes/no buttons & turn on okay button
 		}
 		CloseBox();
 	}

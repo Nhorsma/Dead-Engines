@@ -1227,7 +1227,7 @@ GameObject:
   - component: {fileID: 899971605}
   - component: {fileID: 899971604}
   m_Layer: 5
-  m_Name: MenuPanel (1)
+  m_Name: BackPanel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1646,7 +1646,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: exit
+  m_Text: quit
 --- !u!222 &1432920988
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -1804,7 +1804,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 852732140}
-        m_MethodName: StartButton
+        m_MethodName: 
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -2149,7 +2149,7 @@ GameObject:
   - component: {fileID: 1947920604}
   - component: {fileID: 1947920603}
   m_Layer: 5
-  m_Name: Exit
+  m_Name: Quit
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
