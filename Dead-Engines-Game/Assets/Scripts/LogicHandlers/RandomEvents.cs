@@ -104,14 +104,15 @@ public class RandomEvents : MonoBehaviour
 	{
 		int rumor = 0;
 		int asked = 0;
-		asked = Random.Range(0, 1);
+		asked = Random.Range(0, 2);
 
-		rumor = Random.Range(0, 14); //15 rumors
+		rumor = Random.Range(0, 16); //15 rumors
 
 		//even numbered rumors are free, odds cost resources to hear
 		if (rumor%2 == 0)
 		{
-			prompt = "A wanderer arrives. He speaks of " + rumors[rumor];
+			int rumRand = Random.Range(0, 5);
+			prompt = "A passerby said, " + rumors[rumRand];
 			//turn okay button on
 			okayButton.gameObject.SetActive(true);
 		}
@@ -119,7 +120,7 @@ public class RandomEvents : MonoBehaviour
 		{
 			if (asked == 0)
 			{
-				prompt = "A wanderer arrives. He's willing to share information for " + rumor + " metal...";
+				prompt = "A wanderer arrives. He's willing to share information for 10 metal...";
 				//turn metal specific yes & no button on [contract]
 				yesButton.gameObject.SetActive(true);
 				yesButton.onClick.AddListener(delegate { SetContract("paid metal rumor"); });
@@ -128,7 +129,7 @@ public class RandomEvents : MonoBehaviour
 			}
 			else if (asked == 1)
 			{
-				prompt = "A wanderer arrives. He's willing to share information for " + rumor + " electronics...";
+				prompt = "A wanderer arrives. He's willing to share information for 5 electronics...";
 				//turn electronic specific yes & no button on [contract]
 				yesButton.gameObject.SetActive(true);
 				yesButton.onClick.AddListener(delegate { SetContract("paid electronics rumor"); });
@@ -148,9 +149,11 @@ public class RandomEvents : MonoBehaviour
 		prompt = "A trader has arrived. Browse his wares?";
 		Debug.Log(prompt);
 		//turn yes & no buttons on
-		//yesButton.enabled = true;
-		//noButton.enabled = true;
-		okayButton.gameObject.SetActive(true);
+		yesButton.gameObject.SetActive(true);
+		yesButton.onClick.AddListener(delegate { SetContract("trade"); });
+		noButton.gameObject.SetActive(true);
+		noButton.onClick.AddListener(delegate { SetContract("no trade"); });
+		//okayButton.gameObject.SetActive(true);
 
 		promptText.text = prompt;
 		eventPanel.SetActive(true);
@@ -175,7 +178,11 @@ public class RandomEvents : MonoBehaviour
 		}
 		else if (what == "trade")
 		{
-			//activate a scroll view?
+			promptText.text = "He takes off his sock and tries to sell it to you. Turns out he only sells wears, not wares.";
+			yesButton.gameObject.SetActive(false);
+			noButton.gameObject.SetActive(false);
+			okayButton.gameObject.SetActive(true);
+			return;
 			Debug.Log(what);
 		}
 		else if (what == "no trade")
@@ -193,16 +200,29 @@ public class RandomEvents : MonoBehaviour
 		else if (what == "paid metal rumor")
 		{
 			Debug.Log(what);
-			ResourceHandling.metal -= 10; // errrrr set to 10 for now, fix logic later
+			int randRumor = Random.Range(5, 10);
 			//change text to the new rumor
+			promptText.text = rumors[randRumor];
+			ResourceHandling.metal -= 10; // errrrr set to 10 for now, fix logic later
+										 
 			//turn off yes/no buttons & turn on okay button
+			yesButton.gameObject.SetActive(false);
+			noButton.gameObject.SetActive(false);
+			okayButton.gameObject.SetActive(true);
+			return;
 		}
 		else if (what == "paid electronics rumor")
 		{
-			Debug.Log(what);
-			ResourceHandling.electronics -= 5; // same as ^
+			int randRumor = Random.Range(5, 10);
 			//change text to the new rumor
+			promptText.text = rumors[randRumor];
+			ResourceHandling.electronics -= 5; // same as ^
+											   
 			//turn off yes/no buttons & turn on okay button
+			yesButton.gameObject.SetActive(false);
+			noButton.gameObject.SetActive(false);
+			okayButton.gameObject.SetActive(true);
+			return;
 		}
 		CloseBox();
 	}

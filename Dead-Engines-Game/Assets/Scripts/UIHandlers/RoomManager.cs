@@ -78,10 +78,16 @@ public class RoomManager : MonoBehaviour
 	public List<Sprite> rightRoomSprites; // 4, 5, 6
 	public List<Sprite> leftRoomSprites; // 0, 1, 2, 3
 
+	public Sprite genRepairedSprite;
+	public Sprite ctrlRepairedSprite;
+
 	public int refineryCapacity;
 	public int shrineCapacity;
 	public int studyCapacity;
 	//add generator 1 & control 1 later
+
+	public static bool generatorRepaired = false;
+	public static bool controllerRepaired = false;
 
 	void Start()
     {
@@ -126,6 +132,29 @@ public class RoomManager : MonoBehaviour
 		genMiniTab.gameObject.SetActive(true);
 	}
 
+	public void RepairGenerator()
+	{
+		if (ResourceHandling.metal >= 100)
+		{
+			ResourceHandling.metal -= 100;
+			generatorRepaired = true;
+			genMiniTab.GetComponent<MiniTabHolder>().build.gameObject.SetActive(false);
+			genMiniTab.GetComponent<MiniTabHolder>().pic.sprite = genRepairedSprite;
+		}
+	}
+
+	public void RepairController()
+	{
+		if (ResourceHandling.electronics >= 100)
+		{
+			ResourceHandling.electronics -= 100;
+			controllerRepaired = true;
+			ctrlMiniTab.GetComponent<MiniTabHolder>().build.gameObject.SetActive(false);
+			ctrlMiniTab.GetComponent<MiniTabHolder>().pic.sprite = ctrlRepairedSprite;
+		}
+	}
+
+	//unsure if this is still used
 	public void RepairAutomaton()
 	{
 		isAutomatonRepaired = true;
@@ -817,12 +846,14 @@ public class RoomManager : MonoBehaviour
 			display[i].text = rooms[i].Type;
 			displaySprites[i].GetComponent<Image>().sprite = miniTabs[i].GetComponent<MiniTabHolder>().pic.sprite;
 		}
+
 		Debug.Log("Updated Rooms");
 		auto.OpenTab2();
 	}
 
     public void ActivateAutomoton()
     {
+		auto.activationButton.gameObject.SetActive(false);
 		spawnRes.OpenMapRange();
         autoObj.GetComponent<AutomotonAction>().enabled = true;
         huntHandler.enabled = true;

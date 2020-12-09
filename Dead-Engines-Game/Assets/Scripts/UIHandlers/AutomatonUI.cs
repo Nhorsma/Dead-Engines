@@ -36,6 +36,8 @@ public class AutomatonUI : MonoBehaviour
 
 	public int lastClickedID = -1;
 
+	public Button activationButton;
+
 	void Start()
     {
 		metalText.text = " ";
@@ -112,6 +114,15 @@ public class AutomatonUI : MonoBehaviour
 
 		hudMetal.text = "Metal: " + ResourceHandling.metal;
 		hudElectronics.text = "Electronics: " + ResourceHandling.electronics;
+
+		if (RoomManager.generatorRepaired && RoomManager.controllerRepaired)
+		{
+			activationButton.enabled = true;
+		}
+		else
+		{
+			activationButton.enabled = false;
+		}
 
 		//if (unitManager.units != null)
 		//{
