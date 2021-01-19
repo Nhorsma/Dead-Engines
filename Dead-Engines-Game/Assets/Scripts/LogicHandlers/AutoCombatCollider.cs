@@ -4,53 +4,53 @@ using UnityEngine;
 
 public class AutoCombatCollider : MonoBehaviour
 {
-    public ResourceHandling recHandle;
-    public EncampmentHandler campHandle;
-    public EnemyHandler enemyHandle;
-    public HunterHandler huntHandle;
+    public ResourceHandling resourceHandling;
+    public EncampmentHandler encampmentHandler;
+    public EnemyHandler enemyHandler;
+    public HunterHandler hunterHandler;
     public GameObject explosion;
 
     private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.tag == "Enemy")
         {
-            enemyHandle.GetEnemy(other.gameObject).Health = 0;
+            other.gameObject.GetComponent<Enemy>().Health = 0;
         }
         if (other.gameObject.tag == "Encampment")
         {
-            campHandle.PlayClip(campHandle.GetEncampment(other.gameObject), "death");
-            campHandle.GetEncampment(other.gameObject).Health -= 100;
-            campHandle.BeDestroyed();
+            encampmentHandler.PlayClip(other.gameObject, other.gameObject.GetComponent<Encampment>(), "death");
+            other.gameObject.GetComponent<Encampment>().Health -= 100;
+			encampmentHandler.BeDestroyed();
             SpawnExplosion(other.gameObject);
         }
         if (other.gameObject.tag == "Hunter")
         {
-            huntHandle.DealHunterDamage(other.gameObject);
+            hunterHandler.DealHunterDamage(other.gameObject);
             SpawnExplosion(other.gameObject);
         }
         if (other.gameObject.tag == "Metal")
         {
-            recHandle.Extract(other.gameObject, 50);
+            resourceHandling.Extract(other.gameObject, 50);
 
-            if (recHandle.resQuantities[recHandle.GetNumber(other.gameObject)] < 0)
-                ResourceHandling.metal -= recHandle.resQuantities[recHandle.GetNumber(other.gameObject)]; //subtracting a negative is positive
+            if (resourceHandling.resourceQuantities[resourceHandling.GetNumber(other.gameObject)] < 0)
+                ResourceHandling.metal -= resourceHandling.resourceQuantities[resourceHandling.GetNumber(other.gameObject)]; //subtracting a negative is positive
             else
                 ResourceHandling.metal += 50;
 
-            huntHandle.PlayClip("hit");
-            huntHandle.CheckSpawnHunter();
+            hunterHandler.PlayClip("hit");
+            hunterHandler.CheckSpawnHunter();
         }
         if (other.gameObject.tag == "Electronics")
         {
-            recHandle.Extract(other.gameObject, 50);
+            resourceHandling.Extract(other.gameObject, 50);
 
-            if (recHandle.resQuantities[recHandle.GetNumber(other.gameObject)] < 0)
-                ResourceHandling.electronics -= recHandle.resQuantities[recHandle.GetNumber(other.gameObject)]; //subtracting a negative is positive
+            if (resourceHandling.resourceQuantities[resourceHandling.GetNumber(other.gameObject)] < 0)
+                ResourceHandling.electronics -= resourceHandling.resourceQuantities[resourceHandling.GetNumber(other.gameObject)]; //subtracting a negative is positive
             else
                 ResourceHandling.electronics += 50;
 
-            huntHandle.PlayClip("hit");
-            huntHandle.CheckSpawnHunter();
+            hunterHandler.PlayClip("hit");
+            hunterHandler.CheckSpawnHunter();
         }
     }
 

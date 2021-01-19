@@ -5,21 +5,30 @@ using UnityEngine.AI;
 
 public class UnitManager : MonoBehaviour
 {
-    public SelectItems si;
-    public ResourceHandling rh;
-    public EnemyHandler eh;
-    public EncampmentHandler encampHandle;
-    public Vector3 robotPos;
-    public GameObject robot;
-    public float stoppingDistance, pickUpDistance;
-    public float shootingDistance;
-    public float downTime;
-    public int unitDamage;
+    public SelectItems selectItems;							// pull
+    public ResourceHandling resourceHandling;				// pull
+    public EnemyHandler enemyHandler;						// pull
+    public EncampmentHandler encampmentHandler;				// pull
 
-    public GameObject[] unitsGM;         //the gameobjects
-    public Unit[] units;                 //the 'unit' info attached to the gameobjects
-    [System.NonSerialized]
-    public static List<GameObject> selectedUnits;
+    public Vector3 robotPos;								//
+    public GameObject robot;                                //
+
+	public int startingUnits;                               //
+
+	public GameObject unitPrefab;
+	public List<GameObject> units = new List<GameObject>(); // unit prefabs, unit script attached. lists are better imo
+
+	[System.NonSerialized]
+	public static List<GameObject> selectedUnits;
+
+	public float stoppingDistance;							//
+	public float pickUpDistance;							//
+    public float shootingDistance;                          //
+
+	public int unitDamage;                                  //
+	public float unitFireCooldown = 1f;
+
+	public float downTime;									//
 
     AudioSource audioSource;
     public AudioClip goingClip1, goingClip2, confirmPing, deadClip, shootClip,
@@ -30,23 +39,16 @@ public class UnitManager : MonoBehaviour
     Color selectedYellow = new Color32(255, 255, 0, 100);
     NavMeshAgent nv;
 
-    //public AutomatonUI auto;
-
-    public float unitFireCooldown = 1f;
-
-    //public EffectConnector effConnector;
-
-    public GameObject unitPrefab;
-
     void Start()
     {
-        eh = GetComponent<EnemyHandler>();
-        encampHandle = GetComponent<EncampmentHandler>();
+        //enemyHandler = GetComponent<EnemyHandler>();
+        //encampmentHandler = GetComponent<EncampmentHandler>();
         selectedUnits = new List<GameObject>();
-        robotPos = new Vector3(robot.transform.position.x,0, robot.transform.position.z);
-        audioSource = Camera.main.GetComponent<AudioSource>();
+		robotPos = new Vector3(robot.transform.position.x,0, robot.transform.position.z);
 
-        SetUpUnits(3);
+		audioSource = Camera.main.GetComponent<AudioSource>();
+
+        SetUpUnits(startingUnits);
         //auto.UpdateInfoTab();
     }
 
@@ -56,77 +58,166 @@ public class UnitManager : MonoBehaviour
         RunAllJobs();
     }
 
-    //-----------------------------------------------------------------------------------------
-    //-----------------------------------------------------------------------------------------
+	//-----------------------------------------------------------------------------------------
+	//-----------------------------------------------------------------------------------------
 
+	/// <summary>
+	/// INITIALIZE --------------------------------------------------------------------------------------------------------------------------->
+	/// </summary>
 
-    void SetUpUnits(int num)
+	void SetUpUnits(int startingUnits)
     {
-        unitsGM = new GameObject[num];
-        units = new Unit[num];
-        for (int i = 0; i < unitsGM.Length; i++)
+        for (int i = 0; i < startingUnits; i++)
         {
-            units[i] = new Unit(i);
-            Vector3 pos = FindSpotToSpawn();
-            GameObject u = (GameObject)Instantiate(Resources.Load("unit"), pos, robot.transform.rotation);
-            unitsGM[i] = u;
+            //Vector3 initialPos = FindSpotToSpawn();
+            GameObject u = (GameObject)Instantiate(Resources.Load("unit"), FindSpotToSpawn(), robot.transform.rotation);
+
+			u.GetComponent<Unit>().Id = i;
+			u.GetComponent<Unit>().UnitName = "U" + u.GetComponent<Unit>().Id.ToString();
+
+			units.Add(u);
         }
     }
 
-	public void TakeInUnit()
+	RaycastHit Hit()
 	{
-		GameObject wanderer = (GameObject)Instantiate(Resources.Load("unit"), FindSpotToSpawn(), robot.transform.rotation);
-		Unit u = new Unit(unitsGM.Length);
-		GameObject[] tempUnitsGM = new GameObject[unitsGM.Length + 1];
-		Unit[] tempUnits = new Unit[units.Length + 1];
-		unitsGM.CopyTo(tempUnitsGM, 0);
-		units.CopyTo(tempUnits, 0);
-
-		tempUnitsGM[unitsGM.Length] = wanderer;
-		tempUnits[units.Length] = u;
-
-		unitsGM = tempUnitsGM;
-		units = tempUnits;
-
-		//unitsGM[unitsGM.Length] = wanderer;
-		//units[units.Length] = new Unit(units.Length);
+		RaycastHit hit;
+		if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit, Mathf.Infinity))
+			return hit;
+		return hit;
 	}
 
-    RaycastHit Hit()
-    {
-        RaycastHit hit;
-        if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit, Mathf.Infinity))
-            return hit;
-        return hit;
-    }
+	void RightClick()
+	{
+		if (Input.GetMouseButtonDown(1) && Hit().point != null && selectedUnits.Count > 0)
+		{
+			//right click on anything that has units do a job
+			if (Hit().collider != null &&
+				Hit().collider.gameObject.tag == "Metal" ||
+				Hit().collider.gameObject.tag == "Electronics" ||
+				Hit().collider.gameObject.tag == "Enemy" ||
+				Hit().collider.gameObject.tag == "Encampment")
+			{
+				SetJobOfSelected(Hit().collider.gameObject);
+				selectItems.UpdateUnitUI(selectedUnits[0].GetComponent<Unit>());
+			}
+			else
+			{
+				MoveAllSelected();
+			}
+			ReadyClip();
+		}
+	}
 
-    void RightClick()
-    {
-        if (Input.GetMouseButtonDown(1) && Hit().point != null && selectedUnits.Count > 0)
-        {
-            //right click on anything that has units do a job
-            if (Hit().collider != null &&
-                Hit().collider.gameObject.tag == "Metal" ||
-                Hit().collider.gameObject.tag == "Electronics" ||
-                Hit().collider.gameObject.tag == "Enemy" ||
-                Hit().collider.gameObject.tag == "Encampment")
-            {
-                SetJobOfSelected(Hit().collider.gameObject);
-                si.UpdateUnitUI(GetUnit(selectedUnits[0])); ///////////////////////////////////////////////////////////////// //
-            }
-            else
-            {
-                MoveAllSelected();
-            }
-            ReadyClip();
-        }
-    }
+	/// <summary>
+	/// MAIN FUNCTIONS --------------------------------------------------------------------------------------------------------------------------->
+	/// </summary>
 
-    void MoveAllSelected()
+	/// <summary>
+	/// might add a parameter Unit unit_data for performance 
+	/// </summary>
+	void SetJobOfSelected(GameObject clickedObj)
+	{
+		if (clickedObj == null)
+			return;
+
+		if (clickedObj.tag == "Metal" ||
+			clickedObj.tag == "Electronics")
+		{
+			int ri = GetResourceID(clickedObj);
+			foreach (GameObject u in selectedUnits)
+			{
+				Unit unit = u.GetComponent<Unit>();
+
+				ResetJob(unit);
+				unit.Job = ("Extraction" + clickedObj.tag);
+				unit.JobPos = (clickedObj); // fishy
+				unit.JustDroppedOff = (true);
+
+				TravelTo(units[unit.GetComponent<Unit>().Id], unit.GetComponent<Unit>().JobPos.transform.position, false, false);
+			}
+		}
+		if (clickedObj.tag == "Enemy" || clickedObj.tag == "Encampment")
+		{
+			foreach (GameObject unit in selectedUnits)
+			{
+				ResetJob(unit.GetComponent<Unit>());
+				unit.GetComponent<Unit>().Job = "Combat";
+				unit.GetComponent<Unit>().JobPos = clickedObj; // fishy
+
+				TravelTo(units[unit.GetComponent<Unit>().Id], unit.GetComponent<Unit>().JobPos.transform.position, true, true);
+			}
+		}
+		PlayClip("ping");
+	}
+
+	/// <summary>
+	/// might add a parameter Unit unit_data for performance 
+	/// </summary>
+	void RunAllJobs()
+	{
+		foreach (GameObject unit in units)
+		{
+			Animator anim = unit.GetComponent<Animator>();
+			if (unit.GetComponent<Unit>().Job != "none")//&& !unit.JobPos.Equals(null)
+			{
+				if (unit.GetComponent<Unit>().Job == "Combat")
+				{
+					Combat(unit); //
+				}
+				else if (unit.GetComponent<Unit>().Job.Equals("ExtractionMetal") || unit.GetComponent<Unit>().Job.Equals("ExtractionElectronics"))
+				{
+					Extraction(unit, GetResourceID(unit.GetComponent<Unit>().JobPos), unit.GetComponent<Unit>().Job); //
+				}
+				else if (unit.GetComponent<Unit>().Job == "shrine" || unit.GetComponent<Unit>().Job == "refinery"
+					|| unit.GetComponent<Unit>().Job == "storage" || unit.GetComponent<Unit>().Job == "study")
+				{
+					float jx = unit.transform.position.x; //
+					float jz = unit.transform.position.z; //
+					if (Mathf.Abs(jx - unit.GetComponent<Unit>().JobPos.transform.position.x) < 1f && Mathf.Abs(jz - unit.GetComponent<Unit>().JobPos.transform.position.z) < 1f)
+					{
+						unit.SetActive(false);
+					}
+				}
+				else if (unit.GetComponent<Unit>().Job == "dead")
+				{
+					if (unit.GetComponent<Unit>().CanSpawn)
+					{
+						unit.GetComponent<Unit>().Health = 3; //
+						unit.GetComponent<Unit>().Job = "none";
+						unit.SetActive(true);
+						//TravelTo(GetUnitObject(unit), robotPos + new Vector3(-stoppingDistance*1.5f, 0, -stoppingDistance*1.5f), false, true);
+						unit.transform.position = robotPos + new Vector3(-stoppingDistance + Random.Range(-3, 3), 0, -stoppingDistance + Random.Range(-3, 3));
+						unit.GetComponent<Unit>().CanSpawn = false;
+					}
+				}
+				else
+				{
+					//
+					//When units stop having jobs in Robot, set them back to Active
+					//
+					// GetUnitObject(unit).SetActive(true);
+				}
+			}
+			else
+			{
+				if (unit.GetComponent<NavMeshAgent>().velocity == new Vector3(0, 0, 0))
+				{
+					unit.GetComponent<Animator>().SetBool("walking", false);
+				}
+
+			}
+		}
+	}
+
+	/// <summary>
+	/// might add a parameter Unit unit_data for performance 
+	/// </summary>
+	void MoveAllSelected()
     {
         if (selectedUnits.Count == 1)
         {
-            ResetJob(GetUnit(selectedUnits[0]));
+            ResetJob(selectedUnits[0].GetComponent<Unit>());
             TravelTo(selectedUnits[0], Hit().point, false, false);
         }
         else if (selectedUnits.Count > 0)
@@ -136,20 +227,20 @@ public class UnitManager : MonoBehaviour
                 //
                 //When more Room jobs are implemented, Fix This to have more Jobs
                 //
-                if (GetUnit(selectedUnits[i]).Job != "shrine" || GetUnit(selectedUnits[i]).Job != "study"
-                    || GetUnit(selectedUnits[i]).Job != "refinery" || GetUnit(selectedUnits[i]).Job != "storage") // && selectedUnits[i].activeSelf
+                if (selectedUnits[i].GetComponent<Unit>().Job != "shrine" || selectedUnits[i].GetComponent<Unit>().Job != "study"
+                    || selectedUnits[i].GetComponent<Unit>().Job != "refinery" || selectedUnits[i].GetComponent<Unit>().Job != "storage") // && selectedUnits[i].activeSelf
                 {
-                    ResetJob(GetUnit(selectedUnits[i]));
+                    ResetJob(selectedUnits[i].GetComponent<Unit>());
 
                     if (i == 0)
                     {
-                        ResetJob(GetUnit(selectedUnits[i]));
+                        ResetJob(selectedUnits[i].GetComponent<Unit>());
                         TravelTo(selectedUnits[i], Hit().point, false, false);
 
                     }
                     else if (i > 0)
                     {
-                        ResetJob(GetUnit(selectedUnits[i]));
+                        ResetJob(selectedUnits[i].GetComponent<Unit>());
                         Vector3 prevDes = selectedUnits[i - 1].GetComponent<NavMeshAgent>().destination;
                         Vector3 newDes = new Vector3();
                         if (i % 3 > 0)
@@ -167,142 +258,27 @@ public class UnitManager : MonoBehaviour
         }
     }
 
-    void RunAllJobs()
+	/// <summary>
+	/// might add a parameter Unit unit_data for performance 
+	/// </summary>
+    void Extraction(GameObject unit, int resourceId, string resource)
     {
-        foreach (Unit unit in units)
+        if (unit.GetComponent<Unit>().JobPos == null)
+		{
+			return;
+		}
+
+        Vector3 depositPos = resourceHandling.resourceDeposits[resourceId].transform.position;
+        Vector3 unitPos = unit.transform.position;
+
+        if (unit.GetComponent<Unit>().JustDroppedOff && Vector3.Distance(unit.transform.position, unit.GetComponent<Unit>().JobPos.transform.position) < pickUpDistance)
         {
-            Animator anim = GetUnitObject(unit).GetComponent<Animator>();
-            if (unit.Job != "none")//&& !unit.JobPos.Equals(null)
-            {
-                if (unit.Job == "Combat")
-                {
-                    Combat(unit);
-                }
-                else if (unit.Job.Equals("ExtractionMetal") || unit.Job.Equals("ExtractionElectronics"))
-                {
-                    Extraction(unit, GetResourceID(unit.JobPos), unit.Job);///////////////////////////////////////////////////////////////////////
-                }
-                else if (unit.Job == "shrine" || unit.Job == "refinery" 
-                    || unit.Job == "storage" || unit.Job == "study")
-                {
-                    float jx = GetUnitObject(unit).transform.position.x;
-                    float jz = GetUnitObject(unit).transform.position.z;
-                    if (Mathf.Abs(jx - unit.JobPos.transform.position.x) < 1f && Mathf.Abs(jz - unit.JobPos.transform.position.z) < 1f)
-                    {
-                        GetUnitObject(unit).SetActive(false);
-                    }
-                }
-                else if (unit.Job == "dead")
-                {
-                    if (unit.CanSpawn)
-                    {
-                        unit.Health = 10;
-                        unit.Job = "none";
-                        GetUnitObject(unit).SetActive(true);
-                        //TravelTo(GetUnitObject(unit), robotPos + new Vector3(-stoppingDistance*1.5f, 0, -stoppingDistance*1.5f), false, true);
-                        GetUnitObject(unit).transform.position = robotPos + new Vector3(-stoppingDistance + Random.Range(-3, 3), 0, -stoppingDistance + Random.Range(-3, 3));
-                        unit.CanSpawn = false;
-                    }
-                }
-                else
-                {
-                    //
-                    //When units stop having jobs in Robot, set them back to Active
-                    //
-                    // GetUnitObject(unit).SetActive(true);
-                }
-            }
-            else
-            {
-                if (GetUnitObject(unit).GetComponent<NavMeshAgent>().velocity == new Vector3(0, 0, 0))
-                    GetUnitObject(unit).GetComponent<Animator>().SetBool("walking", false);
-            }
+            Extract(resourceId);
+			unit.GetComponent<Unit>().JustDroppedOff = false;
+            TravelTo(unit, robotPos, false, false);
         }
-    }
-
-    void SetJobOfSelected(GameObject thing)
-    {
-        if (thing == null)
-            return;
-
-        if (thing.tag == "Metal" ||
-            thing.tag == "Electronics")
+        else if (!unit.GetComponent<Unit>().JustDroppedOff && Vector3.Distance(unit.transform.position, robotPos) < pickUpDistance) //reaches robot
         {
-            int ri = GetResourceID(thing);
-            foreach (GameObject gm in selectedUnits)
-            {
-                Unit unit = GetUnit(gm);
-
-                ResetJob(unit);
-                unit.Job = ("Extraction" + thing.tag); //////////////////////////////////////////////////////////////////////////////////////////////
-                unit.JobPos = (thing);
-                unit.JustDroppedOff = (true);
-              
-                TravelTo(unitsGM[unit.Id], unit.JobPos.transform.position, false, false);
-            }
-        }
-        if (thing.tag == "Enemy" || thing.tag == "Encampment")
-        {
-            //int ri = GetResourceID(thing);
-            foreach (GameObject gm in selectedUnits)
-            {
-                Unit unit = GetUnit(gm);
-                ResetJob(unit);
-                unit.Job = "Combat";
-                unit.JobPos = thing;
-               
-                TravelTo(unitsGM[unit.Id], unit.JobPos.transform.position, true, true);
-            }
-        }
-        PlayClip("ping");
-    }
-
-    int GetResourceID(GameObject gm)
-    {
-        for (int i = 0; i < rh.resDeposits.Length; i++)
-        {
-            if (rh.resDeposits[i] == gm)
-                return i;
-        }
-        return -1;
-    }
-
-    public GameObject GetUnitObject(Unit unit)
-    {
-        return unitsGM[unit.Id];
-    }
-
-    public Unit GetUnit(GameObject gm)
-    {
-        for (int i = 0; i < unitsGM.Length; i++)
-        {
-            if (unitsGM[i] == gm)
-                return units[i];
-        }
-        return null;
-    }
-
-    void Extraction(Unit unit, int ri, string resource)
-    {
-        if (unit.JobPos == null)
-            return;
-
-        GameObject gm = GetUnitObject(unit);
-        Vector3 depPos = rh.resDeposits[ri].transform.position;
-        Vector3 uPos = gm.transform.position;
-
-        //reaches resource
-        if (unit.JustDroppedOff && Vector3.Distance(gm.transform.position, unit.JobPos.transform.position) < pickUpDistance)
-        {
-            Extract(ri);
-            unit.JustDroppedOff = false;
-            TravelTo(gm, robotPos, false, false);
-            //Debug.Log(unit.Job + " at " + unit.JobPos.transform.position);
-        }
-        else if (!unit.JustDroppedOff && Vector3.Distance(gm.transform.position, robotPos) < pickUpDistance) //reaches robot
-        {
-            //if (effConnector.StockCheck() == true)
-            //{
             if (resource.Equals("ExtractionMetal"))
             {
                 AddMetal();
@@ -313,184 +289,231 @@ public class UnitManager : MonoBehaviour
                 AddElectronics();
                 Debug.Log("Got electronics");
             }
-
-            unit.JustDroppedOff = (true);
-            TravelTo(gm, unit.JobPos.transform.position, false, false);
-            //Debug.Log(unit.Job + " at "+unit.JobPos.transform.position);
-            //}
-            //else
-            //{
-            //	Debug.Log("No storage space");
-            //	//make unit drop in unit info
-            //}
+			unit.GetComponent<Unit>().JustDroppedOff = (true);
+            TravelTo(unit, unit.GetComponent<Unit>().JobPos.transform.position, false, false);
         }
     }
 
-    void Combat(Unit unit)
+	/// <summary>
+	/// might add a parameter Unit unit_data for performance 
+	/// </summary>
+	void Combat(GameObject unit)
     {
-        GameObject gm = GetUnitObject(unit);
-        NavMeshAgent nv = GetUnitObject(unit).GetComponent<NavMeshAgent>();
+        NavMeshAgent nv = unit.GetComponent<NavMeshAgent>();
 
-        if (unit.JobPos != null &&
-            Vector3.Distance(unit.JobPos.transform.position, GetUnitObject(unit).transform.position) > stoppingDistance)
-            TravelTo(unitsGM[unit.Id], unit.JobPos.transform.position, true, true);
+        if (unit.GetComponent<Unit>().JobPos != null &&
+            Vector3.Distance(unit.GetComponent<Unit>().JobPos.transform.position, unit.transform.position) > stoppingDistance)
+            TravelTo(units[unit.GetComponent<Unit>().Id], unit.GetComponent<Unit>().JobPos.transform.position, true, true);
 
-        if (unit.JobPos != null &&
-            Vector3.Distance(gm.transform.position, unit.JobPos.transform.position) < shootingDistance
-            && !unit.JustShot)
+        if (unit.GetComponent<Unit>().JobPos != null &&
+            Vector3.Distance(unit.transform.position, unit.GetComponent<Unit>().JobPos.transform.position) < shootingDistance
+            && !unit.GetComponent<Unit>().JustShot)
         {
             Fire(unit);
-            StartCoroutine(FireCoolDown(unit));
+            StartCoroutine(FireCoolDown(unit.GetComponent<Unit>()));
         }
     }
 
-    IEnumerator FireCoolDown(Unit unit)
-    {
-        unit.JustShot = true;
-        yield return new WaitForSeconds(unitFireCooldown);
-        unit.JustShot = false;
-    }
+	public void TakeInUnit()
+	{
+		GameObject wanderingUnit = (GameObject)Instantiate(Resources.Load("unit"), FindSpotToSpawn(), robot.transform.rotation);
 
-    void Fire(Unit unit)
-    {
-        Vector3 direction = unit.JobPos.transform.position - GetUnitObject(unit).transform.position;
-        PlayClip("shoot");
-        //RaycastHit hit;
-        //      if (Physics.Raycast(GetUnitObject(unit).transform.position, direction, out hit, 100f))
-        //      {
-        int hitChance = Random.Range(0, 2);
-        if (hitChance == 0)
-        {
-            StartCoroutine(TrailOff(0.05f, GetUnitObject(unit).transform.position, unit.JobPos.transform.position));
-            if (unit.JobPos.tag == "Enemy")
-            {
-                //access's the enemy via the enemyHandler, and reduces the enemie's health by one
-                //Debug.Log("enemy : " + eh.GetEnemy(unit.JobPos));
-                if (eh.GetEnemy(unit.JobPos) == null || eh.GetEnemy(unit.JobPos).Health <= 0)
-                {
-                    ResetJob(unit);
-                }
-                else
-                {
-                    eh.GetEnemy(unit.JobPos).Health -= unitDamage;
-                }
+		wanderingUnit.GetComponent<Unit>().Id = units.Count;
+		wanderingUnit.GetComponent<Unit>().UnitName = "U" + wanderingUnit.GetComponent<Unit>().Id.ToString();
 
-                //Debug.Log("enemy: " + gameObject.GetComponent<EnemyHandler>().GetEnemy(hit.collider.gameObject).Health);
-            }
-            else if (unit.JobPos.tag == "Encampment")
-            {
-                gameObject.GetComponent<EncampmentHandler>().GetEncampment(unit.JobPos).Health -= unitDamage;
-                if (encampHandle.GetEncampment(unit.JobPos).Health <= unitDamage)
-                {
-                    gameObject.GetComponent<EncampmentHandler>().BeDestroyed();
-                    ResetJob(unit);
-                }
-                else
-                {
-                    gameObject.GetComponent<EncampmentHandler>().BeDestroyed();
-                    gameObject.GetComponent<EncampmentHandler>().GetEncampment(unit.JobPos).Health -= unitDamage;
-                }
-                //Debug.Log("camp: "+gameObject.GetComponent<EncampmentHandler>().GetEncampment(hit.collider.gameObject).Health);
-            }
-        }
-    }
+		units.Add(wanderingUnit);
 
-    public void UnitDown(Unit unit)
-    {
-        if (unit.Health <= 0)
-        {
-            PlayClip("dead");
-            GetUnitObject(unit).GetComponent<Animator>().SetBool("knockedOut", true);
-            Debug.Log(unit + " is dead");
-            unit.Job = "dead";
-            unit.JobPos = null;
-            if (selectedUnits.Contains(GetUnitObject(unit)))
-            {
-                si.RemoveSpecific(GetUnitObject(unit)); //
-            }
-            StartCoroutine(WaitToRespawn(unit));
-        }
-    }
+		//GameObject wanderer = (GameObject)Instantiate(Resources.Load("unit"), FindSpotToSpawn(), robot.transform.rotation);
+		//Unit u = new Unit(unitsGM.Length);
+		//GameObject[] tempUnitsGM = new GameObject[unitsGM.Length + 1];
+		//Unit[] tempUnits = new Unit[units.Length + 1];
+		//unitsGM.CopyTo(tempUnitsGM, 0);
+		//units.CopyTo(tempUnits, 0);
 
-    IEnumerator WaitToRespawn(Unit unit)
+		//tempUnitsGM[unitsGM.Length] = wanderer;
+		//tempUnits[units.Length] = u;
+
+		//unitsGM = tempUnitsGM;
+		//units = tempUnits;
+
+		//unitsGM[unitsGM.Length] = wanderer;
+		//units[units.Length] = new Unit(units.Length);
+	}
+
+	/// <summary>
+	/// UTILITY FUNCTIONS --------------------------------------------------------------------------------------------------------------------------->
+	/// </summary>
+
+	public void TravelTo(GameObject unit, Vector3 place, bool stop, bool randomize)
+	{
+		if (unit.activeSelf == true && unit.GetComponent<NavMeshAgent>() != null)
+		{
+			NavMeshAgent nav = unit.GetComponent<NavMeshAgent>();
+			unit.GetComponent<Animator>().SetBool("walking", true);
+
+			if (stop)
+			{
+				nav.stoppingDistance = this.stoppingDistance;
+			}
+			else
+			{
+				nav.stoppingDistance = 0f;
+			}
+
+			if (randomize)
+			{
+				place += new Vector3(Random.Range(-stoppingDistance / 2, stoppingDistance / 2), 0, Random.Range(-stoppingDistance / 2, stoppingDistance / 2));
+			}
+
+			nav.SetDestination(place);
+		}
+
+	}
+	public Vector3 FindSpotToSpawn()
+	{
+		return robotPos + new Vector3(-pickUpDistance + Random.Range(-3, 3), 0, -pickUpDistance + Random.Range(-3, 3));
+	}
+
+	void Extract(int id)
+	{
+		//rh.resQuantities[id] -= 1;
+		resourceHandling.Extract(id, 1);
+		PlayClip("pickaxe");
+	}
+
+	public void SetJobFromRoom(GameObject unit, string roomJob)
+	{
+		PlayClip("ping");
+		TravelTo(unit, robotPos, false, false);
+	}
+	public void LeaveRoomJob(GameObject unit)
+	{
+		ReadyClip();
+		ResetJob(unit.GetComponent<Unit>());
+
+		if (!AutomotonAction.endPhaseOne)
+		{
+			unit.transform.position = FindSpotToSpawn();
+			unit.SetActive(true);
+		}
+	}
+	public GameObject ReturnJoblessUnit()
+	{
+		foreach (GameObject u in units)
+		{
+			if (u.GetComponent<Unit>().Job == "none")
+			{
+				return u;
+			}
+		}
+		return null;
+	}
+	void ResetJob(Unit unit_data)
+	{
+		ResetColor(unit_data);
+		unit_data.Job = "none";
+		unit_data.JobPos = null;
+	}
+
+	void Fire(GameObject unit)
+	{
+		Vector3 direction = unit.GetComponent<Unit>().JobPos.transform.position - unit.transform.position;
+		PlayClip("shoot");
+		//RaycastHit hit;
+		//      if (Physics.Raycast(GetUnitObject(unit).transform.position, direction, out hit, 100f))
+		//      {
+		int hitChance = Random.Range(0, 2);
+		if (hitChance == 0)
+		{
+			StartCoroutine(TrailOff(0.05f, unit.transform.position, unit.GetComponent<Unit>().JobPos.transform.position));
+			if (unit.GetComponent<Unit>().JobPos.tag == "Enemy")
+			{
+				//access's the enemy via the enemyHandler, and reduces the enemie's health by one
+				//Debug.Log("enemy : " + eh.GetEnemy(unit.JobPos));
+				if (unit.GetComponent<Unit>().JobPos.GetComponent<Enemy>() == null || unit.GetComponent<Unit>().JobPos.GetComponent<Enemy>().Health <= 0) //fishy
+				{
+					ResetJob(unit.GetComponent<Unit>());
+				}
+				else
+				{
+					unit.GetComponent<Unit>().JobPos.GetComponent<Enemy>().Health -= unitDamage;
+				}
+
+				//Debug.Log("enemy: " + gameObject.GetComponent<EnemyHandler>().GetEnemy(hit.collider.gameObject).Health);
+			}
+			else if (unit.GetComponent<Unit>().JobPos.tag == "Encampment")
+			{
+				//gameObject.GetComponent<EncampmentHandler>().GetEncampment(unit.GetComponent<Unit>().JobPos).Health -= unitDamage;
+				unit.GetComponent<Unit>().JobPos.GetComponent<Encampment>().Health -= unitDamage; // fishy
+				if (unit.GetComponent<Unit>().JobPos.GetComponent<Encampment>().Health <= unitDamage) // fishy
+				{
+					gameObject.GetComponent<EncampmentHandler>().BeDestroyed();
+					ResetJob(unit.GetComponent<Unit>());
+				}
+				else
+				{
+					gameObject.GetComponent<EncampmentHandler>().BeDestroyed();
+					unit.GetComponent<Unit>().JobPos.GetComponent<Encampment>().Health -= unitDamage; //fishy
+				}
+				//Debug.Log("camp: "+gameObject.GetComponent<EncampmentHandler>().GetEncampment(hit.collider.gameObject).Health);
+			}
+		}
+	}
+	IEnumerator FireCoolDown(Unit unit_data)
+	{
+		unit_data.JustShot = true;
+		yield return new WaitForSeconds(unitFireCooldown);
+		unit_data.JustShot = false;
+	}
+
+	public void UnitDown(GameObject unit)
+	{
+		if (unit.GetComponent<Unit>().Health <= 0)
+		{
+			PlayClip("dead");
+			unit.GetComponent<Animator>().SetBool("knockedOut", true);
+			Debug.Log(unit.GetComponent<Unit>().UnitName + " is dead"); //
+			unit.GetComponent<Unit>().Job = "dead";
+			unit.GetComponent<Unit>().JobPos = null;
+			if (selectedUnits.Contains(unit))
+			{
+				selectItems.RemoveSpecific(unit);
+			}
+			StartCoroutine(WaitToRespawn(unit));
+		}
+	}
+	IEnumerator WaitToRespawn(GameObject unit)
     {
-        if (!unit.CanSpawn)
+        if (!unit.GetComponent<Unit>().CanSpawn)
         {
 //            yield return new WaitForSeconds(3f);
-            GetUnitObject(unit).SetActive(false);
-            GetUnitObject(unit).transform.position = robotPos;
+            unit.SetActive(false);
+            unit.transform.position = robotPos;
             yield return new WaitForSeconds(downTime);
-            GetUnitObject(unit).GetComponent<Animator>().SetBool("knockedOut", false);
-            unit.CanSpawn = true;
+            unit.GetComponent<Animator>().SetBool("knockedOut", false);
+			unit.GetComponent<Unit>().CanSpawn = true;
             ReadyClip();
         }
     }
 
-    public void TravelTo(GameObject b, Vector3 place, bool stop, bool randomize)
-    {
-        if (b.activeSelf == true && b.GetComponent<NavMeshAgent>() != null)
-        {
-            NavMeshAgent a = b.GetComponent<NavMeshAgent>();
-            b.GetComponent<Animator>().SetBool("walking", true);
-            if (stop)
-                a.stoppingDistance = stoppingDistance;
-            else
-                a.stoppingDistance = 0f;
-            if (randomize)
-                place += new Vector3(Random.Range(-stoppingDistance / 2, stoppingDistance / 2), 0, Random.Range(-stoppingDistance / 2, stoppingDistance / 2));
-
-            a.SetDestination(place);
-        }
-
-    }
-
-    void Extract(int id)
-    {
-        //rh.resQuantities[id] -= 1;
-        rh.Extract(id, 1);
-        PlayClip("pickaxe");
-    }
-
-    void AddMetal()
+	int GetResourceID(GameObject clickedObj)
+	{
+		for (int i = 0; i < resourceHandling.resourceDeposits.Length; i++)
+		{
+			if (resourceHandling.resourceDeposits[i] == clickedObj)
+				return i;
+		}
+		return -1;
+	}
+	void AddMetal()
     {
         ResourceHandling.metal++;
         PlayClip("drop");
     }
-
     void AddElectronics()
     {
         ResourceHandling.electronics++;
         PlayClip("drop");
-    }
-
-    public Unit ReturnJoblessUnit()
-    {
-        foreach (Unit u in units)
-        {
-            if (u.Job == "none")
-            {
-                return u;
-            }
-        }
-        return null;
-    }
-
-    public void SetJobFromRoom(Unit unit, string roomJob)
-    {
-        PlayClip("ping");
-        TravelTo(GetUnitObject(unit), robotPos/*unit.JobPos.transform.position*/, false, false);
-    }
-
-    public void LeaveRoomJob(Unit unit)
-    {
-        ReadyClip();
-        ResetJob(unit);
-
-        if (!AutomotonAction.endPhaseOne)
-        {
-            GetUnitObject(unit).transform.position = FindSpotToSpawn();
-            GetUnitObject(unit).SetActive(true);
-        }
     }
 
     GameObject BulletTrail(Vector3 start, Vector3 end)
@@ -508,22 +531,11 @@ public class UnitManager : MonoBehaviour
         trail.transform.localScale = new Vector3(0.05f, 0.05f, Vector3.Distance(start, end));
         return trail;
     }
-
     IEnumerator TrailOff(float time, Vector3 start, Vector3 end)
     {
         GameObject t = BulletTrail(start, end);
         yield return new WaitForSeconds(time);
         Destroy(t);
-    }
-
-    public void FindUnit(Unit unit)
-    {
-        Debug.Log("No one is here");
-    }
-
-    public Vector3 FindSpotToSpawn()
-    {
-        return robotPos + new Vector3(-pickUpDistance + Random.Range(-3, 3), 0, -pickUpDistance + Random.Range(-3, 3));
     }
 
     void ReadyClip()
@@ -538,7 +550,6 @@ public class UnitManager : MonoBehaviour
                     audioSource.PlayOneShot(goingClip2);
                 }
     }
-
     void PlayClip(string str)
     {
         if (str.Equals("ping"))
@@ -571,35 +582,30 @@ public class UnitManager : MonoBehaviour
         }
     }
 
-    public void SetJobCircleColor(Unit unit, Color colorChange)
+    public void SetJobCircleColor(Unit unit_data, Color colorChange)
     {
-        if (unit.JobPos != null && unit.JobPos.GetComponentInChildren<SpriteRenderer>() != null)
+        if (unit_data.JobPos != null && unit_data.JobPos.GetComponentInChildren<SpriteRenderer>() != null)
         {
-            unit.JobPos.GetComponentInChildren<SpriteRenderer>().color = colorChange;
+            unit_data.JobPos.GetComponentInChildren<SpriteRenderer>().color = colorChange;
         }
     }
-
-    public void ResetColor(Unit unit)
+    public void ResetColor(Unit unit_data)
     {
-        if(unit.Job == "Combat")
-            SetJobCircleColor(unit, enemyRed);
-        else if (unit.JobPos != null && (unit.JobPos.tag == "Metal" || unit.JobPos.tag == "Electronics"))
-            SetJobCircleColor(unit, resourceGreen);
+        if(unit_data.Job == "Combat")
+		{
+			SetJobCircleColor(unit_data, enemyRed);
+		}
+        else if (unit_data.JobPos != null && (unit_data.JobPos.tag == "Metal" || unit_data.JobPos.tag == "Electronics"))
+		{
+			SetJobCircleColor(unit_data, resourceGreen);
+		}
     }
-
-    void ResetJob(Unit unit)
-    {
-        ResetColor(unit);
-        unit.Job = "none";
-        unit.JobPos = null;
-    }
-
 
     public void PhaseTwoUnits()
     {
-        foreach(GameObject unitObject in unitsGM)
+        foreach(GameObject unit in units)
         {
-            unitObject.SetActive(false);
+            unit.SetActive(false);
         }
     }
 }

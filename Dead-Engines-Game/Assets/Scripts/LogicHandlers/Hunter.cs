@@ -4,27 +4,25 @@ using UnityEngine;
 
 public class Hunter : Enemy
 {
-    protected GameObject obj;
-    protected bool canWalk, walkingForward, walkingBackward, firing, isDead;
-    protected float speed;
-    protected int range;
+	private bool canWalk = true;
+	private bool walkingForward = false;
+	private bool walkingBackward = false;
+	private bool firing = false;
+	private bool isDead = false;
+    private float speed = 10f;
+    private int range = 1;
 
-    public Hunter(GameObject g)
+    public Hunter()
     {
-        canWalk = true;
-        obj = g;
-        health = 1;
-        id = -1;
-        target = null;
-        justShot = false;
-        range = 1; //not implemented yet
+		//inherited from enemy
+        Health = 1;
+        Id = -1;
+        Target = null;
+		JustShot = false;
+
+		canWalk = true;
+		range = 1; //not implemented yet
         speed = 10f;
-    }
-
-    public GameObject Obj
-    {
-        get { return obj; }
-        set { obj = value; }
     }
 
     public bool CanWalk

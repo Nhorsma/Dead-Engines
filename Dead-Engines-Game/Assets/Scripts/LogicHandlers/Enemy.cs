@@ -2,34 +2,51 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Enemy
+public class Enemy : MonoBehaviour
 {
-    protected int health, damage;
-    protected int attack;
-    protected float fireSpeed;
+	//protected int health, damage;
+	//protected int attack;
+	//protected float fireSpeed;
 
-    protected int id;
-    protected GameObject target, obj;
-    protected GameObject rec, camp;
-    protected bool justShot;
+	//protected int id;
+	//protected GameObject target, obj;
+	//protected GameObject rec, camp;
+	//protected bool justShot;
 
-    public Enemy()
+	private int id = -1;
+	private int health = 100;
+	private int damage = 1;
+	private int attack = 1;
+
+	private float fireSpeed = 1f; // fishy
+	private bool justShot = false;
+
+	private GameObject target = null;
+	private GameObject resource = null;
+	private GameObject camp = null;
+
+	public Enemy()
     {
-        health = 3;
+		attack = 1;
+		damage = 1;
+		health = 100;
         id = -1;
-        target = null;
-        justShot = false;
-        damage = 1;
+
+		justShot = false;
+		fireSpeed = 1f;
+
+		target = null;
+		camp = null;
+		resource = null;
     }
 
-    public Enemy(int newID)
-    {
-        health = 100;
-        id = newID;
-        target = null;
-        justShot = false;
-    }
-
+    //public Enemy(int newID)
+    //{
+    //    health = 100;
+    //    id = newID;
+    //    target = null;
+    //    justShot = false;
+    //}
 
     public int Health
     {
@@ -43,7 +60,13 @@ public class Enemy
         set { attack = value; }
     }
 
-    public float FireSpeed
+	public int Damage
+	{
+		get { return damage; }
+		set { damage = value; }
+	}
+
+	public float FireSpeed
     {
         get { return fireSpeed; }
         set { fireSpeed = value; }
@@ -67,28 +90,17 @@ public class Enemy
         set { justShot = value; }
     }
 
-    public GameObject Rec
+    public GameObject Resource
     {
-        get { return rec; }
-        set { rec = value; }
+        get { return resource; }
+        set { resource = value; }
     }
 
     public GameObject Camp
     {
         get { return camp; }
         set { camp = value; }
-
     }
 
-    public int Damage
-    {
-       get { return damage; }
-       set { damage = value; }
-    }
 
-    public GameObject Obj
-    {
-        get { return obj; }
-        set { obj = value; }
-    }
 }

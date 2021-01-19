@@ -4,46 +4,47 @@ using UnityEngine;
 
 public class EncampmentHandler : MonoBehaviour
 {
-    public static int metal;
-    public static int electronics;
-    public int startingHealth;
+    public static int metal;			//why did i put these here???
+    public static int electronics;		//
+	public int startingHealth;			//
 
-    public GameObject[] eGM;
-    public Encampment[] encamps;
-    public EnemyHandler eh;
+    public List<GameObject> encampments;
+
+    public EnemyHandler enemyHandler;
     public UnitManager unitManager;
 
-    public SpawnRes spawn;
-    public ResourceHandling rh;
-    public float startSpawnTime,spawnTime, spawnDistance;
+    public SpawnRes spawnRes;
+    public ResourceHandling resourceHandling;
+    public float startSpawnTime,spawnTime, spawnDistance; //
     public bool startSpawning;
 
     public AudioSource audioSource;
     public AudioClip attackClip1, attackClip2, deathClip, destroyClip;
     public float volume;
 
-    string[] depRec43 = { "gunner", "gunner", "gunner" };
-    string[] depRec33 = { "gunner", "APC_2", "gunner" };
-    string[] depRec23 = { "gunner", "gunner", "APC_2", "APC_2" };
-    string[] depRec13 = { "gunner", "APC_2", "gunner", "APC_2" };
+	// numbers represent xy = [% health][encampments on map]. meant to escalate
+    string[] health100_3left = { "gunner", "gunner", "gunner" };
+    string[] health75_3left = { "gunner", "APC_2", "gunner" };
+    string[] health50_3left = { "gunner", "gunner", "APC_2", "APC_2" };
+    string[] health25_3left = { "gunner", "APC_2", "gunner", "APC_2" };
 
-    string[] depRec42 = { "gunner", "gunner", "APC_2" };
-    string[] depRec32 = { "gunner", "APC_2", "gunner", "APC_2" };
-    string[] depRec22 = { "APC_2", "APC_2", "Mech 2" };
-    string[] depRec12 = { "Mech 2", "APC_2", "Mech 2" };
+    string[] health100_2left = { "gunner", "gunner", "APC_2" };
+    string[] health75_2left = { "gunner", "APC_2", "gunner", "APC_2" };
+    string[] health50_2left = { "APC_2", "APC_2", "Mech 2" };
+    string[] health25_2left = { "Mech 2", "APC_2", "Mech 2" };
 
-    string[] depRec41 = { "gunner", "gunner", "gunner", "APC_2" };
-    string[] depRec31 = { "gunner", "gunner", "APC_2", "APC_2", "Mech 2" };
-    string[] depRec21 = { "gunner", "gunner", "gunner", "APC_2", "APC_2", "Mech 2", "Mech 2" };
-    string[] depRec11 = { "Mech 2", "gunner", "gunner", "APC_2", "APC_2", "Mech 2", "APC_2" };
+    string[] health100_1left = { "gunner", "gunner", "gunner", "APC_2" };
+    string[] health75_1left = { "gunner", "gunner", "APC_2", "APC_2", "Mech 2" };
+    string[] health50_1left = { "gunner", "gunner", "gunner", "APC_2", "APC_2", "Mech 2", "Mech 2" };
+    string[] health25_1left = { "Mech 2", "gunner", "gunner", "APC_2", "APC_2", "Mech 2", "APC_2" };
 
     void Start()
     {
-        rh = GetComponent<ResourceHandling>();
-        eh = GetComponent<EnemyHandler>();
-        eGM = GameObject.FindGameObjectsWithTag("Encampment");
-        encamps = new Encampment[eGM.Length];
-        SetUpCamps(); //
+        resourceHandling = GetComponent<ResourceHandling>(); //fishy
+        enemyHandler = GetComponent<EnemyHandler>(); //fishy
+		encampments = new List<GameObject>();
+
+        SetUpCamps(); //fishy
         startSpawning = true;
         startSpawnTime = spawnTime;
     }
@@ -51,208 +52,179 @@ public class EncampmentHandler : MonoBehaviour
     void Update()
     {
         if (startSpawning)
-            for (int i = 0; i < encamps.Length; i++)
+            for (int i = 0; i < encampments.Count; i++)
             {
-                CheckUnitNear(encamps[i]);
+                CheckUnitNear(encampments[i]);
             }
     }
 
-    //-----------------------------------------------------------------------------------------
-    //-----------------------------------------------------------------------------------------
+	//-----------------------------------------------------------------------------------------
+	//-----------------------------------------------------------------------------------------
 
-
-
-    //this will establish that spawned enemies travel to this resource...
-    //as well as will attack player units that get too close to it.
-    void SetUpCamps()
+	/// <summary>
+	/// INITIALIZE --------------------------------------------------------------------------------------------------------------------------->
+	/// </summary>
+	//this will establish that spawned enemies travel to this resource as well as will attack player units that get too close to it.
+	void SetUpCamps()
     {
-        for (int i = 0; i < encamps.Length; i++)
+        for (int i = 0; i < encampments.Count; i++)
         {
-            encamps[i] = new Encampment(i);
-            encamps[i].ClosestRec = GetClosestResource(encamps[i]);
-            encamps[i].Deployment = depRec33;
+			GameObject encampment = (GameObject)(Resources.Load("encampment"));
+            encampment.GetComponent<Encampment>().ClosestResource = GetClosestResource(encampment, encampment.GetComponent<Encampment>());
+            encampment.GetComponent<Encampment>().Deployment = health100_3left;
+			encampments.Add(encampment);
         }
     }
 
+	/// <summary>
+	/// MAIN FUNCTIONS --------------------------------------------------------------------------------------------------------------------------->
+	/// </summary>
 
-    public Encampment GetEncampment(GameObject gm)
+    void SpawnEnemy(GameObject encampment, Encampment encampment_data)
     {
-        for (int i = 0; i < eGM.Length; i++)
-        {
-            if (eGM[i] == gm)
-                return encamps[i];
-        }
-        return null;
-    }
-
-
-    public GameObject GetEncampmentGM(Encampment e)
-    {
-        return eGM[e.Id];
-    }
-
-
-    public void BeDestroyed()
-    {
-        for (int i = 0; i < encamps.Length; i++)
-        {
-            if (encamps[i].Health <= 0)
-            {
-                PlayClip(encamps[i], "death");
-                startSpawning = false;
-                eGM[i].SetActive(false);
-                encamps[i] = null;
-            }
-            else
-            {
-                if (encamps[i].Health >= startSpawnTime * 0.75f)
-                {
-                    spawnTime--;
-                }
-                if (encamps[i].Health >= startSpawnTime * 0.5f)
-                {
-                    spawnTime --;
-                }
-                else if (encamps[i].Health >= startSpawnTime * 0.25f)
-                {
-                    spawnTime --;
-                }
-            }
-        }
-    }
-
-
-    void CheckUnitNear(Encampment e)
-    {
-        foreach (GameObject u in unitManager.unitsGM)
-        {
-            if (Vector3.Distance(u.transform.position, GetEncampmentGM(e).transform.position) < eh.tresspassingRange ||
-                Vector3.Distance(u.transform.position, e.ClosestRec.transform.position) < eh.tresspassingRange)
-            {
-                CheckSpawnEnemy(e);
-            }
-        }
-    }
-
-
-    void CheckSpawnEnemy(Encampment e)
-    {
-        if (e.CanSpawn)
-        {
-            int hit = Random.Range(1, 5);
-            if (e.OnField < e.Deployment.Length && hit < e.Chance)
-            {
-                SpawnEnemy(e);
-                e.Chance = 0;
-            }
-            else
-            {
-                e.Chance++;
-            }
-            //Debug.Log(e.Chance + "0%");
-            StartCoroutine(ChangeSpawnChance(e));
-        }
-    }
-
-    IEnumerator ChangeSpawnChance(Encampment e)
-    {
-        e.CanSpawn = false;
-        yield return new WaitForSeconds(spawnTime);
-        e.CanSpawn = true;
-    }
-
-
-    void SpawnEnemy(Encampment e)
-    {
-        PlayClip(e, "attack");
-        CheckDeployment(e);
-        Vector3 spawnPlace = eGM[e.Id].transform.position + new Vector3(Random.Range(1, 5), 0, Random.Range(1, 5));
+        PlayClip(encampment, encampment_data, "attack");
+        CheckDeployment(encampment_data);
+        Vector3 spawnPlace = encampments[encampment_data.Id].transform.position + new Vector3(Random.Range(1, 5), 0, Random.Range(1, 5));
 
         // for(int i=0;i<e.Deployment.Length;i++)
         // Debug.Log(e.Deployment[i] +" : "+e.OnField);
-        var gm = Instantiate(Resources.Load(e.Deployment[e.OnField]), spawnPlace, transform.rotation);
+        GameObject enemyObj = (GameObject)Instantiate(Resources.Load(encampment_data.Deployment[encampment_data.OnField]), spawnPlace, transform.rotation);
 
-        Enemy enemy = new Enemy();
-        enemy.Rec = e.ClosestRec;
-        enemy.Camp = GetEncampmentGM(e);
-        enemy.Id = eh.enemiesGM.Count;
-        enemy.Obj = (GameObject)gm;
+        enemyObj.GetComponent<Enemy>().Resource = encampment_data.ClosestResource;
+        enemyObj.GetComponent<Enemy>().Camp = encampment;
+        enemyObj.GetComponent<Enemy>().Id = enemyHandler.enemies.Count;
 
-        eh.enemiesGM.Add((GameObject)gm);
-        eh.enemies.Add(enemy);
+        enemyHandler.enemies.Add(enemyObj);
 
-        eh.FindSpot(enemy);
-        e.OnField++;
+        enemyHandler.FindSpot(enemyObj);
+        encampment_data.OnField++;
     }
 
+	public void BeDestroyed()
+	{
+		for (int i = 0; i < encampments.Count; i++)
+		{
+			if (encampments[i].GetComponent<Encampment>().Health <= 0)
+			{
+				PlayClip(encampments[i], encampments[i].GetComponent<Encampment>(), "death");
+				startSpawning = false;
+				encampments[i].SetActive(false);
+				//encamps[i] = null;
+			}
+			else
+			{
+				if (encampments[i].GetComponent<Encampment>().Health >= startSpawnTime * 0.75f)
+				{
+					spawnTime--;
+				}
+				if (encampments[i].GetComponent<Encampment>().Health >= startSpawnTime * 0.5f)
+				{
+					spawnTime--;
+				}
+				else if (encampments[i].GetComponent<Encampment>().Health >= startSpawnTime * 0.25f)
+				{
+					spawnTime--;
+				}
+			}
+		}
+	}
 
-    //adds "gunner", "APC", or "Mech"
-    void CheckDeployment(Encampment e)
+	/// <summary>
+	/// UTILITY FUNCTIONS --------------------------------------------------------------------------------------------------------------------------->
+	/// </summary>
+
+	void CheckSpawnEnemy(GameObject encampment, Encampment encampment_data)
+	{
+		if (encampment_data.CanSpawn)
+		{
+			int hit = Random.Range(1, 5);
+			if (encampment_data.OnField < encampment_data.Deployment.Length && hit < encampment_data.Chance)
+			{
+				SpawnEnemy(encampment, encampment_data);
+				encampment_data.Chance = 0;
+			}
+			else
+			{
+				encampment_data.Chance++;
+			}
+			//Debug.Log(e.Chance + "0%");
+			StartCoroutine(ChangeSpawnChance(encampment_data));
+		}
+	}
+	IEnumerator ChangeSpawnChance(Encampment encampment_data)
+	{
+		encampment_data.CanSpawn = false;
+		yield return new WaitForSeconds(spawnTime);
+		encampment_data.CanSpawn = true;
+	}
+
+	//adds "gunner", "APC", or "Mech"
+	void CheckDeployment(Encampment encampment_data)
     {
-        int quant = rh.resQuantities[rh.GetNumber(e.ClosestRec)];
+        int quantity = resourceHandling.resourceQuantities[resourceHandling.GetNumber(encampment_data.ClosestResource)];
 
-        if (quant <= 0)
+        if (quantity <= 0)
         {
-            e.Deployment = new string[50];
+            encampment_data.Deployment = new string[50];
             //Debug.Log("whoops");
             return;
         }
 
-        if (rh.recsLeft == 3)
+        if (resourceHandling.resourcesLeft == 3)
         {
-            if (e.Health < 25 || quant < rh.startQuantity / 4)
+            if (encampment_data.Health < 25 || quantity < resourceHandling.startQuantity / 4)
             {
-                e.Deployment = depRec13;
+				encampment_data.Deployment = health25_3left;
             }
-            if (e.Health < 50 || quant < (rh.startQuantity / 2))
+            if (encampment_data.Health < 50 || quantity < (resourceHandling.startQuantity / 2)) // fishy if if elsesif else
             {
-                e.Deployment = depRec23;
+				encampment_data.Deployment = health50_3left;
             }
-            else if (e.Health < 75 || quant < rh.startQuantity * 0.25f)
+            else if (encampment_data.Health < 75 || quantity < resourceHandling.startQuantity * 0.25f)
             {
-                e.Deployment = depRec33;
+				encampment_data.Deployment = health75_3left;
             }
             else
             {
-                e.Deployment = depRec43;
+				encampment_data.Deployment = health100_3left;
             }
         }
-        else if (rh.recsLeft == 2)
+        else if (resourceHandling.resourcesLeft == 2)
         {
-            if (e.Health < 25 || quant < rh.startQuantity / 4)
+            if (encampment_data.Health < 25 || quantity < resourceHandling.startQuantity / 4)
             {
-                e.Deployment = depRec12;
+				encampment_data.Deployment = health25_2left;
             }
-            if (e.Health < 50 || quant < (rh.startQuantity / 2))
-            {
-                e.Deployment = depRec22;
+            if (encampment_data.Health < 50 || quantity < (resourceHandling.startQuantity / 2)) // fishy if if elsesif else
+			{
+                encampment_data.Deployment = health50_2left;
             }
-            else if (e.Health < 75 || quant < rh.startQuantity * 0.25f)
+            else if (encampment_data.Health < 75 || quantity < resourceHandling.startQuantity * 0.25f)
             {
-                e.Deployment = depRec32;
+				encampment_data.Deployment = health75_2left;
             }
             else
             {
-                e.Deployment = depRec42;
+				encampment_data.Deployment = health100_2left;
             }
         }
-        else if (rh.recsLeft == 1)
+        else if (resourceHandling.resourcesLeft == 1)
         {
-            if (e.Health < 25 || quant < rh.startQuantity / 4)
+            if (encampment_data.Health < 25 || quantity < resourceHandling.startQuantity / 4)
             {
-                e.Deployment = depRec11;
+                encampment_data.Deployment = health25_1left;
             }
-            if (e.Health < 50 || quant < (rh.startQuantity / 2))
+            if (encampment_data.Health < 50 || quantity < (resourceHandling.startQuantity / 2))
             {
-                e.Deployment = depRec21;
+                encampment_data.Deployment = health50_1left;
             }
-            else if (e.Health < 75 || quant < rh.startQuantity * 0.25f)
+            else if (encampment_data.Health < 75 || quantity < resourceHandling.startQuantity * 0.25f)
             {
-                e.Deployment = depRec31;
+                encampment_data.Deployment = health75_1left;
             }
             else
             {
-                e.Deployment = depRec41;
+                encampment_data.Deployment = health100_1left;
             }
         }
         else
@@ -262,26 +234,36 @@ public class EncampmentHandler : MonoBehaviour
 
     }
 
+	void CheckUnitNear(GameObject encampment)
+	{
+		foreach (GameObject u in unitManager.units)
+		{
+			if (Vector3.Distance(u.transform.position, encampment.transform.position) < enemyHandler.tresspassingRange ||
+				Vector3.Distance(u.transform.position, encampment.GetComponent<Encampment>().ClosestResource.transform.position) < enemyHandler.tresspassingRange)
+			{
+				CheckSpawnEnemy(encampment, encampment.GetComponent<Encampment>());
+			}
+		}
+	}
 
-    GameObject GetClosestResource(Encampment camp)
+	GameObject GetClosestResource(GameObject encampment, Encampment encampment_data)
     {
         float distance = Mathf.Infinity;
         GameObject chosen = new GameObject();
-        foreach (GameObject rec in spawn.GetResources())
+        foreach (GameObject r in spawnRes.GetResources())
         {
-            if (Vector3.Distance(rec.transform.position, GetEncampmentGM(camp).transform.position) < distance)
+            if (Vector3.Distance(r.transform.position, encampment.transform.position) < distance)
             {
-                distance = Vector3.Distance(rec.transform.position, GetEncampmentGM(camp).transform.position);
-                chosen = rec;
+                distance = Vector3.Distance(r.transform.position, encampment.transform.position);
+                chosen = r;
             }
         }
         return chosen;
     }
 
-
-    public void PlayClip(Encampment encampment, string str)
+    public void PlayClip(GameObject encampment, Encampment encampment_data, string str)
     {
-        AudioSource tempSource = GetEncampmentGM(encampment).GetComponent<AudioSource>();
+        AudioSource tempSource = encampment.GetComponent<AudioSource>();
         Debug.Log(tempSource);
         //tempSource.volume = volume;
         if (str.Equals("attack"))

@@ -5,10 +5,13 @@ using UnityEngine;
 public class Encampment
 {
     private string[] deployment;
-    private bool canSpawn, playerInRange;
-    private int id, health, chance, onField;
-    private GameObject closestRec;
-
+	private bool canSpawn = true;
+	private bool playerInRange = false;
+	private int id = -1;
+	private int health = 100;
+	private int chance = 0;
+	private int onField = 0;
+    private GameObject closestResource = null; 
 
     public Encampment(int newid)
     {
@@ -19,7 +22,6 @@ public class Encampment
         onField = 0;
         playerInRange = false;
         deployment = new string[] { "hellow" };
-      
     }
 
     public int Id
@@ -52,10 +54,10 @@ public class Encampment
         set { onField = value; }
     }
 
-    public GameObject ClosestRec
+    public GameObject ClosestResource
     {
-        get { return closestRec;}
-        set { closestRec = value; }
+        get { return closestResource;}
+        set { closestResource = value; }
     }
 
     public bool PlayerInRange

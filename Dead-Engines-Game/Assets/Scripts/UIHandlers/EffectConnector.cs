@@ -48,9 +48,9 @@ public class EffectConnector : MonoBehaviour
 	public void Recalculate()
 	{
 		//shrine related
-		foreach (GameObject o in unitManager.unitsGM)
+		foreach (GameObject u in unitManager.units)
 		{
-			o.GetComponent<NavMeshAgent>().speed = unitSpeed;
+			u.GetComponent<NavMeshAgent>().speed = unitSpeed;
 		}
 
 		unitManager.unitFireCooldown = unitFiringRate;

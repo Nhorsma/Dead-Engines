@@ -5,22 +5,23 @@ using UnityEngine.AI;
 
 public class EnemyHandler : MonoBehaviour
 {
-    SpawnRes spawn;
-    UnitManager um;
-    EncampmentHandler eh;
-    public List<GameObject> enemiesGM;
-    public List<Enemy> enemies;
+    SpawnRes spawnResources;
+    UnitManager unitManager;
+    EncampmentHandler encampmentHandler;
+
+    public List<GameObject> enemies;
+
     public float stoppingDistance, shootingRange, tresspassingRange;
+
     public AudioSource audioSource;
     public AudioClip attackClip1, attackClip2, dieClip1, dieClip2, shootClip;
 
     private void Start()
     {
-        um = GetComponent<UnitManager>();
-        enemiesGM = new List<GameObject>();
-        enemies = new List<Enemy>();
-        spawn = GetComponent<SpawnRes>();
-        eh = GetComponent<EncampmentHandler>();
+        unitManager = GetComponent<UnitManager>();	// fishy
+        enemies = new List<GameObject>();
+        spawnResources = GetComponent<SpawnRes>();	// fishy
+        encampmentHandler = GetComponent<EncampmentHandler>();	// fishy
     }
 
     private void Update()
@@ -28,52 +29,29 @@ public class EnemyHandler : MonoBehaviour
         RunJobs();
     }
 
+	//-----------------------------------------------------------------------------------------
+	//-----------------------------------------------------------------------------------------
 
-    //-----------------------------------------------------------------------------------------
-    //-----------------------------------------------------------------------------------------
+	/// <summary>
+	/// MAIN FUNCTIONS --------------------------------------------------------------------------------------------------------------------------->
+	/// </summary>
 
-    public GameObject GetEnemyObject(Enemy ene)
-    {/*
-        if (ene.Id < 0 && ene.Id > enemies.Count)
-            return null;
-        Debug.Log(enemiesGM[ene.Id]);
-        return enemiesGM[ene.Id];
-        */
-
-        return ene.Obj;
-    }
-
-
-    public  Enemy GetEnemy(GameObject gm)
+	void RunJobs()
     {
-        for (int i = 0; i < enemiesGM.Count; i++)
+        foreach (GameObject e in enemies)
         {
-            if (enemiesGM[i] == gm)
+            if(e.GetComponent<Enemy>().Health <= 0)
             {
-                return enemies[i];
-            }
-        }
-        return null;
-    }
-
-
-    void RunJobs()
-    {
-        foreach (Enemy e in enemies)
-        {
-            if(EnemyDead(e))
-            {
-                Debug.Log(e.Id);
-                PlayClip(e.Camp, "die");
+                //Debug.Log(e.GetComponent<Enemy>().Id);
+                PlayClip(e.GetComponent<Enemy>().Camp, "die");
                 enemies.Remove(e);
-                enemiesGM.Remove(GetEnemyObject(e));
-                Destroy(GetEnemyObject(e));
-                eh.GetEncampment(e.Camp).OnField--; 
+                Destroy(e);
+                e.GetComponent<Enemy>().Camp.GetComponent<Encampment>().OnField--; // fishy
                 break;
             }
-            if(e.Target!=null)
+            if(e.GetComponent<Enemy>().Target!=null)
             {
-                Persue(e);
+                Persue(e, e.GetComponent<Enemy>());
             }
             else
             {
@@ -82,117 +60,122 @@ public class EnemyHandler : MonoBehaviour
         }
     }
 
-
-    public void FindSpot(Enemy e)
-    {
-        int chance = Random.Range(0, 2);
-        if(chance==1)
-        {
-            Vector3 rand = new Vector3(Random.Range(-3, 3), Random.Range(-3, 3), Random.Range(-3, 3));
-            TravelTo(GetEnemyObject(e), e.Rec.transform.position + rand, true, false);
-        }
-        else
-        {
-            Vector3 rand = new Vector3(Random.Range(-3, 3), Random.Range(-3, 3), Random.Range(-3, 3));
-            TravelTo(GetEnemyObject(e), e.Camp.transform.position + rand, true, false);
-        }
-    }
-
-
-    //i was hoping i wouldn't have to loop through every friendly game object to see if they were in range...
-    //...but you leave me no choice
-
-    /*
-    * if tresspassing, move to firing range
-    * if in firing range and still in tresspassing, shoot and follow
-    * if in firing range but not tresspassing, shoot
-    * if not in firing range nor tresspassing, find spot
+	/*
+	 * i was hoping i wouldn't have to loop through every friendly game object to see if they were in range...
+	 * ...but you leave me no choice
+     * if tresspassing, move to firing range
+     * if in firing range and still in tresspassing, shoot and follow
+     * if in firing range but not tresspassing, shoot
+     * if not in firing range nor tresspassing, find spot
     */
-
-
-    void Protect(Enemy e)
+	void Protect(GameObject enemy)
     {
-        foreach (Unit u in um.units)
+        foreach (GameObject u in unitManager.units)
         {
-            if (Vector3.Distance(um.GetUnitObject(u).transform.position, e.Rec.transform.position) < tresspassingRange
-                || Vector3.Distance(um.GetUnitObject(u).transform.position, e.Camp.transform.position) < tresspassingRange)
+            if (Vector3.Distance(u.transform.position, enemy.GetComponent<Enemy>().Resource.transform.position) < tresspassingRange
+                || Vector3.Distance(u.transform.position, enemy.GetComponent<Enemy>().Camp.transform.position) < tresspassingRange)
             {
-                e.Target = um.GetUnitObject(u);
-                TravelTo(GetEnemyObject(e), um.GetUnitObject(u).transform.position, true, true);
-                AssignAnimation(GetEnemyObject(e), "isShooting", false);
+				enemy.GetComponent<Enemy>().Target = u;
+                TravelTo(enemy, u.transform.position, true, true);
+                AssignAnimation(enemy, "isShooting", false);
                 break;
             }
         }
     }
 
-    void Persue(Enemy e)
+    void Persue(GameObject enemy, Enemy enemy_data)
     {
-        if (GetEnemyObject(e)==null || e.Target == null)
-            return;
-        float dis = Vector3.Distance(GetEnemyObject(e).transform.position, e.Target.transform.position);
+        if (enemy==null || enemy_data.Target == null)
+		{
+			return;
+		}
+        float dis = Vector3.Distance(enemy.transform.position, enemy_data.Target.transform.position);
 
-        if(e.Target != null)
-        if ( dis < shootingRange && !e.JustShot)
-        {
-                AssignAnimation(GetEnemyObject(e), "isShooting", true);
-                Fire(e);
-            StartCoroutine(FireCoolDown(e));
-        }
-        else if(dis>shootingRange && dis<tresspassingRange)
-        {
-                AssignAnimation(GetEnemyObject(e), "isShooting", false);
-                TravelTo(GetEnemyObject(e), e.Target.transform.position, true, true);
-        }
-        else if(dis>tresspassingRange && dis>shootingRange)
-        {
-                AssignAnimation(GetEnemyObject(e), "isShooting", false);
-                FindSpot(e);
-            e.Target = null;
-        }
+        if(enemy_data.Target != null) //fishy
+		{
+			if (dis < shootingRange && !enemy_data.JustShot)
+			{
+				AssignAnimation(enemy, "isShooting", true);
+				Fire(enemy, enemy_data);
+				StartCoroutine(FireCoolDown(enemy_data));
+			}
+			else if (dis > shootingRange && dis < tresspassingRange)
+			{
+				AssignAnimation(enemy, "isShooting", false);
+				TravelTo(enemy, enemy_data.Target.transform.position, true, true);
+			}
+			else if (dis > tresspassingRange && dis > shootingRange)
+			{
+				AssignAnimation(enemy, "isShooting", false);
+				FindSpot(enemy);
+				enemy_data.Target = null;
+			}
+		}
     }
 
+	public void FindSpot(GameObject enemy)
+	{
+		int chance = Random.Range(0, 2);
+		if (chance == 1)
+		{
+			Vector3 rand = new Vector3(Random.Range(-3, 3), Random.Range(-3, 3), Random.Range(-3, 3));
+			TravelTo(enemy, enemy.GetComponent<Enemy>().Resource.transform.position + rand, true, false);
+		}
+		else
+		{
+			Vector3 rand = new Vector3(Random.Range(-3, 3), Random.Range(-3, 3), Random.Range(-3, 3));
+			TravelTo(enemy, enemy.GetComponent<Enemy>().Camp.transform.position + rand, true, false);
+		}
+	}
 
-    IEnumerator FireCoolDown(Enemy ene)
+	/// <summary>
+	/// UTILITY FUNCTIONS --------------------------------------------------------------------------------------------------------------------------->
+	/// </summary>
+
+	void Fire(GameObject enemy, Enemy enemy_data)
+	{
+		if (enemy_data.Target != null)
+		{
+			Vector3 direction = enemy_data.Target.transform.position - enemy.transform.position;
+
+			//    RaycastHit hit;
+			//   if (Physics.Raycast(GetEnemyObject(ene).transform.position, direction, out hit, 100f))
+			//   {
+			PlayClip(enemy_data.Camp, "shoot");
+			StartCoroutine(TrailOff(0.05f, enemy.transform.position, enemy_data.Target.transform.position));
+
+			int hitChance = Random.Range(0, 2);
+			if (hitChance == 0)
+			{
+				Debug.Log("hit");
+				enemy_data.Target.GetComponent<Unit>().Health--;
+				unitManager.UnitDown(enemy_data.Target);
+			}
+			//    }
+		}
+	}
+	IEnumerator FireCoolDown(Enemy enemy_data)
     {
-        ene.JustShot = true;
+        enemy_data.JustShot = true;
         yield return new WaitForSeconds(2f);
-        ene.JustShot = false;
+        enemy_data.JustShot = false;
     }
 
-    void Fire(Enemy ene)
+    void TravelTo(GameObject enemy, Vector3 place, bool stop, bool randomize)
     {
-        if (ene.Target != null)
+        if (enemy != null && enemy.GetComponent<NavMeshAgent>() != null)
         {
-            Vector3 direction = ene.Target.transform.position - GetEnemyObject(ene).transform.position;
-
-        //    RaycastHit hit;
-         //   if (Physics.Raycast(GetEnemyObject(ene).transform.position, direction, out hit, 100f))
-         //   {
-                PlayClip(ene.Camp,"shoot");
-                StartCoroutine(TrailOff(0.05f, GetEnemyObject(ene).transform.position, ene.Target.transform.position));
-
-                int hitChance = Random.Range(0, 2);
-                if (hitChance == 0)
-                {
-                    Debug.Log("hit");
-                    um.GetUnit(ene.Target).Health--;
-                    um.UnitDown(um.GetUnit(ene.Target));
-                }
-        //    }
-        }
-    }
-
-    void TravelTo(GameObject a, Vector3 place, bool stop, bool randomize)
-    {
-        if (a != null && a.GetComponent<NavMeshAgent>() != null)
-        {
-            NavMeshAgent nv = a.GetComponent<NavMeshAgent>();
+            NavMeshAgent nav = enemy.GetComponent<NavMeshAgent>();
             if (stop)
-                nv.stoppingDistance = stoppingDistance;
+			{
+				nav.stoppingDistance = this.stoppingDistance;
+			}
             if (randomize)
-                place += new Vector3(Random.Range(-stoppingDistance, stoppingDistance), 0, Random.Range(-stoppingDistance, stoppingDistance));
+			{
+				place += new Vector3(Random.Range(-stoppingDistance, stoppingDistance), 0, Random.Range(-stoppingDistance, stoppingDistance));
+			}
 
-            nv.SetDestination(place);
+            nav.SetDestination(place);
         }
     }
 
@@ -205,7 +188,6 @@ public class EnemyHandler : MonoBehaviour
         trail.transform.localScale = new Vector3(0.05f, 0.05f, Vector3.Distance(start, end));
         return trail;
     }
-
     IEnumerator TrailOff(float time, Vector3 start, Vector3 end)
     {
         GameObject t = BulletTrail(start, end);
@@ -213,15 +195,9 @@ public class EnemyHandler : MonoBehaviour
         Destroy(t);
     }
 
-    public bool EnemyDead(Enemy e)
+    void PlayClip(GameObject encampment, string str)
     {
-        return e.Health <= 0;
-
-    }
-
-    void PlayClip(GameObject encamp, string str)
-    {
-        AudioSource tempSource = encamp.GetComponent<AudioSource>();
+        AudioSource tempSource = encampment.GetComponent<AudioSource>();
         if (str.Equals("attack"))
         {
             if (Random.Range(0, 2) == 0)
@@ -239,10 +215,9 @@ public class EnemyHandler : MonoBehaviour
         else if (str.Equals("shoot"))
             tempSource.PlayOneShot(shootClip);
     }
-
-    void AssignAnimation(GameObject gm, string anim, bool play)
+    void AssignAnimation(GameObject enemy, string anim, bool play)
     {
-        if (gm.GetComponent<Animator>() != null)
-            gm.GetComponent<Animator>().SetBool(anim, play);
+        if (enemy.GetComponent<Animator>() != null)
+            enemy.GetComponent<Animator>().SetBool(anim, play);
     }
 }

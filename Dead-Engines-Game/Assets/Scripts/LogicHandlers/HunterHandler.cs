@@ -5,53 +5,108 @@ using UnityEngine.AI;
 
 public class HunterHandler : MonoBehaviour
 {
-    public GameObject automoton, h1, h2, h3;
+    public GameObject automaton, h1, h2, h3;
     public AutomotonAction autoAction;
-    public Hunter[] deployed;
+
+    public List<GameObject> deployedHunters;
+
     public float spawnRadius, stoppingDistance, movementSpeed;
     public bool canSpawn, isDeployed;
     public float chance, spawnTime;
     public AudioClip attack1Clip, attack2Clip, shootClip, hitClip, destroyClip, enemyDetectedClip;
-
 
     Vector3 last;
 
     void Start()
     {
         last = new Vector3();
-        deployed = new Hunter[3];
     }
-
 
     void Update()
     {
         HappyHunting();
     }
 
+	//-----------------------------------------------------------------------------------------
+	//-----------------------------------------------------------------------------------------
 
-    void HappyHunting()
+	/// <summary>
+	/// INITIALIZE --------------------------------------------------------------------------------------------------------------------------->
+	/// </summary>
+
+	GameObject SetHunter() //fishy
+	{
+		int r = Random.Range(1, 4);
+		GameObject hunterObj = h1.gameObject;
+
+		switch (r)
+		{
+			case 1:
+				hunterObj = (GameObject)Instantiate(Resources.Load("hunter 1"));
+				hunterObj.GetComponent<Hunter>().Speed = 7f;
+				hunterObj.GetComponent<Hunter>().Health = 2;
+				hunterObj.GetComponent<Hunter>().Damage = 2;
+				break;
+			case 2:
+				hunterObj = (GameObject)Instantiate(Resources.Load("hunter 2"));
+				hunterObj.GetComponent<Hunter>().Speed = 10f;
+				hunterObj.GetComponent<Hunter>().Health = 1;
+				hunterObj.GetComponent<Hunter>().Damage = 1;
+				break;
+			case 3:
+				hunterObj = (GameObject)Instantiate(Resources.Load("hunter 3"));
+				hunterObj.GetComponent<Hunter>().Speed = 3f;
+				hunterObj.GetComponent<Hunter>().Health = 3;
+				hunterObj.GetComponent<Hunter>().Damage = 3;
+				break;
+		}
+
+		hunterObj.GetComponent<Hunter>().Target = automaton;
+		return hunterObj;
+	}
+
+	/// <summary>
+	/// MAIN FUNCTIONS --------------------------------------------------------------------------------------------------------------------------->
+	/// </summary>
+
+	void SpawnHunter()
+	{
+		for (int i = 0; i < 3; i++)
+		{
+			Vector3 spawnPlace = automaton.transform.position + RandomSpawnPoint();
+			//Hunter h = SetHunter().GetComponent<Hunter>();
+			GameObject hunterObj = SetHunter(); // fishy
+			hunterObj.transform.position = spawnPlace;
+			hunterObj.transform.rotation = transform.rotation;
+
+			deployedHunters.Add(hunterObj);
+			hunterObj.GetComponent<Hunter>().Id = i;
+			hunterObj.GetComponent<NavMeshAgent>().speed = hunterObj.GetComponent<Hunter>().Speed;
+		}
+	}
+
+	void HappyHunting()
     {
         if (isDeployed)
-            foreach (Hunter h in deployed)
+            foreach (GameObject h in deployedHunters)
             {
                 if (h == null)
                     break;
 
-                GameObject ho = h.Obj;
-                Transform hm = ho.GetComponentInChildren<Transform>();
+                Transform hunterTransform = h.GetComponentInChildren<Transform>();
 
-                if (Vector3.Distance(ho.transform.position, automoton.transform.position) > stoppingDistance * 1.5f)
+                if (Vector3.Distance(h.transform.position, automaton.transform.position) > stoppingDistance * 1.5f)
                 {
-                    TravelTo(ho, automoton.transform.position, true);
-                    ho.GetComponent<Animator>().SetBool("isShooting", false);
+                    TravelTo(h, automaton.transform.position, true);
+                    h.GetComponent<Animator>().SetBool("isShooting", false);
                 }
-                else if (Vector3.Distance(ho.transform.position, automoton.transform.position) < stoppingDistance)
+                else if (Vector3.Distance(h.transform.position, automaton.transform.position) < stoppingDistance)
                 {
-                    ho.GetComponent<Animator>().SetBool("isShooting", true);
-                    if (!h.JustShot)
+                    h.GetComponent<Animator>().SetBool("isShooting", true);
+                    if (!h.GetComponent<Hunter>().JustShot)
                     {
-                        Fire(h);
-                        StartCoroutine(FireCoolDown(h));
+                        Fire(h, h.GetComponent<Hunter>());
+                        StartCoroutine(FireCoolDown(h.GetComponent<Hunter>()));
                     }
                 }
 
@@ -69,145 +124,109 @@ public class HunterHandler : MonoBehaviour
                     ho.GetComponent<Animator>().SetBool("isShooting", false);
                 }
                 */
-                hm.forward = automoton.transform.position - ho.transform.position;
+                hunterTransform.forward = automaton.transform.position - h.transform.position;
             }
     }
 
-    public void CheckSpawnHunter()
+	/// <summary>
+	/// UTILITY FUNCTIONS --------------------------------------------------------------------------------------------------------------------------->
+	/// </summary>
+
+	void TravelTo(GameObject hunter, Vector3 place, bool stop)
+	{
+		if (hunter != null && hunter.GetComponent<NavMeshAgent>() != null)
+		{
+			NavMeshAgent nav = hunter.GetComponent<NavMeshAgent>();
+			if (stop)
+			{
+				nav.stoppingDistance = stoppingDistance;
+			}
+			nav.SetDestination(place);
+		}
+		else
+		{
+			Debug.Log("not working");
+		}
+	}
+
+	public void CheckSpawnHunter()
+	{
+		if (canSpawn && !isDeployed)
+		{
+			int hit = Random.Range(0, 2);
+			if (hit < chance)
+			{
+				PlayClip("enemy");
+				SpawnHunter();
+				chance = 0;
+				isDeployed = true;
+			}
+			else
+			{
+				chance++;
+			}
+			//Debug.Log(e.Chance + "0%");
+			StartCoroutine(ChangeSpawnChance());
+		}
+	}
+	Vector3 RandomSpawnPoint()
+	{
+		int r = Random.Range(1, 4);
+
+		if (r < 3)
+		{
+			if (r == 1)
+			{
+				return new Vector3(Random.Range(-spawnRadius, spawnRadius), 0, spawnRadius);
+			}
+			else
+			{
+				return new Vector3(Random.Range(-spawnRadius, spawnRadius), 0, -spawnRadius);
+			}
+		}
+		else
+		{
+			if (r == 3)
+			{
+				return new Vector3(spawnRadius, 0, Random.Range(-spawnRadius, spawnRadius));
+			}
+			else
+			{
+				return new Vector3(-spawnRadius, 0, Random.Range(-spawnRadius, spawnRadius));
+			}
+		}
+	}
+	IEnumerator ChangeSpawnChance()
+	{
+		canSpawn = false;
+		yield return new WaitForSeconds(spawnTime);
+		canSpawn = true;
+	}
+
+	public void DealHunterDamage(GameObject hunter) //fishy
     {
-        if (canSpawn && !isDeployed)
+        Hunter hunter_data = deployedHunters[0].GetComponent<Hunter>();
+        foreach (GameObject h in deployedHunters)
         {
-            int hit = Random.Range(0, 2);
-            if (hit < chance)
+            if (h.GetComponent<Hunter>() != null && h.Equals(hunter_data))
             {
-                PlayClip("enemy");
-                SpawnHunter();
-                chance = 0;
-                isDeployed = true;
-            }
-            else
-            {
-                chance++;
-            }
-            //Debug.Log(e.Chance + "0%");
-            StartCoroutine(ChangeSpawnChance());
-        }
-    }
-
-    IEnumerator ChangeSpawnChance()
-    {
-        canSpawn = false;
-        yield return new WaitForSeconds(spawnTime);
-        canSpawn = true;
-    }
-
-    void SpawnHunter()
-    {
-        for (int i = 0; i < 3; i++)
-        {
-            Vector3 spawnPlace = automoton.transform.position + RandomSpawnPoint();
-            Hunter h = SetHunter();
-            GameObject gm = (GameObject)Instantiate(Resources.Load(h.Obj.name), spawnPlace, transform.rotation);
-
-            h.Obj = gm;
-            deployed[i] = h;
-            h.Id = i;
-            h.Obj.GetComponent<NavMeshAgent>().speed = h.Speed;
-        }
-    }
-
-    Vector3 RandomSpawnPoint()
-    {
-        int a = Random.Range(1, 4);
-
-        if (a < 3)
-        {
-            if (a == 1)
-                return new Vector3(Random.Range(-spawnRadius, spawnRadius), 0, spawnRadius);
-            else
-                return new Vector3(Random.Range(-spawnRadius, spawnRadius), 0, -spawnRadius);
-        }
-        else
-        {
-            if (a == 3)
-                return new Vector3(spawnRadius, 0, Random.Range(-spawnRadius, spawnRadius));
-            else
-                return new Vector3(-spawnRadius, 0, Random.Range(-spawnRadius, spawnRadius));
-        }
-    }
-
-    Hunter SetHunter()
-    {
-        Hunter h = new Hunter(h1);
-        int a = Random.Range(1, 4);
-        switch (a)
-        {
-            case 1:
-                h = new Hunter(h1);
-                h.Speed = 7f;
-                h.Health = 2;
-                h.Damage = 2;
-                break;
-            case 2:
-                h = new Hunter(h2);
-                h.Speed = 10f;
-                h.Health = 1;
-                h.Damage = 1;
-                break;
-            case 3:
-                h = new Hunter(h3);
-                h.Speed = 3f;
-                h.Health = 3;
-                h.Damage = 3;
-                break;
-        }
-        h.Target = automoton;
-        return h;
-
-    }
-
-    void TravelTo(GameObject a, Vector3 place, bool stop)
-    {
-        if (a != null && a.GetComponent<NavMeshAgent>() != null)
-        {
-            NavMeshAgent nv = a.GetComponent<NavMeshAgent>();
-            if (stop)
-            {
-                nv.stoppingDistance = stoppingDistance;
-            }
-            nv.SetDestination(place);
-        }
-        else
-        {
-            Debug.Log("not working");
-        }
-    }
-
-    public void DealHunterDamage(GameObject ho)
-    {
-        Hunter hunter = deployed[0];
-        foreach (Hunter h in deployed)
-        {
-            if (h != null && h.Obj.Equals(ho))
-            {
-                hunter = h;
+                hunter_data = h.GetComponent<Hunter>();
                 break;
             }
         }
-        hunter.Health--;
+        hunter_data.Health--;
         Debug.Log("shots recieved");
-        HunterDeath(hunter);
+        HunterDeath(hunter, hunter_data);
 
     }
-
-    public void HunterDeath(Hunter h)
+    public void HunterDeath(GameObject hunter, Hunter hunter_data)
     {
-        if (h.Health <= 0)
+        if (hunter_data.Health <= 0)
         {
             int i = -1;
-            for (int j = 0; j < deployed.Length; j++)
+            for (int j = 0; j < deployedHunters.Count; j++)
             {
-                if (deployed[j] == (h))
+                if (deployedHunters[j] == (hunter_data))
                 {
                     i = j;
                     break;
@@ -215,16 +234,23 @@ public class HunterHandler : MonoBehaviour
             }
 
             if (i == -1)
-                return;
+			{
+				return;
+			}
 
-            deployed[i] = null;
+			deployedHunters.Remove(hunter);
             PlayClip("death");
-            Destroy(h.Obj);
+			Destroy(hunter);
 
-            if (deployed.Equals(new Hunter[] { null, null, null }))
-            {
-                isDeployed = false;
-            }
+            //if (deployedHunters.Equals(new Hunter[] { null, null, null }))
+            //{
+            //    isDeployed = false;
+            //}
+
+			if (deployedHunters.Count <= 0)
+			{
+				isDeployed = false;
+			}
         }
         else
         {
@@ -232,28 +258,27 @@ public class HunterHandler : MonoBehaviour
         }
     }
 
-    IEnumerator FireCoolDown(Hunter hunt)
+    void Fire(GameObject hunter, Hunter hunter_data)
     {
-        hunt.JustShot = true;
-        yield return new WaitForSeconds(2f);
-        hunt.JustShot = false;
-    }
-
-    void Fire(Hunter hunter)
-    {
-        if (hunter.Target != null)
+        if (hunter_data.Target != null)
         {
-            Vector3 direction = hunter.Target.transform.position - hunter.Obj.transform.position;
+            Vector3 direction = hunter_data.Target.transform.position - hunter.transform.position;
             PlayClip("shoot");
 
-            Vector3 shootFrom = hunter.Obj.transform.Find("FireFrom").position;
-            StartCoroutine(TrailOff(0.07f, shootFrom, hunter.Target.transform.position + new Vector3(0, 50, 0)));
+            Vector3 shootFrom = hunter.transform.Find("FireFrom").position;
+            StartCoroutine(TrailOff(0.07f, shootFrom, hunter_data.Target.transform.position + new Vector3(0, 50, 0)));
 
-            autoAction.RecieveDamage(hunter.Damage);
+            autoAction.RecieveDamage(hunter_data.Damage);
         }
     }
+	IEnumerator FireCoolDown(Hunter hunter_data)
+	{
+		hunter_data.JustShot = true;
+		yield return new WaitForSeconds(2f);
+		hunter_data.JustShot = false;
+	}
 
-    GameObject BulletTrail(Vector3 start, Vector3 end)
+	GameObject BulletTrail(Vector3 start, Vector3 end)
     {
         float x, y, z;
         x = Random.Range(-1.2f, 1.2f);
@@ -268,7 +293,6 @@ public class HunterHandler : MonoBehaviour
         trail.transform.localScale = new Vector3(0.05f, 0.05f, Vector3.Distance(start, end));
         return trail;
     }
-
     IEnumerator TrailOff(float time, Vector3 start, Vector3 end)
     {
         GameObject t = BulletTrail(start, end);
@@ -278,7 +302,7 @@ public class HunterHandler : MonoBehaviour
 
     public void PlayClip(string str)
     {
-        AudioSource tempSource = automoton.GetComponent<AudioSource>();
+        AudioSource tempSource = automaton.GetComponent<AudioSource>();
         if (str.Equals("attack"))
         {
             if (Random.Range(0, 2) == 0)

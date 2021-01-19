@@ -83,12 +83,12 @@ public class AutomatonUI : MonoBehaviour
 		{
 			t.SetActive(false);
 		}
-		foreach (GameObject m in roomManager.miniTabs)
+		foreach (GameObject m in roomManager.roomComponents)
 		{
 			m.SetActive(false);
 		}
-		roomManager.ctrlMiniTab.gameObject.SetActive(false);
-		roomManager.genMiniTab.gameObject.SetActive(false);
+		roomManager.controllerComponents.gameObject.SetActive(false);
+		roomManager.generatorComponents.gameObject.SetActive(false);
 		tabs[1].SetActive(true);
 	}
 
@@ -138,7 +138,7 @@ public class AutomatonUI : MonoBehaviour
 
 	public void FindUnit(int i)
 	{
-		Vector3 unitPos = unitManager.unitsGM[i].transform.position;
+		Vector3 unitPos = unitManager.units[i].transform.position;
 		Debug.Log(unitPos);
 		lastClickedID = i;
         Teleport(unitPos, 10f);
