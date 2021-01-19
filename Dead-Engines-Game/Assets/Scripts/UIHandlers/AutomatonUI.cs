@@ -68,7 +68,7 @@ public class AutomatonUI : MonoBehaviour
 		}
 	}
 
-	public void OpenTab1()
+	public void OpenInfoTab()
 	{
 		foreach (GameObject t in tabs)
 		{
@@ -77,7 +77,7 @@ public class AutomatonUI : MonoBehaviour
 		tabs[0].SetActive(true);
 	}
 
-	public void OpenTab2()
+	public void OpenRoomsTab()
 	{
 		foreach (GameObject t in tabs)
 		{
@@ -92,7 +92,7 @@ public class AutomatonUI : MonoBehaviour
 		tabs[1].SetActive(true);
 	}
 
-	public void OpenTab3()
+	public void OpenBuildTab()
 	{
 		foreach (GameObject t in tabs)
 		{

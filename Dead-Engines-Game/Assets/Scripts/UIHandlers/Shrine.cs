@@ -2,17 +2,18 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Refinery : Room
+public class Shrine: Room
 {
 	private bool canFunction;
 
-	public Refinery(int slot, int level)
+	public Shrine(int slot, int level)
 	{
-		this.Type = "refinery";
+		this.Type = "shrine";
 		this.Slot = slot;
 		this.Level = level;
 		this.Workers = new List<GameObject>();
 		this.WorkerCapacity = 3;
+		this.ActiveEffect = "none";
 		this.CanFunction = false;
 	}
 
@@ -22,5 +23,4 @@ public class Refinery : Room
 	{
 		return; // ugh do later
 	}
-
 }
