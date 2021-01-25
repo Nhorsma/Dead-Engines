@@ -13,7 +13,7 @@ public class UITesting : MonoBehaviour
 
     void Start()
     {
-		content = room.GetComponent<MiniTabHolder>().scroller.GetComponent<ScrollRect>().content.gameObject;
+		content = room.GetComponent<RoomComponents>().scroller.GetComponent<ScrollRect>().content.gameObject;
 		Debug.Log("done");
     }
 

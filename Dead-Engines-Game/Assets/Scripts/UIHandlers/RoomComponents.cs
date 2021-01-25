@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class MiniTabHolder : MonoBehaviour
+public class RoomComponents : MonoBehaviour
 {
 	public Image pic;
 	public Text roomName;

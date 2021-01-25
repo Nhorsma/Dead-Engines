@@ -83,12 +83,12 @@ public class AutomatonUI : MonoBehaviour
 		{
 			t.SetActive(false);
 		}
-		foreach (GameObject m in roomManager.roomComponents)
+		foreach (GameObject t in roomManager.roomTabs)
 		{
-			m.SetActive(false);
+			t.SetActive(false);
 		}
-		roomManager.controllerComponents.gameObject.SetActive(false);
-		roomManager.generatorComponents.gameObject.SetActive(false);
+		roomManager.controllerTab.gameObject.SetActive(false);
+		roomManager.generatorTab.gameObject.SetActive(false);
 		tabs[1].SetActive(true);
 	}
 

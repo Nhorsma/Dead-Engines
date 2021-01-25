@@ -5,7 +5,6 @@ using UnityEngine;
 public class Storage : Room
 {
 
-	private int storageCapacity;
 	private List<string> stored;
 
 	public Storage(int slot, int level)
@@ -17,7 +16,6 @@ public class Storage : Room
 		this.Stored = new List<string>(); // maybe
 	}
 
-	public int StorageCapacity { get => storageCapacity; set => storageCapacity = value; }
 	public List<string> Stored { get => stored; set => stored = value; }
 
 	public override void DestroyRoom()

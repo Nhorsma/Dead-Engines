@@ -5,23 +5,50 @@ using UnityEngine;
 public class StartPhaseTwo : MonoBehaviour
 {
     public static bool endPhaseOne;
-    public static AutomotonAction aa;
-    public static HunterHandler hh;
+    public static AutomotonAction automatonAction;
+    public static HunterHandler hunterHandler;
+
+	public AutomatonUI auto;
+	public SpawnRes spawnRes;
+	public GameObject autoObj;
+	public SelectItems selectItems;
+	public ResourceHandling resourceHandling;
+
+	public static bool isAutomatonRepaired = false;
 
     void Start()
     {
-        aa = GameObject.FindGameObjectWithTag("Robot").GetComponent<AutomotonAction>();
-        hh = GetComponent<HunterHandler>();
-        aa.enabled = false;
-        hh.enabled = false;
+        automatonAction = GameObject.FindGameObjectWithTag("Robot").GetComponent<AutomotonAction>();
+        hunterHandler = GetComponent<HunterHandler>();
+        automatonAction.enabled = false;
+        hunterHandler.enabled = false;
         endPhaseOne = false;
     }
 
     public static void PhaseTwo()
     {
-        aa.enabled = true;
-        hh.enabled = true;
+        automatonAction.enabled = true;
+        hunterHandler.enabled = true;
         endPhaseOne = true;
     }
+
+	public void RepairAutomaton()
+	{
+		isAutomatonRepaired = true;
+		Debug.Log("repaired automaton");
+
+		//activates automoton movement script
+		PhaseTwo();
+	}
+
+	public void ActivateAutomoton()
+	{
+		auto.activationButton.gameObject.SetActive(false);
+		spawnRes.OpenMapRange();
+		autoObj.GetComponent<AutomotonAction>().enabled = true;
+		hunterHandler.enabled = true;
+		selectItems.enabled = false;
+		resourceHandling.SetNewResourceDeposits(spawnRes.GetAllResources());
+	}
 
 }
