@@ -5,12 +5,11 @@ using UnityEngine.UI;
 
 public class RoomManager : MonoBehaviour
 {
-	// pulling scripts -------------------> can remove some now!
-	public SpawnRes spawnRes;
-    public ResourceHandling resourceHandling;
-    public SelectItems selectItems;
-
 	public SetupRoom setupRoom;
+	public AutomatonUI auto;
+	public UnitManager unitManager;
+
+	public GameObject autoObj;
 
 	// room data & tabs
 	public List<Room> rooms = new List<Room>(); // room_data
@@ -24,12 +23,7 @@ public class RoomManager : MonoBehaviour
 	public Sprite generatorRepairedSprite;
 	public Sprite controllerRepairedSprite;
 
-	// pulling scripts
 	public int roomSlotClicked = 0;
-	public GameObject autoObj;
-	public AutomatonUI auto;
-    public UnitManager unitManager;
-    public HunterHandler hunterHandler;
 
 	// sound fx
     public AudioSource audioSource;
@@ -37,49 +31,11 @@ public class RoomManager : MonoBehaviour
     public AudioClip hammerClip;
     public AudioClip errorClip;
 
-	/// <summary>
-	/// this could be so much better
-	/// </summary>
-	public float refineryCost_M;
-	public float refineryCost_E;
-
-	public float storageCost_M;
-	public float storageCost_E;
-
-	public float shrineCost_M;
-	public float shrineCost_E;
-
-	public float studyCost_M;
-	public float studyCost_E;
-
-	//origs
-	/// <summary>
-	/// I hate that I have to do this
-	/// </summary>
-	public float refineryCost_Mo;
-	public float refineryCost_Eo;
-
-	public float storageCost_Mo;
-	public float storageCost_Eo;
-
-	public float shrineCost_Mo;
-	public float shrineCost_Eo;
-
-	public float studyCost_Mo;
-	public float studyCost_Eo;
-
-
 	// effects. this is where hella data is stored, mostly data that changes with room effects
 	public EffectConnector effectConnector;
-	public int efficiency = 0;
+	public int efficiency = 0; // this needs to be here for some reason I can't remember at the moment
 
-	// room worker capacity? add generator 1 & control 1 later
-	public int refineryCapacity;
-	public int shrineCapacity;
-	public int studyCapacity;
-
-	// trigger phase 2; maybe this can be moved to a static data-ish file
-	public bool isAutomatonRepaired = false;
+	// repair individual rooms
 	public static bool generatorRepaired = false;
 	public static bool controllerRepaired = false;
 
@@ -88,19 +44,6 @@ public class RoomManager : MonoBehaviour
     {
 		// might have a problem with list passing?
 		InitializeRooms();
-
-		// I hate that I had to do this -_-
-		refineryCost_Mo = refineryCost_M;
-		refineryCost_Eo = refineryCost_E;
-
-		storageCost_Mo = storageCost_M;
-		storageCost_Eo = storageCost_E;
-
-		shrineCost_Mo = shrineCost_M;
-		shrineCost_Eo = shrineCost_E;
-
-		studyCost_Mo = studyCost_M;
-		studyCost_Eo = studyCost_E;
 
 		// this is actually important
 		UpdateRoomDisplay();
@@ -130,34 +73,34 @@ public class RoomManager : MonoBehaviour
 	// need to clean
 	public void Build(string room)
 	{
-		if (room == "refinery" && ResourceHandling.metal >= refineryCost_M && ResourceHandling.electronics >= refineryCost_E)
+		if (room == "refinery" && ResourceHandling.metal >= CostData.build_refinery[2] && ResourceHandling.electronics >= CostData.build_refinery[3])
 		{
-			ResourceHandling.metal -= (int)refineryCost_M;
-			ResourceHandling.electronics -= (int)refineryCost_E;
+			ResourceHandling.metal -= (int)CostData.build_refinery[2];
+			ResourceHandling.electronics -= (int)CostData.build_refinery[3];
 			rooms[roomSlotClicked] = new Refinery(roomSlotClicked, 1);
 			setupRoom.Setup(rooms[roomSlotClicked]); // ->
 			PlayClip("wrench");
 		}
-		else if (room == "storage" && ResourceHandling.metal >= storageCost_M && ResourceHandling.electronics >= refineryCost_E)
+		else if (room == "storage" && ResourceHandling.metal >= CostData.build_storage[2] && ResourceHandling.electronics >= CostData.build_storage[3])
 		{
-			ResourceHandling.metal -= (int)storageCost_M;
-			ResourceHandling.electronics -= (int)storageCost_E;
+			ResourceHandling.metal -= (int)CostData.build_storage[2];
+			ResourceHandling.electronics -= (int)CostData.build_storage[3];
 			rooms[roomSlotClicked] = new Storage(roomSlotClicked, 1);
 			setupRoom.Setup(rooms[roomSlotClicked]);
 			PlayClip("wrench");
 		}
-		else if (room == "shrine" && ResourceHandling.metal >= shrineCost_M && ResourceHandling.electronics >= shrineCost_E)
+		else if (room == "shrine" && ResourceHandling.metal >= CostData.build_shrine[2] && ResourceHandling.electronics >= CostData.build_shrine[3])
 		{
-			ResourceHandling.metal -= (int)shrineCost_M;
-			ResourceHandling.electronics -= (int)shrineCost_E;
+			ResourceHandling.metal -= (int)CostData.build_shrine[2];
+			ResourceHandling.electronics -= (int)CostData.build_shrine[3];
 			rooms[roomSlotClicked] = new Shrine(roomSlotClicked, 1);
 			setupRoom.Setup(rooms[roomSlotClicked]);
 			PlayClip("wrench");
 		}
-		else if (room == "study" && ResourceHandling.metal >= studyCost_M && ResourceHandling.electronics >= studyCost_E)
+		else if (room == "study" && ResourceHandling.metal >= CostData.build_study[2] && ResourceHandling.electronics >= CostData.build_study[3])
 		{
-			ResourceHandling.metal -= (int)studyCost_M;
-			ResourceHandling.electronics -= (int)studyCost_E;
+			ResourceHandling.metal -= (int)CostData.build_study[2];
+			ResourceHandling.electronics -= (int)CostData.build_study[3];
 			rooms[roomSlotClicked] = new Study(roomSlotClicked, 1);
 			setupRoom.Setup(rooms[roomSlotClicked]);
 			PlayClip("wrench");
@@ -266,20 +209,20 @@ public class RoomManager : MonoBehaviour
 					efficiencyBonus = 0;
 				}
 
-				if (what == "plate")
-				{
-					for (int i = 0; i < howMany; i++)
-					{
-						ResourceHandling.plate++;
-						ResourceHandling.metal -= (3 - efficiencyBonus);
-					}
-				}
-				else if (what == "bolt")
+				if (what == "bolt")
 				{
 					for (int i = 0; i < howMany; i++)
 					{
 						ResourceHandling.bolt++;
-						ResourceHandling.metal -= (1 - efficiencyBonus);
+						ResourceHandling.metal -= (CostData.metal_bolt - efficiencyBonus);
+					}
+				}
+				else if (what == "plate")
+				{
+					for (int i = 0; i < howMany; i++)
+					{
+						ResourceHandling.plate++;
+						ResourceHandling.metal -= (CostData.metal_plate - efficiencyBonus);
 					}
 				}
 				else if (what == "part")
@@ -287,16 +230,8 @@ public class RoomManager : MonoBehaviour
 					for (int i = 0; i < howMany; i++)
 					{
 						ResourceHandling.part++;
-						ResourceHandling.plate -= (3 - efficiencyBonus);
-						ResourceHandling.bolt -= (2 - efficiencyBonus);
-					}
-				}
-				else if (what == "chip")
-				{
-					for (int i = 0; i < howMany; i++)
-					{
-						ResourceHandling.chip++;
-						ResourceHandling.electronics -= (3 - efficiencyBonus);
+						ResourceHandling.bolt -= (CostData.special_part[0] - efficiencyBonus);
+						ResourceHandling.plate -= (CostData.special_part[1] - efficiencyBonus);
 					}
 				}
 				else if (what == "wire")
@@ -304,7 +239,15 @@ public class RoomManager : MonoBehaviour
 					for (int i = 0; i < howMany; i++)
 					{
 						ResourceHandling.wire++;
-						ResourceHandling.electronics -= (1 - efficiencyBonus);
+						ResourceHandling.electronics -= (CostData.electronics_wire - efficiencyBonus);
+					}
+				}
+				else if (what == "chip")
+				{
+					for (int i = 0; i < howMany; i++)
+					{
+						ResourceHandling.chip++;
+						ResourceHandling.electronics -= (CostData.electronics_chip - efficiencyBonus);
 					}
 				}
 				else if (what == "board")
@@ -312,8 +255,8 @@ public class RoomManager : MonoBehaviour
 					for (int i = 0; i < howMany; i++)
 					{
 						ResourceHandling.board++;
-						ResourceHandling.chip -= (2 - efficiencyBonus);
-						ResourceHandling.wire -= (3 - efficiencyBonus);
+						ResourceHandling.wire -= (CostData.special_board[0] - efficiencyBonus);
+						ResourceHandling.chip -= (CostData.special_board[1] - efficiencyBonus);
 					}
 				}
 				PlayClip("hammer");
@@ -529,27 +472,33 @@ public class RoomManager : MonoBehaviour
 
 	public void SetActiveEffect(string buff, int slot)
 	{
-		if (rooms[slot].Type == "shrine")
+		rooms[slot].ActiveEffect = buff;
+		switch (rooms[slot].Type)
 		{
-			rooms[slot].ActiveEffect = buff;
-			Worship();
-		}
-		else if (rooms[slot].Type == "study")
-		{
-			rooms[slot].ActiveEffect = buff;
-			Research();
+			case "shrine":
+				Worship();
+				break;
+			case "study":
+				Research();
+				break;
 		}
 		Debug.Log("Active effect of [ " + rooms[slot].Type + " " + slot + " ] is now : " + rooms[slot].ActiveEffect + ".");
 	}
 
     void PlayClip(string str)
     {
-        if (str == "wrench")
-            audioSource.PlayOneShot(wrenchClip);
-        else if (str == "hammer")
-            audioSource.PlayOneShot(hammerClip);
-        else if (str == "error")
-            audioSource.PlayOneShot(errorClip);
+		switch (str)
+		{
+			case "wrench":
+				audioSource.PlayOneShot(wrenchClip);
+				break;
+			case "hammer":
+				audioSource.PlayOneShot(hammerClip);
+				break;
+			case "error":
+				audioSource.PlayOneShot(errorClip);
+				break;
+		}
     }
 
 	//this is a debug function for testing only!
