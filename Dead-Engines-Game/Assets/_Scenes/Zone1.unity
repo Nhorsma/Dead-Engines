@@ -6357,7 +6357,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   selectionSquare: {fileID: 686704900}
   dragLimit: 0
-  unitManager: {fileID: 0}
+  unitManager: {fileID: 467610732}
   normalMaterial: {fileID: 2100000, guid: 80d99d111da86da41951967e4aad5f9e, type: 2}
   highlightMaterial: {fileID: 2100000, guid: 95ccc95e68534fa4b92d3c0d16d17b2a, type: 2}
   selectedMaterial: {fileID: 2100000, guid: 64d79bbb5de2c4740a8b70494ce6c403, type: 2}
@@ -6384,13 +6384,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a4ad199838f944e499004c0a2c8a823e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  selectItems: {fileID: 0}
-  resourceHandling: {fileID: 0}
-  enemyHandler: {fileID: 0}
-  encampmentHandler: {fileID: 0}
+  selectItems: {fileID: 467610731}
+  resourceHandling: {fileID: 467610735}
+  enemyHandler: {fileID: 467610734}
+  encampmentHandler: {fileID: 467610733}
   robotPos: {x: 10, y: 3, z: 8}
   robot: {fileID: 5905536743914566335}
-  startingUnits: 0
+  startingUnits: 3
   unitPrefab: {fileID: 4133695892088483390, guid: b1c2c3cf472c75946a45d3f0e6066865,
     type: 3}
   units: []
@@ -6421,10 +6421,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   startingHealth: 10
   encampments: []
-  enemyHandler: {fileID: 0}
+  enemyHandler: {fileID: 467610734}
   unitManager: {fileID: 467610732}
-  spawnRes: {fileID: 0}
-  resourceHandling: {fileID: 0}
+  spawnRes: {fileID: 1102157336}
+  resourceHandling: {fileID: 467610735}
   startSpawnTime: 0
   spawnTime: 3
   spawnDistance: 5
@@ -6475,7 +6475,7 @@ MonoBehaviour:
   fuelDropped: 0
   resourceDeposits: []
   resourceQuantities: 
-  spawnRes: {fileID: 0}
+  spawnRes: {fileID: 1102157336}
   resourcesLeft: 0
 --- !u!114 &467610736
 MonoBehaviour:
@@ -23639,6 +23639,7 @@ GameObject:
   - component: {fileID: 1822839393}
   - component: {fileID: 1822839396}
   - component: {fileID: 1822839397}
+  - component: {fileID: 1822839398}
   m_Layer: 0
   m_Name: logic block 3
   m_TagString: Untagged
@@ -23725,6 +23726,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d0b5383961e3f0845b54ec950b0bd334, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  auto: {fileID: 5905536743914566334}
+  spawnRes: {fileID: 1102157336}
+  autoObj: {fileID: 5905536743914566335}
+  selectItems: {fileID: 467610731}
+  resourceHandling: {fileID: 467610735}
 --- !u!114 &1822839396
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -23737,7 +23743,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7c12db2259dd6644bb0347633d1dfcbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  automaton: {fileID: 0}
+  automaton: {fileID: 5905536743914566335}
   h1: {fileID: 7984746186806774821, guid: 885c2fefa067bba4a89e61a5e1dcf802, type: 3}
   h2: {fileID: 7816565298225748079, guid: 73c5358c9ec28d647a502447b57c808a, type: 3}
   h3: {fileID: 2844502961085742202, guid: 280aff34cf62f864ba8eb71207a5a037, type: 3}
@@ -23769,6 +23775,83 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pausePanel: {fileID: 1575186756}
+--- !u!114 &1822839398
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1822839391}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8c27262028dc92148a01b48c2d02d0a2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  roomComponents:
+  - {fileID: 1107861419401142352}
+  - {fileID: 860571542}
+  - {fileID: 248373378}
+  - {fileID: 610528079}
+  - {fileID: 1487091030}
+  - {fileID: 409536357}
+  - {fileID: 1810783598}
+  roomManager: {fileID: 2075244114}
+  rightRoomSprites:
+  - {fileID: 21300000, guid: b7fa06ff86c148547bc8c114e38c0dff, type: 3}
+  - {fileID: 21300000, guid: dfc0ed4d70b2c724ea47127575b453f0, type: 3}
+  - {fileID: 21300000, guid: f1fc8ee97bd12394494dea4c76bb26be, type: 3}
+  - {fileID: 21300000, guid: b48d60c801f8234439fdf09be5e1114d, type: 3}
+  leftRoomSprites:
+  - {fileID: 21300000, guid: 5674e0b001c7ece45af3a415b00da723, type: 3}
+  - {fileID: 21300000, guid: 683730a9ffc63654f9413248efaef8f6, type: 3}
+  - {fileID: 21300000, guid: ce29b02ea7f828843a652dbad91ac568, type: 3}
+  - {fileID: 21300000, guid: 9a7c0d115ce003d489c6a6d975f1fffe, type: 3}
+  refineryEntries:
+  - {fileID: 5090530155275515524, guid: c50be997d5dcbc84bb00a9d008054152, type: 3}
+  - {fileID: 5090530155275515524, guid: 0362b2ee7ac493a46ae832fec0e4916d, type: 3}
+  - {fileID: 5090530155275515524, guid: a2b85bffbe2b2a64a875f899f5c73a2a, type: 3}
+  - {fileID: 5090530155275515524, guid: c562baf022105484f97e5c271ef1ffe6, type: 3}
+  - {fileID: 5090530155275515524, guid: f586dcb9e4091664a9910b01a8713b4b, type: 3}
+  - {fileID: 5090530155275515524, guid: c6b95e15c3c25e94f81bc5d50d21037c, type: 3}
+  refineryCosts:
+  - {fileID: 5090530155275515524, guid: 24ebb96056b69bc42b2549efb2d26a4f, type: 3}
+  - {fileID: 5090530155275515524, guid: 24ebb96056b69bc42b2549efb2d26a4f, type: 3}
+  - {fileID: 5090530155275515524, guid: 24ebb96056b69bc42b2549efb2d26a4f, type: 3}
+  - {fileID: 5090530155275515524, guid: 24ebb96056b69bc42b2549efb2d26a4f, type: 3}
+  - {fileID: 5090530155275515524, guid: 24ebb96056b69bc42b2549efb2d26a4f, type: 3}
+  - {fileID: 5090530155275515524, guid: 24ebb96056b69bc42b2549efb2d26a4f, type: 3}
+  refineryButtons:
+  - {fileID: 3601512576527024351, guid: 4f56b5235e97cf34abea588405a2f70f, type: 3}
+  - {fileID: 3601512576527024351, guid: 54ab16f04c041034cbbc2c87775d92f8, type: 3}
+  storageEntries:
+  - {fileID: 5090530155275515524, guid: 2197d2f91bf51f14fa19c9edd2acfa7f, type: 3}
+  - {fileID: 5090530155275515524, guid: c5fe5878b48b9674db21fe36889e13d5, type: 3}
+  - {fileID: 5090530155275515524, guid: 801f5281285aec048be04ef85860c7ec, type: 3}
+  - {fileID: 5090530155275515524, guid: 740258aef156b834f82bd58ee7e5bf39, type: 3}
+  - {fileID: 5090530155275515524, guid: 1a6ce02901cf6064f8e987bf2179f41b, type: 3}
+  - {fileID: 5090530155275515524, guid: 43dfc817cc8f08344943c11369b6f01a, type: 3}
+  storageDesc:
+  - {fileID: 5090530155275515524, guid: cdd1e1495081fe645b320b1b49729011, type: 3}
+  - {fileID: 5090530155275515524, guid: cdd1e1495081fe645b320b1b49729011, type: 3}
+  - {fileID: 5090530155275515524, guid: cdd1e1495081fe645b320b1b49729011, type: 3}
+  - {fileID: 5090530155275515524, guid: cdd1e1495081fe645b320b1b49729011, type: 3}
+  - {fileID: 5090530155275515524, guid: cdd1e1495081fe645b320b1b49729011, type: 3}
+  - {fileID: 5090530155275515524, guid: cdd1e1495081fe645b320b1b49729011, type: 3}
+  storageButtons:
+  - {fileID: 3601512576527024351, guid: 9bab1d24385449945b2af646d716576d, type: 3}
+  - {fileID: 3601512576527024351, guid: 79070f5af48324649a5b233214164a15, type: 3}
+  shrineEffectButtons:
+  - {fileID: 3601512576527024351, guid: f46431f45aab40b4a9d4cefd38bd70ef, type: 3}
+  shrineEffectKeys:
+  - unitSpeed
+  shrineEffectDescs:
+  - increase unit movement speed
+  studyEffectButtons:
+  - {fileID: 3601512576527024351, guid: f46431f45aab40b4a9d4cefd38bd70ef, type: 3}
+  studyEffectKeys:
+  - roomCost
+  studyEffectDescs:
+  - reduce the cost to build a room
 --- !u!1 &1826246228
 GameObject:
   m_ObjectHideFlags: 0
@@ -27052,8 +27135,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   unitManager: {fileID: 467610732}
   roomManager: {fileID: 2075244114}
-  storageSpace: 25
-  hasSpace: 1
 --- !u!114 &2075244112
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -27068,8 +27149,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   hoverBox: {fileID: 1728887557}
   amountText: {fileID: 2076324048}
-  resourceHandling: {fileID: 0}
-  encampmentHandling: {fileID: 0}
+  resourceHandling: {fileID: 467610735}
+  encampmentHandling: {fileID: 467610733}
 --- !u!114 &2075244113
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -27107,10 +27188,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 470fad9b36a43154c8a140fc0a07fb8e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  spawnRes: {fileID: 1102157336}
-  resourceHandling: {fileID: 0}
-  selectItems: {fileID: 467610731}
-  display:
+  setupRoom: {fileID: 1822839398}
+  auto: {fileID: 5905536743914566334}
+  unitManager: {fileID: 467610732}
+  autoObj: {fileID: 5905536743914566335}
+  roomTabs:
+  - {fileID: 590680891}
+  - {fileID: 860571540}
+  - {fileID: 248373376}
+  - {fileID: 610528077}
+  - {fileID: 1487091028}
+  - {fileID: 409536355}
+  - {fileID: 1810783596}
+  controllerTab: {fileID: 626851393}
+  generatorTab: {fileID: 1130015373}
+  roomTypesAtAGlance:
   - {fileID: 430906750}
   - {fileID: 405261272}
   - {fileID: 381428997}
@@ -27118,7 +27210,7 @@ MonoBehaviour:
   - {fileID: 265385088}
   - {fileID: 268462314}
   - {fileID: 1234614568}
-  displaySprites:
+  roomSpritesInOrder:
   - {fileID: 1210114795}
   - {fileID: 965141326}
   - {fileID: 2049286441}
@@ -27126,108 +27218,17 @@ MonoBehaviour:
   - {fileID: 479741200}
   - {fileID: 1681420329}
   - {fileID: 1145851003}
-  rightRoomSprites:
-  - {fileID: 21300000, guid: b7fa06ff86c148547bc8c114e38c0dff, type: 3}
-  - {fileID: 21300000, guid: dfc0ed4d70b2c724ea47127575b453f0, type: 3}
-  - {fileID: 21300000, guid: f1fc8ee97bd12394494dea4c76bb26be, type: 3}
-  - {fileID: 21300000, guid: b48d60c801f8234439fdf09be5e1114d, type: 3}
-  leftRoomSprites:
-  - {fileID: 21300000, guid: 5674e0b001c7ece45af3a415b00da723, type: 3}
-  - {fileID: 21300000, guid: 683730a9ffc63654f9413248efaef8f6, type: 3}
-  - {fileID: 21300000, guid: ce29b02ea7f828843a652dbad91ac568, type: 3}
-  - {fileID: 21300000, guid: 9a7c0d115ce003d489c6a6d975f1fffe, type: 3}
-  generatorRepairedSprite: {fileID: 0}
-  controllerRepairedSprite: {fileID: 0}
+  generatorRepairedSprite: {fileID: 21300000, guid: 2c3242efff2375045845419c3fd2bfcd,
+    type: 3}
+  controllerRepairedSprite: {fileID: 21300000, guid: e364ebb3634b29d44bdef1ed14aa1154,
+    type: 3}
   roomSlotClicked: 0
-  autoObj: {fileID: 5905536743914566335}
-  auto: {fileID: 5905536743914566334}
-  unitManager: {fileID: 0}
-  hunterHandler: {fileID: 0}
-  roomComponents: []
-  controllerComponents: {fileID: 0}
-  generatorComponents: {fileID: 0}
   audioSource: {fileID: 1457351892}
   wrenchClip: {fileID: 8300000, guid: 292077ad3b341d249ab32710a0c7a432, type: 3}
   hammerClip: {fileID: 8300000, guid: 4d7f3459649f52b41975c36f41c5a8a7, type: 3}
   errorClip: {fileID: 8300000, guid: 2987a47a1130cf44abfd1d14c267d138, type: 3}
-  refineryCost_M: 10
-  refineryCost_E: 10
-  storageCost_M: 50
-  storageCost_E: 50
-  shrineCost_M: 100
-  shrineCost_E: 100
-  studyCost_M: 100
-  studyCost_E: 100
-  refineryCost_Mo: 0
-  refineryCost_Eo: 0
-  storageCost_Mo: 0
-  storageCost_Eo: 0
-  shrineCost_Mo: 0
-  shrineCost_Eo: 0
-  studyCost_Mo: 0
-  studyCost_Eo: 0
   effectConnector: {fileID: 2075244111}
   efficiency: 0
-  refineryEntries:
-  - {fileID: 5090530155275515524, guid: c50be997d5dcbc84bb00a9d008054152, type: 3}
-  - {fileID: 5090530155275515524, guid: 0362b2ee7ac493a46ae832fec0e4916d, type: 3}
-  - {fileID: 5090530155275515524, guid: a2b85bffbe2b2a64a875f899f5c73a2a, type: 3}
-  - {fileID: 5090530155275515524, guid: c562baf022105484f97e5c271ef1ffe6, type: 3}
-  - {fileID: 5090530155275515524, guid: f586dcb9e4091664a9910b01a8713b4b, type: 3}
-  - {fileID: 5090530155275515524, guid: c6b95e15c3c25e94f81bc5d50d21037c, type: 3}
-  refineryCosts:
-  - {fileID: 5090530155275515524, guid: 24ebb96056b69bc42b2549efb2d26a4f, type: 3}
-  - {fileID: 5090530155275515524, guid: 24ebb96056b69bc42b2549efb2d26a4f, type: 3}
-  - {fileID: 5090530155275515524, guid: 24ebb96056b69bc42b2549efb2d26a4f, type: 3}
-  - {fileID: 5090530155275515524, guid: 24ebb96056b69bc42b2549efb2d26a4f, type: 3}
-  - {fileID: 5090530155275515524, guid: 24ebb96056b69bc42b2549efb2d26a4f, type: 3}
-  - {fileID: 5090530155275515524, guid: 24ebb96056b69bc42b2549efb2d26a4f, type: 3}
-  refineryButtons:
-  - {fileID: 3601512576527024351, guid: 4f56b5235e97cf34abea588405a2f70f, type: 3}
-  - {fileID: 3601512576527024351, guid: 54ab16f04c041034cbbc2c87775d92f8, type: 3}
-  storageEntries:
-  - {fileID: 5090530155275515524, guid: 3d4d89f76191fb443a7d8331ded31b66, type: 3}
-  - {fileID: 5090530155275515524, guid: 2197d2f91bf51f14fa19c9edd2acfa7f, type: 3}
-  - {fileID: 5090530155275515524, guid: c5fe5878b48b9674db21fe36889e13d5, type: 3}
-  - {fileID: 5090530155275515524, guid: 801f5281285aec048be04ef85860c7ec, type: 3}
-  - {fileID: 5090530155275515524, guid: 5d1cdff97096e804ea9e8a454c99801c, type: 3}
-  - {fileID: 5090530155275515524, guid: 740258aef156b834f82bd58ee7e5bf39, type: 3}
-  - {fileID: 5090530155275515524, guid: 1a6ce02901cf6064f8e987bf2179f41b, type: 3}
-  - {fileID: 5090530155275515524, guid: 43dfc817cc8f08344943c11369b6f01a, type: 3}
-  storageDesc:
-  - {fileID: 5090530155275515524, guid: cdd1e1495081fe645b320b1b49729011, type: 3}
-  - {fileID: 5090530155275515524, guid: cdd1e1495081fe645b320b1b49729011, type: 3}
-  - {fileID: 5090530155275515524, guid: cdd1e1495081fe645b320b1b49729011, type: 3}
-  - {fileID: 5090530155275515524, guid: cdd1e1495081fe645b320b1b49729011, type: 3}
-  - {fileID: 5090530155275515524, guid: cdd1e1495081fe645b320b1b49729011, type: 3}
-  - {fileID: 5090530155275515524, guid: cdd1e1495081fe645b320b1b49729011, type: 3}
-  - {fileID: 5090530155275515524, guid: cdd1e1495081fe645b320b1b49729011, type: 3}
-  - {fileID: 5090530155275515524, guid: cdd1e1495081fe645b320b1b49729011, type: 3}
-  storageButtons:
-  - {fileID: 3601512576527024351, guid: 9bab1d24385449945b2af646d716576d, type: 3}
-  - {fileID: 3601512576527024351, guid: 79070f5af48324649a5b233214164a15, type: 3}
-  shrineEffectButtons:
-  - {fileID: 3601512576527024351, guid: f46431f45aab40b4a9d4cefd38bd70ef, type: 3}
-  - {fileID: 3601512576527024351, guid: f46431f45aab40b4a9d4cefd38bd70ef, type: 3}
-  shrineEffectKeys:
-  - none
-  - unitSpeed
-  shrineEffectDescs:
-  - Disable active effect
-  - Increase unit movement speed
-  studyEffectButtons:
-  - {fileID: 3601512576527024351, guid: f46431f45aab40b4a9d4cefd38bd70ef, type: 3}
-  - {fileID: 3601512576527024351, guid: f46431f45aab40b4a9d4cefd38bd70ef, type: 3}
-  studyEffectKeys:
-  - none
-  - roomCost
-  studyEffectDescs:
-  - Disable active effect
-  - Decrease the cost of building rooms
-  refineryCapacity: 3
-  shrineCapacity: 3
-  studyCapacity: 3
-  isAutomatonRepaired: 0
 --- !u!1 &2076324046
 GameObject:
   m_ObjectHideFlags: 0
@@ -29161,6 +29162,18 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 98e97ccf714d2904a834fb6ca2a8d8c6, type: 3}
+--- !u!114 &1107861419401142352 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1107861419891028851, guid: 98e97ccf714d2904a834fb6ca2a8d8c6,
+    type: 3}
+  m_PrefabInstance: {fileID: 1107861419401142351}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 590680891}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4125bdce8b64e6a48b4f910302b12f99, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &1266450223540624246
 Transform:
   m_ObjectHideFlags: 0
