@@ -70,7 +70,6 @@ public class RoomManager : MonoBehaviour
 	/// MAIN FUNCTIONS --------------------------------------------------------------------------------------------------------------------------->
 	/// </summary>
 
-	// need to clean
 	public void Build(string room)
 	{
 		if (room == "refinery" && ResourceHandling.metal >= CostData.build_refinery[2] && ResourceHandling.electronics >= CostData.build_refinery[3])
@@ -113,6 +112,7 @@ public class RoomManager : MonoBehaviour
 		UpdateRoomDisplay();
 	}
 
+	//doing twice for shrine & study?
 	public void Assign(string roomType, int slot)
 	{
 		if (unitManager.ReturnJoblessUnit() == null)
@@ -322,11 +322,14 @@ public class RoomManager : MonoBehaviour
 		List<string> effects = new List<string>();
 		effects.Clear();
 
-		foreach (Shrine s in rooms)
+		foreach (Room r in rooms)
 		{
-			Debug.Log("Shrine[" + s.Slot + "]: " + s.Workers.Count + "x boost");
-			combinedMultiplier += s.Workers.Count; //case for multiples of the same room
-			effects.Add(s.ActiveEffect);
+			if (r.Type == "shrine")
+			{
+				Debug.Log("Shrine[" + r.Slot + "]: " + r.Workers.Count + "x boost");
+				combinedMultiplier += r.Workers.Count; //case for multiples of the same room
+				effects.Add(r.ActiveEffect);
+			}
 		}
 		Debug.Log("Total Shrine Multiplier: " + combinedMultiplier);
 
@@ -352,11 +355,14 @@ public class RoomManager : MonoBehaviour
 		List<string> effects = new List<string>();
 		effects.Clear();
 
-		foreach (Study s in rooms)
+		foreach (Room r in rooms)
 		{
-			Debug.Log("Study[" + s.Slot + "]: " + s.Workers.Count + "x boost");
-			combinedMultiplier += s.Workers.Count; //case for multiples of the same room
-			effects.Add(s.ActiveEffect);
+			if (r.Type == "study")
+			{
+				Debug.Log("Study[" + r.Slot + "]: " + r.Workers.Count + "x boost");
+				combinedMultiplier += r.Workers.Count; //case for multiples of the same room
+				effects.Add(r.ActiveEffect);
+			}
 		}
 		Debug.Log("Total Study Multiplier: " + combinedMultiplier);
 
@@ -380,13 +386,15 @@ public class RoomManager : MonoBehaviour
 	public void Produce()
 	{
 		EffectConnector.efficiency = 0;
-		foreach (Refinery r in rooms)
+		foreach (Room r in rooms)
 		{
-			if (r.Workers.Count > 0)
+			if (r.Type == "refinery")
 			{
-				r.CanFunction = true;
-				Debug.Log("Refinery[" + r.Slot + "]: Running");
-				EffectConnector.efficiency += r.Workers.Count;
+				if (r.Workers.Count > 0)
+				{
+					Debug.Log("Refinery[" + r.Slot + "]: Running");
+					EffectConnector.efficiency += r.Workers.Count;
+				}
 			}
 		}
 		effectConnector.Recalculate();

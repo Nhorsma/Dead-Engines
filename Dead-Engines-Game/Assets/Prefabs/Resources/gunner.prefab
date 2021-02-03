@@ -894,6 +894,7 @@ GameObject:
   - component: {fileID: 6414390379043460317}
   - component: {fileID: 6414390379043460318}
   - component: {fileID: 6414390379043460316}
+  - component: {fileID: -260538662889423389}
   m_Layer: 0
   m_Name: gunner
   m_TagString: Enemy
@@ -972,6 +973,18 @@ NavMeshAgent:
   m_BaseOffset: 0
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
+--- !u!114 &-260538662889423389
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6180372181544574514}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 783f45c7ccdcd9245a74006851fc02af, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &6197373703354482025
 GameObject:
   m_ObjectHideFlags: 0

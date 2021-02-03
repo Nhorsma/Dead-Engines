@@ -941,6 +941,7 @@ GameObject:
   - component: {fileID: 4945272978076373003}
   - component: {fileID: 8213371871424096212}
   - component: {fileID: 7088102563000862603}
+  - component: {fileID: -8851523548405337214}
   m_Layer: 0
   m_Name: Mini Automoton
   m_TagString: Hunter
@@ -1019,6 +1020,18 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &-8851523548405337214
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2844502961085742202}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 76d21abb2b9cc3648a5459a44c10757e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &3003122576121361192
 GameObject:
   m_ObjectHideFlags: 0

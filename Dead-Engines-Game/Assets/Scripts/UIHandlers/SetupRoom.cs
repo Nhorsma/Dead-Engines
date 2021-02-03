@@ -42,7 +42,7 @@ public class SetupRoom : MonoBehaviour
 	public void Setup(Room room)
 	{
 		int slot = room.Slot;
-		roomComponents[slot].pic = null; // fix later
+		roomComponents[slot].pic.sprite = leftRoomSprites[0]; // fix later, unsure what this does, might just initialise?
 		roomComponents[slot].roomName.text = room.Type;
 		roomComponents[slot].build.gameObject.SetActive(false);
 		roomComponents[slot].upgrade.gameObject.SetActive(true);
@@ -214,6 +214,7 @@ public class SetupRoom : MonoBehaviour
 	{
 		if (slot <= 3)
 		{
+			Debug.Log(spriteInList);
 			roomComponents[slot].pic.sprite = leftRoomSprites[spriteInList];
 		}
 		else

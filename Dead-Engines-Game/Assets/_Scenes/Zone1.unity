@@ -1468,7 +1468,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 5905536743914566334}
-        m_MethodName: OpenTab1
+        m_MethodName: OpenInfoTab
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -12319,7 +12319,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 2075244114}
-        m_MethodName: OpenMiniTab
+        m_MethodName: OpenRoom
         m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -13436,7 +13436,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 5905536743914566334}
-        m_MethodName: OpenTab2
+        m_MethodName: OpenRoomsTab
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -14208,7 +14208,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 2075244114}
-        m_MethodName: OpenMiniTab
+        m_MethodName: OpenRoom
         m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -18211,7 +18211,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 2075244114}
-        m_MethodName: OpenMiniTab
+        m_MethodName: OpenRoom
         m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -21264,7 +21264,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 2075244114}
-        m_MethodName: OpenMiniTab
+        m_MethodName: OpenRoom
         m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -26301,7 +26301,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 2075244114}
-        m_MethodName: OpenMiniTab
+        m_MethodName: OpenRoom
         m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -26594,7 +26594,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 2075244114}
-        m_MethodName: OpenMiniTab
+        m_MethodName: OpenRoom
         m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -28457,6 +28457,7 @@ GameObject:
   - component: {fileID: 2075244114}
   - component: {fileID: 2075244113}
   - component: {fileID: 2075244112}
+  - component: {fileID: 2075244110}
   - component: {fileID: 2075244111}
   m_Layer: 0
   m_Name: logic block 2
@@ -28479,6 +28480,18 @@ Transform:
   m_Father: {fileID: 1102157335}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2075244110
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2075244108}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dbeb58b4c46868d4794c5892224c6e58, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &2075244111
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -28875,7 +28888,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 2075244114}
-        m_MethodName: OpenMiniTab
+        m_MethodName: OpenRoom
         m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
