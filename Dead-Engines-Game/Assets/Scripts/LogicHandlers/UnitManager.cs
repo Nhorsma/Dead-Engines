@@ -41,15 +41,12 @@ public class UnitManager : MonoBehaviour
 
     void Start()
     {
-        //enemyHandler = GetComponent<EnemyHandler>();
-        //encampmentHandler = GetComponent<EncampmentHandler>();
         selectedUnits = new List<GameObject>();
 		robotPos = new Vector3(robot.transform.position.x,0, robot.transform.position.z);
 
 		audioSource = Camera.main.GetComponent<AudioSource>();
 
         SetUpUnits(startingUnits);
-        //auto.UpdateInfoTab();
     }
 
     void Update()
@@ -69,7 +66,7 @@ public class UnitManager : MonoBehaviour
     {
         for (int i = 0; i < startingUnits; i++)
         {
-            GameObject u = (GameObject)Instantiate(Resources.Load("unit"), FindSpotToSpawn(), robot.transform.rotation);
+            GameObject u = (GameObject)Instantiate(Resources.Load(unitPrefab.name), FindSpotToSpawn(), robot.transform.rotation);
 
 			u.GetComponent<Unit>().Id = i;
 			u.GetComponent<Unit>().UnitName = "U" + u.GetComponent<Unit>().Id.ToString();
@@ -200,7 +197,9 @@ public class UnitManager : MonoBehaviour
 				if (u.GetComponent<NavMeshAgent>().velocity == new Vector3(0, 0, 0))
 				{
 					u.GetComponent<Animator>().SetBool("walking", false);
-				}
+                    Debug.Log("not walking");
+
+                }
 
 			}
 		}
@@ -218,9 +217,6 @@ public class UnitManager : MonoBehaviour
             for (int i = 0; i < selectedUnits.Count; i++)
             {
 				Unit unit_data = selectedUnits[i].GetComponent<Unit>();
-                //
-                //When more Room jobs are implemented, Fix This to have more Jobs
-                //
                 if (unit_data.Job != "shrine" || unit_data.Job != "study"
                     || unit_data.Job != "refinery" || unit_data.Job != "storage") // && selectedUnits[i].activeSelf
                 {
@@ -243,7 +239,7 @@ public class UnitManager : MonoBehaviour
                         }
                         else
                         {
-                            newDes = selectedUnits[i - 3].GetComponent<NavMeshAgent>().destination + new Vector3(3, 0, 0);
+                            newDes = selectedUnits[i - 3].GetComponent<NavMeshAgent>().destination + new Vector3(stoppingDistance, 0, 0);
                         }
                         TravelTo(selectedUnits[i], newDes, false, false);
                     }
@@ -270,6 +266,7 @@ public class UnitManager : MonoBehaviour
         if (unit_data.JustDroppedOff && Vector3.Distance(unit.transform.position, unit_data.JobPos.transform.position) < pickUpDistance)
         {
             Extract(resourceId);
+            IsDepositProtected(unit_data.JobPos);
 			unit_data.JustDroppedOff = false;
             TravelTo(unit, robotPos, false, false);
         }
@@ -287,6 +284,15 @@ public class UnitManager : MonoBehaviour
             }
 			unit_data.JustDroppedOff = (true);
             TravelTo(unit, unit_data.JobPos.transform.position, false, false);
+        }
+    }
+
+    void IsDepositProtected(GameObject deposit)
+    {
+        foreach (Encampment encampment in encampmentHandler.encampments)
+        {
+            if(deposit==encampment.ClosestResource)
+                encampmentHandler.CheckForTrigger(encampment);
         }
     }
 
@@ -328,8 +334,9 @@ public class UnitManager : MonoBehaviour
 		{
 			NavMeshAgent nav = unit.GetComponent<NavMeshAgent>();
 			unit.GetComponent<Animator>().SetBool("walking", true);
+            Debug.Log("is walking");
 
-			if (stop)
+            if (stop)
 			{
 				nav.stoppingDistance = this.stoppingDistance;
 			}
@@ -421,9 +428,11 @@ public class UnitManager : MonoBehaviour
 			}
 			else if (unit.GetComponent<Unit>().JobPos.tag == "Encampment")
 			{
-				//gameObject.GetComponent<EncampmentHandler>().GetEncampment(unit.GetComponent<Unit>().JobPos).Health -= unitDamage;
-				unit.GetComponent<Unit>().JobPos.GetComponent<Encampment>().Health -= unitDamage; // fishy
-				if (unit.GetComponent<Unit>().JobPos.GetComponent<Encampment>().Health <= unitDamage) // fishy
+                Encampment encampmentTarget = unit.GetComponent<Unit>().JobPos.GetComponent<Encampment>();
+                encampmentTarget.Health -= unitDamage;
+                encampmentHandler.CheckForTrigger(encampmentTarget);
+
+                if (unit.GetComponent<Unit>().JobPos.GetComponent<Encampment>().Health <= unitDamage) // fishy
 				{
 					gameObject.GetComponent<EncampmentHandler>().BeDestroyed();
 					ResetJob(unit.GetComponent<Unit>());
@@ -460,6 +469,7 @@ public class UnitManager : MonoBehaviour
 			StartCoroutine(WaitToRespawn(unit));
 		}
 	}
+
 	IEnumerator WaitToRespawn(GameObject unit)
     {
         if (!unit.GetComponent<Unit>().CanSpawn)

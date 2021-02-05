@@ -91,6 +91,7 @@ GameObject:
   - component: {fileID: 8750840648289251085}
   - component: {fileID: 8205760310627590830}
   - component: {fileID: 8792804633234075223}
+  - component: {fileID: 7051603034172037645}
   m_Layer: 0
   m_Name: Encampment 1
   m_TagString: Encampment
@@ -238,3 +239,15 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &7051603034172037645
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3500671454363015440}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a801b6bd70b3ff449b64352014a8c9e0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

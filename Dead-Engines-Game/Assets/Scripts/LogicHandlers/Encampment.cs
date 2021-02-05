@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Encampment
+public class Encampment : MonoBehaviour
 {
     private string[] deployment;
 	private bool canSpawn = true;
@@ -11,7 +11,8 @@ public class Encampment
 	private int health = 100;
 	private int chance = 0;
 	private int onField = 0;
-    private GameObject closestResource = null; 
+    private GameObject closestResource = null;
+    private GameObject obj;
 
     public Encampment(int newid)
     {
@@ -70,6 +71,12 @@ public class Encampment
     {
         get { return deployment; }
         set { deployment = value; }
+    }
+
+    public GameObject Obj
+    {
+        get { return obj; }
+        set { obj = value; }
     }
 
 

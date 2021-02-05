@@ -6553,7 +6553,7 @@ MonoBehaviour:
   robotPos: {x: 10, y: 3, z: 8}
   robot: {fileID: 5905536743914566335}
   startingUnits: 3
-  unitPrefab: {fileID: 4133695892088483390, guid: b1c2c3cf472c75946a45d3f0e6066865,
+  unitPrefab: {fileID: 6730369722945657225, guid: 79ae4ad0dde23774f83ee874c7458fbb,
     type: 3}
   units: []
   stoppingDistance: 65
@@ -12047,6 +12047,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Robot_1_2
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: bcd6761819800564e8c73febc15dba45,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: bcd6761819800564e8c73febc15dba45, type: 3}
 --- !u!1 &860571540
@@ -15669,7 +15674,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1169887838
 Transform:
   m_ObjectHideFlags: 0

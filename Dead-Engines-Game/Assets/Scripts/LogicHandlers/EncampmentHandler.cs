@@ -8,13 +8,13 @@ public class EncampmentHandler : MonoBehaviour
     public static int electronics;		//
 	public int startingHealth;			//
 
-    public List<GameObject> encampments;
+    public List<Encampment> encampments;
 
     public EnemyHandler enemyHandler;
     public UnitManager unitManager;
-
     public SpawnRes spawnRes;
     public ResourceHandling resourceHandling;
+
     public float startSpawnTime,spawnTime, spawnDistance; //
     public bool startSpawning;
 
@@ -42,20 +42,11 @@ public class EncampmentHandler : MonoBehaviour
     {
         resourceHandling = GetComponent<ResourceHandling>(); //fishy
         enemyHandler = GetComponent<EnemyHandler>(); //fishy
-		encampments = new List<GameObject>();
+		encampments = new List<Encampment>();
 
         SetUpCamps(); //fishy
         startSpawning = true;
         startSpawnTime = spawnTime;
-    }
-
-    void Update()
-    {
-        if (startSpawning)
-            for (int i = 0; i < encampments.Count; i++)
-            {
-                CheckUnitNear(encampments[i]);
-            }
     }
 
 	//-----------------------------------------------------------------------------------------
@@ -69,9 +60,11 @@ public class EncampmentHandler : MonoBehaviour
     {
         for (int i = 0; i < encampments.Count; i++)
         {
-			GameObject encampment = (GameObject)(Resources.Load("encampment"));
-            encampment.GetComponent<Encampment>().ClosestResource = GetClosestResource(encampment, encampment.GetComponent<Encampment>());
-            encampment.GetComponent<Encampment>().Deployment = health100_3left;
+			GameObject encampment_Object = (GameObject)Resources.Load("encampment");
+            Encampment encampment = encampment_Object.GetComponent<Encampment>();
+            encampment.Obj = encampment_Object;
+            encampment.ClosestResource = GetClosestResource(encampment);
+            encampment.Deployment = health100_3left;
 			encampments.Add(encampment);
         }
     }
@@ -80,48 +73,28 @@ public class EncampmentHandler : MonoBehaviour
 	/// MAIN FUNCTIONS --------------------------------------------------------------------------------------------------------------------------->
 	/// </summary>
 
-    void SpawnEnemy(GameObject encampment, Encampment encampment_data)
-    {
-        PlayClip(encampment, encampment_data, "attack");
-        CheckDeployment(encampment_data);
-        Vector3 spawnPlace = encampments[encampment_data.Id].transform.position + new Vector3(Random.Range(1, 5), 0, Random.Range(1, 5));
-
-        // for(int i=0;i<e.Deployment.Length;i++)
-        // Debug.Log(e.Deployment[i] +" : "+e.OnField);
-        GameObject enemyObj = (GameObject)Instantiate(Resources.Load(encampment_data.Deployment[encampment_data.OnField]), spawnPlace, transform.rotation);
-
-        enemyObj.GetComponent<Enemy>().Resource = encampment_data.ClosestResource;
-        enemyObj.GetComponent<Enemy>().Camp = encampment;
-        enemyObj.GetComponent<Enemy>().Id = enemyHandler.enemies.Count;
-
-        enemyHandler.enemies.Add(enemyObj);
-
-        enemyHandler.FindSpot(enemyObj);
-        encampment_data.OnField++;
-    }
-
 	public void BeDestroyed()
 	{
 		for (int i = 0; i < encampments.Count; i++)
 		{
-			if (encampments[i].GetComponent<Encampment>().Health <= 0)
+			if (encampments[i].Health <= 0)
 			{
-				PlayClip(encampments[i], encampments[i].GetComponent<Encampment>(), "death");
+				PlayClip(encampments[i].Obj, "death");
 				startSpawning = false;
-				encampments[i].SetActive(false);
+				encampments[i].Obj.SetActive(false);
 				//encamps[i] = null;
 			}
 			else
 			{
-				if (encampments[i].GetComponent<Encampment>().Health >= startSpawnTime * 0.75f)
+				if (encampments[i].Health >= startSpawnTime * 0.75f)
 				{
 					spawnTime--;
 				}
-				if (encampments[i].GetComponent<Encampment>().Health >= startSpawnTime * 0.5f)
+				if (encampments[i].Health >= startSpawnTime * 0.5f)
 				{
 					spawnTime--;
 				}
-				else if (encampments[i].GetComponent<Encampment>().Health >= startSpawnTime * 0.25f)
+				else if (encampments[i].Health >= startSpawnTime * 0.25f)
 				{
 					spawnTime--;
 				}
@@ -129,44 +102,67 @@ public class EncampmentHandler : MonoBehaviour
 		}
 	}
 
-	/// <summary>
-	/// UTILITY FUNCTIONS --------------------------------------------------------------------------------------------------------------------------->
-	/// </summary>
+    /// <summary>
+    /// UTILITY FUNCTIONS --------------------------------------------------------------------------------------------------------------------------->
+    /// </summary>
 
-	void CheckSpawnEnemy(GameObject encampment, Encampment encampment_data)
-	{
-		if (encampment_data.CanSpawn)
-		{
-			int hit = Random.Range(1, 5);
-			if (encampment_data.OnField < encampment_data.Deployment.Length && hit < encampment_data.Chance)
-			{
-				SpawnEnemy(encampment, encampment_data);
-				encampment_data.Chance = 0;
-			}
-			else
-			{
-				encampment_data.Chance++;
-			}
-			//Debug.Log(e.Chance + "0%");
-			StartCoroutine(ChangeSpawnChance(encampment_data));
-		}
-	}
-	IEnumerator ChangeSpawnChance(Encampment encampment_data)
-	{
-		encampment_data.CanSpawn = false;
-		yield return new WaitForSeconds(spawnTime);
-		encampment_data.CanSpawn = true;
-	}
+    public void CheckForTrigger(Encampment encampment)
+    {
+        if ((encampment.Health < 90)||(resourceHandling.resourceQuantities[resourceHandling.GetNumber(encampment.ClosestResource)]<75) && encampment.CanSpawn)
+        {
+            int hit = Random.Range(1, 5);
 
-	//adds "gunner", "APC", or "Mech"
-	void CheckDeployment(Encampment encampment_data)
+            if (hit < encampment.Chance)
+            {
+                SpawnEnemy(encampment);
+                encampment.Chance = 0;
+            }
+            else
+            {
+                encampment.Chance++;
+            }
+        }
+    }
+
+
+    void SpawnEnemy(Encampment encampment)
+    {
+        PlayClip(encampment.Obj, "attack");
+        CheckDeployment(encampment);
+        GameObject enemyObj = new GameObject();
+
+        for (int i=0;i<encampment.Deployment.Length;i++)
+        {
+            Vector3 spawnPlace = encampments[encampment.Id].Obj.transform.position + new Vector3(Random.Range(1, 5), 0, Random.Range(1, 5));
+            enemyObj = (GameObject)Instantiate(Resources.Load(encampment.Deployment[i]), spawnPlace, transform.rotation);
+        }
+
+        enemyObj.GetComponent<Enemy>().Resource = encampment.ClosestResource;
+        enemyObj.GetComponent<Enemy>().Camp = encampment.Obj;
+        enemyObj.GetComponent<Enemy>().Id = enemyHandler.enemies.Count;
+
+        StartCoroutine(WaitUntilCanSpawn(encampment));
+
+        enemyHandler.enemies.Add(enemyObj);
+        enemyHandler.FindSpot(enemyObj);
+        encampment.OnField++;
+    }
+
+    IEnumerator WaitUntilCanSpawn(Encampment encampment_data)
+    {
+        encampment_data.CanSpawn = false;
+        yield return new WaitForSeconds(spawnTime);
+        encampment_data.CanSpawn = true;
+    }
+
+    //adds "gunner", "APC", or "Mech"
+    void CheckDeployment(Encampment encampment_data)
     {
         int quantity = resourceHandling.resourceQuantities[resourceHandling.GetNumber(encampment_data.ClosestResource)];
 
         if (quantity <= 0)
         {
             encampment_data.Deployment = new string[50];
-            //Debug.Log("whoops");
             return;
         }
 
@@ -234,36 +230,25 @@ public class EncampmentHandler : MonoBehaviour
 
     }
 
-	void CheckUnitNear(GameObject encampment)
-	{
-		foreach (GameObject u in unitManager.units)
-		{
-			if (Vector3.Distance(u.transform.position, encampment.transform.position) < enemyHandler.tresspassingRange ||
-				Vector3.Distance(u.transform.position, encampment.GetComponent<Encampment>().ClosestResource.transform.position) < enemyHandler.tresspassingRange)
-			{
-				CheckSpawnEnemy(encampment, encampment.GetComponent<Encampment>());
-			}
-		}
-	}
 
-	GameObject GetClosestResource(GameObject encampment, Encampment encampment_data)
+	GameObject GetClosestResource(Encampment encampment)
     {
         float distance = Mathf.Infinity;
         GameObject chosen = new GameObject();
         foreach (GameObject r in spawnRes.GetResources())
         {
-            if (Vector3.Distance(r.transform.position, encampment.transform.position) < distance)
+            if (Vector3.Distance(r.transform.position, encampment.Obj.transform.position) < distance)
             {
-                distance = Vector3.Distance(r.transform.position, encampment.transform.position);
+                distance = Vector3.Distance(r.transform.position, encampment.Obj.transform.position);
                 chosen = r;
             }
         }
         return chosen;
     }
 
-    public void PlayClip(GameObject encampment, Encampment encampment_data, string str)
+    public void PlayClip(GameObject encampment_Object, string str)
     {
-        AudioSource tempSource = encampment.GetComponent<AudioSource>();
+        AudioSource tempSource = encampment_Object.GetComponent<AudioSource>();
         Debug.Log(tempSource);
         //tempSource.volume = volume;
         if (str.Equals("attack"))
