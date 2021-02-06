@@ -943,7 +943,7 @@ Animator:
   m_GameObject: {fileID: 6180372181544574514}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 52569495ced302641a6a289ab288a26e, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -1704,18 +1704,23 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: 6b14a3c0e4ed578478aafb6d0f7a744a,
         type: 3}
       propertyPath: m_LocalScale.x
-      value: 50
+      value: 100
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 6b14a3c0e4ed578478aafb6d0f7a744a,
         type: 3}
       propertyPath: m_LocalScale.y
-      value: 50
+      value: 100
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 6b14a3c0e4ed578478aafb6d0f7a744a,
         type: 3}
       propertyPath: m_LocalScale.z
-      value: 50
+      value: 100
       objectReference: {fileID: 0}
+    - target: {fileID: -1750197354950549132, guid: 6b14a3c0e4ed578478aafb6d0f7a744a,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 95ccc95e68534fa4b92d3c0d16d17b2a, type: 2}
     - target: {fileID: 919132149155446097, guid: 6b14a3c0e4ed578478aafb6d0f7a744a,
         type: 3}
       propertyPath: m_Name

@@ -88,26 +88,28 @@ public class EnemyHandler : MonoBehaviour
         if (enemy==null || enemy_data.Target == null)
 		{
 			return;
-		}
+            AssignAnimation(enemy, "walking", false);
+        }
         float dis = Vector3.Distance(enemy.transform.position, enemy_data.Target.transform.position);
 
         if(enemy_data.Target != null) //fishy
 		{
+            AssignAnimation(enemy, "inCombat", true);
 			if (dis < shootingRange && !enemy_data.JustShot)
 			{
-				AssignAnimation(enemy, "isShooting", true);
-				Fire(enemy, enemy_data);
+				AssignAnimation(enemy, "firing", true);
+                Fire(enemy, enemy_data);
 				StartCoroutine(FireCoolDown(enemy_data));
 			}
 			else if (dis > shootingRange && dis < tresspassingRange)
 			{
-				AssignAnimation(enemy, "isShooting", false);
-				TravelTo(enemy, enemy_data.Target.transform.position, true, true);
+				AssignAnimation(enemy, "firing", false);
+                TravelTo(enemy, enemy_data.Target.transform.position, true, true);
 			}
 			else if (dis > tresspassingRange && dis > shootingRange)
 			{
-				AssignAnimation(enemy, "isShooting", false);
-				FindSpot(enemy);
+				AssignAnimation(enemy, "firing", false);
+                FindSpot(enemy);
 				enemy_data.Target = null;
 			}
 		}
@@ -147,11 +149,9 @@ public class EnemyHandler : MonoBehaviour
 			int hitChance = Random.Range(0, 2);
 			if (hitChance == 0)
 			{
-				Debug.Log("hit");
 				enemy_data.Target.GetComponent<Unit>().Health--;
 				unitManager.UnitDown(enemy_data.Target);
 			}
-			//    }
 		}
 	}
 	IEnumerator FireCoolDown(Enemy enemy_data)
@@ -174,7 +174,7 @@ public class EnemyHandler : MonoBehaviour
 			{
 				place += new Vector3(Random.Range(-stoppingDistance, stoppingDistance), 0, Random.Range(-stoppingDistance, stoppingDistance));
 			}
-
+            AssignAnimation(enemy, "walking", true);
             nav.SetDestination(place);
         }
     }
@@ -220,4 +220,5 @@ public class EnemyHandler : MonoBehaviour
         if (enemy.GetComponent<Animator>() != null)
             enemy.GetComponent<Animator>().SetBool(anim, play);
     }
+
 }

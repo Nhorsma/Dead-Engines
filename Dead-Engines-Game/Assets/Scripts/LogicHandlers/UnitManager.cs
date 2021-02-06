@@ -124,7 +124,8 @@ public class UnitManager : MonoBehaviour
 
 				ResetJob(unit_data);
 				unit_data.Job = ("Extraction" + clickedObj.tag);
-				unit_data.JobPos = (clickedObj); // fishy
+                SetAnimation(u, "inCombat", false);
+                unit_data.JobPos = (clickedObj); // fishy
 				unit_data.JustDroppedOff = (true);
 
 				TravelTo(units[unit_data.Id], unit_data.JobPos.transform.position, false, false);
@@ -137,12 +138,14 @@ public class UnitManager : MonoBehaviour
 				Unit unit_data = u.GetComponent<Unit>();
 				ResetJob(unit_data);
 				unit_data.Job = "Combat";
-				unit_data.JobPos = clickedObj; // fishy
+                SetAnimation(u, "inCombat", true);
+
+                unit_data.JobPos = clickedObj; // fishy
 
 				TravelTo(units[unit_data.Id], unit_data.JobPos.transform.position, true, true);
 			}
 		}
-		PlayClip("ping");
+        PlayClip("ping");
 	}
 
 	void RunAllJobs()
@@ -152,7 +155,13 @@ public class UnitManager : MonoBehaviour
 			Animator anim = u.GetComponent<Animator>();
 			Unit unit_data = u.GetComponent<Unit>();
 
-			if (unit_data.Job != "none")//&& !unit.JobPos.Equals(null)
+            if (u.GetComponent<NavMeshAgent>().velocity == new Vector3(0, 0, 0))
+            {
+                SetAnimation(u, "walking", false);
+
+            }
+
+            if (unit_data.Job != "none")//&& !unit.JobPos.Equals(null)
 			{
 				if (unit_data.Job == "Combat")
 				{
@@ -192,16 +201,6 @@ public class UnitManager : MonoBehaviour
 					// GetUnitObject(unit).SetActive(true);
 				}
 			}
-			else
-			{
-				if (u.GetComponent<NavMeshAgent>().velocity == new Vector3(0, 0, 0))
-				{
-					u.GetComponent<Animator>().SetBool("walking", false);
-                    Debug.Log("not walking");
-
-                }
-
-			}
 		}
 	}
 
@@ -216,7 +215,8 @@ public class UnitManager : MonoBehaviour
         {
             for (int i = 0; i < selectedUnits.Count; i++)
             {
-				Unit unit_data = selectedUnits[i].GetComponent<Unit>();
+                SetAnimation(selectedUnits[i], "inCombat", false);
+                Unit unit_data = selectedUnits[i].GetComponent<Unit>();
                 if (unit_data.Job != "shrine" || unit_data.Job != "study"
                     || unit_data.Job != "refinery" || unit_data.Job != "storage") // && selectedUnits[i].activeSelf
                 {
@@ -235,11 +235,11 @@ public class UnitManager : MonoBehaviour
                         Vector3 newDes = new Vector3();
                         if (i % 3 > 0)
                         {
-                            newDes = prevDes + new Vector3(0, 0, 3);
+                            newDes = prevDes + new Vector3(0, 0, 6);
                         }
                         else
                         {
-                            newDes = selectedUnits[i - 3].GetComponent<NavMeshAgent>().destination + new Vector3(stoppingDistance, 0, 0);
+                            newDes = selectedUnits[i - 3].GetComponent<NavMeshAgent>().destination + new Vector3(stoppingDistance+3, 0, 0);
                         }
                         TravelTo(selectedUnits[i], newDes, false, false);
                     }
@@ -333,8 +333,7 @@ public class UnitManager : MonoBehaviour
 		if (unit.activeSelf == true && unit.GetComponent<NavMeshAgent>() != null)
 		{
 			NavMeshAgent nav = unit.GetComponent<NavMeshAgent>();
-			unit.GetComponent<Animator>().SetBool("walking", true);
-            Debug.Log("is walking");
+            SetAnimation(unit, "walking", true);
 
             if (stop)
 			{
@@ -453,28 +452,34 @@ public class UnitManager : MonoBehaviour
 		if (unit.GetComponent<Unit>().Health <= 0)
 		{
 			PlayClip("dead");
-			unit.GetComponent<Animator>().SetBool("knockedOut", true);
-			Debug.Log(unit.GetComponent<Unit>().UnitName + " is dead"); //
-			unit.GetComponent<Unit>().Job = "dead";
-			unit.GetComponent<Unit>().JobPos = null;
+            SetAnimation(unit, "knockedOut", true);
+            SetAnimation(unit, "inCombat", false);
 			if (selectedUnits.Contains(unit))
 			{
 				selectItems.RemoveSpecific(unit);
 			}
-			StartCoroutine(WaitToRespawn(unit));
-		}
+            StartCoroutine(WaitToDespawn(unit));
+        }
 	}
+
+    IEnumerator WaitToDespawn(GameObject unit)
+    {
+        yield return new WaitForSeconds(5f);
+        unit.GetComponent<Unit>().Job = "dead";
+        unit.GetComponent<Unit>().JobPos = null;
+
+        StartCoroutine(WaitToRespawn(unit));
+    }
 
 	IEnumerator WaitToRespawn(GameObject unit)
     {
         if (!unit.GetComponent<Unit>().CanSpawn)
         {
-//            yield return new WaitForSeconds(3f);
             unit.SetActive(false);
             unit.transform.position = robotPos;
             yield return new WaitForSeconds(downTime);
-            unit.GetComponent<Animator>().SetBool("knockedOut", false);
-			unit.GetComponent<Unit>().CanSpawn = true;
+            SetAnimation(unit, "knockedOut", false);
+            unit.GetComponent<Unit>().CanSpawn = true;
             ReadyClip();
         }
     }
@@ -592,4 +597,11 @@ public class UnitManager : MonoBehaviour
             unit.SetActive(false);
         }
     }
+
+    public void SetAnimation(GameObject unit_object, string animationSetting, bool value)
+    {
+        if(unit_object.GetComponent<Animator>()!= null)
+            unit_object.GetComponent<Animator>().SetBool(animationSetting, value);
+    }
+
 }
