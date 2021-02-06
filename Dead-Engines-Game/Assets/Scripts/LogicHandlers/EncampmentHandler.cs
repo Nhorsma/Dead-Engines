@@ -58,14 +58,15 @@ public class EncampmentHandler : MonoBehaviour
 	//this will establish that spawned enemies travel to this resource as well as will attack player units that get too close to it.
 	void SetUpCamps()
     {
-        for (int i = 0; i < encampments.Count; i++)
+        GameObject[] encampmentObjects = GameObject.FindGameObjectsWithTag("Encampment");
+        for (int i = 0; i < encampmentObjects.Length; i++)
         {
-			GameObject encampment_Object = (GameObject)Resources.Load("encampment");
-            Encampment encampment = encampment_Object.GetComponent<Encampment>();
-            encampment.Obj = encampment_Object;
-            encampment.ClosestResource = GetClosestResource(encampment);
-            encampment.Deployment = health100_3left;
-			encampments.Add(encampment);
+            encampmentObjects[i].GetComponent<Encampment>().Obj = encampmentObjects[i];
+            encampmentObjects[i].GetComponent<Encampment>().ClosestResource = GetClosestResource(encampmentObjects[i].GetComponent<Encampment>());
+            Debug.Log("*** encampment's closest resource : " + encampmentObjects[i].GetComponent<Encampment>().ClosestResource);
+            encampmentObjects[i].GetComponent<Encampment>().Deployment = health100_3left;
+
+            encampments.Add(encampmentObjects[i].GetComponent<Encampment>());
         }
     }
 
@@ -108,9 +109,10 @@ public class EncampmentHandler : MonoBehaviour
 
     public void CheckForTrigger(Encampment encampment)
     {
-        if ((encampment.Health < 90)||(resourceHandling.resourceQuantities[resourceHandling.GetNumber(encampment.ClosestResource)]<75) && encampment.CanSpawn)
+        Debug.Log("ecampments resource : " + encampment.ClosestResource);
+        if (encampment.CanSpawn && (encampment.Health < 90 || resourceHandling.resourceQuantities[resourceHandling.GetNumber(encampment.ClosestResource)]<40))
         {
-            int hit = Random.Range(1, 5);
+            int hit = Random.Range(1, 10);
 
             if (hit < encampment.Chance)
             {
@@ -127,6 +129,7 @@ public class EncampmentHandler : MonoBehaviour
 
     void SpawnEnemy(Encampment encampment)
     {
+        Debug.Log("Object: "+encampment.Obj);
         PlayClip(encampment.Obj, "attack");
         CheckDeployment(encampment);
         GameObject enemyObj = new GameObject();

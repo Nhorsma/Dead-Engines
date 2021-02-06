@@ -140,7 +140,7 @@ public class ResourceHandling : MonoBehaviour
 	public int GetNumber(GameObject gm)
 	{
 		int i = 0;
-		while (!resourceDeposits[i].Equals(gm) && i < resourceDeposits.Length)
+		while (i < resourceDeposits.Length && !resourceDeposits[i].Equals(gm))
 		{
 			i++;
 		}

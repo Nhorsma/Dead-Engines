@@ -404,9 +404,6 @@ public class UnitManager : MonoBehaviour
 	{
 		Vector3 direction = unit.GetComponent<Unit>().JobPos.transform.position - unit.transform.position;
 		PlayClip("shoot");
-		//RaycastHit hit;
-		//      if (Physics.Raycast(GetUnitObject(unit).transform.position, direction, out hit, 100f))
-		//      {
 		int hitChance = Random.Range(0, 2);
 		if (hitChance == 0)
 		{
@@ -414,7 +411,6 @@ public class UnitManager : MonoBehaviour
 			if (unit.GetComponent<Unit>().JobPos.tag == "Enemy")
 			{
 				//access's the enemy via the enemyHandler, and reduces the enemie's health by one
-				//Debug.Log("enemy : " + eh.GetEnemy(unit.JobPos));
 				if (unit.GetComponent<Unit>().JobPos.GetComponent<Enemy>() == null || unit.GetComponent<Unit>().JobPos.GetComponent<Enemy>().Health <= 0) //fishy
 				{
 					ResetJob(unit.GetComponent<Unit>());
@@ -423,12 +419,11 @@ public class UnitManager : MonoBehaviour
 				{
 					unit.GetComponent<Unit>().JobPos.GetComponent<Enemy>().Health -= unitDamage;
 				}
-
-				//Debug.Log("enemy: " + gameObject.GetComponent<EnemyHandler>().GetEnemy(hit.collider.gameObject).Health);
 			}
 			else if (unit.GetComponent<Unit>().JobPos.tag == "Encampment")
 			{
                 Encampment encampmentTarget = unit.GetComponent<Unit>().JobPos.GetComponent<Encampment>();
+                Debug.Log("encampmentTarget : " + encampmentTarget.ClosestResource);
                 encampmentTarget.Health -= unitDamage;
                 encampmentHandler.CheckForTrigger(encampmentTarget);
 

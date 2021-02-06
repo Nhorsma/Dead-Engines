@@ -25,6 +25,17 @@ public class Encampment : MonoBehaviour
         deployment = new string[] { "hellow" };
     }
 
+    public Encampment()
+    {
+        canSpawn = true;
+        chance = 0;
+        id = 0;
+        health = 100;
+        onField = 0;
+        playerInRange = false;
+        deployment = new string[] { "hellow" };
+    }
+
     public int Id
     {
         get { return id; }

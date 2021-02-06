@@ -6588,7 +6588,7 @@ MonoBehaviour:
   spawnRes: {fileID: 1102157336}
   resourceHandling: {fileID: 467610735}
   startSpawnTime: 0
-  spawnTime: 3
+  spawnTime: 10
   spawnDistance: 5
   startSpawning: 0
   audioSource: {fileID: 1457351892}
@@ -14900,7 +14900,7 @@ MonoBehaviour:
   enemy: {fileID: 3500671454363015440, guid: 79a02ea539ec3c54ebab16eeef8dc84f, type: 3}
   autoObj: {fileID: 5905536743914566335}
   startPos: {fileID: 6539084605846923269}
-  s_maxDistance: 350
+  s_maxDistance: 200
   s_minDistance: 150
   r_maxDistance: 350
   r_minDistance: 150
