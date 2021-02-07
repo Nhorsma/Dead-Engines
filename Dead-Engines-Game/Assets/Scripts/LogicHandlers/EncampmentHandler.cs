@@ -51,7 +51,6 @@ public class EncampmentHandler : MonoBehaviour
         {
             encampmentObjects[i].GetComponent<Encampment>().Obj = encampmentObjects[i];
             encampmentObjects[i].GetComponent<Encampment>().ClosestResource = GetClosestResource(encampmentObjects[i].GetComponent<Encampment>());
-            Debug.Log("*** encampment's closest resource : " + encampmentObjects[i].GetComponent<Encampment>().ClosestResource);
             encampmentObjects[i].GetComponent<Encampment>().Deployment = new string[]{enemy_model1.name};
 
             encampments.Add(encampmentObjects[i].GetComponent<Encampment>());
@@ -96,9 +95,8 @@ public class EncampmentHandler : MonoBehaviour
     /// </summary>
 
     public void CheckForTrigger(Encampment encampment)
-    {
-        Debug.Log("ecampments resource : " + encampment.ClosestResource);
-        if (encampment.CanSpawn && (encampment.Health < 90 || resourceHandling.resourceQuantities[resourceHandling.GetNumber(encampment.ClosestResource)]<40))
+    { 
+        if (encampment.OnField < 2 && (encampment.Health < 90 || resourceHandling.resourceQuantities[resourceHandling.GetNumber(encampment.ClosestResource)]<40))
         {
             int hit = Random.Range(1, 10);
 
@@ -126,24 +124,26 @@ public class EncampmentHandler : MonoBehaviour
         {
             Vector3 spawnPlace = encampments[encampment.Id].Obj.transform.position + new Vector3(Random.Range(1, 5), 0, Random.Range(1, 5));
             enemyObj = (GameObject)Instantiate(Resources.Load(encampment.Deployment[i]), spawnPlace, transform.rotation);
+            enemyHandler.enemies.Add(enemyObj);
+            enemyHandler.FindSpot(enemyObj);
+            encampment.OnField++;
         }
 
         enemyObj.GetComponent<Enemy>().Resource = encampment.ClosestResource;
         enemyObj.GetComponent<Enemy>().Camp = encampment.Obj;
         enemyObj.GetComponent<Enemy>().Id = enemyHandler.enemies.Count;
 
-        StartCoroutine(WaitUntilCanSpawn(encampment));
-
         enemyHandler.enemies.Add(enemyObj);
         enemyHandler.FindSpot(enemyObj);
-        encampment.OnField++;
     }
 
     IEnumerator WaitUntilCanSpawn(Encampment encampment_data)
     {
         encampment_data.CanSpawn = false;
         yield return new WaitForSeconds(spawnTime);
-        encampment_data.CanSpawn = true;
+
+        if(encampment_data.OnField < 2)
+            encampment_data.CanSpawn = true;
     }
 
     void CheckDeployment(Encampment encampment_data)
@@ -177,9 +177,7 @@ public class EncampmentHandler : MonoBehaviour
             else
                 deployment[1] = enemy_model2.name;
         }
-
         encampment_data.Deployment = deployment;
-
     }
 
 

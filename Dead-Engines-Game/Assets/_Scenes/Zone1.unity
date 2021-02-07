@@ -6615,6 +6615,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8dda09e0f725015479faec45bd01d30d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  automoton: {fileID: 5905536743914566335}
   enemies: []
   stoppingDistance: 30
   shootingRange: 40
