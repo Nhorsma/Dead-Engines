@@ -22,21 +22,9 @@ public class EncampmentHandler : MonoBehaviour
     public AudioClip attackClip1, attackClip2, deathClip, destroyClip;
     public float volume;
 
-	// numbers represent xy = [% health][encampments on map]. meant to escalate
-    string[] health100_3left = { "gunner", "gunner", "gunner" };
-    string[] health75_3left = { "gunner", "APC_2", "gunner" };
-    string[] health50_3left = { "gunner", "gunner", "APC_2", "APC_2" };
-    string[] health25_3left = { "gunner", "APC_2", "gunner", "APC_2" };
+    // numbers represent xy = [% health][encampments on map]. meant to escalate
 
-    string[] health100_2left = { "gunner", "gunner", "APC_2" };
-    string[] health75_2left = { "gunner", "APC_2", "gunner", "APC_2" };
-    string[] health50_2left = { "APC_2", "APC_2", "Mech 2" };
-    string[] health25_2left = { "Mech 2", "APC_2", "Mech 2" };
-
-    string[] health100_1left = { "gunner", "gunner", "gunner", "APC_2" };
-    string[] health75_1left = { "gunner", "gunner", "APC_2", "APC_2", "Mech 2" };
-    string[] health50_1left = { "gunner", "gunner", "gunner", "APC_2", "APC_2", "Mech 2", "Mech 2" };
-    string[] health25_1left = { "Mech 2", "gunner", "gunner", "APC_2", "APC_2", "Mech 2", "APC_2" };
+    public GameObject enemy_model1, enemy_model2, enemy_model3;
 
     void Start()
     {
@@ -64,7 +52,7 @@ public class EncampmentHandler : MonoBehaviour
             encampmentObjects[i].GetComponent<Encampment>().Obj = encampmentObjects[i];
             encampmentObjects[i].GetComponent<Encampment>().ClosestResource = GetClosestResource(encampmentObjects[i].GetComponent<Encampment>());
             Debug.Log("*** encampment's closest resource : " + encampmentObjects[i].GetComponent<Encampment>().ClosestResource);
-            encampmentObjects[i].GetComponent<Encampment>().Deployment = health100_3left;
+            encampmentObjects[i].GetComponent<Encampment>().Deployment = new string[]{enemy_model1.name};
 
             encampments.Add(encampmentObjects[i].GetComponent<Encampment>());
         }
@@ -158,7 +146,6 @@ public class EncampmentHandler : MonoBehaviour
         encampment_data.CanSpawn = true;
     }
 
-    //adds "gunner", "APC", or "Mech"
     void CheckDeployment(Encampment encampment_data)
     {
         int quantity = resourceHandling.resourceQuantities[resourceHandling.GetNumber(encampment_data.ClosestResource)];
@@ -169,67 +156,29 @@ public class EncampmentHandler : MonoBehaviour
             return;
         }
 
-        if (resourceHandling.resourcesLeft == 3)
+        //default is 4 gunners
+        string[] deployment = new string[] { enemy_model1.name, enemy_model1.name, enemy_model1.name, enemy_model1.name };
+
+        if (resourceHandling.resourcesLeft <= 2 || encampment_data.Health < 50 || quantity < (resourceHandling.startQuantity / 2))
         {
-            if (encampment_data.Health < 25 || quantity < resourceHandling.startQuantity / 4)
-            {
-				encampment_data.Deployment = health25_3left;
-            }
-            if (encampment_data.Health < 50 || quantity < (resourceHandling.startQuantity / 2)) // fishy if if elsesif else
-            {
-				encampment_data.Deployment = health50_3left;
-            }
-            else if (encampment_data.Health < 75 || quantity < resourceHandling.startQuantity * 0.25f)
-            {
-				encampment_data.Deployment = health75_3left;
-            }
-            else
-            {
-				encampment_data.Deployment = health100_3left;
-            }
+            deployment[3] = enemy_model2.name;
         }
-        else if (resourceHandling.resourcesLeft == 2)
+        if(resourceHandling.resourcesLeft <= 2)
         {
-            if (encampment_data.Health < 25 || quantity < resourceHandling.startQuantity / 4)
-            {
-				encampment_data.Deployment = health25_2left;
-            }
-            if (encampment_data.Health < 50 || quantity < (resourceHandling.startQuantity / 2)) // fishy if if elsesif else
-			{
-                encampment_data.Deployment = health50_2left;
-            }
-            else if (encampment_data.Health < 75 || quantity < resourceHandling.startQuantity * 0.25f)
-            {
-				encampment_data.Deployment = health75_2left;
-            }
-            else
-            {
-				encampment_data.Deployment = health100_2left;
-            }
-        }
-        else if (resourceHandling.resourcesLeft == 1)
-        {
-            if (encampment_data.Health < 25 || quantity < resourceHandling.startQuantity / 4)
-            {
-                encampment_data.Deployment = health25_1left;
-            }
             if (encampment_data.Health < 50 || quantity < (resourceHandling.startQuantity / 2))
-            {
-                encampment_data.Deployment = health50_1left;
-            }
-            else if (encampment_data.Health < 75 || quantity < resourceHandling.startQuantity * 0.25f)
-            {
-                encampment_data.Deployment = health75_1left;
-            }
+                deployment[2] = enemy_model3.name;
             else
-            {
-                encampment_data.Deployment = health100_1left;
-            }
+                deployment[2] = enemy_model2.name;
         }
-        else
+        if(resourceHandling.resourcesLeft <= 1)
         {
-            return;
+            if (encampment_data.Health < 50 || quantity < (resourceHandling.startQuantity / 2))
+                deployment[1] = enemy_model3.name;
+            else
+                deployment[1] = enemy_model2.name;
         }
+
+        encampment_data.Deployment = deployment;
 
     }
 

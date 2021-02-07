@@ -22,7 +22,7 @@ public class Encampment : MonoBehaviour
         health = 100;
         onField = 0;
         playerInRange = false;
-        deployment = new string[] { "hellow" };
+        deployment = new string[] {};
     }
 
     public Encampment()

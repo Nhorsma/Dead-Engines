@@ -8,6 +8,7 @@ public class EnemyHandler : MonoBehaviour
     SpawnRes spawnResources;
     UnitManager unitManager;
     EncampmentHandler encampmentHandler;
+    GameObject automoton;
 
     public List<GameObject> enemies;
 
@@ -49,16 +50,22 @@ public class EnemyHandler : MonoBehaviour
                 e.GetComponent<Enemy>().Camp.GetComponent<Encampment>().OnField--; // fishy
                 break;
             }
-            if(e.GetComponent<Enemy>().Target!=null)
+            else if(e.GetComponent<Enemy>().Target!=null)
             {
-                Persue(e, e.GetComponent<Enemy>());
+                AttackUnit(e, e.GetComponent<Enemy>());
+            }
+            else if(e.GetComponent<Enemy>().Camp.GetComponent<Encampment>().Health > 50 
+                && e.GetComponent<Enemy>().Camp.GetComponent<Encampment>().Health < 25)
+            {
+                ProtectEncampment(e);
             }
             else
             {
-                Protect(e);
+                AttackRobot(e);
             }
         }
     }
+
 
 	/*
 	 * i was hoping i wouldn't have to loop through every friendly game object to see if they were in range...
@@ -68,14 +75,15 @@ public class EnemyHandler : MonoBehaviour
      * if in firing range but not tresspassing, shoot
      * if not in firing range nor tresspassing, find spot
     */
-	void Protect(GameObject enemy)
+
+	void ProtectEncampment(GameObject enemy)
     {
         foreach (GameObject u in unitManager.units)
         {
             if (Vector3.Distance(u.transform.position, enemy.GetComponent<Enemy>().Resource.transform.position) < tresspassingRange
                 || Vector3.Distance(u.transform.position, enemy.GetComponent<Enemy>().Camp.transform.position) < tresspassingRange)
             {
-				enemy.GetComponent<Enemy>().Target = u;
+				//enemy.GetComponent<Enemy>().Target = u;
                 TravelTo(enemy, u.transform.position, true, true);
                 AssignAnimation(enemy, "isShooting", false);
                 break;
@@ -83,36 +91,47 @@ public class EnemyHandler : MonoBehaviour
         }
     }
 
-    void Persue(GameObject enemy, Enemy enemy_data)
+    void AttackUnit(GameObject enemy, Enemy enemy_data)
     {
         if (enemy==null || enemy_data.Target == null)
 		{
-			return;
-            AssignAnimation(enemy, "walking", false);
+            //AssignAnimation(enemy, "inCombat", false);
+            return;
         }
         float dis = Vector3.Distance(enemy.transform.position, enemy_data.Target.transform.position);
 
         if(enemy_data.Target != null) //fishy
 		{
             AssignAnimation(enemy, "inCombat", true);
-			if (dis < shootingRange && !enemy_data.JustShot)
+			if (!enemy_data.JustShot)
 			{
 				AssignAnimation(enemy, "firing", true);
                 Fire(enemy, enemy_data);
 				StartCoroutine(FireCoolDown(enemy_data));
 			}
-			else if (dis > shootingRange && dis < tresspassingRange)
+			else if (dis < tresspassingRange)
 			{
 				AssignAnimation(enemy, "firing", false);
                 TravelTo(enemy, enemy_data.Target.transform.position, true, true);
 			}
-			else if (dis > tresspassingRange && dis > shootingRange)
+			else// if (dis > tresspassingRange && dis > shootingRange)
 			{
 				AssignAnimation(enemy, "firing", false);
                 FindSpot(enemy);
 				enemy_data.Target = null;
 			}
 		}
+    }
+
+    public void AttackRobot(GameObject enemy_object)
+    {
+        TravelTo(enemy_object, automoton.transform.position, true, true);
+
+        if(enemy_object.GetComponent<Enemy>().Target == null && enemy_object.GetComponent<NavMeshAgent>().isStopped)
+        {
+            //attack robot, maybe start lobbing grenades or something
+            //slowly increments down robot health or damages rooms
+        }
     }
 
 	public void FindSpot(GameObject enemy)
@@ -139,10 +158,6 @@ public class EnemyHandler : MonoBehaviour
 		if (enemy_data.Target != null)
 		{
 			Vector3 direction = enemy_data.Target.transform.position - enemy.transform.position;
-
-			//    RaycastHit hit;
-			//   if (Physics.Raycast(GetEnemyObject(ene).transform.position, direction, out hit, 100f))
-			//   {
 			PlayClip(enemy_data.Camp, "shoot");
 			StartCoroutine(TrailOff(0.05f, enemy.transform.position, enemy_data.Target.transform.position));
 

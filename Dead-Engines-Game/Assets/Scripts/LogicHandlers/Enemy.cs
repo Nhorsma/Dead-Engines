@@ -102,5 +102,21 @@ public class Enemy : MonoBehaviour
         set { camp = value; }
     }
 
+    private void OnTriggerEnter(Collider other)
+    {
+        if(other.gameObject.tag=="Friendly")
+        {
+            target = other.gameObject;
+        }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.gameObject.tag == "Friendly")
+        {
+            target = null;
+        }
+    }
+
 
 }

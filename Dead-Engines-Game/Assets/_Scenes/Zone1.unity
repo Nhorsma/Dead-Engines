@@ -6597,6 +6597,12 @@ MonoBehaviour:
   deathClip: {fileID: 8300000, guid: dea962989df3fa2478729985a431e863, type: 3}
   destroyClip: {fileID: 8300000, guid: b6248d1d4ba53734c97dda60ed2c8b26, type: 3}
   volume: 1
+  enemy_model1: {fileID: 6180372181544574514, guid: 60ca0186f1838ad47bb07ef9905de507,
+    type: 3}
+  enemy_model2: {fileID: 7763235492483150828, guid: 29ab567c5440d8846a24cf4a119f9462,
+    type: 3}
+  enemy_model3: {fileID: 684524556473636996, guid: 4dec55fdc9643974fa8c1a7a24f8cafd,
+    type: 3}
 --- !u!114 &467610734
 MonoBehaviour:
   m_ObjectHideFlags: 0
