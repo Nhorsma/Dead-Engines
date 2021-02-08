@@ -19634,10 +19634,10 @@ Camera:
   field of view: 60.000004
   orthographic: 0
   orthographic size: 5
-  m_Depth: 0
+  m_Depth: 1
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 311
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0
@@ -19945,7 +19945,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1475101789
 RectTransform:
   m_ObjectHideFlags: 0
@@ -29670,7 +29670,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 0.12941177}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -32399,7 +32399,7 @@ GameObject:
   - component: {fileID: 5905536743914566334}
   - component: {fileID: 5905536743914566336}
   m_Layer: 0
-  m_Name: Auto_Full_Animations
+  m_Name: Automaton
   m_TagString: Robot
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
