@@ -64,7 +64,7 @@ public class EnemyHandler : MonoBehaviour
             }
             else
             {
-                AttackRobot(e);
+                FindSpot(e);
             }
         }
     }
@@ -72,9 +72,11 @@ public class EnemyHandler : MonoBehaviour
 
     public GameObject unitsTresspassing(GameObject encampment)
     {
-        foreach(GameObject unit in unitManager.units)
+        foreach (GameObject unit in unitManager.units)
         {
-            if(Vector3.Distance(unit.transform.position, encampment.GetComponent<Encampment>().ClosestResource.transform.position) < tresspassingRange
+            if (encampment == null || encampment.GetComponent<Encampment>().ClosestResource == null)
+                return null;
+            else if(Vector3.Distance(unit.transform.position, encampment.GetComponent<Encampment>().ClosestResource.transform.position) < tresspassingRange
                 || Vector3.Distance(unit.transform.position, encampment.transform.position) < tresspassingRange)
             {
                 return unit;
@@ -134,19 +136,21 @@ public class EnemyHandler : MonoBehaviour
 
 	public void FindSpot(GameObject enemy)
 	{
-		int chance = Random.Range(0, 2);
+        if (Vector3.Distance(enemy.gameObject.transform.position, enemy.GetComponent<Enemy>().transform.position) > stoppingDistance)
+        {
 
-        if(Vector3.Distance(enemy.transform.position,enemy.GetComponent<Enemy>().Camp.transform.position) > stoppingDistance)
-		if (chance == 1)
-		{
-			Vector3 rand = new Vector3(Random.Range(-3, 3), Random.Range(-3, 3), Random.Range(-3, 3));
-			TravelTo(enemy, enemy.GetComponent<Enemy>().Resource.transform.position + rand, true, false);
-		}
-		else
-		{
-			Vector3 rand = new Vector3(Random.Range(-3, 3), Random.Range(-3, 3), Random.Range(-3, 3));
-			TravelTo(enemy, enemy.GetComponent<Enemy>().Camp.transform.position + rand, true, false);
-		}
+            int chance = Random.Range(0, 2);
+            if (chance == 1)
+            {
+                Vector3 rand = new Vector3(Random.Range(-3, 3), Random.Range(-3, 3), Random.Range(-3, 3));
+                TravelTo(enemy, enemy.GetComponent<Enemy>().Resource.transform.position + rand, true, false);
+            }
+            else
+            {
+                Vector3 rand = new Vector3(Random.Range(-3, 3), Random.Range(-3, 3), Random.Range(-3, 3));
+                TravelTo(enemy, enemy.GetComponent<Enemy>().Camp.transform.position + rand, true, false);
+            }
+        }
 	}
 
 	/// <summary>

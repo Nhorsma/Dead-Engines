@@ -27,6 +27,8 @@ public class UnitManager : MonoBehaviour
 
 	public int unitDamage;                                  
 	public float unitFireCooldown = 1f;
+    public Dictionary<string, Queue<GameObject>> poolDictionary;
+    public List<Pool> pools;
 
 	public float downTime;									
 
@@ -45,8 +47,9 @@ public class UnitManager : MonoBehaviour
 		robotPos = new Vector3(robot.transform.position.x,0, robot.transform.position.z);
 
 		audioSource = Camera.main.GetComponent<AudioSource>();
-
+        poolDictionary = new Dictionary<string, Queue<GameObject>>();
         SetUpUnits(startingUnits);
+        SetUpPools();
     }
 
     void Update()
@@ -70,9 +73,23 @@ public class UnitManager : MonoBehaviour
 
 			u.GetComponent<Unit>().Id = i;
 			u.GetComponent<Unit>().UnitName = "U" + u.GetComponent<Unit>().Id.ToString();
-
 			units.Add(u);
         }
+    }
+
+    void SetUpPools()
+    {
+        Queue<GameObject> trailPool = new Queue<GameObject>();
+
+        //for bullet trails
+        for(int i=0;i<pools[0].size;i++)
+        {
+            GameObject obj = Instantiate(pools[0].prefab);
+            obj.SetActive(false);
+            trailPool.Enqueue(obj);
+        }
+
+        poolDictionary.Add("trails", trailPool);
     }
 
 	RaycastHit Hit()
@@ -422,7 +439,6 @@ public class UnitManager : MonoBehaviour
 			else if (unit.GetComponent<Unit>().JobPos.tag == "Encampment")
 			{
                 Encampment encampmentTarget = unit.GetComponent<Unit>().JobPos.GetComponent<Encampment>();
-                Debug.Log("encampmentTarget : " + encampmentTarget.ClosestResource);
                 encampmentTarget.Health -= unitDamage;
                 encampmentHandler.CheckForTrigger(encampmentTarget);
 
@@ -452,6 +468,7 @@ public class UnitManager : MonoBehaviour
 		if (unit.GetComponent<Unit>().Health <= 0)
 		{
 			PlayClip("dead");
+            unit.GetComponent<NavMeshAgent>().enabled = false;
             SetAnimation(unit, "knockedOut", true);
             SetAnimation(unit, "inCombat", false);
 			if (selectedUnits.Contains(unit))
@@ -480,6 +497,7 @@ public class UnitManager : MonoBehaviour
             yield return new WaitForSeconds(downTime);
             SetAnimation(unit, "knockedOut", false);
             unit.GetComponent<Unit>().CanSpawn = true;
+            unit.GetComponent<NavMeshAgent>().enabled = true;
             ReadyClip();
         }
     }
@@ -504,17 +522,21 @@ public class UnitManager : MonoBehaviour
         PlayClip("drop");
     }
 
-    GameObject BulletTrail(Vector3 start, Vector3 end)
+    public GameObject BulletTrail(Vector3 start, Vector3 end)
     {
         float x, y, z;
         x = Random.Range(-1.2f, 1.2f);
         y = Random.Range(-1.2f, 1.2f);
         z = Random.Range(-1.2f, 1.2f);
         Quaternion offset = Quaternion.Euler(x, y, z);
-
         Vector3 dif = (start - end) / 2;
         Quaternion angle = Quaternion.LookRotation(start - end);
-        GameObject trail = (GameObject)Instantiate(Resources.Load("BulletTrail"), start - dif, angle * offset);
+
+        GameObject trail = poolDictionary["trails"].Dequeue();
+        trail.transform.position = start-dif;
+        trail.transform.rotation = angle*offset;
+        trail.SetActive(true);
+        //GameObject trail = (GameObject)Instantiate(Resources.Load("BulletTrail"), start - dif, angle * offset);
 
         trail.transform.localScale = new Vector3(0.05f, 0.05f, Vector3.Distance(start, end));
         return trail;
@@ -523,7 +545,8 @@ public class UnitManager : MonoBehaviour
     {
         GameObject t = BulletTrail(start, end);
         yield return new WaitForSeconds(time);
-        Destroy(t);
+        poolDictionary["trails"].Enqueue(t);
+        t.SetActive(false);
     }
 
     void ReadyClip()

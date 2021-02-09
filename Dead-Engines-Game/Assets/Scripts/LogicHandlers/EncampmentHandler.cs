@@ -115,7 +115,6 @@ public class EncampmentHandler : MonoBehaviour
 
     void SpawnEnemy(Encampment encampment)
     {
-        Debug.Log("Object: "+encampment.Obj);
         PlayClip(encampment.Obj, "attack");
         CheckDeployment(encampment);
         GameObject enemyObj = new GameObject();
@@ -124,17 +123,14 @@ public class EncampmentHandler : MonoBehaviour
         {
             Vector3 spawnPlace = encampments[encampment.Id].Obj.transform.position + new Vector3(Random.Range(1, 5), 0, Random.Range(1, 5));
             enemyObj = (GameObject)Instantiate(Resources.Load(encampment.Deployment[i]), spawnPlace, transform.rotation);
+
+            enemyObj.GetComponent<Enemy>().Resource = encampment.ClosestResource;
+            enemyObj.GetComponent<Enemy>().Camp = encampment.Obj;
+            enemyObj.GetComponent<Enemy>().Id = enemyHandler.enemies.Count;
             enemyHandler.enemies.Add(enemyObj);
             enemyHandler.FindSpot(enemyObj);
             encampment.OnField++;
         }
-
-        enemyObj.GetComponent<Enemy>().Resource = encampment.ClosestResource;
-        enemyObj.GetComponent<Enemy>().Camp = encampment.Obj;
-        enemyObj.GetComponent<Enemy>().Id = enemyHandler.enemies.Count;
-
-        enemyHandler.enemies.Add(enemyObj);
-        enemyHandler.FindSpot(enemyObj);
     }
 
     IEnumerator WaitUntilCanSpawn(Encampment encampment_data)
@@ -199,7 +195,6 @@ public class EncampmentHandler : MonoBehaviour
     public void PlayClip(GameObject encampment_Object, string str)
     {
         AudioSource tempSource = encampment_Object.GetComponent<AudioSource>();
-        Debug.Log(tempSource);
         //tempSource.volume = volume;
         if (str.Equals("attack"))
         {
