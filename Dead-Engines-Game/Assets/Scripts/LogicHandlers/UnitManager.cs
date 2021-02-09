@@ -8,7 +8,8 @@ public class UnitManager : MonoBehaviour
     public SelectItems selectItems;							
     public ResourceHandling resourceHandling;				
     public EnemyHandler enemyHandler;						
-    public EncampmentHandler encampmentHandler;				
+    public EncampmentHandler encampmentHandler;
+    public SpawningPoolController spawnPool;
 
     public Vector3 robotPos;								
     public GameObject robot;                                
@@ -27,9 +28,6 @@ public class UnitManager : MonoBehaviour
 
 	public int unitDamage;                                  
 	public float unitFireCooldown = 1f;
-    public Dictionary<string, Queue<GameObject>> poolDictionary;
-    public List<Pool> pools;
-
 	public float downTime;									
 
     AudioSource audioSource;
@@ -47,9 +45,7 @@ public class UnitManager : MonoBehaviour
 		robotPos = new Vector3(robot.transform.position.x,0, robot.transform.position.z);
 
 		audioSource = Camera.main.GetComponent<AudioSource>();
-        poolDictionary = new Dictionary<string, Queue<GameObject>>();
         SetUpUnits(startingUnits);
-        SetUpPools();
     }
 
     void Update()
@@ -77,25 +73,10 @@ public class UnitManager : MonoBehaviour
         }
     }
 
-    void SetUpPools()
-    {
-        Queue<GameObject> trailPool = new Queue<GameObject>();
-
-        //for bullet trails
-        for(int i=0;i<pools[0].size;i++)
-        {
-            GameObject obj = Instantiate(pools[0].prefab);
-            obj.SetActive(false);
-            trailPool.Enqueue(obj);
-        }
-
-        poolDictionary.Add("trails", trailPool);
-    }
-
 	RaycastHit Hit()
 	{
 		RaycastHit hit;
-		if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit, Mathf.Infinity))
+		if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit, Mathf.Infinity, ~(1 << 10)))
 			return hit;
 		return hit;
 	}
@@ -191,12 +172,18 @@ public class UnitManager : MonoBehaviour
 				else if (unit_data.Job == "shrine" || unit_data.Job == "refinery"
 					|| unit_data.Job == "storage" || unit_data.Job == "study")
 				{
+                    /*
 					float jx = u.transform.position.x; //
 					float jz = u.transform.position.z; //
 					if (Mathf.Abs(jx - unit_data.JobPos.transform.position.x) < 1f && Mathf.Abs(jz - unit_data.JobPos.transform.position.z) < 1f)
 					{
 						u.SetActive(false);
 					}
+                    */
+                    if(Vector3.Distance(u.transform.position,robotPos)<10f)
+                    {
+                        u.SetActive(false);
+                    }
 				}
 				else if (unit_data.Job == "dead")
 				{
@@ -327,7 +314,6 @@ public class UnitManager : MonoBehaviour
             && !unit_data.JustShot)
         {
             Fire(unit);
-            StartCoroutine(FireCoolDown(unit_data));
         }
     }
 
@@ -420,8 +406,8 @@ public class UnitManager : MonoBehaviour
 	{
 		Vector3 direction = unit.GetComponent<Unit>().JobPos.transform.position - unit.transform.position;
 		PlayClip("shoot");
-		int hitChance = Random.Range(0, 2);
-		if (hitChance == 0)
+		float hitChance = Random.Range(0, 2);
+		if (hitChance > 0.5f)
 		{
 			StartCoroutine(TrailOff(0.05f, unit.transform.position, unit.GetComponent<Unit>().JobPos.transform.position));
 			if (unit.GetComponent<Unit>().JobPos.tag == "Enemy")
@@ -452,14 +438,14 @@ public class UnitManager : MonoBehaviour
 					gameObject.GetComponent<EncampmentHandler>().BeDestroyed();
 					unit.GetComponent<Unit>().JobPos.GetComponent<Encampment>().Health -= unitDamage; //fishy
 				}
-				//Debug.Log("camp: "+gameObject.GetComponent<EncampmentHandler>().GetEncampment(hit.collider.gameObject).Health);
 			}
 		}
-	}
-	IEnumerator FireCoolDown(Unit unit_data)
+        StartCoroutine(FireCoolDown(hitChance,unit.GetComponent<Unit>()));
+    }
+	IEnumerator FireCoolDown(float extratime, Unit unit_data)
 	{
 		unit_data.JustShot = true;
-		yield return new WaitForSeconds(unitFireCooldown);
+		yield return new WaitForSeconds(unitFireCooldown+extratime/2);
 		unit_data.JustShot = false;
 	}
 
@@ -467,9 +453,9 @@ public class UnitManager : MonoBehaviour
 	{
 		if (unit.GetComponent<Unit>().Health <= 0)
 		{
-			PlayClip("dead");
-            unit.GetComponent<NavMeshAgent>().enabled = false;
             SetAnimation(unit, "knockedOut", true);
+            PlayClip("dead");
+            unit.GetComponent<NavMeshAgent>().enabled = false;
             SetAnimation(unit, "inCombat", false);
 			if (selectedUnits.Contains(unit))
 			{
@@ -532,7 +518,7 @@ public class UnitManager : MonoBehaviour
         Vector3 dif = (start - end) / 2;
         Quaternion angle = Quaternion.LookRotation(start - end);
 
-        GameObject trail = poolDictionary["trails"].Dequeue();
+        GameObject trail = spawnPool.poolDictionary["trails"].Dequeue();
         trail.transform.position = start-dif;
         trail.transform.rotation = angle*offset;
         trail.SetActive(true);
@@ -545,7 +531,7 @@ public class UnitManager : MonoBehaviour
     {
         GameObject t = BulletTrail(start, end);
         yield return new WaitForSeconds(time);
-        poolDictionary["trails"].Enqueue(t);
+        spawnPool.poolDictionary["trails"].Enqueue(t);
         t.SetActive(false);
     }
 

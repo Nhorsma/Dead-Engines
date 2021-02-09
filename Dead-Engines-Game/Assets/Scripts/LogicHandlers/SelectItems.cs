@@ -92,7 +92,7 @@ public class SelectItems : MonoBehaviour
                 if (!hasCreatedSquare)
                 {
                     ClearAll();
-                    if (hit.collider.CompareTag("Friendly") && !UnitManager.selectedUnits.Contains(hit.collider.gameObject))
+                    if (hit.collider.CompareTag("Friendly") && !UnitManager.selectedUnits.Contains(hit.collider.gameObject) && hit.collider.gameObject.activeInHierarchy)
                     {
                         UnitManager.selectedUnits.Add(hit.collider.gameObject);
                         SetColor(hit.collider.gameObject, false);
@@ -240,7 +240,7 @@ public class SelectItems : MonoBehaviour
             GameObject currentUnit = unitManager.units[i];
 
             //Is this unit within the square
-            if (InRect(currentUnit.transform.position))
+            if (InRect(currentUnit.transform.position) && currentUnit.activeInHierarchy)
             {
                 //currentUnit.GetComponentInChildren<SpriteRenderer>().color = selectedC;
                 SetColor(currentUnit, false);

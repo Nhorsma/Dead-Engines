@@ -741,7 +741,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3317151071574080539}
-  m_Layer: 0
+  - component: {fileID: 422528171038667338}
+  m_Layer: 10
   m_Name: group
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -763,6 +764,19 @@ Transform:
   m_Father: {fileID: 6813602559741904008}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &422528171038667338
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5921778902960557441}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.8079245, y: 0.02, z: 0.8210806}
+  m_Center: {x: -0.0020422172, y: 0.03, z: -0.0022660063}
 --- !u!1 &5989104355435704309
 GameObject:
   m_ObjectHideFlags: 0
@@ -773,7 +787,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4267196287222089947}
   - component: {fileID: 8778059610065353257}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: pasted__pasted__polySurface3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -895,6 +909,7 @@ GameObject:
   - component: {fileID: 6414390379043460318}
   - component: {fileID: 6414390379043460316}
   - component: {fileID: -260538662889423389}
+  - component: {fileID: 3369396668634318040}
   m_Layer: 0
   m_Name: gunner
   m_TagString: Enemy
@@ -931,7 +946,7 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 34.89, y: 3.0574927, z: 40.93}
+  m_Size: {x: 5.22, y: 3.0574927, z: 5.64}
   m_Center: {x: -0.01960373, y: 1.3930118, z: 0.065416336}
 --- !u!95 &6414390379043460318
 Animator:
@@ -986,6 +1001,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 783f45c7ccdcd9245a74006851fc02af, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!54 &3369396668634318040
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6180372181544574514}
+  serializedVersion: 2
+  m_Mass: 0.0000001
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 0
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!1 &6197373703354482025
 GameObject:
   m_ObjectHideFlags: 0
@@ -1554,7 +1585,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2388066369896946966}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: pasted__Unit
   m_TagString: Untagged
   m_Icon: {fileID: 0}

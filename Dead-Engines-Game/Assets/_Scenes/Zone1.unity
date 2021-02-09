@@ -6799,6 +6799,7 @@ MonoBehaviour:
   resourceHandling: {fileID: 467610735}
   enemyHandler: {fileID: 467610734}
   encampmentHandler: {fileID: 467610733}
+  spawnPool: {fileID: 1102157339}
   robotPos: {x: 10, y: 3, z: 8}
   robot: {fileID: 5905536743914566335}
   startingUnits: 3
@@ -6810,11 +6811,6 @@ MonoBehaviour:
   shootingDistance: 75
   unitDamage: 0
   unitFireCooldown: 1
-  pools:
-  - tag: trails
-    prefab: {fileID: 5961106698798059313, guid: 60dc6924f9da7974f84019a57441fa3d,
-      type: 3}
-    size: 10
   downTime: 5
   goingClip1: {fileID: 8300000, guid: 7c5852769ae1a8542b517f5684cc949d, type: 3}
   goingClip2: {fileID: 8300000, guid: 497a967409f647b49bed041dc65ae899, type: 3}
@@ -6870,6 +6866,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   automoton: {fileID: 5905536743914566335}
+  spawnPool: {fileID: 1102157339}
   enemies: []
   stoppingDistance: 30
   shootingRange: 40
@@ -15792,6 +15789,7 @@ GameObject:
   - component: {fileID: 1102157337}
   - component: {fileID: 1102157338}
   - component: {fileID: 1102157336}
+  - component: {fileID: 1102157339}
   m_Layer: 0
   m_Name: Logic
   m_TagString: Untagged
@@ -15904,6 +15902,23 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   spawnRes: {fileID: 1102157336}
+--- !u!114 &1102157339
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1102157334}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2c573fcdd309ef443910f141b68ffee3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  pools:
+  - tag: trails
+    prefab: {fileID: 5961106698798059313, guid: 60dc6924f9da7974f84019a57441fa3d,
+      type: 3}
+    size: 5
 --- !u!1 &1107264130
 GameObject:
   m_ObjectHideFlags: 0

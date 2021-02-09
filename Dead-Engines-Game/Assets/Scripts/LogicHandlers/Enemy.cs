@@ -102,7 +102,7 @@ public class Enemy : MonoBehaviour
         set { camp = value; }
     }
 
-    private void OnTriggerEnter(Collider other)
+    protected void OnTriggerEnter(Collider other)
     {
         if(other.gameObject.tag=="Friendly")
         {
@@ -110,7 +110,7 @@ public class Enemy : MonoBehaviour
         }
     }
 
-    private void OnTriggerExit(Collider other)
+    protected void OnTriggerExit(Collider other)
     {
         if (other.gameObject.tag == "Friendly")
         {

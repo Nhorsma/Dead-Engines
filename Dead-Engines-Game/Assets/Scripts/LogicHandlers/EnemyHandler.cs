@@ -9,6 +9,7 @@ public class EnemyHandler : MonoBehaviour
     UnitManager unitManager;
     EncampmentHandler encampmentHandler;
     public GameObject automoton;
+    public SpawningPoolController spawnPool;
 
     public List<GameObject> enemies;
 
@@ -118,7 +119,6 @@ public class EnemyHandler : MonoBehaviour
             {
                 AssignAnimation(enemy, "firing", true);
                 Fire(enemy, enemy_data);
-                StartCoroutine(FireCoolDown(enemy_data));
             }
         }
     }
@@ -161,23 +161,26 @@ public class EnemyHandler : MonoBehaviour
 	{
 		if (enemy_data.Target != null)
 		{
-			Vector3 direction = enemy_data.Target.transform.position - enemy.transform.position;
+            float hitChance = Random.Range(0f, 2f);
+
+            Vector3 direction = enemy_data.Target.transform.position - enemy.transform.position;
 			PlayClip(enemy_data.Camp, "shoot");
             AssignAnimation(enemy, "firing", true);
             StartCoroutine(TrailOff(0.05f, enemy.transform.position, enemy_data.Target.transform.position));
-
-			int hitChance = Random.Range(0, 2);
-			if (hitChance == 0)
+	
+			if (hitChance>0.5f)
 			{
 				enemy_data.Target.GetComponent<Unit>().Health--;
 				unitManager.UnitDown(enemy_data.Target);
 			}
-		}
+
+            StartCoroutine(FireCoolDown(hitChance, enemy_data));
+        }
 	}
-	IEnumerator FireCoolDown(Enemy enemy_data)
+	IEnumerator FireCoolDown(float extratime, Enemy enemy_data)
     {
         enemy_data.JustShot = true;
-        yield return new WaitForSeconds(2f);
+        yield return new WaitForSeconds(1f+extratime/2);
         enemy_data.JustShot = false;
     }
 
@@ -199,11 +202,21 @@ public class EnemyHandler : MonoBehaviour
         }
     }
 
-    GameObject BulletTrail(Vector3 start, Vector3 end)
+    public GameObject BulletTrail(Vector3 start, Vector3 end)
     {
+        float x, y, z;
+        x = Random.Range(-1.2f, 1.2f);
+        y = Random.Range(-1.2f, 1.2f);
+        z = Random.Range(-1.2f, 1.2f);
+        Quaternion offset = Quaternion.Euler(x, y, z);
         Vector3 dif = (start - end) / 2;
         Quaternion angle = Quaternion.LookRotation(start - end);
-        GameObject trail = (GameObject)Instantiate(Resources.Load("BulletTrail"), start - dif, angle);
+
+        GameObject trail = spawnPool.poolDictionary["trails"].Dequeue();
+        trail.transform.position = start - dif;
+        trail.transform.rotation = angle * offset;
+        trail.SetActive(true);
+        //GameObject trail = (GameObject)Instantiate(Resources.Load("BulletTrail"), start - dif, angle * offset);
 
         trail.transform.localScale = new Vector3(0.05f, 0.05f, Vector3.Distance(start, end));
         return trail;
@@ -212,7 +225,8 @@ public class EnemyHandler : MonoBehaviour
     {
         GameObject t = BulletTrail(start, end);
         yield return new WaitForSeconds(time);
-        Destroy(t);
+        spawnPool.poolDictionary["trails"].Enqueue(t);
+        t.SetActive(false);
     }
 
     void PlayClip(GameObject encampment, string str)
