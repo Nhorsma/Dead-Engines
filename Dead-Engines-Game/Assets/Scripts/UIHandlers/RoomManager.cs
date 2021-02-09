@@ -104,6 +104,14 @@ public class RoomManager : MonoBehaviour
 			setupRoom.Setup(rooms[roomSlotClicked]);
 			PlayClip("wrench");
 		}
+		else if (room == "infirmary" && ResourceHandling.metal >= 10 && ResourceHandling.electronics >= 10)
+		{
+			ResourceHandling.metal -= 10;
+			ResourceHandling.electronics -= 10;
+			rooms[roomSlotClicked] = new Infirmary(roomSlotClicked, 1);
+			setupRoom.Setup(rooms[roomSlotClicked]);
+			PlayClip("wrench");
+		}
 		else
 		{
 			Debug.Log("Not enough resources to build a " + room + ".");
@@ -115,46 +123,79 @@ public class RoomManager : MonoBehaviour
 	//doing twice for shrine & study?
 	public void Assign(string roomType, int slot)
 	{
-		if (unitManager.ReturnJoblessUnit() == null)
+		if (roomType != "infirmary")
 		{
-			Debug.Log("No worker available");
-			return;
-		}
-		else
-		{
-			GameObject unit = unitManager.ReturnJoblessUnit();
-
-			if (rooms[slot].Workers.Count < rooms[slot].WorkerCapacity)
+			if (unitManager.ReturnJoblessUnit() == null)
 			{
-				unit.GetComponent<Unit>().Job = roomType;
-				unit.GetComponent<Unit>().JobPos = autoObj;
-				unitManager.SetJobFromRoom(unit, roomType);
-				rooms[slot].Workers.Add(unit);
-				setupRoom.roomComponents[slot].capacity.text = rooms[slot].Workers.Count.ToString() + " / " + rooms[slot].WorkerCapacity.ToString();
-
-				switch (roomType)
-				{
-					case "refinery":
-						Produce();
-						break;
-					case "shrine":
-						Worship();
-						break;
-					case "study":
-						Research();
-						break;
-				}
-
-				Debug.Log("Assigned [" + unit.GetComponent<Unit>().UnitName + "] to[" + roomType + "][" + slot + "]");
+				Debug.Log("No worker available");
+				return;
 			}
 			else
 			{
-				Debug.Log("Room is full");
+				GameObject unit = unitManager.ReturnJoblessUnit();
+
+				if (rooms[slot].Workers.Count < rooms[slot].WorkerCapacity)
+				{
+					unit.GetComponent<Unit>().Job = roomType;
+					unit.GetComponent<Unit>().JobPos = autoObj;
+					unitManager.SetJobFromRoom(unit, roomType);
+					rooms[slot].Workers.Add(unit);
+					setupRoom.roomComponents[slot].capacity.text = rooms[slot].Workers.Count.ToString() + " / " + rooms[slot].WorkerCapacity.ToString();
+
+					switch (roomType)
+					{
+						case "refinery":
+							Produce();
+							break;
+						case "shrine":
+							Worship();
+							break;
+						case "study":
+							Research();
+							break;
+					}
+
+					Debug.Log("Assigned [" + unit.GetComponent<Unit>().UnitName + "] to[" + roomType + "][" + slot + "]");
+				}
+				else
+				{
+					Debug.Log("Room is full");
+					return;
+				}
+			}
+		}
+		else if (roomType == "infirmary")
+		{
+			if (unitManager.ReturnJoblessUnit() == null) //ReturnKnockedOutUnit()
+			{
+				Debug.Log("No knocked out units available");
 				return;
+			}
+			else
+			{
+				GameObject unit = unitManager.ReturnJoblessUnit(); //ReturnKnockedOutUnit()
+
+				if (rooms[slot].Workers.Count < rooms[slot].WorkerCapacity)
+				{
+					//assign to this room
+					unit.GetComponent<Unit>().Job = roomType;
+					unit.GetComponent<Unit>().JobPos = autoObj;
+					unitManager.SetJobFromRoom(unit, roomType);
+					rooms[slot].Workers.Add(unit);
+					setupRoom.roomComponents[slot].capacity.text = rooms[slot].Workers.Count.ToString() + " / " + rooms[slot].WorkerCapacity.ToString();
+
+					Debug.Log("Assigned [" + unit.GetComponent<Unit>().UnitName + "] to[" + roomType + "][" + slot + "]");
+				}
+				else
+				{
+					Debug.Log("Room is full");
+					return;
+				}
 			}
 		}
 	}
 
+	//add infirmary stuff
 	public void Unassign(string roomType, int slot)
 	{
 		if (rooms[slot].Workers.Count == 0)
@@ -312,6 +353,12 @@ public class RoomManager : MonoBehaviour
 		{
 			Debug.Log("You do not have " + howMany + " " + what + ".");
 		}
+	}
+
+	public void Bedrest(int slot)
+	{
+		Assign("infirmary", slot);
+		
 	}
 
 	// need to clean

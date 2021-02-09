@@ -29,6 +29,9 @@ public class SetupRoom : MonoBehaviour
 	public List<string> studyEffectKeys;
 	public List<string> studyEffectDescs;
 
+	public List<Text> infirmaryEntries;
+	public List<Text> infirmaryDescs;
+
 	void Start()
     {
         
@@ -73,6 +76,11 @@ public class SetupRoom : MonoBehaviour
 				case "study":
 					SetupStudy(slot);
 					roomManager.Research();
+					break;
+				case "infirmary":
+					roomComponents[slot].assign.gameObject.SetActive(false);
+					roomComponents[slot].unassign.gameObject.SetActive(false);
+					SetupInfirmary(slot);
 					break;
 			}
 		}
@@ -208,6 +216,26 @@ public class SetupRoom : MonoBehaviour
 
 		//rooms[slot].ActiveEffect = "none";
 		roomManager.Research();
+	}
+
+	public void SetupInfirmary(int slot)
+	{
+		GameObject scrollerContent = roomComponents[slot].scroller.GetComponent<ScrollRect>().content.gameObject;
+		scrollerContent.GetComponent<GridLayoutGroup>().constraintCount = 2;
+		scrollerContent.GetComponent<GridLayoutGroup>().cellSize = new Vector2(112.5f, 50);
+
+		for (int i = 0; i < roomManager.rooms[slot].WorkerCapacity; i++) //3 entries : bed 0, 1, 2
+		{
+			Instantiate(infirmaryEntries[0], scrollerContent.transform); // bed 0-2
+
+			Instantiate(infirmaryDescs[0], scrollerContent.transform); // bedrest() -> refreshes the room
+		}
+
+		//findSick button here
+
+		roomComponents[slot].scroller.gameObject.SetActive(true);
+
+		LeftOrRight(slot, 1); //change 1 to 4 later 
 	}
 
 	public void LeftOrRight(int slot, int spriteInList)
