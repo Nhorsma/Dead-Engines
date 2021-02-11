@@ -172,31 +172,25 @@ public class UnitManager : MonoBehaviour
 				else if (unit_data.Job == "shrine" || unit_data.Job == "refinery"
 					|| unit_data.Job == "storage" || unit_data.Job == "study")
 				{
-                    /*
-					float jx = u.transform.position.x; //
-					float jz = u.transform.position.z; //
-					if (Mathf.Abs(jx - unit_data.JobPos.transform.position.x) < 1f && Mathf.Abs(jz - unit_data.JobPos.transform.position.z) < 1f)
-					{
-						u.SetActive(false);
-					}
-                    */
                     if(Vector3.Distance(u.transform.position,robotPos)<10f)
                     {
                         u.SetActive(false);
                     }
 				}
-				else if (unit_data.Job == "dead")
-				{
-					if (unit_data.CanSpawn)
-					{
-						unit_data.Health = 3; //
-						unit_data.Job = "none";
-						u.SetActive(true);
-						//TravelTo(GetUnitObject(unit), robotPos + new Vector3(-stoppingDistance*1.5f, 0, -stoppingDistance*1.5f), false, true);
-						u.transform.position = robotPos + new Vector3(-stoppingDistance + Random.Range(-3, 3), 0, -stoppingDistance + Random.Range(-3, 3));
-						unit_data.CanSpawn = false;
-					}
-				}
+                else if(unit_data.Job == "dead")
+                {
+                    if(unit_data.CanSpawn)
+                    {
+                        u.transform.position = robotPos + new Vector3(-stoppingDistance + Random.Range(-3, 3), 0, -stoppingDistance + Random.Range(-3, 3));
+                        SetAnimation(u, "knockedOut", false);
+                        u.GetComponent<NavMeshAgent>().enabled = true;
+                        u.SetActive(true);
+                        unit_data.Health = 3;
+                        unit_data.Job = "none";
+                        unit_data.CanSpawn = false;
+                        ReadyClip();
+                    }
+                }
 				else
 				{
 					//
@@ -333,7 +327,7 @@ public class UnitManager : MonoBehaviour
 
 	public void TravelTo(GameObject unit, Vector3 place, bool stop, bool randomize)
 	{
-		if (unit.activeSelf == true && unit.GetComponent<NavMeshAgent>() != null)
+		if (unit.activeSelf == true && unit.GetComponent<NavMeshAgent>() != null && unit.GetComponent<NavMeshAgent>().isActiveAndEnabled)
 		{
 			NavMeshAgent nav = unit.GetComponent<NavMeshAgent>();
             SetAnimation(unit, "walking", true);
@@ -455,12 +449,11 @@ public class UnitManager : MonoBehaviour
 		{
             SetAnimation(unit, "knockedOut", true);
             PlayClip("dead");
-            unit.GetComponent<NavMeshAgent>().enabled = false;
             SetAnimation(unit, "inCombat", false);
-			if (selectedUnits.Contains(unit))
-			{
-				selectItems.RemoveSpecific(unit);
-			}
+            unit.GetComponent<NavMeshAgent>().enabled = false;
+            unit.GetComponent<Unit>().Job = "dead";
+            unit.GetComponent<Unit>().JobPos = null;
+
             StartCoroutine(WaitToDespawn(unit));
         }
 	}
@@ -468,24 +461,23 @@ public class UnitManager : MonoBehaviour
     IEnumerator WaitToDespawn(GameObject unit)
     {
         yield return new WaitForSeconds(5f);
-        unit.GetComponent<Unit>().Job = "dead";
-        unit.GetComponent<Unit>().JobPos = null;
 
+        if (selectedUnits.Contains(unit))
+        {
+            selectItems.RemoveSpecific(unit);
+        }
         StartCoroutine(WaitToRespawn(unit));
+
     }
 
 	IEnumerator WaitToRespawn(GameObject unit)
     {
-        if (!unit.GetComponent<Unit>().CanSpawn)
-        {
-            unit.SetActive(false);
-            unit.transform.position = robotPos;
-            yield return new WaitForSeconds(downTime);
-            SetAnimation(unit, "knockedOut", false);
-            unit.GetComponent<Unit>().CanSpawn = true;
-            unit.GetComponent<NavMeshAgent>().enabled = true;
-            ReadyClip();
-        }
+        Unit unit_data = unit.GetComponent<Unit>();
+        unit.SetActive(false);
+        unit.transform.position = robotPos;
+        yield return new WaitForSeconds(downTime);
+
+        unit.GetComponent<Unit>().CanSpawn = true;
     }
 
 	int GetResourceID(GameObject clickedObj)
@@ -522,7 +514,6 @@ public class UnitManager : MonoBehaviour
         trail.transform.position = start-dif;
         trail.transform.rotation = angle*offset;
         trail.SetActive(true);
-        //GameObject trail = (GameObject)Instantiate(Resources.Load("BulletTrail"), start - dif, angle * offset);
 
         trail.transform.localScale = new Vector3(0.05f, 0.05f, Vector3.Distance(start, end));
         return trail;

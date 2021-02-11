@@ -6811,7 +6811,7 @@ MonoBehaviour:
   shootingDistance: 75
   unitDamage: 0
   unitFireCooldown: 1
-  downTime: 5
+  downTime: 15
   goingClip1: {fileID: 8300000, guid: 7c5852769ae1a8542b517f5684cc949d, type: 3}
   goingClip2: {fileID: 8300000, guid: 497a967409f647b49bed041dc65ae899, type: 3}
   confirmPing: {fileID: 8300000, guid: a8cef582cb23de74cab8c8e9b3cad780, type: 3}
@@ -6837,6 +6837,7 @@ MonoBehaviour:
   unitManager: {fileID: 467610732}
   spawnRes: {fileID: 1102157336}
   resourceHandling: {fileID: 467610735}
+  automaton: {fileID: 5905536743914566335}
   startSpawnTime: 0
   spawnTime: 10
   spawnDistance: 5

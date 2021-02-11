@@ -159,7 +159,7 @@ public class EnemyHandler : MonoBehaviour
 
 	void Fire(GameObject enemy, Enemy enemy_data)
 	{
-		if (enemy_data.Target != null)
+		if (enemy_data.Target != null && enemy_data.Target.GetComponent<Unit>().Health>0)
 		{
             float hitChance = Random.Range(0f, 2f);
 
@@ -172,11 +172,14 @@ public class EnemyHandler : MonoBehaviour
 			{
 				enemy_data.Target.GetComponent<Unit>().Health--;
 				unitManager.UnitDown(enemy_data.Target);
-			}
+
+                if (enemy_data.Target.GetComponent<Unit>().Health <= 0)
+                    enemy.GetComponent<Enemy>().Target = null;
+            }
 
             StartCoroutine(FireCoolDown(hitChance, enemy_data));
         }
-	}
+    }
 	IEnumerator FireCoolDown(float extratime, Enemy enemy_data)
     {
         enemy_data.JustShot = true;

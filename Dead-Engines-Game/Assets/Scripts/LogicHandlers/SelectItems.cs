@@ -15,12 +15,12 @@ public class SelectItems : MonoBehaviour
     public Material highlightMaterial;
     public Material selectedMaterial;
 
-    Color normalC = new Color32(0, 100, 100, 100);
-    Color highLightedC = new Color32(255, 0, 255, 100);
-    Color selectedC = new Color32(255, 255, 0, 100);
-    Color enemyRed = new Color32(207, 67, 74, 100);
-    Color resourceGreen = new Color32(69, 207, 69, 100);
-    Color selectedYellow = new Color32(255, 255, 0, 100);
+    Color normalC = new Color32(250, 250, 250, 200);
+    Color highLightedC = new Color32(255, 0, 255, 200);
+    Color selectedC = new Color32(255, 255, 0, 200);
+    Color enemyRed = new Color32(207, 67, 74, 200);
+    Color resourceGreen = new Color32(69, 207, 69, 200);
+    Color selectedYellow = new Color32(255, 255, 0, 200);
 
     GameObject highlightThisUnit;
     public GameObject g1, g2; 

@@ -14,6 +14,7 @@ public class EncampmentHandler : MonoBehaviour
     public UnitManager unitManager;
     public SpawnRes spawnRes;
     public ResourceHandling resourceHandling;
+    public GameObject automaton;
 
     public float startSpawnTime,spawnTime, spawnDistance; //
     public bool startSpawning;
@@ -118,10 +119,11 @@ public class EncampmentHandler : MonoBehaviour
         PlayClip(encampment.Obj, "attack");
         CheckDeployment(encampment);
         GameObject enemyObj = new GameObject();
+        Vector3 autoPos = automaton.transform.position;
 
         for (int i=0;i<encampment.Deployment.Length;i++)
         {
-            Vector3 spawnPlace = encampments[encampment.Id].Obj.transform.position + new Vector3(Random.Range(1, 5), 0, Random.Range(1, 5));
+            Vector3 spawnPlace = encampments[encampment.Id].Obj.transform.position;
             enemyObj = (GameObject)Instantiate(Resources.Load(encampment.Deployment[i]), spawnPlace, transform.rotation);
 
             enemyObj.GetComponent<Enemy>().Resource = encampment.ClosestResource;
