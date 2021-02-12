@@ -15919,7 +15919,7 @@ MonoBehaviour:
   - tag: trails
     prefab: {fileID: 5961106698798059313, guid: 60dc6924f9da7974f84019a57441fa3d,
       type: 3}
-    size: 5
+    size: 10
 --- !u!1 &1107264130
 GameObject:
   m_ObjectHideFlags: 0

@@ -91,6 +91,22 @@ public class EncampmentHandler : MonoBehaviour
 		}
 	}
 
+
+    public void SetEnemyJobs(GameObject encampment)
+    {
+        Encampment encampment_data = encampment.GetComponent<Encampment>();
+        if(encampment_data.Health > 80) //startinghealth/2 normally
+        {
+            encampment.GetComponent<Encampment>().EnemyJobs = "guard";
+        }
+        else
+        {
+            encampment.GetComponent<Encampment>().EnemyJobs = "destroy";
+        }
+    }
+
+
+
     /// <summary>
     /// UTILITY FUNCTIONS --------------------------------------------------------------------------------------------------------------------------->
     /// </summary>
@@ -110,7 +126,9 @@ public class EncampmentHandler : MonoBehaviour
             {
                 encampment.Chance++;
             }
+            return;
         }
+        SetEnemyJobs(encampment.Obj);
     }
 
 
@@ -127,7 +145,8 @@ public class EncampmentHandler : MonoBehaviour
             enemyObj = (GameObject)Instantiate(Resources.Load(encampment.Deployment[i]), spawnPlace, transform.rotation);
 
             enemyObj.GetComponent<Enemy>().Resource = encampment.ClosestResource;
-            enemyObj.GetComponent<Enemy>().Camp = encampment.Obj;
+            enemyObj.GetComponent<Enemy>().CampObj = encampment.Obj;
+            enemyObj.GetComponent<Enemy>().CampData = encampment;
             enemyObj.GetComponent<Enemy>().Id = enemyHandler.enemies.Count;
             enemyHandler.enemies.Add(enemyObj);
             enemyHandler.FindSpot(enemyObj);

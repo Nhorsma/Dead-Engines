@@ -20,10 +20,12 @@ public class Enemy : MonoBehaviour
 
 	private float fireSpeed = 1f; // fishy
 	private bool justShot = false;
+    private string job = "";
 
 	private GameObject target = null;
 	private GameObject resource = null;
-	private GameObject camp = null;
+	private GameObject campObj = null;
+    private Encampment campData = null;
 
 	public Enemy()
     {
@@ -36,7 +38,8 @@ public class Enemy : MonoBehaviour
 		fireSpeed = 1f;
 
 		target = null;
-		camp = null;
+		campObj = null;
+        campData = null;
 		resource = null;
     }
 
@@ -96,12 +99,23 @@ public class Enemy : MonoBehaviour
         set { resource = value; }
     }
 
-    public GameObject Camp
+    public GameObject CampObj
     {
-        get { return camp; }
-        set { camp = value; }
+        get { return campObj; }
+        set { campObj = value; }
     }
 
+    public Encampment CampData
+    {
+        get { return campData; }
+        set { campData = value; }
+    }
+
+    public string Job
+    {
+        get { return job; }
+        set { job = value; }
+    }
 
     protected void OnTriggerEnter(Collider other)
     {

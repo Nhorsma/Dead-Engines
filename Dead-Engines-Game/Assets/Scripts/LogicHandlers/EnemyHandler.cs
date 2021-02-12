@@ -18,12 +18,15 @@ public class EnemyHandler : MonoBehaviour
     public AudioSource audioSource;
     public AudioClip attackClip1, attackClip2, dieClip1, dieClip2, shootClip;
 
+    Vector3 robotPos;
+
     private void Start()
     {
         unitManager = GetComponent<UnitManager>();	// fishy
         enemies = new List<GameObject>();
         spawnResources = GetComponent<SpawnRes>();	// fishy
-        encampmentHandler = GetComponent<EncampmentHandler>();	// fishy
+        encampmentHandler = GetComponent<EncampmentHandler>();  // fishy
+        robotPos = new Vector3(automoton.transform.position.x, 0, automoton.transform.position.z);
     }
 
     private void Update()
@@ -45,23 +48,32 @@ public class EnemyHandler : MonoBehaviour
             Enemy enemy_data = e.GetComponent<Enemy>();
             if (enemy_data.Health <= 0)
             {
-                PlayClip(enemy_data.Camp, "die");
+                PlayClip(enemy_data.CampObj, "die");
                 enemies.Remove(e);
                 Destroy(e);
-                enemy_data.Camp.GetComponent<Encampment>().OnField--; // fishy
+                enemy_data.CampData.OnField--; // fishy
                 break;
             }
-            else if(unitsTresspassing(enemy_data.Camp)!=null)   //a unit is tresspassing
+            if(enemy_data.CampData.EnemyJobs=="guard")
+            {
+                if (unitsTresspassing(enemy_data.CampObj) != null)
+                {
+                    if (enemy_data.Target == null)
+                        TravelTo(e, unitsTresspassing(enemy_data.CampObj).transform.position, true, true);
+                    else
+                        AttackUnit(e);
+                }
+                else
+                {
+                    FindSpot(e);
+                }
+            }
+            else if(enemy_data.CampData.EnemyJobs=="destroy")
             {
                 if (enemy_data.Target == null)
-                    TravelTo(e, unitsTresspassing(enemy_data.Camp).transform.position, true, true);
+                    AttackRobot(e);
                 else
                     AttackUnit(e);
-            }
-            else if(enemy_data.Camp.GetComponent<Encampment>().Health > 50 
-                || enemy_data.Camp.GetComponent<Encampment>().Health < 25)
-            {
-                ProtectEncampment(e);
             }
             else
             {
@@ -70,22 +82,18 @@ public class EnemyHandler : MonoBehaviour
         }
     }
 
-
-    public GameObject unitsTresspassing(GameObject encampment)
+    GameObject unitsTresspassing(GameObject encampment)
     {
-        foreach (GameObject unit in unitManager.units)
+        foreach(GameObject u in unitManager.units)
         {
-            if (encampment == null || encampment.GetComponent<Encampment>().ClosestResource == null)
-                return null;
-            else if(Vector3.Distance(unit.transform.position, encampment.GetComponent<Encampment>().ClosestResource.transform.position) < tresspassingRange
-                || Vector3.Distance(unit.transform.position, encampment.transform.position) < tresspassingRange)
+            if(Vector3.Distance(u.transform.position,encampment.transform.position)<tresspassingRange
+                || Vector3.Distance(u.transform.position, encampment.GetComponent<Encampment>().ClosestResource.transform.position) < tresspassingRange)
             {
-                return unit;
+                return u;
             }
         }
         return null;
     }
-
 
 	/*
 	 * i was hoping i wouldn't have to loop through every friendly game object to see if they were in range...
@@ -105,9 +113,10 @@ public class EnemyHandler : MonoBehaviour
     void AttackUnit(GameObject enemy)
     {
         Enemy enemy_data = enemy.GetComponent<Enemy>();
-        if (enemy==null || enemy_data.Target == null ||enemy_data.Target.GetComponent<Unit>().Health<=0)
+        if (enemy==null || enemy_data.Target == null || enemy_data.Target.GetComponent<Unit>().Health<=0)
 		{
             AssignAnimation(enemy, "inCombat", false);
+            enemy_data.Target = null;
             return;
         }
         AssignAnimation(enemy, "inCombat", true);
@@ -125,12 +134,9 @@ public class EnemyHandler : MonoBehaviour
 
     public void AttackRobot(GameObject enemy_object)
     {
-        TravelTo(enemy_object, automoton.transform.position, true, true);
-
-        if(enemy_object.GetComponent<Enemy>().Target == null && enemy_object.GetComponent<NavMeshAgent>().acceleration<0.1f)
+        if (enemy_object.GetComponent<Enemy>().Target == null)
         {
-            //attack robot, maybe start lobbing grenades or something
-            //slowly increments down robot health or damages rooms
+            TravelTo(enemy_object, robotPos, true, true);
         }
     }
 
@@ -148,7 +154,7 @@ public class EnemyHandler : MonoBehaviour
             else
             {
                 Vector3 rand = new Vector3(Random.Range(-3, 3), Random.Range(-3, 3), Random.Range(-3, 3));
-                TravelTo(enemy, enemy.GetComponent<Enemy>().Camp.transform.position + rand, true, false);
+                TravelTo(enemy, enemy.GetComponent<Enemy>().CampObj.transform.position + rand, true, false);
             }
         }
 	}
@@ -164,7 +170,7 @@ public class EnemyHandler : MonoBehaviour
             float hitChance = Random.Range(0f, 2f);
 
             Vector3 direction = enemy_data.Target.transform.position - enemy.transform.position;
-			PlayClip(enemy_data.Camp, "shoot");
+			PlayClip(enemy_data.CampObj, "shoot");
             AssignAnimation(enemy, "firing", true);
             StartCoroutine(TrailOff(0.05f, enemy.transform.position, enemy_data.Target.transform.position));
 	
@@ -191,6 +197,7 @@ public class EnemyHandler : MonoBehaviour
     {
         if (enemy != null && enemy.GetComponent<NavMeshAgent>() != null)
         {
+            Debug.Log("lets ago");
             NavMeshAgent nav = enemy.GetComponent<NavMeshAgent>();
             if (stop)
 			{

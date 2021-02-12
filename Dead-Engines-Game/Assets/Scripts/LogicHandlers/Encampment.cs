@@ -11,6 +11,7 @@ public class Encampment : MonoBehaviour
 	private int health = 100;
 	private int chance = 0;
 	private int onField = 0;
+    private string enemyJobs = null;
     private GameObject closestResource = null;
     private GameObject obj;
 
@@ -23,6 +24,7 @@ public class Encampment : MonoBehaviour
         onField = 0;
         playerInRange = false;
         deployment = new string[] {};
+        enemyJobs = "guard";
     }
 
     public Encampment()
@@ -88,6 +90,12 @@ public class Encampment : MonoBehaviour
     {
         get { return obj; }
         set { obj = value; }
+    }
+
+    public string EnemyJobs
+    {
+        get { return enemyJobs; }
+        set { enemyJobs = value; }
     }
 
 
