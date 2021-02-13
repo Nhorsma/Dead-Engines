@@ -194,7 +194,9 @@ public class EncampmentHandler : MonoBehaviour
             else
                 deployment[1] = enemy_model2.name;
         }
+        
         encampment_data.Deployment = deployment;
+        
     }
 
 
