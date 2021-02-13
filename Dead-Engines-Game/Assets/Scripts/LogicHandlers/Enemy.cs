@@ -119,7 +119,7 @@ public class Enemy : MonoBehaviour
 
     protected void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.tag == "Friendly")
+        if (other.gameObject.tag == "Friendly" || other.gameObject.tag=="Robot")
         {
             target = other.gameObject;
         }
@@ -127,7 +127,7 @@ public class Enemy : MonoBehaviour
 
     protected void OnTriggerUpdate(Collider other)
     {
-        if (other.gameObject.tag == "Friendly")
+        if (other.gameObject.tag == "Friendly" || other.gameObject.tag == "Robot")
         {
             target = other.gameObject;
         }
@@ -135,7 +135,7 @@ public class Enemy : MonoBehaviour
 
     protected void OnTriggerExit(Collider other)
     {
-        if (other.gameObject.tag == "Friendly")
+        if (other.gameObject.tag == "Friendly" || other.gameObject.tag == "Robot")
         {
             target = null;
         }

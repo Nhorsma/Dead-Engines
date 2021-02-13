@@ -70,10 +70,10 @@ public class EnemyHandler : MonoBehaviour
             }
             else if(enemy_data.CampData.EnemyJobs=="destroy")
             {
-                if (enemy_data.Target == null)
-                    AttackRobot(e);
-                else
+                if (enemy_data.Target != null && enemy_data.Target.tag == "Friendly")
                     AttackUnit(e);
+                else
+                    AttackRobot(e);
             }
             else
             {
@@ -126,7 +126,6 @@ public class EnemyHandler : MonoBehaviour
             //shooting
             if (!enemy_data.JustShot)
             {
-                AssignAnimation(enemy, "firing", true);
                 Fire(enemy, enemy_data);
             }
         }
@@ -137,6 +136,10 @@ public class EnemyHandler : MonoBehaviour
         if (enemy_object.GetComponent<Enemy>().Target == null)
         {
             TravelTo(enemy_object, robotPos, true, true);
+        }
+        else if(!enemy_object.GetComponent<Enemy>().JustShot)
+        {
+            Fire(enemy_object, enemy_object.GetComponent<Enemy>());
         }
     }
 
@@ -165,30 +168,43 @@ public class EnemyHandler : MonoBehaviour
 
 	void Fire(GameObject enemy, Enemy enemy_data)
 	{
-		if (enemy_data.Target != null && enemy_data.Target.GetComponent<Unit>().Health>0)
+		if (enemy_data.Target != null)
 		{
-            float hitChance = Random.Range(0f, 2f);
+            float hitChance = 1;
+            if (enemy_data.Target.tag == "Friendly" && enemy_data.Target.GetComponent<Unit>().Health > 0)
+            {
+                hitChance = Random.Range(0f, 2f);
+                Vector3 targetPos = new Vector3(enemy_data.Target.transform.position.x, 1, enemy_data.Target.transform.position.z);
+                Vector3 direction = targetPos - enemy.transform.position;
 
-            Vector3 direction = enemy_data.Target.transform.position - enemy.transform.position;
-			PlayClip(enemy_data.CampObj, "shoot");
-            AssignAnimation(enemy, "firing", true);
-            StartCoroutine(TrailOff(0.05f, enemy.transform.position, enemy_data.Target.transform.position));
-	
-			if (hitChance>0.5f)
-			{
-				enemy_data.Target.GetComponent<Unit>().Health--;
-				unitManager.UnitDown(enemy_data.Target);
+                PlayClip(enemy_data.CampObj, "shoot");
+                AssignAnimation(enemy, "firing", true);
+                StartCoroutine(TrailOff(0.05f, enemy.transform.position, enemy_data.Target.transform.position));
 
-                if (enemy_data.Target.GetComponent<Unit>().Health <= 0)
-                    enemy.GetComponent<Enemy>().Target = null;
+                if (hitChance > 0.5f)
+                {
+                    enemy_data.Target.GetComponent<Unit>().Health--;
+                    unitManager.UnitDown(enemy_data.Target);
+
+                    if (enemy_data.Target.GetComponent<Unit>().Health <= 0)
+                        enemy.GetComponent<Enemy>().Target = null;
+                }
             }
-
+            else if(enemy_data.Target.tag=="Robot")
+            {
+                Vector3 targetPos = new Vector3(enemy_data.Target.transform.position.x, 1, enemy_data.Target.transform.position.z);
+                Vector3 direction = targetPos - enemy.transform.position;
+                PlayClip(enemy_data.CampObj, "shoot");
+                AssignAnimation(enemy, "firing", true);
+                StartCoroutine(TrailOff(0.05f, enemy.transform.position, enemy_data.Target.transform.position));
+            }
             StartCoroutine(FireCoolDown(hitChance, enemy_data));
         }
     }
 	IEnumerator FireCoolDown(float extratime, Enemy enemy_data)
     {
         enemy_data.JustShot = true;
+        Debug.Log("Time: "+1f + extratime / 2);
         yield return new WaitForSeconds(1f+extratime/2);
         enemy_data.JustShot = false;
     }
