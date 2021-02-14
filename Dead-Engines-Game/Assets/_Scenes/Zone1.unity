@@ -6806,9 +6806,9 @@ MonoBehaviour:
   unitPrefab: {fileID: 6730369722945657225, guid: 79ae4ad0dde23774f83ee874c7458fbb,
     type: 3}
   units: []
-  stoppingDistance: 65
+  stoppingDistance: 69
   pickUpDistance: 20
-  shootingDistance: 75
+  shootingDistance: 70
   unitDamage: 0
   unitFireCooldown: 1
   downTime: 15
