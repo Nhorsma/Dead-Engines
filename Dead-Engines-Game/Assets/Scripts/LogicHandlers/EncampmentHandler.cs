@@ -95,7 +95,7 @@ public class EncampmentHandler : MonoBehaviour
     public void SetEnemyJobs(GameObject encampment)
     {
         Encampment encampment_data = encampment.GetComponent<Encampment>();
-        if(encampment_data.Health > 80) //startinghealth/2 normally
+        if(encampment_data.Health > startingHealth/2) //startinghealth/2 normally
         {
             encampment.GetComponent<Encampment>().EnemyJobs = "guard";
         }

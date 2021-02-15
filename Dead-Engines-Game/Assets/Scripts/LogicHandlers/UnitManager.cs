@@ -46,6 +46,8 @@ public class UnitManager : MonoBehaviour
 
         audioSource = Camera.main.GetComponent<AudioSource>();
         SetUpUnits(startingUnits);
+
+        Debug.Log(robotPos);
     }
 
     void Update()
@@ -180,13 +182,14 @@ public class UnitManager : MonoBehaviour
                 {
                     if (unit_data.CanSpawn)
                     {
-                        u.transform.position = robotPos + new Vector3(-stoppingDistance + Random.Range(-3, 3), 0, -stoppingDistance + Random.Range(-3, 3));
+                        u.transform.position = new Vector3(robotPos.x+3, 0, robotPos.z+3);
                         SetAnimation(u, "knockedOut", false);
                         u.GetComponent<NavMeshAgent>().enabled = true;
                         u.SetActive(true);
                         unit_data.Health = 3;
                         unit_data.Job = "none";
                         unit_data.CanSpawn = false;
+                        TravelTo(u, new Vector3(robotPos.x - 20, 0, robotPos.z - 20),false,true);
                         ReadyClip();
                     }
                 }
@@ -349,7 +352,7 @@ public class UnitManager : MonoBehaviour
 
             if (randomize)
             {
-                place += new Vector3(Random.Range(-stoppingDistance / 2, stoppingDistance / 2), 0, Random.Range(-stoppingDistance / 2, stoppingDistance / 2));
+                place += new Vector3(Random.Range(-stoppingDistance / 10, stoppingDistance / 10), 0, Random.Range(-stoppingDistance / 10, stoppingDistance / 10));
             }
 
             nav.SetDestination(place);
