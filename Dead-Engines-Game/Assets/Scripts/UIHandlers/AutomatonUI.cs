@@ -64,7 +64,7 @@ public class AutomatonUI : MonoBehaviour
 		if (!Pause.paused)
 		{
 			auto_main.SetActive(!auto_main.activeSelf);
-			top_hud.SetActive(!top_hud.activeSelf);
+			//top_hud.SetActive(!top_hud.activeSelf);
 		}
 	}
 
@@ -74,7 +74,23 @@ public class AutomatonUI : MonoBehaviour
 		{
 			t.SetActive(false);
 		}
-		tabs[0].SetActive(true);
+
+		if (auto_main.activeSelf == false && tabs[0].activeSelf == false)
+		{
+			tabs[0].SetActive(true);
+			auto_main.SetActive(true);
+		}
+		else if (auto_main.activeSelf == true && tabs[0].activeSelf == false)
+		{
+			Debug.Log("hit");
+			auto_main.SetActive(false);
+		}
+		else if (auto_main.activeSelf == true)
+		{
+			tabs[0].SetActive(false);
+			auto_main.SetActive(false);
+		}
+
 	}
 
 	public void OpenRoomsTab()
@@ -89,7 +105,22 @@ public class AutomatonUI : MonoBehaviour
 		}
 		roomManager.controllerTab.gameObject.SetActive(false);
 		roomManager.generatorTab.gameObject.SetActive(false);
-		tabs[1].SetActive(true);
+
+		if (auto_main.activeSelf == false && tabs[1].activeSelf == false)
+		{
+			tabs[1].SetActive(true);
+			auto_main.SetActive(true);
+		}
+		else if (auto_main.activeSelf == true && tabs[1].activeSelf == false)
+		{
+			Debug.Log("hit");
+			auto_main.SetActive(false);
+		}
+		else if (auto_main.activeSelf == true)
+		{
+			tabs[1].SetActive(false);
+			auto_main.SetActive(false);
+		}
 	}
 
 	public void OpenBuildTab()
