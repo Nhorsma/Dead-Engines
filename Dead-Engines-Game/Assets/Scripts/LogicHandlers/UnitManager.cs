@@ -399,6 +399,20 @@ public class UnitManager : MonoBehaviour
         }
         return null;
     }
+
+    public List<GameObject> ReturnDeadUnits()
+    {
+        List<GameObject> dead_units = new List<GameObject>();
+        foreach (GameObject u in units)
+        {
+            if (u.GetComponent<Unit>().Job == "dead")
+            {
+                dead_units.Add(u);
+            }
+        }
+        return dead_units;
+    }
+
     void ResetJob(Unit unit_data)
     {
         ResetColor(unit_data);
