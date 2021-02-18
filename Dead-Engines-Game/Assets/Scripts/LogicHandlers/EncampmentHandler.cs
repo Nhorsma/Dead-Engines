@@ -174,7 +174,7 @@ public class EncampmentHandler : MonoBehaviour
         }
 
         //default is 4 gunners
-        string[] deployment = new string[] { enemy_model1.name, enemy_model1.name, enemy_model1.name, enemy_model1.name };
+        string[] deployment = new string[] { enemy_model1.name, enemy_model1.name, enemy_model2.name, enemy_model3.name };
 
         if (resourceHandling.resourcesLeft <= 2 || encampment_data.Health < 50 || quantity < (resourceHandling.startQuantity / 2))
         {
