@@ -204,7 +204,6 @@ public class EnemyHandler : MonoBehaviour
 	IEnumerator FireCoolDown(float extratime, Enemy enemy_data)
     {
         enemy_data.JustShot = true;
-        Debug.Log("Time: "+1f + extratime / 2);
         yield return new WaitForSeconds(1f+extratime/2);
         enemy_data.JustShot = false;
     }
@@ -213,7 +212,6 @@ public class EnemyHandler : MonoBehaviour
     {
         if (enemy != null && enemy.GetComponent<NavMeshAgent>() != null)
         {
-            Debug.Log("lets ago");
             NavMeshAgent nav = enemy.GetComponent<NavMeshAgent>();
             if (stop)
 			{
