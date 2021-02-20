@@ -204,7 +204,7 @@ public class EnemyHandler : MonoBehaviour
 	IEnumerator FireCoolDown(float extratime, Enemy enemy_data)
     {
         enemy_data.JustShot = true;
-        yield return new WaitForSeconds(1f+extratime/2);
+        yield return new WaitForSeconds(enemy_data.FireSpeed+extratime/2);
         enemy_data.JustShot = false;
     }
 

@@ -23,9 +23,10 @@ public class EncampmentHandler : MonoBehaviour
     public AudioClip attackClip1, attackClip2, deathClip, destroyClip;
     public float volume;
 
-    // numbers represent xy = [% health][encampments on map]. meant to escalate
-
     public GameObject enemy_model1, enemy_model2, enemy_model3;
+    Enemy enemy_type_1 = new Enemy(5, 1, 1.5f, false);
+    Enemy enemy_type_2 = new Enemy(10, 1, 0.5f, false);
+    Enemy enemy_type_3 = new Enemy(50, 3, 3f, true);
 
     void Start()
     {
@@ -144,6 +145,13 @@ public class EncampmentHandler : MonoBehaviour
             Vector3 spawnPlace = encampments[encampment.Id].Obj.transform.position;
             enemyObj = (GameObject)Instantiate(Resources.Load(encampment.Deployment[i]), spawnPlace, transform.rotation);
 
+            Enemy new_enemy = SetEnemyDataOfSpawned(encampment.Deployment[i]);
+            Debug.Log(new_enemy);
+            enemyObj.GetComponent<Enemy>().Health = new_enemy.Health;
+            enemyObj.GetComponent<Enemy>().Damage = new_enemy.Damage;
+            enemyObj.GetComponent<Enemy>().FireSpeed = new_enemy.FireSpeed;
+            enemyObj.GetComponent<Enemy>().Armored = new_enemy.Armored;
+
             enemyObj.GetComponent<Enemy>().Resource = encampment.ClosestResource;
             enemyObj.GetComponent<Enemy>().CampObj = encampment.Obj;
             enemyObj.GetComponent<Enemy>().CampData = encampment;
@@ -197,6 +205,19 @@ public class EncampmentHandler : MonoBehaviour
         
         encampment_data.Deployment = deployment;
         
+    }
+
+    Enemy SetEnemyDataOfSpawned(string name)
+    {
+            if (name==enemy_model1.name)
+                return enemy_type_1;
+            else if (name == enemy_model2.name)
+                return enemy_type_2;
+            else if (name == enemy_model3.name)
+                return enemy_type_3;
+
+        return null;
+
     }
 
 

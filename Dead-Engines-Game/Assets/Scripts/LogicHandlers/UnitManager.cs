@@ -29,6 +29,7 @@ public class UnitManager : MonoBehaviour
     public int unitDamage;
     public float unitFireCooldown = 1f;
     public float downTime;
+    public float piercingMultiplier;
 
     AudioSource audioSource;
     public AudioClip goingClip1, goingClip2, confirmPing, deadClip, shootClip,
@@ -437,7 +438,11 @@ public class UnitManager : MonoBehaviour
                 }
                 else
                 {
-                    unit.GetComponent<Unit>().JobPos.GetComponent<Enemy>().Health -= unitDamage;
+                    if(unit.GetComponent<Unit>().JobPos.GetComponent<Enemy>().Armored &&
+                        unit.GetComponent<Unit>().Piercing)
+                        unit.GetComponent<Unit>().JobPos.GetComponent<Enemy>().Health -= (int)(unitDamage*piercingMultiplier);
+                    else
+                        unit.GetComponent<Unit>().JobPos.GetComponent<Enemy>().Health -= unitDamage;
                 }
             }
             else if (unit.GetComponent<Unit>().JobPos.tag == "Encampment")

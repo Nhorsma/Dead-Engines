@@ -8,11 +8,12 @@ public class Unit : MonoBehaviour
 	private string unitName = "u";			// unit's individual name
     private string job = "none";			// what the unit is doing
     private GameObject jobPos = null;		// where the unit is going
-    private int health = 3;					// how much damage the unit can take
+    private int health = 1000;					// how much damage the unit can take
 	private bool justDroppedOff = false;	// is the unit on the way to or from the automaton?
 	private bool justShot = false;			// has the unit fired its gun?
 	private int id = -1;                    // which unit is this?
 	private bool canSpawn = false;          // can the unit respawn?
+    private bool armorPiercing = false;
 
 	public Unit()
 	{
@@ -85,6 +86,12 @@ public class Unit : MonoBehaviour
     {
         get { return canSpawn; }
         set { canSpawn = value; }
+    }
+
+    public bool Piercing
+    {
+        get { return armorPiercing; }
+        set { armorPiercing = value; }
     }
 
 }

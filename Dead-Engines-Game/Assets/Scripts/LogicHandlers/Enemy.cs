@@ -16,7 +16,7 @@ public class Enemy : MonoBehaviour
 	private int id = -1;
 	private int health = 100;
 	private int damage = 1;
-	private int attack = 1;
+	private bool armored = false;
 
 	private float fireSpeed = 1f; // fishy
 	private bool justShot = false;
@@ -27,20 +27,36 @@ public class Enemy : MonoBehaviour
 	private GameObject campObj = null;
     private Encampment campData = null;
 
-	public Enemy()
+	public Enemy(int hp, int dmg, float shootspeed, bool isArmored)
     {
-		attack = 1;
-		damage = 1;
-		health = 100;
+        armored = isArmored;
+        damage = dmg;
+		health = hp;
         id = -1;
 
 		justShot = false;
-		fireSpeed = 1f;
+		fireSpeed = shootspeed;
 
 		target = null;
 		campObj = null;
         campData = null;
 		resource = null;
+    }
+
+    public Enemy()
+    {
+        armored = false;
+        damage = 1;
+        health = 1;
+        id = -1;
+
+        justShot = false;
+        fireSpeed = 1f;
+
+        target = null;
+        campObj = null;
+        campData = null;
+        resource = null;
     }
 
     //public Enemy(int newID)
@@ -57,10 +73,10 @@ public class Enemy : MonoBehaviour
         set { health = value; }
     }
 
-    public int Attack
+    public bool Armored
     {
-        get { return attack; }
-        set { attack = value; }
+        get { return armored; }
+        set { armored = value; }
     }
 
 	public int Damage

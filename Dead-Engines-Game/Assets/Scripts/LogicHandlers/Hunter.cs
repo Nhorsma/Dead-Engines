@@ -12,18 +12,20 @@ public class Hunter : Enemy
     private float speed = 10f;
     private int range = 1;
 
-    public Hunter()
+    public Hunter(int hp, int dmg, float shootspeed)
     {
-		//inherited from enemy
-        Health = 1;
+        Health = hp;
         Id = -1;
         Target = null;
 		JustShot = false;
+        Armored = true;
+        Damage = 1;
 
 		canWalk = true;
 		range = 1; //not implemented yet
         speed = 10f;
     }
+
 
     public bool CanWalk
     {

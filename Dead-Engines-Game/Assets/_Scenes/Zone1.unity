@@ -6515,6 +6515,7 @@ MonoBehaviour:
   unitDamage: 0
   unitFireCooldown: 1
   downTime: 15
+  piercingMultiplier: 5
   goingClip1: {fileID: 8300000, guid: 7c5852769ae1a8542b517f5684cc949d, type: 3}
   goingClip2: {fileID: 8300000, guid: 497a967409f647b49bed041dc65ae899, type: 3}
   confirmPing: {fileID: 8300000, guid: a8cef582cb23de74cab8c8e9b3cad780, type: 3}
