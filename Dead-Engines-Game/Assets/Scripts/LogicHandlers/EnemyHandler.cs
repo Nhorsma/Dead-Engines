@@ -106,7 +106,7 @@ public class EnemyHandler : MonoBehaviour
 
 	void ProtectEncampment(GameObject enemy)
     {
-        AssignAnimation(enemy, "isShooting", false);
+        AssignAnimation(enemy, "firing", false);
         FindSpot(enemy);
     }
 
@@ -115,11 +115,10 @@ public class EnemyHandler : MonoBehaviour
         Enemy enemy_data = enemy.GetComponent<Enemy>();
         if (enemy==null || enemy_data.Target == null || enemy_data.Target.GetComponent<Unit>().Health<=0)
 		{
-            AssignAnimation(enemy, "inCombat", false);
+            AssignAnimation(enemy, "firing", false);
             enemy_data.Target = null;
             return;
         }
-        AssignAnimation(enemy, "inCombat", true);
 
         if (enemy_data.Target != null)
         {
@@ -195,7 +194,6 @@ public class EnemyHandler : MonoBehaviour
                 Vector3 targetPos = new Vector3(enemy_data.Target.transform.position.x, 1, enemy_data.Target.transform.position.z);
                 Vector3 direction = targetPos - enemy.transform.position;
                 PlayClip(enemy_data.CampObj, "shoot");
-                AssignAnimation(enemy, "firing", true);
                 StartCoroutine(TrailOff(0.05f, enemy.transform.position, enemy_data.Target.transform.position));
             }
             StartCoroutine(FireCoolDown(hitChance, enemy_data));
@@ -205,6 +203,7 @@ public class EnemyHandler : MonoBehaviour
     {
         enemy_data.JustShot = true;
         yield return new WaitForSeconds(enemy_data.FireSpeed+extratime/2);
+        AssignAnimation(enemy_data.gameObject, "firing", false);
         enemy_data.JustShot = false;
     }
 
@@ -221,7 +220,7 @@ public class EnemyHandler : MonoBehaviour
 			{
 				place += new Vector3(Random.Range(-stoppingDistance, stoppingDistance), 0, Random.Range(-stoppingDistance, stoppingDistance));
 			}
-            AssignAnimation(enemy, "walking", true);
+            AssignAnimation(enemy, "walking", Mathf.Abs(enemy.GetComponent<NavMeshAgent>().velocity.x + enemy.GetComponent<NavMeshAgent>().velocity.z) / 2);
             nav.SetDestination(place);
         }
     }
@@ -277,6 +276,12 @@ public class EnemyHandler : MonoBehaviour
     {
         if (enemy.GetComponent<Animator>() != null)
             enemy.GetComponent<Animator>().SetBool(anim, play);
+    }
+
+    void AssignAnimation(GameObject enemy, string anim, float speed)
+    {
+        if (enemy.GetComponent<Animator>() != null)
+            enemy.GetComponent<Animator>().SetFloat(anim, speed);
     }
 
 }
