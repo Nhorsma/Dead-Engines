@@ -18,32 +18,44 @@ public class SpawnRes : MonoBehaviour
 	public int low_range;
 	public int high_range;
 
-	public GameObject fogOfWar;
-	public GameObject ground;
-	public Material groundMat;
-
 	public int outer_low_range;
 	public int outer_high_range;
 
 	public int outerSpawnDensity;
 	public GameObject[] outerResources;
+	public GameObject[] innerResources;
+	public GameObject[] coreResources;
     public ResourceHandling recHandle;
+
+	public GameObject placeholderObj;
 
 
 	void Start()
     {
-
 		startPos = autoObj.transform;
 		Debug.Log(autoObj.transform.position);
 
 		// must call in order else null reference
+		// these will be left in (in case the player spawns slightly far out from any resources)
 		SpawnResource(1);
 		SpawnResource(2);
 		SpawnResource(3);
 
-		SpawnEnemies(howMany);
-
 		outerResources = new GameObject[outerSpawnDensity];
+
+		placeholderObj.GetComponentInChildren<SpriteRenderer>().color = Color.magenta;
+		SpawnOuterResources(false);
+		outer_low_range = 450;
+		outer_high_range = 450;
+		outerSpawnDensity = 75;
+		placeholderObj.GetComponentInChildren<SpriteRenderer>().color = Color.cyan;
+		SpawnOuterResources(false);
+		outerSpawnDensity = 30;
+		placeholderObj.GetComponentInChildren<SpriteRenderer>().color = Color.yellow;
+		SpawnOuterResources(true);
+
+		SpawnEnemies(1);
+		//SpawnEnemies(10, outerResources);
 	}
 
 	void Update()
@@ -52,7 +64,9 @@ public class SpawnRes : MonoBehaviour
 		if (Input.GetKey(KeyCode.R))
 		{
 			//SceneManager.LoadScene("v1");
-			Debug.Log("respawn");
+			SpawnOuterResources(true);
+			int r = Random.Range(0, 11);
+			Debug.Log(r);
 		}
     }
 
@@ -151,31 +165,61 @@ public class SpawnRes : MonoBehaviour
 		}
 	}
 
-	public void SpawnOuterResources()
+	// new version, testing
+	void SpawnEnemies2(int probability, GameObject[] resourceLayer)
+	{
+		int x, z = 0;
+		for (int i = 0; i < resourceLayer.Length; i++)
+		{
+			int r = Random.Range(0, probability + 1);
+			if (r == probability)
+			{
+				do
+				{
+					x = Random.Range(-(outer_low_range - 1), (outer_high_range));
+					z = Random.Range(-(outer_low_range - 1), (outer_high_range));
+				} while (Vector3.Distance(new Vector3(x, 0, z), resourceLayer[i].transform.position) >= e_maxDistance || Vector3.Distance(new Vector3(x, 0, z), resourceLayer[i].transform.position) <= e_minDistance);
+				//	Debug.Log("Spawned enemy");
+				var e = Instantiate(enemy, new Vector3(startPos.position.x + x, -6.5f, startPos.position.z + z), Quaternion.identity);
+			}
+		}
+	}
+
+	public void SpawnOuterResources(bool bias)
 	{
 		int x, z = 0;
 		GameObject outer_res = new GameObject();
 
 		for (int i = 0; i < outerSpawnDensity; i++)
 		{
-			x = Random.Range(-(outer_low_range - 1), (outer_high_range));
-			z = Random.Range(-(outer_low_range - 1), (outer_high_range));
+			if (bias)
+			{
+				do
+				{
+					x = Random.Range(-(low_range - 1), (high_range));
+					z = Random.Range(-(low_range - 1), (high_range));
+				} while (Vector3.Distance(new Vector3(startPos.position.x + x, 0, startPos.position.z + z), startPos.position) >= s_maxDistance || Vector3.Distance(new Vector3(startPos.position.x + x, 0, startPos.position.z + z), startPos.position) <= s_minDistance);
+			}
+			else
+			{
+				x = Random.Range(-(outer_low_range - 1), (outer_high_range));
+				z = Random.Range(-(outer_low_range - 1), (outer_high_range));
+			}
 
 			if (x % 2 == 0 && z % 2 == 0)
 			{
-				outer_res = Instantiate(res1, new Vector3(x, -6.5f, z), Quaternion.identity);
+				outer_res = Instantiate(placeholderObj, new Vector3(x, -6.5f, z), Quaternion.identity);
 			}
 			else if (x % 2 != 0 && z % 2 != 0)
 			{
-				outer_res = Instantiate(res2, new Vector3(x, -6.5f, z), Quaternion.identity);
+				outer_res = Instantiate(placeholderObj, new Vector3(x, -6.5f, z), Quaternion.identity);
 			}
 			else if ((x % 2 != 0 && z % 2 == 0) || (x % 2 == 0 && z % 2 != 0))
 			{
-				outer_res = Instantiate(res3, new Vector3(x, -6.5f, z), Quaternion.identity);
+				outer_res = Instantiate(placeholderObj, new Vector3(x, -6.5f, z), Quaternion.identity);
 			}
 			outerResources[i] = outer_res;
-
-        }
+		}
     }
 
 
@@ -200,9 +244,6 @@ public class SpawnRes : MonoBehaviour
 
 	public void OpenMapRange()
 	{
-		fogOfWar.GetComponent<MeshRenderer>().material = groundMat;
-		ground.GetComponent<MeshRenderer>().enabled = false;
-
-		SpawnOuterResources();
+		SpawnOuterResources(false);
     }
 }
