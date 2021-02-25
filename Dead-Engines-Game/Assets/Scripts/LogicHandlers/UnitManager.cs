@@ -68,7 +68,7 @@ public class UnitManager : MonoBehaviour
     {
         for (int i = 0; i < startingUnits; i++)
         {
-            GameObject u = (GameObject)Instantiate(Resources.Load(unitPrefab.name), FindSpotToSpawn(), robot.transform.rotation);
+            GameObject u = (GameObject)Instantiate(Resources.Load(unitPrefab.name), FindSpotToSpawn(i), robot.transform.rotation);
 
             u.GetComponent<Unit>().Id = i;
             u.GetComponent<Unit>().UnitName = "U" + u.GetComponent<Unit>().Id.ToString();
@@ -323,7 +323,7 @@ public class UnitManager : MonoBehaviour
 
     public void TakeInUnit()
     {
-        GameObject wanderingUnit = (GameObject)Instantiate(Resources.Load("unit"), FindSpotToSpawn(), robot.transform.rotation);
+        GameObject wanderingUnit = (GameObject)Instantiate(Resources.Load("unit"), FindSpotToSpawn(0), robot.transform.rotation);
 
         wanderingUnit.GetComponent<Unit>().Id = units.Count;
         wanderingUnit.GetComponent<Unit>().UnitName = "U" + wanderingUnit.GetComponent<Unit>().Id.ToString();
@@ -360,9 +360,10 @@ public class UnitManager : MonoBehaviour
         }
 
     }
-    public Vector3 FindSpotToSpawn()
+    public Vector3 FindSpotToSpawn(int number)
     {
-        return robotPos + new Vector3(-pickUpDistance + Random.Range(-3, 3), 0, -pickUpDistance + Random.Range(-3, 3));
+        float range = Random.Range(-5, 0);
+        return robotPos + new Vector3(-pickUpDistance + range, 0, -pickUpDistance - (5*number));
     }
 
     void Extract(int id)
@@ -385,7 +386,7 @@ public class UnitManager : MonoBehaviour
 
         if (!AutomotonAction.endPhaseOne)
         {
-            unit.transform.position = FindSpotToSpawn();
+            unit.transform.position = FindSpotToSpawn(0);
             unit.SetActive(true);
         }
     }
