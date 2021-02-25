@@ -120,7 +120,7 @@ public class RoomManager : MonoBehaviour
 		UpdateRoomDisplay();
 	}
 
-	//doing twice for shrine & study?
+	//add infirmary stuff
 	public void Assign(string roomType, int slot)
 	{
 		if (roomType != "infirmary")

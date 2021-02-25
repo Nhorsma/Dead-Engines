@@ -150,12 +150,6 @@ public class SetupRoom : MonoBehaviour
 		//
 		GameObject scrollerContent;
 
-		roomComponents[slot].assign.onClick.AddListener(delegate { roomManager.Assign("shrine", slot); });
-		roomComponents[slot].assign.gameObject.SetActive(true);
-
-		roomComponents[slot].unassign.onClick.AddListener(delegate { roomManager.Unassign("shrine", slot); });
-		roomComponents[slot].unassign.gameObject.SetActive(true);
-
 		roomComponents[slot].capacity.text = "0/3";
 
 		roomComponents[slot].scroller.gameObject.SetActive(true);
@@ -188,12 +182,6 @@ public class SetupRoom : MonoBehaviour
 
 		//
 		GameObject scrollerContent;
-
-		roomComponents[slot].assign.onClick.AddListener(delegate { roomManager.Assign("study", slot); });
-		roomComponents[slot].assign.gameObject.SetActive(true);
-
-		roomComponents[slot].unassign.onClick.AddListener(delegate { roomManager.Unassign("study", slot); });
-		roomComponents[slot].unassign.gameObject.SetActive(true);
 
 		roomComponents[slot].capacity.text = "0/3";
 

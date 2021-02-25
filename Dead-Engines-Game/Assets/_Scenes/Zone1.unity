@@ -15732,18 +15732,27 @@ MonoBehaviour:
   s_minDistance: 150
   r_maxDistance: 350
   r_minDistance: 150
-  e_maxDistance: 60
+  e_maxDistance: 90
   e_minDistance: 30
-  howMany: 1
+  howManyEncampments: 1
   low_range: 750
   high_range: 750
   outer_low_range: 725
   outer_high_range: 725
-  outerSpawnDensity: 150
   outerResources: []
+  outerSpawnDensity: 150
+  inner_low_range: 450
+  inner_high_range: 450
+  innerResources: []
+  innerSpawnDensity: 75
+  core_low_range: 750
+  core_high_range: 750
+  coreResources: []
+  coreSpawnDensity: 30
   recHandle: {fileID: 467610735}
-  placeholderObj: {fileID: 4013801925313436967, guid: 01ab1810f6a7b8a488dda24bcfea197d,
+  placeholderObj: {fileID: 8510683415502693747, guid: 7727306db95fba341a547b782418b12d,
     type: 3}
+  spawnWithEncampmentProbability: 5
 --- !u!114 &1102157337
 MonoBehaviour:
   m_ObjectHideFlags: 0

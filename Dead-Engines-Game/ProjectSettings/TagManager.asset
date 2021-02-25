@@ -14,6 +14,7 @@ TagManager:
   - HoverUI
   - Hunter
   - Gun
+  - Bumpable
   layers:
   - Default
   - TransparentFX

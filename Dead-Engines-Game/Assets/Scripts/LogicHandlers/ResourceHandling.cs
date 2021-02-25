@@ -116,9 +116,15 @@ public class ResourceHandling : MonoBehaviour
             fuelDropped = true;
     }
 
-    public void SetNewResourceDeposits(GameObject[] newDeps)
+    public void SetNewResourceDeposits(List<GameObject> newDeps)
     {
-        GameObject[] newDeposits = newDeps;
+		GameObject[] newDeposits = new GameObject[newDeps.Count];
+
+		for (int i = 0; i < newDeps.Count; i++)
+		{
+			newDeposits[i] = newDeps[i];
+		}
+
         int[] newQuantity = new int[newDeposits.Length];
         
         for (int i = 0; i < newQuantity.Length; i++)
@@ -133,10 +139,10 @@ public class ResourceHandling : MonoBehaviour
             newQuantity[id] = amount;
         }
 
-    resourceDeposits = newDeposits;
-    resourceQuantities = newQuantity;
-
+		resourceDeposits = newDeposits;
+		resourceQuantities = newQuantity;
     }
+
 	public int GetNumber(GameObject gm)
 	{
 		int i = 0;

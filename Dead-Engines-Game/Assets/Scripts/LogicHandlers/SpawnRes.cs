@@ -14,20 +14,30 @@ public class SpawnRes : MonoBehaviour
 	public int r_maxDistance, r_minDistance;			// max/min distance from an unspecified resource
 	public float e_maxDistance, e_minDistance;			// max/min distance from an enemy camp
 	private Transform t_res1, t_res2, t_res3;			// transforms used to calculate the above distances
-	public int howMany;                                 // how many enemies to spawn
+	public int howManyEncampments;                      // how many enemies to spawn
 	public int low_range;
 	public int high_range;
 
 	public int outer_low_range;
 	public int outer_high_range;
-
-	public int outerSpawnDensity;
 	public GameObject[] outerResources;
+	public int outerSpawnDensity;
+
+	public int inner_low_range;
+	public int inner_high_range;
 	public GameObject[] innerResources;
+	public int innerSpawnDensity;
+
+	public int core_low_range;
+	public int core_high_range;
 	public GameObject[] coreResources;
+	public int coreSpawnDensity;
+
     public ResourceHandling recHandle;
 
 	public GameObject placeholderObj;
+
+	public int spawnWithEncampmentProbability;
 
 
 	void Start()
@@ -42,31 +52,31 @@ public class SpawnRes : MonoBehaviour
 		SpawnResource(3);
 
 		outerResources = new GameObject[outerSpawnDensity];
+		innerResources = new GameObject[innerSpawnDensity];
+		coreResources = new GameObject[coreSpawnDensity];
 
+		//debugging stuff
 		placeholderObj.GetComponentInChildren<SpriteRenderer>().color = Color.magenta;
-		SpawnOuterResources(false);
-		outer_low_range = 450;
-		outer_high_range = 450;
-		outerSpawnDensity = 75;
+		SpawnOuterResources();
+
 		placeholderObj.GetComponentInChildren<SpriteRenderer>().color = Color.cyan;
-		SpawnOuterResources(false);
-		outerSpawnDensity = 30;
+		SpawnInnerResources();
+
 		placeholderObj.GetComponentInChildren<SpriteRenderer>().color = Color.yellow;
-		SpawnOuterResources(true);
+		SpawnCoreResources();
 
 		SpawnEnemies(1);
-		//SpawnEnemies(10, outerResources);
+
+		placeholderObj.GetComponentInChildren<SpriteRenderer>().color = Color.white;
+		SpawnEnemies2(spawnWithEncampmentProbability, outerResources);
 	}
 
 	void Update()
 	{
 		// debug reload scene
-		if (Input.GetKey(KeyCode.R))
+		if (Input.GetKeyDown(KeyCode.P))
 		{
 			//SceneManager.LoadScene("v1");
-			SpawnOuterResources(true);
-			int r = Random.Range(0, 11);
-			Debug.Log(r);
 		}
     }
 
@@ -171,40 +181,36 @@ public class SpawnRes : MonoBehaviour
 		int x, z = 0;
 		for (int i = 0; i < resourceLayer.Length; i++)
 		{
-			int r = Random.Range(0, probability + 1);
+			int r = Random.Range(1, probability + 1);
 			if (r == probability)
 			{
 				do
 				{
 					x = Random.Range(-(outer_low_range - 1), (outer_high_range));
 					z = Random.Range(-(outer_low_range - 1), (outer_high_range));
-				} while (Vector3.Distance(new Vector3(x, 0, z), resourceLayer[i].transform.position) >= e_maxDistance || Vector3.Distance(new Vector3(x, 0, z), resourceLayer[i].transform.position) <= e_minDistance);
+				} while (Vector3.Distance(new Vector3(x, 0, z), resourceLayer[i].transform.position) > e_maxDistance || Vector3.Distance(new Vector3(x, 0, z), resourceLayer[i].transform.position) < e_minDistance);
+				Debug.Log(i + " " + Vector3.Distance(new Vector3(x, 0, z), resourceLayer[i].transform.position));
+
+				//do
+				//{
+				//	x = Random.Range(-(outer_low_range - 1), (outer_high_range));
+				//	z = Random.Range(-(outer_low_range - 1), (outer_high_range));
+				//} while (Vector3.Distance(new Vector3(x, 0, z), resourceLayer[i].transform.position) >= e_maxDistance || Vector3.Distance(new Vector3(x, 0, z), resourceLayer[i].transform.position) <= e_minDistance);
 				//	Debug.Log("Spawned enemy");
-				var e = Instantiate(enemy, new Vector3(startPos.position.x + x, -6.5f, startPos.position.z + z), Quaternion.identity);
+				var e = Instantiate(placeholderObj, new Vector3(x, -6.5f, z), Quaternion.identity);
 			}
 		}
 	}
 
-	public void SpawnOuterResources(bool bias)
+	public void SpawnOuterResources()
 	{
 		int x, z = 0;
 		GameObject outer_res = new GameObject();
 
 		for (int i = 0; i < outerSpawnDensity; i++)
 		{
-			if (bias)
-			{
-				do
-				{
-					x = Random.Range(-(low_range - 1), (high_range));
-					z = Random.Range(-(low_range - 1), (high_range));
-				} while (Vector3.Distance(new Vector3(startPos.position.x + x, 0, startPos.position.z + z), startPos.position) >= s_maxDistance || Vector3.Distance(new Vector3(startPos.position.x + x, 0, startPos.position.z + z), startPos.position) <= s_minDistance);
-			}
-			else
-			{
-				x = Random.Range(-(outer_low_range - 1), (outer_high_range));
-				z = Random.Range(-(outer_low_range - 1), (outer_high_range));
-			}
+			x = Random.Range(-(outer_low_range - 1), (outer_high_range));
+			z = Random.Range(-(outer_low_range - 1), (outer_high_range));
 
 			if (x % 2 == 0 && z % 2 == 0)
 			{
@@ -222,28 +228,96 @@ public class SpawnRes : MonoBehaviour
 		}
     }
 
-
-	public GameObject[] GetResources()
+	public void SpawnInnerResources()
 	{
-		return new GameObject[] { r1, r2, r3 };
+		int x, z = 0;
+		GameObject inner_res = new GameObject();
+
+		for (int i = 0; i < innerSpawnDensity; i++)
+		{
+			x = Random.Range(-(inner_low_range - 1), (inner_high_range));
+			z = Random.Range(-(inner_low_range - 1), (inner_high_range));
+
+			if (x % 2 == 0 && z % 2 == 0)
+			{
+				inner_res = Instantiate(placeholderObj, new Vector3(x, -6.5f, z), Quaternion.identity);
+			}
+			else if (x % 2 != 0 && z % 2 != 0)
+			{
+				inner_res = Instantiate(placeholderObj, new Vector3(x, -6.5f, z), Quaternion.identity);
+			}
+			else if ((x % 2 != 0 && z % 2 == 0) || (x % 2 == 0 && z % 2 != 0))
+			{
+				inner_res = Instantiate(placeholderObj, new Vector3(x, -6.5f, z), Quaternion.identity);
+			}
+			innerResources[i] = inner_res;
+		}
 	}
 
-	public GameObject[] GetAllResources()
+	public void SpawnCoreResources()
 	{
-		GameObject[] allResources = new GameObject[outerSpawnDensity + 3];
-		allResources[0] = r1;
-		allResources[1] = r2;
-		allResources[2] = r3;
-		for (int i = 3; i < outerSpawnDensity + 3; i++)
+		int x, z = 0;
+		GameObject core_res = new GameObject();
+
+		for (int i = 0; i < coreSpawnDensity; i++)
 		{
-			allResources[i] = outerResources[i - 3];
+			do
+			{
+				x = Random.Range(-(core_low_range - 1), (core_high_range));
+				z = Random.Range(-(core_low_range - 1), (core_high_range));
+			} while (Vector3.Distance(new Vector3(startPos.position.x + x, 0, startPos.position.z + z), startPos.position) >= s_maxDistance || Vector3.Distance(new Vector3(startPos.position.x + x, 0, startPos.position.z + z), startPos.position) <= s_minDistance);
+
+			if (x % 2 == 0 && z % 2 == 0)
+			{
+				core_res = Instantiate(placeholderObj, new Vector3(x, -6.5f, z), Quaternion.identity);
+			}
+			else if (x % 2 != 0 && z % 2 != 0)
+			{
+				core_res = Instantiate(placeholderObj, new Vector3(x, -6.5f, z), Quaternion.identity);
+			}
+			else if ((x % 2 != 0 && z % 2 == 0) || (x % 2 == 0 && z % 2 != 0))
+			{
+				core_res = Instantiate(placeholderObj, new Vector3(x, -6.5f, z), Quaternion.identity);
+			}
+			coreResources[i] = core_res;
+		}
+	}
+
+	//needs to be reworked
+	public GameObject[] GetResources()
+	{
+		return new GameObject[] { r1, r2, r3};
+	}
+
+	//needs to be reworked
+	public List<GameObject> GetAllResources()
+	{
+		List<GameObject> allResources = new List<GameObject>();
+
+		allResources.Add(r1);
+		allResources.Add(r2);
+		allResources.Add(r3);
+
+		foreach (GameObject o in outerResources)
+		{
+			allResources.Add(o);
+		}
+		foreach (GameObject o in innerResources)
+		{
+			allResources.Add(o);
+		}
+		foreach (GameObject o in coreResources)
+		{
+			allResources.Add(o);
 		}
 
 		return allResources;
 	}
 
+	//needs to be removed!
 	public void OpenMapRange()
 	{
-		SpawnOuterResources(false);
+		SpawnInnerResources();
     }
+
 }
