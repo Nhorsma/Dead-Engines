@@ -59,9 +59,12 @@ public class EnemyHandler : MonoBehaviour
                 if (unitsTresspassing(enemy_data.CampObj) != null)
                 {
                     if (enemy_data.Target == null)
-                        TravelTo(e, unitsTresspassing(enemy_data.CampObj).transform.position, true, true);
+                    {
+                        TravelTo(e, unitsTresspassing(enemy_data.CampObj).transform.position, true, false);
+                        //Debug.Log("tresspassing Unit:" + unitsTresspassing(enemy_data.CampObj).transform.position);
+                    }
                     else
-                        AttackUnit(e);
+                        Attack(e);
                 }
                 else
                 {
@@ -70,10 +73,8 @@ public class EnemyHandler : MonoBehaviour
             }
             else if(enemy_data.CampData.EnemyJobs=="destroy")
             {
-                if (enemy_data.Target != null && enemy_data.Target.tag == "Friendly")
-                    AttackUnit(e);
-                else
-                    AttackRobot(e);
+                GoTowardsRobot(e);
+                Attack(e);
             }
             else
             {
@@ -110,18 +111,32 @@ public class EnemyHandler : MonoBehaviour
         FindSpot(enemy);
     }
 
-    void AttackUnit(GameObject enemy)
+    void Attack(GameObject enemy)
     {
         Enemy enemy_data = enemy.GetComponent<Enemy>();
-        if (enemy==null || enemy_data.Target == null || enemy_data.Target.GetComponent<Unit>().Health<=0)
-		{
+        if (enemy == null || enemy_data.Target == null)
+        {
             AssignAnimation(enemy, "firing", false);
             enemy_data.Target = null;
             return;
         }
-
-        if (enemy_data.Target != null)
+        else if(enemy_data.Target != null)
         {
+            if(enemy_data.Target.tag == "Friendly")
+            {
+                if (enemy_data.Target.GetComponent<Unit>().Health <= 0)
+                {
+                    AssignAnimation(enemy, "firing", false);
+                    enemy_data.Target = null;
+                    return;
+                }
+            }
+            else if(enemy_data.Target.tag=="Robot")
+            {
+                //discuss robot health being something static outside the AUtomotonAction script
+                //since that script isn't activated until the start of phase 2
+            }
+
             //shooting
             if (!enemy_data.JustShot)
             {
@@ -130,15 +145,13 @@ public class EnemyHandler : MonoBehaviour
         }
     }
 
-    public void AttackRobot(GameObject enemy_object)
+
+    public void GoTowardsRobot(GameObject enemy_object)
     {
         if (enemy_object.GetComponent<Enemy>().Target == null)
         {
             TravelTo(enemy_object, robotPos, true, true);
-        }
-        else if(!enemy_object.GetComponent<Enemy>().JustShot)
-        {
-            Fire(enemy_object, enemy_object.GetComponent<Enemy>());
+            Debug.Log("Lets get the Robot:" + robotPos);
         }
     }
 
@@ -152,11 +165,13 @@ public class EnemyHandler : MonoBehaviour
             {
                 Vector3 rand = new Vector3(Random.Range(-3, 3), Random.Range(-3, 3), Random.Range(-3, 3));
                 TravelTo(enemy, enemy.GetComponent<Enemy>().Resource.transform.position + rand, true, false);
+                Debug.Log("Finding Spot 1");
             }
             else
             {
                 Vector3 rand = new Vector3(Random.Range(-3, 3), Random.Range(-3, 3), Random.Range(-3, 3));
                 TravelTo(enemy, enemy.GetComponent<Enemy>().CampObj.transform.position + rand, true, false);
+                Debug.Log("Finding SPot 2");
             }
         }
 	}
@@ -211,6 +226,7 @@ public class EnemyHandler : MonoBehaviour
     {
         if (enemy != null && enemy.GetComponent<NavMeshAgent>() != null)
         {
+            place.y = enemy.transform.position.y;
             NavMeshAgent nav = enemy.GetComponent<NavMeshAgent>();
             if (stop)
 			{

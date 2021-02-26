@@ -187,7 +187,7 @@ public class UnitManager : MonoBehaviour
                         SetAnimation(u, "knockedOut", false);
                         u.GetComponent<NavMeshAgent>().enabled = true;
                         u.SetActive(true);
-                        unit_data.Health = 3;
+                        unit_data.Health = 10;
                         unit_data.Job = "none";
                         unit_data.CanSpawn = false;
                         TravelTo(u, new Vector3(robotPos.x - 20, 0, robotPos.z - 20),false,true);

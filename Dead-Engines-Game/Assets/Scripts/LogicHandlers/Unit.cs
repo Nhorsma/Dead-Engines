@@ -8,7 +8,7 @@ public class Unit : MonoBehaviour
 	private string unitName = "u";			// unit's individual name
     private string job = "none";			// what the unit is doing
     private GameObject jobPos = null;		// where the unit is going
-    private int health = 1000;					// how much damage the unit can take
+    private int health = 10;					// how much damage the unit can take
 	private bool justDroppedOff = false;	// is the unit on the way to or from the automaton?
 	private bool justShot = false;			// has the unit fired its gun?
 	private int id = -1;                    // which unit is this?

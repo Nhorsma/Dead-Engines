@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class EncampmentHandler : MonoBehaviour
 {
@@ -142,11 +143,10 @@ public class EncampmentHandler : MonoBehaviour
 
         for (int i=0;i<encampment.Deployment.Length;i++)
         {
-            Vector3 spawnPlace = encampments[encampment.Id].Obj.transform.position;
+            Vector3 spawnPlace = encampments[encampment.Id].Obj.transform.position+EnemySpawnPlacement(i,20);
             enemyObj = (GameObject)Instantiate(Resources.Load(encampment.Deployment[i]), spawnPlace, transform.rotation);
 
             Enemy new_enemy = SetEnemyDataOfSpawned(encampment.Deployment[i]);
-            Debug.Log(new_enemy);
             enemyObj.GetComponent<Enemy>().Health = new_enemy.Health;
             enemyObj.GetComponent<Enemy>().Damage = new_enemy.Damage;
             enemyObj.GetComponent<Enemy>().FireSpeed = new_enemy.FireSpeed;
@@ -160,6 +160,22 @@ public class EncampmentHandler : MonoBehaviour
             enemyHandler.FindSpot(enemyObj);
             encampment.OnField++;
         }
+    }
+
+    Vector3 EnemySpawnPlacement(int number, int multi)
+    {
+        switch (number)
+        {
+            case 0:
+                return new Vector3(multi, 0, multi);
+            case 1:
+                return new Vector3(multi, 0, -multi);
+            case 2:
+                return new Vector3(-multi, 0, multi);
+            case 3:
+                return new Vector3(-multi, 0, -multi);
+        }
+        return new Vector3(1, 0, 1);
     }
 
     IEnumerator WaitUntilCanSpawn(Encampment encampment_data)

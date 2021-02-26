@@ -14,7 +14,7 @@ public class Enemy : MonoBehaviour
 	//protected bool justShot;
 
 	private int id = -1;
-	private int health = 100;
+	private int health = 5;
 	private int damage = 1;
 	private bool armored = false;
 
