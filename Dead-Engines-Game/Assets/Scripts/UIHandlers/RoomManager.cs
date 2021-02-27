@@ -51,7 +51,10 @@ public class RoomManager : MonoBehaviour
 
     void Update()
     {
-        
+        if (Input.GetKeyDown(KeyCode.K))
+		{
+			Debug.Log(CheckInfirmary());
+		}
     }
 
 	/// <summary>

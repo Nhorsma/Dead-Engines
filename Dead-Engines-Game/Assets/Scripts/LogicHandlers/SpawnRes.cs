@@ -189,7 +189,7 @@ public class SpawnRes : MonoBehaviour
 					x = Random.Range(-(outer_low_range - 1), (outer_high_range));
 					z = Random.Range(-(outer_low_range - 1), (outer_high_range));
 				} while (Vector3.Distance(new Vector3(x, 0, z), resourceLayer[i].transform.position) > e_maxDistance || Vector3.Distance(new Vector3(x, 0, z), resourceLayer[i].transform.position) < e_minDistance);
-				Debug.Log(i + " " + Vector3.Distance(new Vector3(x, 0, z), resourceLayer[i].transform.position));
+				//Debug.Log(i + " " + Vector3.Distance(new Vector3(x, 0, z), resourceLayer[i].transform.position));
 
 				//do
 				//{

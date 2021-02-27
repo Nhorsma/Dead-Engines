@@ -6503,6 +6503,7 @@ MonoBehaviour:
   enemyHandler: {fileID: 467610734}
   encampmentHandler: {fileID: 467610733}
   spawnPool: {fileID: 1102157339}
+  roomManager: {fileID: 2075244114}
   robotPos: {x: 10, y: 3, z: 8}
   robot: {fileID: 5905536743914566335}
   startingUnits: 3

@@ -11,6 +11,7 @@ public class Infirmary : Room
 		this.Slot = slot;
 		this.Level = level;
 		this.WorkerCapacity = 3; //how many sick can be here?
+		this.Workers = new List<GameObject>();
 	}
 
 	public override void DestroyRoom()
