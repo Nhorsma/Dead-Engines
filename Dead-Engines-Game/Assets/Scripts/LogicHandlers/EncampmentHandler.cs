@@ -198,22 +198,22 @@ public class EncampmentHandler : MonoBehaviour
         }
 
         //default is 4 gunners
-        string[] deployment = new string[] { enemy_model1.name, enemy_model1.name, enemy_model2.name, enemy_model3.name };
+        string[] deployment = new string[] { enemy_model1.name, enemy_model1.name, enemy_model1.name, enemy_model1.name };
 
-        if (resourceHandling.resourcesLeft <= 2 || encampment_data.Health < 50 || quantity < (resourceHandling.startQuantity / 2))
+        if (resourceHandling.resourcesLeft <= 2 || encampment_data.Health < startingHealth/2 || quantity < (resourceHandling.startQuantity / 2))
         {
             deployment[3] = enemy_model2.name;
         }
         if(resourceHandling.resourcesLeft <= 2)
         {
-            if (encampment_data.Health < 50 || quantity < (resourceHandling.startQuantity / 2))
+            if (encampment_data.Health < startingHealth / 3 || quantity < (resourceHandling.startQuantity / 2))
                 deployment[2] = enemy_model3.name;
             else
                 deployment[2] = enemy_model2.name;
         }
         if(resourceHandling.resourcesLeft <= 1)
         {
-            if (encampment_data.Health < 50 || quantity < (resourceHandling.startQuantity / 2))
+            if (encampment_data.Health < startingHealth / 3 || quantity < (resourceHandling.startQuantity / 2))
                 deployment[1] = enemy_model3.name;
             else
                 deployment[1] = enemy_model2.name;

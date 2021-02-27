@@ -54,7 +54,11 @@ public class EnemyHandler : MonoBehaviour
                 enemy_data.CampData.OnField--; // fishy
                 break;
             }
-            if(enemy_data.CampData.EnemyJobs=="guard")
+            if (enemy_data.Target != null)
+            {
+                Attack(e);
+            }
+            else if (enemy_data.CampData.EnemyJobs=="guard")
             {
                 if (unitsTresspassing(enemy_data.CampObj) != null)
                 {
@@ -63,8 +67,6 @@ public class EnemyHandler : MonoBehaviour
                         TravelTo(e, unitsTresspassing(enemy_data.CampObj).transform.position, true, false);
                         //Debug.Log("tresspassing Unit:" + unitsTresspassing(enemy_data.CampObj).transform.position);
                     }
-                    else
-                        Attack(e);
                 }
                 else
                 {
@@ -74,7 +76,6 @@ public class EnemyHandler : MonoBehaviour
             else if(enemy_data.CampData.EnemyJobs=="destroy")
             {
                 GoTowardsRobot(e);
-                Attack(e);
             }
             else
             {
@@ -113,8 +114,12 @@ public class EnemyHandler : MonoBehaviour
 
     void Attack(GameObject enemy)
     {
+        if (enemy == null)
+        {
+            return;
+        }
         Enemy enemy_data = enemy.GetComponent<Enemy>();
-        if (enemy == null || enemy_data.Target == null)
+        if (enemy_data.Target == null)
         {
             AssignAnimation(enemy, "firing", false);
             enemy_data.Target = null;
@@ -122,6 +127,7 @@ public class EnemyHandler : MonoBehaviour
         }
         else if(enemy_data.Target != null)
         {
+            enemy.GetComponent<NavMeshAgent>().isStopped = true;
             if(enemy_data.Target.tag == "Friendly")
             {
                 if (enemy_data.Target.GetComponent<Unit>().Health <= 0)
@@ -211,15 +217,15 @@ public class EnemyHandler : MonoBehaviour
                 PlayClip(enemy_data.CampObj, "shoot");
                 StartCoroutine(TrailOff(0.05f, enemy.transform.position, enemy_data.Target.transform.position));
             }
-            StartCoroutine(FireCoolDown(hitChance, enemy_data));
+            StartCoroutine(FireCoolDown(hitChance, enemy));
         }
     }
-	IEnumerator FireCoolDown(float extratime, Enemy enemy_data)
+	IEnumerator FireCoolDown(float extratime, GameObject enemy)
     {
-        enemy_data.JustShot = true;
-        yield return new WaitForSeconds(enemy_data.FireSpeed+extratime/2);
-        AssignAnimation(enemy_data.gameObject, "firing", false);
-        enemy_data.JustShot = false;
+        enemy.GetComponent<Enemy>().JustShot = true;
+        yield return new WaitForSeconds(enemy.GetComponent<Enemy>().FireSpeed+extratime/2);
+        AssignAnimation(enemy, "firing", false);
+        enemy.GetComponent<Enemy>().JustShot = false;
     }
 
     void TravelTo(GameObject enemy, Vector3 place, bool stop, bool randomize)
@@ -228,6 +234,7 @@ public class EnemyHandler : MonoBehaviour
         {
             place.y = enemy.transform.position.y;
             NavMeshAgent nav = enemy.GetComponent<NavMeshAgent>();
+            nav.isStopped = false;
             if (stop)
 			{
 				nav.stoppingDistance = this.stoppingDistance;
@@ -290,7 +297,7 @@ public class EnemyHandler : MonoBehaviour
     }
     void AssignAnimation(GameObject enemy, string anim, bool play)
     {
-        if (enemy.GetComponent<Animator>() != null)
+        if (enemy!=null && enemy.GetComponent<Animator>() != null)
             enemy.GetComponent<Animator>().SetBool(anim, play);
     }
 

@@ -6509,9 +6509,9 @@ MonoBehaviour:
   unitPrefab: {fileID: 6730369722945657225, guid: 79ae4ad0dde23774f83ee874c7458fbb,
     type: 3}
   units: []
-  stoppingDistance: 69
+  stoppingDistance: 49
   pickUpDistance: 20
-  shootingDistance: 70
+  shootingDistance: 50
   unitDamage: 0
   unitFireCooldown: 1
   downTime: 15
@@ -6535,7 +6535,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 536887f337eaf5042936cd4e55aa4165, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  startingHealth: 10
+  startingHealth: 200
   encampments: []
   enemyHandler: {fileID: 467610734}
   unitManager: {fileID: 467610732}

@@ -156,6 +156,7 @@ public class UnitManager : MonoBehaviour
         {
             Animator anim = u.GetComponent<Animator>();
             Unit unit_data = u.GetComponent<Unit>();
+            Debug.Log(u + " - " + unit_data.Job);
             Vector3 navmesh_velocity = u.GetComponent<NavMeshAgent>().velocity;
 
             SetAnimation(u, "walkingSpeed", Mathf.Abs(navmesh_velocity.x + navmesh_velocity.z) / 2);
@@ -184,12 +185,8 @@ public class UnitManager : MonoBehaviour
                     if (unit_data.CanSpawn)
                     {
                         u.transform.position = new Vector3(robotPos.x+3, 0, robotPos.z+3);
-                        SetAnimation(u, "knockedOut", false);
-                        u.GetComponent<NavMeshAgent>().enabled = true;
-                        u.SetActive(true);
-                        unit_data.Health = 10;
-                        unit_data.Job = "none";
-                        unit_data.CanSpawn = false;
+                        SetSpawnedUnitInfo(u, true);
+
                         TravelTo(u, new Vector3(robotPos.x - 20, 0, robotPos.z - 20),false,true);
                         ReadyClip();
                     }
@@ -477,18 +474,12 @@ public class UnitManager : MonoBehaviour
     {
         if (unit.GetComponent<Unit>().Health <= 0)
         {
-            ShowGun(unit, false);
-            SetAnimation(unit, "knockedOut", true);
-            PlayClip("dead");
-            SetAnimation(unit, "inCombat", false);
-            unit.GetComponent<NavMeshAgent>().enabled = false;
-            unit.GetComponent<Unit>().Job = "dead";
-            unit.GetComponent<Unit>().JobPos = null;
-
+            SetSpawnedUnitInfo(unit, false);
             StartCoroutine(WaitToDespawn(unit));
         }
     }
 
+    //lets the "dying" animation play out, then makes the unit disappear
     IEnumerator WaitToDespawn(GameObject unit)
     {
         yield return new WaitForSeconds(5f);
@@ -501,6 +492,7 @@ public class UnitManager : MonoBehaviour
 
     }
 
+    //waits to allow the unit to respawn, see "RunAllJobs" for the "dead" job
     IEnumerator WaitToRespawn(GameObject unit)
     {
         Unit unit_data = unit.GetComponent<Unit>();
@@ -648,4 +640,28 @@ public class UnitManager : MonoBehaviour
             unit_object.transform.Find("Rifle").gameObject.SetActive(showGun);
         }
     }
+
+    void SetSpawnedUnitInfo(GameObject unit, bool isSpawned)
+    {
+        if(!isSpawned)
+        {
+            ShowGun(unit, false);
+            SetAnimation(unit, "inCombat", false);
+            SetAnimation(unit, "knockedOut", true);
+            PlayClip("dead");
+            unit.GetComponent<NavMeshAgent>().enabled = false;
+            unit.GetComponent<Unit>().Job = "dead";
+            unit.GetComponent<Unit>().JobPos = null;
+        }
+        else
+        {
+            unit.SetActive(true);
+            unit.GetComponent<Unit>().Health = 10;
+            unit.GetComponent<Unit>().CanSpawn = false;
+            SetAnimation(unit, "knockedOut", false);
+            unit.GetComponent<NavMeshAgent>().enabled = true;
+            ResetJob(unit.GetComponent<Unit>());
+        }
+    }
+
 }
