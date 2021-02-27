@@ -64,28 +64,32 @@ public class AutomatonUI : MonoBehaviour
 		if (!Pause.paused)
 		{
 			auto_main.SetActive(!auto_main.activeSelf);
-			//top_hud.SetActive(!top_hud.activeSelf);
+			tabs[0].SetActive(!tabs[0].activeSelf);
+			tabs[1].SetActive(false);								// ------------------------------------------> for some reason the room tab forces itself open at start, this is the *official* workaround
 		}
 	}
 
 	public void OpenInfoTab()
 	{
-		foreach (GameObject t in tabs)
+		for (int i = 0; i < tabs.Count; i++)
 		{
-			t.SetActive(false);
+			if (i != 0) // info tab index
+			{
+				tabs[i].SetActive(false);
+			}
 		}
 
-		if (auto_main.activeSelf == false && tabs[0].activeSelf == false)
+		if (auto_main.activeSelf == false && tabs[0].activeSelf == false) //if neither are turned on, turn both on
 		{
 			tabs[0].SetActive(true);
 			auto_main.SetActive(true);
 		}
-		else if (auto_main.activeSelf == true && tabs[0].activeSelf == false)
+		else if (auto_main.activeSelf == true && tabs[0].activeSelf == false) //if main content is on but tab is off, turn on tab only
 		{
 			Debug.Log("hit");
-			auto_main.SetActive(false);
+			tabs[0].SetActive(true);
 		}
-		else if (auto_main.activeSelf == true)
+		else if (auto_main.activeSelf == true) // last - if main content and tab are both on, turn both off
 		{
 			tabs[0].SetActive(false);
 			auto_main.SetActive(false);
@@ -95,9 +99,12 @@ public class AutomatonUI : MonoBehaviour
 
 	public void OpenRoomsTab()
 	{
-		foreach (GameObject t in tabs)
+		for (int i = 0; i < tabs.Count; i++)
 		{
-			t.SetActive(false);
+			if (i != 1) // room tab index
+			{
+				tabs[i].SetActive(false);
+			}
 		}
 		foreach (GameObject t in roomManager.roomTabs)
 		{
@@ -114,7 +121,7 @@ public class AutomatonUI : MonoBehaviour
 		else if (auto_main.activeSelf == true && tabs[1].activeSelf == false)
 		{
 			Debug.Log("hit");
-			auto_main.SetActive(false);
+			tabs[1].SetActive(true);
 		}
 		else if (auto_main.activeSelf == true)
 		{

@@ -166,14 +166,14 @@ public class RoomManager : MonoBehaviour
 		}
 		else if (roomType == "infirmary")
 		{
-			if (unitManager.ReturnJoblessUnit() == null) //ReturnKnockedOutUnit()
+			if (unitManager.ReturnKnockedOutUnit() == null)
 			{
 				Debug.Log("No knocked out units available");
 				return;
 			}
 			else
 			{
-				GameObject unit = unitManager.ReturnJoblessUnit(); //ReturnKnockedOutUnit()
+				GameObject unit = unitManager.ReturnKnockedOutUnit(); //ReturnKnockedOutUnit()
 
 				if (rooms[slot].Workers.Count < rooms[slot].WorkerCapacity)
 				{
@@ -195,7 +195,7 @@ public class RoomManager : MonoBehaviour
 		}
 	}
 
-	//add infirmary stuff
+	//add infirmary stuff -> a variation for a timed unassign of sorts to mimic healing, maybe in unit manager?
 	public void Unassign(string roomType, int slot)
 	{
 		if (rooms[slot].Workers.Count == 0)
@@ -555,6 +555,21 @@ public class RoomManager : MonoBehaviour
 				break;
 		}
     }
+
+	public bool CheckInfirmary()
+	{
+		foreach (Room r in rooms)
+		{
+			if (r.Type == "infirmary")
+			{
+				if (r.Workers.Count < r.WorkerCapacity)
+				{
+					return true;
+				}
+			}
+		}
+		return false;
+	}
 
 	//this is a debug function for testing only!
 	public void Sup()

@@ -412,7 +412,20 @@ public class UnitManager : MonoBehaviour
         return dead_units;
     }
 
-    void ResetJob(Unit unit_data)
+	// my version of the method above, pls use it instead
+	public GameObject ReturnKnockedOutUnit()
+	{
+		foreach (GameObject u in units)
+		{
+			if (u.GetComponent<Unit>().Job == "dead")
+			{
+				return u;
+			}
+		}
+		return null;
+	}
+
+	void ResetJob(Unit unit_data)
     {
         ResetColor(unit_data);
         unit_data.Job = "none";
@@ -498,7 +511,15 @@ public class UnitManager : MonoBehaviour
         Unit unit_data = unit.GetComponent<Unit>();
         unit.SetActive(false);
         unit.transform.position = robotPos;
-        yield return new WaitForSeconds(downTime);
+		//if (unit.GetComponent<Unit>().Job == "infirmary")
+		//{
+		//	yield return new WaitForSeconds(downTime / 2);
+		//}
+		//else
+		//{
+		//	yield return new WaitForSeconds(downTime);
+		//}
+		yield return new WaitForSeconds(downTime);
 
         unit.GetComponent<Unit>().CanSpawn = true;
     }
