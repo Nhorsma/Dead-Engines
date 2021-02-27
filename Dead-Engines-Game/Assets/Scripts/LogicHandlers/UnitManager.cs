@@ -10,6 +10,7 @@ public class UnitManager : MonoBehaviour
     public EnemyHandler enemyHandler;
     public EncampmentHandler encampmentHandler;
     public SpawningPoolController spawnPool;
+    public RoomManager roomManager;
 
     public Vector3 robotPos;
     public GameObject robot;
@@ -180,7 +181,7 @@ public class UnitManager : MonoBehaviour
                         u.SetActive(false);
                     }
                 }
-                else if (unit_data.Job == "dead")
+                else if (unit_data.Job == "dead" || unit_data.Job == "infirmary")
                 {
                     if (unit_data.CanSpawn)
                     {
@@ -511,18 +512,43 @@ public class UnitManager : MonoBehaviour
         Unit unit_data = unit.GetComponent<Unit>();
         unit.SetActive(false);
         unit.transform.position = robotPos;
-		//if (unit.GetComponent<Unit>().Job == "infirmary")
-		//{
-		//	yield return new WaitForSeconds(downTime / 2);
-		//}
-		//else
-		//{
-		//	yield return new WaitForSeconds(downTime);
-		//}
-		yield return new WaitForSeconds(downTime);
 
+		if (unit.GetComponent<Unit>().Job == "infirmary")
+			yield return new WaitForSeconds(downTime / 2);
+		else
+			yield return new WaitForSeconds(downTime);
+
+        yield return new WaitForSeconds(0);
         unit.GetComponent<Unit>().CanSpawn = true;
     }
+
+    void SetSpawnedUnitInfo(GameObject unit, bool isSpawned)
+    {
+        if (!isSpawned)
+        {
+            ShowGun(unit, false);
+            SetAnimation(unit, "inCombat", false);
+            SetAnimation(unit, "knockedOut", true);
+            PlayClip("dead");
+            unit.GetComponent<NavMeshAgent>().enabled = false;
+
+            if (roomManager.CheckInfirmary())
+                unit.GetComponent<Unit>().Job = "infirmary";
+            else
+                unit.GetComponent<Unit>().Job = "dead";
+            unit.GetComponent<Unit>().JobPos = null;
+        }
+        else
+        {
+            unit.SetActive(true);
+            unit.GetComponent<Unit>().Health = 10;
+            unit.GetComponent<Unit>().CanSpawn = false;
+            SetAnimation(unit, "knockedOut", false);
+            unit.GetComponent<NavMeshAgent>().enabled = true;
+            ResetJob(unit.GetComponent<Unit>());
+        }
+    }
+
 
     int GetResourceID(GameObject clickedObj)
     {
@@ -659,29 +685,6 @@ public class UnitManager : MonoBehaviour
         if(unit_object.transform.Find("Rifle")!=null)
         {
             unit_object.transform.Find("Rifle").gameObject.SetActive(showGun);
-        }
-    }
-
-    void SetSpawnedUnitInfo(GameObject unit, bool isSpawned)
-    {
-        if(!isSpawned)
-        {
-            ShowGun(unit, false);
-            SetAnimation(unit, "inCombat", false);
-            SetAnimation(unit, "knockedOut", true);
-            PlayClip("dead");
-            unit.GetComponent<NavMeshAgent>().enabled = false;
-            unit.GetComponent<Unit>().Job = "dead";
-            unit.GetComponent<Unit>().JobPos = null;
-        }
-        else
-        {
-            unit.SetActive(true);
-            unit.GetComponent<Unit>().Health = 10;
-            unit.GetComponent<Unit>().CanSpawn = false;
-            SetAnimation(unit, "knockedOut", false);
-            unit.GetComponent<NavMeshAgent>().enabled = true;
-            ResetJob(unit.GetComponent<Unit>());
         }
     }
 
