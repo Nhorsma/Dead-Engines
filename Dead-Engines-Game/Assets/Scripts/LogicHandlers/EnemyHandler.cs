@@ -222,10 +222,13 @@ public class EnemyHandler : MonoBehaviour
     }
 	IEnumerator FireCoolDown(float extratime, GameObject enemy)
     {
-        enemy.GetComponent<Enemy>().JustShot = true;
-        yield return new WaitForSeconds(enemy.GetComponent<Enemy>().FireSpeed+extratime/2);
-        AssignAnimation(enemy, "firing", false);
-        enemy.GetComponent<Enemy>().JustShot = false;
+        if (enemy != null)
+        {
+            enemy.GetComponent<Enemy>().JustShot = true;
+            yield return new WaitForSeconds(enemy.GetComponent<Enemy>().FireSpeed + extratime / 2);
+            AssignAnimation(enemy, "firing", false);
+            enemy.GetComponent<Enemy>().JustShot = false;
+        }
     }
 
     void TravelTo(GameObject enemy, Vector3 place, bool stop, bool randomize)

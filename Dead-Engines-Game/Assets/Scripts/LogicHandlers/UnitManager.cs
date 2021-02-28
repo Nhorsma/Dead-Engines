@@ -512,13 +512,12 @@ public class UnitManager : MonoBehaviour
         Unit unit_data = unit.GetComponent<Unit>();
         unit.SetActive(false);
         unit.transform.position = robotPos;
+        float temp_downtime = downTime;
 
-		if (unit.GetComponent<Unit>().Job == "infirmary")
-			yield return new WaitForSeconds(downTime / 2);
-		else
-			yield return new WaitForSeconds(downTime);
+        if (unit.GetComponent<Unit>().Job == "infirmary")
+            temp_downtime = downTime / 2;
 
-        yield return new WaitForSeconds(0);
+        yield return new WaitForSeconds(temp_downtime);
         unit.GetComponent<Unit>().CanSpawn = true;
     }
 
