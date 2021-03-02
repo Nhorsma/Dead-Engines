@@ -59,15 +59,15 @@ public class AutomatonUI : MonoBehaviour
 		UpdateInfoTab();
 	}
 
-	private void OnMouseDown()
-	{
-		if (!Pause.paused)
-		{
-			auto_main.SetActive(!auto_main.activeSelf);
-			tabs[0].SetActive(!tabs[0].activeSelf);
-			tabs[1].SetActive(false);								// ------------------------------------------> for some reason the room tab forces itself open at start, this is the *official* workaround
-		}
-	}
+	//private void OnMouseDown()
+	//{
+	//	if (!Pause.paused)
+	//	{
+	//		auto_main.SetActive(!auto_main.activeSelf);
+	//		tabs[0].SetActive(!tabs[0].activeSelf);
+	//		tabs[1].SetActive(false);								// ------------------------------------------> for some reason the room tab forces itself open at start, this is the *official* workaround
+	//	}
+	//}
 
 	public void OpenInfoTab()
 	{

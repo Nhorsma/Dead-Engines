@@ -26,10 +26,15 @@ public class ResourceHandling : MonoBehaviour
     public SpawnRes spawnRes;
     public int resourcesLeft;
 
+	public List<GameObject> resTranslator = new List<GameObject>();
+
     void Start()
     {
         resourcesLeft = 3;   //represents how many deposits have not been fully depleted
-        resourceDeposits = new GameObject[spawnRes.GetResources().Length];
+
+		resTranslator = spawnRes.GetAllResources();
+
+        resourceDeposits = new GameObject[resTranslator.Count]; //sorry had to change because of list vs array
         resourceQuantities = new int[resourceDeposits.Length];
         SetUpResources();
 
@@ -62,7 +67,11 @@ public class ResourceHandling : MonoBehaviour
 				resourceQuantities[i] = startQuantity;
 
 			}
-			resourceDeposits = spawnRes.GetResources();
+			for (int i = 0; i < resTranslator.Count; i++)
+			{
+				resourceDeposits[i] = resTranslator[i];
+			}
+			//resourceDeposits = spawnRes.GetAllResources();		// this won't work because GetAllResources returns a list now
 		}
     }
 

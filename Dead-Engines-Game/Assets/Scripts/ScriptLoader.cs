@@ -61,6 +61,8 @@ public class ScriptLoader : MonoBehaviour
 		yield return new WaitForSeconds(1f);
 		Debug.Log("buffer complete");
 
+		spawnRes.TurnOffThinners();
+
 		Debug.Log("end loading");
 	}
 

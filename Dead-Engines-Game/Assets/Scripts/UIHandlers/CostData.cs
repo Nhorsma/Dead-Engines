@@ -20,7 +20,8 @@ public class CostData : MonoBehaviour
 
 	public static int electronics_wire, electronics_chip;
 
-	public static int[] special_part, special_board = new int[2]; // [ingredient 1, ingredient 2] -> oh boy I wish I was better at parsing things
+	public static int[] special_part = new int[2];
+	public static int[] special_board = new int[2]; // [ingredient 1, ingredient 2] -> oh boy I wish I was better at parsing things
 
 	private void Start()
 	{
@@ -42,6 +43,21 @@ public class CostData : MonoBehaviour
 		changer_list.Add(build_study);
 
 		ChangeRoomCost();
+
+		repair_controller = 100;
+		repair_generator = 100;
+
+		metal_bolt = 1;
+		metal_plate = 3;
+
+		electronics_chip = 3;
+		electronics_wire = 1;
+
+		special_part[0] = 2;
+		special_part[1] = 2;
+
+		special_board[0] = 2;
+		special_board[1] = 2;
 	}
 
 	public static void ChangeRoomCost()

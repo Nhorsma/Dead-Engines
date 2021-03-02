@@ -8,7 +8,19 @@ public class ThinOut : MonoBehaviour
 	private void OnTriggerEnter(Collider other)
 	{
 
-		if (other.gameObject.CompareTag("Bumpable"))
+		if (other.gameObject.CompareTag("Metal"))
+		{
+			Destroy(this.gameObject);
+		}
+		if (other.gameObject.CompareTag("Electronics"))
+		{
+			Destroy(this.gameObject);
+		}
+		if (other.gameObject.CompareTag("Encampment"))
+		{
+			Destroy(this.gameObject);
+		}
+		if (other.gameObject.CompareTag("Robot"))
 		{
 			Destroy(this.gameObject);
 		}

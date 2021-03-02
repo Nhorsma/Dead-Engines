@@ -6,7 +6,8 @@ using UnityEngine.SceneManagement;
 public class SpawnRes : MonoBehaviour
 {
 
-	public GameObject res1, res2, res3, enemy;			// resource + enemy game objects (prefabs)
+	public GameObject res1, res2, res3, enemy;          // resource + enemy game objects (prefabs)
+	public GameObject thin_res1, thin_res2, thin_res3, thin_encampment;  // thinOut attached
     private GameObject r1, r2, r3;                      // the clones/instantiations of the resources (to be returned)
 	public GameObject autoObj;
 	public Transform startPos;							// where the robot body is located
@@ -35,7 +36,7 @@ public class SpawnRes : MonoBehaviour
 
     public ResourceHandling recHandle;
 
-	public GameObject placeholderObj;
+	//public GameObject placeholderObj;
 
 	public int spawnWithEncampmentProbability;
 
@@ -56,19 +57,19 @@ public class SpawnRes : MonoBehaviour
 		coreResources = new GameObject[coreSpawnDensity];
 
 		//debugging stuff
-		placeholderObj.GetComponentInChildren<SpriteRenderer>().color = Color.magenta;
+		//placeholderObj.GetComponentInChildren<SpriteRenderer>().color = Color.magenta;
 		SpawnOuterResources();
 
-		placeholderObj.GetComponentInChildren<SpriteRenderer>().color = Color.cyan;
+		//placeholderObj.GetComponentInChildren<SpriteRenderer>().color = Color.cyan;
 		SpawnInnerResources();
 
-		placeholderObj.GetComponentInChildren<SpriteRenderer>().color = Color.yellow;
+		//placeholderObj.GetComponentInChildren<SpriteRenderer>().color = Color.yellow;
 		SpawnCoreResources();
 
-		SpawnEnemies(1);
+		//SpawnEnemies(1); // first version method
 
-		placeholderObj.GetComponentInChildren<SpriteRenderer>().color = Color.white;
-		SpawnEnemies2(spawnWithEncampmentProbability, outerResources);
+		//placeholderObj.GetComponentInChildren<SpriteRenderer>().color = Color.white;
+		SpawnEncampments(spawnWithEncampmentProbability, outerResources);
 	}
 
 	void Update()
@@ -176,7 +177,7 @@ public class SpawnRes : MonoBehaviour
 	}
 
 	// new version, testing
-	void SpawnEnemies2(int probability, GameObject[] resourceLayer)
+	void SpawnEncampments(int probability, GameObject[] resourceLayer)
 	{
 		int x, z = 0;
 		for (int i = 0; i < resourceLayer.Length; i++)
@@ -189,15 +190,8 @@ public class SpawnRes : MonoBehaviour
 					x = Random.Range(-(outer_low_range - 1), (outer_high_range));
 					z = Random.Range(-(outer_low_range - 1), (outer_high_range));
 				} while (Vector3.Distance(new Vector3(x, 0, z), resourceLayer[i].transform.position) > e_maxDistance || Vector3.Distance(new Vector3(x, 0, z), resourceLayer[i].transform.position) < e_minDistance);
-				//Debug.Log(i + " " + Vector3.Distance(new Vector3(x, 0, z), resourceLayer[i].transform.position));
 
-				//do
-				//{
-				//	x = Random.Range(-(outer_low_range - 1), (outer_high_range));
-				//	z = Random.Range(-(outer_low_range - 1), (outer_high_range));
-				//} while (Vector3.Distance(new Vector3(x, 0, z), resourceLayer[i].transform.position) >= e_maxDistance || Vector3.Distance(new Vector3(x, 0, z), resourceLayer[i].transform.position) <= e_minDistance);
-				//	Debug.Log("Spawned enemy");
-				var e = Instantiate(placeholderObj, new Vector3(x, -6.5f, z), Quaternion.identity);
+				var e = Instantiate(thin_encampment, new Vector3(x, -6.5f, z), Quaternion.identity);
 			}
 		}
 	}
@@ -214,15 +208,15 @@ public class SpawnRes : MonoBehaviour
 
 			if (x % 2 == 0 && z % 2 == 0)
 			{
-				outer_res = Instantiate(placeholderObj, new Vector3(x, -6.5f, z), Quaternion.identity);
+				outer_res = Instantiate(thin_res1, new Vector3(x, -6.5f, z), Quaternion.identity);
 			}
 			else if (x % 2 != 0 && z % 2 != 0)
 			{
-				outer_res = Instantiate(placeholderObj, new Vector3(x, -6.5f, z), Quaternion.identity);
+				outer_res = Instantiate(thin_res2, new Vector3(x, -6.5f, z), Quaternion.identity);
 			}
 			else if ((x % 2 != 0 && z % 2 == 0) || (x % 2 == 0 && z % 2 != 0))
 			{
-				outer_res = Instantiate(placeholderObj, new Vector3(x, -6.5f, z), Quaternion.identity);
+				outer_res = Instantiate(thin_res3, new Vector3(x, -6.5f, z), Quaternion.identity);
 			}
 			outerResources[i] = outer_res;
 		}
@@ -240,15 +234,15 @@ public class SpawnRes : MonoBehaviour
 
 			if (x % 2 == 0 && z % 2 == 0)
 			{
-				inner_res = Instantiate(placeholderObj, new Vector3(x, -6.5f, z), Quaternion.identity);
+				inner_res = Instantiate(thin_res1, new Vector3(x, -6.5f, z), Quaternion.identity);				// change res1 with new resource later
 			}
 			else if (x % 2 != 0 && z % 2 != 0)
 			{
-				inner_res = Instantiate(placeholderObj, new Vector3(x, -6.5f, z), Quaternion.identity);
+				inner_res = Instantiate(thin_res2, new Vector3(x, -6.5f, z), Quaternion.identity);
 			}
 			else if ((x % 2 != 0 && z % 2 == 0) || (x % 2 == 0 && z % 2 != 0))
 			{
-				inner_res = Instantiate(placeholderObj, new Vector3(x, -6.5f, z), Quaternion.identity);
+				inner_res = Instantiate(thin_res3, new Vector3(x, -6.5f, z), Quaternion.identity);
 			}
 			innerResources[i] = inner_res;
 		}
@@ -269,15 +263,15 @@ public class SpawnRes : MonoBehaviour
 
 			if (x % 2 == 0 && z % 2 == 0)
 			{
-				core_res = Instantiate(placeholderObj, new Vector3(x, -6.5f, z), Quaternion.identity);
+				core_res = Instantiate(thin_res1, new Vector3(x, -6.5f, z), Quaternion.identity);				// change res1 with new resource later
 			}
 			else if (x % 2 != 0 && z % 2 != 0)
 			{
-				core_res = Instantiate(placeholderObj, new Vector3(x, -6.5f, z), Quaternion.identity);
+				core_res = Instantiate(thin_res2, new Vector3(x, -6.5f, z), Quaternion.identity);
 			}
 			else if ((x % 2 != 0 && z % 2 == 0) || (x % 2 == 0 && z % 2 != 0))
 			{
-				core_res = Instantiate(placeholderObj, new Vector3(x, -6.5f, z), Quaternion.identity);
+				core_res = Instantiate(thin_res3, new Vector3(x, -6.5f, z), Quaternion.identity);
 			}
 			coreResources[i] = core_res;
 		}
@@ -314,10 +308,16 @@ public class SpawnRes : MonoBehaviour
 		return allResources;
 	}
 
-	//needs to be removed!
-	public void OpenMapRange()
+	public void TurnOffThinners()
 	{
-		SpawnInnerResources();
-    }
+		foreach (GameObject o in GetAllResources())
+		{
+			if (o != null)
+			{
+				o.gameObject.GetComponent<SphereCollider>().enabled = false;
+			}
+		}
+		autoObj.GetComponent<SphereCollider>().enabled = false;
+	}
 
 }

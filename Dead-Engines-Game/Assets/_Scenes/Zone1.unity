@@ -340,7 +340,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &36277499
 RectTransform:
   m_ObjectHideFlags: 0
@@ -3374,7 +3374,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &250149884
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5862,7 +5862,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &413807990
 RectTransform:
   m_ObjectHideFlags: 0
@@ -6603,6 +6603,7 @@ MonoBehaviour:
   resourceQuantities: 
   spawnRes: {fileID: 1102157336}
   resourcesLeft: 0
+  resTranslator: []
 --- !u!114 &467610736
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -12193,7 +12194,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &842831416
 RectTransform:
   m_ObjectHideFlags: 0
@@ -13339,7 +13340,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &909030703
 RectTransform:
   m_ObjectHideFlags: 0
@@ -14214,7 +14215,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &985830759
 RectTransform:
   m_ObjectHideFlags: 0
@@ -15727,6 +15728,14 @@ MonoBehaviour:
   res2: {fileID: 8849693777513822540, guid: a0f0ed08341d7c44ba74309fa42dbc13, type: 3}
   res3: {fileID: 3113173182971870230, guid: 0a83527885cd7f241b7c22ece9f51c39, type: 3}
   enemy: {fileID: 3500671454363015440, guid: 79a02ea539ec3c54ebab16eeef8dc84f, type: 3}
+  thin_res1: {fileID: 6267019455420572033, guid: 17145d3838a67b84298e8a3d9e279bd8,
+    type: 3}
+  thin_res2: {fileID: 7672150137713591630, guid: 940d4d5026ed0c9409c32223ca34d83b,
+    type: 3}
+  thin_res3: {fileID: 7422429180628986571, guid: fb022d89c8412e845925e5b3851fe4aa,
+    type: 3}
+  thin_encampment: {fileID: 6625934082898223612, guid: e2ad133342c93a642bb0af64442e503f,
+    type: 3}
   autoObj: {fileID: 5905536743914566335}
   startPos: {fileID: 6539084605846923269}
   s_maxDistance: 200
@@ -15751,8 +15760,6 @@ MonoBehaviour:
   coreResources: []
   coreSpawnDensity: 30
   recHandle: {fileID: 467610735}
-  placeholderObj: {fileID: 8510683415502693747, guid: 7727306db95fba341a547b782418b12d,
-    type: 3}
   spawnWithEncampmentProbability: 5
 --- !u!114 &1102157337
 MonoBehaviour:
@@ -19826,6 +19833,8 @@ MonoBehaviour:
   hunterHandler: {fileID: 0}
   explosion: {fileID: 3118891267616825007, guid: 33b774b5819a306478e54bab16c216bb,
     type: 3}
+  spawnBuffer: 100
+  canTrigger: 0
 --- !u!1 &1379266040
 GameObject:
   m_ObjectHideFlags: 0
@@ -25829,7 +25838,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1783137554
 RectTransform:
   m_ObjectHideFlags: 0
@@ -26566,6 +26575,7 @@ MonoBehaviour:
   autoObj: {fileID: 5905536743914566335}
   selectItems: {fileID: 467610731}
   resourceHandling: {fileID: 467610735}
+  sphereThinner: {fileID: 5905536743914566337}
 --- !u!114 &1822839396
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -27482,6 +27492,8 @@ MonoBehaviour:
   enemyHandler: {fileID: 0}
   hunterHandler: {fileID: 0}
   explosion: {fileID: 0}
+  spawnBuffer: 100
+  canTrigger: 0
 --- !u!65 &1881537981
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -30287,7 +30299,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2075244108}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4109134d95303234097aa39b016d5510, type: 3}
   m_Name: 
@@ -34137,6 +34149,7 @@ GameObject:
   - component: {fileID: 5905536743914566333}
   - component: {fileID: 5905536743914566334}
   - component: {fileID: 5905536743914566336}
+  - component: {fileID: 5905536743914566337}
   m_Layer: 0
   m_Name: Automaton
   m_TagString: Robot
@@ -34240,6 +34253,19 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!135 &5905536743914566337
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5905536743914566335}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 40
+  m_Center: {x: 0, y: 13.14, z: 0}
 --- !u!1 &5939330328289042567
 GameObject:
   m_ObjectHideFlags: 0

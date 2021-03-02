@@ -67,7 +67,7 @@ public class RandomEvents : MonoBehaviour
 		noButton.onClick.RemoveAllListeners();
 
 		int r = 0;
-		r = Random.Range(0, 3);
+		r = Random.Range(0, 2);					// turned off trader for now
 		if (r == 0)
 		{
 			//unit
@@ -183,7 +183,7 @@ public class RandomEvents : MonoBehaviour
 			noButton.gameObject.SetActive(false);
 			okayButton.gameObject.SetActive(true);
 			return;
-			Debug.Log(what);
+			//Debug.Log(what);
 		}
 		else if (what == "no trade")
 		{

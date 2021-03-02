@@ -51,10 +51,10 @@ public class RoomManager : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.K))
-		{
-			Debug.Log(CheckInfirmary());
-		}
+  //      if (Input.GetKeyDown(KeyCode.K))
+		//{
+		//	Debug.Log(CheckInfirmary());
+		//}
     }
 
 	/// <summary>
@@ -476,9 +476,9 @@ public class RoomManager : MonoBehaviour
 	// this will need to get moved to SetupRoom once I make it a functional room
 	public void RepairGenerator()
 	{
-		if (ResourceHandling.metal >= 0)
+		if (ResourceHandling.metal >= 100)
 		{
-			ResourceHandling.metal -= 0;
+			ResourceHandling.metal -= 100;
 			generatorRepaired = true;
 			generatorTab.GetComponent<RoomComponents>().build.gameObject.SetActive(false);
 			generatorTab.GetComponent<RoomComponents>().pic.sprite = generatorRepairedSprite;
@@ -486,9 +486,9 @@ public class RoomManager : MonoBehaviour
 	}
 	public void RepairController()
 	{
-		if (ResourceHandling.electronics >= 0)
+		if (ResourceHandling.electronics >= 100)
 		{
-			ResourceHandling.electronics -= 0;
+			ResourceHandling.electronics -= 100;
 			controllerRepaired = true;
 			controllerTab.GetComponent<RoomComponents>().build.gameObject.SetActive(false);
 			controllerTab.GetComponent<RoomComponents>().pic.sprite = controllerRepairedSprite;

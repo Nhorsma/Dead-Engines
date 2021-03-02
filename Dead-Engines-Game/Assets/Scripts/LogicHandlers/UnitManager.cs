@@ -321,7 +321,7 @@ public class UnitManager : MonoBehaviour
 
     public void TakeInUnit()
     {
-        GameObject wanderingUnit = (GameObject)Instantiate(Resources.Load("unit"), FindSpotToSpawn(0), robot.transform.rotation);
+        GameObject wanderingUnit = (GameObject)Instantiate(Resources.Load("Unit Idle"), FindSpotToSpawn(0), robot.transform.rotation);
 
         wanderingUnit.GetComponent<Unit>().Id = units.Count;
         wanderingUnit.GetComponent<Unit>().UnitName = "U" + wanderingUnit.GetComponent<Unit>().Id.ToString();

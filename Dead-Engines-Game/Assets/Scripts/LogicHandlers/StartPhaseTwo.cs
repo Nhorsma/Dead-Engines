@@ -16,6 +16,8 @@ public class StartPhaseTwo : MonoBehaviour
 
 	public static bool isAutomatonRepaired = false;
 
+	public SphereCollider sphereThinner;
+
     void Start()
     {
         automatonAction = GameObject.FindGameObjectWithTag("Robot").GetComponent<AutomotonAction>();
@@ -43,8 +45,8 @@ public class StartPhaseTwo : MonoBehaviour
 
 	public void ActivateAutomoton()
 	{
+		sphereThinner.enabled = false;	// so the automaton doesn't delete resources inadvertently
 		auto.activationButton.gameObject.SetActive(false);
-		spawnRes.OpenMapRange();
 		autoObj.GetComponent<AutomotonAction>().enabled = true;
 		hunterHandler.enabled = true;
 		selectItems.enabled = false;
