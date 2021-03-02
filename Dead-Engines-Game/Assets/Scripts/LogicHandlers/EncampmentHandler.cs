@@ -52,6 +52,7 @@ public class EncampmentHandler : MonoBehaviour
         GameObject[] encampmentObjects = GameObject.FindGameObjectsWithTag("Encampment");
         for (int i = 0; i < encampmentObjects.Length; i++)
         {
+            encampmentObjects[i].GetComponent<Encampment>().Id = i;
             encampmentObjects[i].GetComponent<Encampment>().Obj = encampmentObjects[i];
             encampmentObjects[i].GetComponent<Encampment>().ClosestResource = GetClosestResource(encampmentObjects[i].GetComponent<Encampment>());
             encampmentObjects[i].GetComponent<Encampment>().Deployment = new string[]{enemy_model1.name};

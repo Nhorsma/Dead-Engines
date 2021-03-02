@@ -461,7 +461,7 @@ public class UnitManager : MonoBehaviour
             {
                 Encampment encampmentTarget = unit.GetComponent<Unit>().JobPos.GetComponent<Encampment>();
                 encampmentTarget.Health -= unitDamage;
-                encampmentHandler.CheckForTrigger(encampmentTarget);
+                encampmentHandler.CheckForTrigger(unit.GetComponent<Unit>().JobPos.GetComponent<Encampment>());
 
                 if (unit.GetComponent<Unit>().JobPos.GetComponent<Encampment>().Health <= unitDamage) // fishy
                 {
