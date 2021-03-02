@@ -476,9 +476,9 @@ public class RoomManager : MonoBehaviour
 	// this will need to get moved to SetupRoom once I make it a functional room
 	public void RepairGenerator()
 	{
-		if (ResourceHandling.metal >= 100)
+		if (ResourceHandling.metal >= CostData.repair_generator)
 		{
-			ResourceHandling.metal -= 100;
+			ResourceHandling.metal -= CostData.repair_generator;
 			generatorRepaired = true;
 			generatorTab.GetComponent<RoomComponents>().build.gameObject.SetActive(false);
 			generatorTab.GetComponent<RoomComponents>().pic.sprite = generatorRepairedSprite;
@@ -486,9 +486,9 @@ public class RoomManager : MonoBehaviour
 	}
 	public void RepairController()
 	{
-		if (ResourceHandling.electronics >= 100)
+		if (ResourceHandling.electronics >= CostData.repair_controller)
 		{
-			ResourceHandling.electronics -= 100;
+			ResourceHandling.electronics -= CostData.repair_controller;
 			controllerRepaired = true;
 			controllerTab.GetComponent<RoomComponents>().build.gameObject.SetActive(false);
 			controllerTab.GetComponent<RoomComponents>().pic.sprite = controllerRepairedSprite;

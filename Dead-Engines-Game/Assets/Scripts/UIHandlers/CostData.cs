@@ -25,17 +25,17 @@ public class CostData : MonoBehaviour
 
 	private void Start()
 	{
-		build_refinery[0] = 15;
-		build_refinery[1] = 15;
+		build_refinery[0] = 10;
+		build_refinery[1] = 10;
 
-		build_storage[0] = 25;
-		build_storage[1] = 25;
+		build_storage[0] = 20;
+		build_storage[1] = 20;
 
-		build_shrine[0] = 50;
-		build_shrine[1] = 50;
+		build_shrine[0] = 25;
+		build_shrine[1] = 25;
 
-		build_study[0] = 50;
-		build_study[1] = 50;
+		build_study[0] = 25;
+		build_study[1] = 25;
 
 		changer_list.Add(build_refinery);
 		changer_list.Add(build_storage);
@@ -44,14 +44,14 @@ public class CostData : MonoBehaviour
 
 		ChangeRoomCost();
 
-		repair_controller = 100;
-		repair_generator = 100;
+		repair_controller = 50;
+		repair_generator = 50;
 
 		metal_bolt = 1;
 		metal_plate = 3;
 
-		electronics_chip = 3;
 		electronics_wire = 1;
+		electronics_chip = 3;
 
 		special_part[0] = 2;
 		special_part[1] = 2;
