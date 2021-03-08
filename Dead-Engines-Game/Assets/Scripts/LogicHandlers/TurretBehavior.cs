@@ -10,6 +10,9 @@ public class TurretBehavior : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (target == null)
+            return;
+        
         var relativePos = target.transform.position - transform.position;
         var forward = transform.forward;
         var angle = Vector3.Angle(relativePos, forward) - 90; //the +30 is for correcting weird angles, 0 should be infront of it 

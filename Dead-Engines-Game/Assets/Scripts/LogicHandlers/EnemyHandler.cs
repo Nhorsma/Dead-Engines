@@ -217,6 +217,7 @@ public class EnemyHandler : MonoBehaviour
                 PlayClip(enemy_data.CampObj, "shoot");
                 StartCoroutine(TrailOff(0.05f, enemy.transform.position, enemy_data.Target.transform.position));
             }
+            PointTurret(enemy);
             StartCoroutine(FireCoolDown(hitChance, enemy));
         }
     }
@@ -248,6 +249,15 @@ public class EnemyHandler : MonoBehaviour
 			}
             AssignAnimation(enemy, "walking", Mathf.Abs(enemy.GetComponent<NavMeshAgent>().velocity.x + enemy.GetComponent<NavMeshAgent>().velocity.z) / 2);
             nav.SetDestination(place);
+        }
+    }
+
+    void PointTurret(GameObject enemy)
+    {
+        if(enemy.transform.Find("APC_turret")!=null)
+        {
+            if (enemy.GetComponent<Enemy>().Target != null)
+                enemy.transform.GetComponentInChildren<TurretBehavior>().target = enemy.GetComponent<Enemy>().Target;
         }
     }
 
