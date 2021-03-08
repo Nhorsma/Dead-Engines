@@ -9,6 +9,7 @@ public class SelectItems : MonoBehaviour
     RectTransform selectionSquareTrans;
     public float dragLimit;
     public UnitManager unitManager;
+    public AutomotonAction autoAction;
 
     //The materials
     public Material normalMaterial;
@@ -23,6 +24,7 @@ public class SelectItems : MonoBehaviour
     Color selectedYellow = new Color32(255, 255, 0, 200);
 
     GameObject highlightThisUnit;
+    public GameObject robot;
     public GameObject g1, g2; 
 
     Vector2 mouseFirst, mouseSecond;
@@ -101,12 +103,16 @@ public class SelectItems : MonoBehaviour
 					    UpdateUnitUI(hit.collider.gameObject.GetComponent<Unit>()); //////////////////////////////////////////
                         ReadyClip();
                     }
+                    if (hit.collider.CompareTag("Robot") && hit.collider.gameObject.activeInHierarchy)
+                    {
+                        autoAction.isSelected = true;
+                    }
                 }
                 else //group select
                 {
                     ClearAll();
                     GroupSelect();
-            }
+                }
             }
     }
 
@@ -235,6 +241,10 @@ public class SelectItems : MonoBehaviour
 
     void GroupSelect()
     {
+        if (InRect(robot.transform.position) && robot.activeInHierarchy)
+        {
+            autoAction.isSelected = true;
+        }
         for (int i = 0; i < unitManager.units.Count; i++)
         {
             GameObject currentUnit = unitManager.units[i];
@@ -304,6 +314,7 @@ public class SelectItems : MonoBehaviour
             SetColor(UnitManager.selectedUnits[i], true);
         }
         UnitManager.selectedUnits.Clear();
+        autoAction.isSelected = false;
 		unitUIPanel.SetActive(false);
 	}
 
