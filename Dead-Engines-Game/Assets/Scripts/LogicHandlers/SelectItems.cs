@@ -105,7 +105,7 @@ public class SelectItems : MonoBehaviour
                     }
                     if (hit.collider.CompareTag("Robot") && hit.collider.gameObject.activeInHierarchy)
                     {
-                        autoAction.isSelected = true;
+                        autoAction.SetSeleted(true, selectedC);
                     }
                 }
                 else //group select
@@ -243,7 +243,7 @@ public class SelectItems : MonoBehaviour
     {
         if (InRect(robot.transform.position) && robot.activeInHierarchy)
         {
-            autoAction.isSelected = true;
+            autoAction.SetSeleted(true, selectedC);
         }
         for (int i = 0; i < unitManager.units.Count; i++)
         {
@@ -314,8 +314,8 @@ public class SelectItems : MonoBehaviour
             SetColor(UnitManager.selectedUnits[i], true);
         }
         UnitManager.selectedUnits.Clear();
-        autoAction.isSelected = false;
-		unitUIPanel.SetActive(false);
+        autoAction.SetSeleted(false, normalC);
+        unitUIPanel.SetActive(false);
 	}
 
 

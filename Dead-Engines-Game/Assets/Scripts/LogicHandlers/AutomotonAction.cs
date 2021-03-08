@@ -385,4 +385,13 @@ public class AutomotonAction : MonoBehaviour
         else if (str == "alarm")
             audioSource.PlayOneShot(alarmClip);
     }
+
+    public void SetSeleted(bool set,Color c)
+    {
+        isSelected = set;
+        if(set)
+        {
+            transform.Find("Ring").GetComponent<SpriteRenderer>().color = c;
+        }
+    }
 }
