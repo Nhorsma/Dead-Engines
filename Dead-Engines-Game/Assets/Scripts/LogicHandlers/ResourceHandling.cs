@@ -21,16 +21,21 @@ public class ResourceHandling : MonoBehaviour
     public bool fuelTaken;
     public bool fuelDropped;
 
-    public GameObject[] resDeposits;
-    public int[] resQuantities;
-    public SpawnRes spawn;
-    public int recsLeft;
+    public GameObject[] resourceDeposits;
+    public int[] resourceQuantities;
+    public SpawnRes spawnRes;
+    public int resourcesLeft;
+
+	public List<GameObject> resTranslator = new List<GameObject>();
 
     void Start()
     {
-        recsLeft = 3;   //represents how many deposits have not been fully depleted
-        resDeposits = new GameObject[spawn.GetResources().Length];
-        resQuantities = new int[resDeposits.Length];
+        resourcesLeft = 3;   //represents how many deposits have not been fully depleted
+
+		resTranslator = spawnRes.GetAllResources();
+
+        resourceDeposits = new GameObject[resTranslator.Count]; //sorry had to change because of list vs array
+        resourceQuantities = new int[resourceDeposits.Length];
         SetUpResources();
 
         fuelDropped = fuelTaken = false;
@@ -46,60 +51,114 @@ public class ResourceHandling : MonoBehaviour
 		}
 	}
 
-    //-----------------------------------------------------------------------------------------
-    //-----------------------------------------------------------------------------------------
+	//-----------------------------------------------------------------------------------------
+	//-----------------------------------------------------------------------------------------
 
-    void SetUpResources()
+	/// <summary>
+	/// INITIALIZE --------------------------------------------------------------------------------------------------------------------------->
+	/// </summary>
+
+	void SetUpResources()
     {
-        for (int i = 0; i < resQuantities.Length; i++)
-        {
-            resQuantities[i] = startQuantity;
-            
-        }
-        resDeposits = spawn.GetResources();
+		if (spawnRes.isActiveAndEnabled)
+		{
+			for (int i = 0; i < resourceQuantities.Length; i++)
+			{
+				resourceQuantities[i] = startQuantity;
+
+			}
+			for (int i = 0; i < resTranslator.Count; i++)
+			{
+				resourceDeposits[i] = resTranslator[i];
+			}
+			//resourceDeposits = spawnRes.GetAllResources();		// this won't work because GetAllResources returns a list now
+		}
     }
 
-    void UpdateQuantities(GameObject deposit)
+	/// <summary>
+	/// MAIN FUNCTIONS --------------------------------------------------------------------------------------------------------------------------->
+	/// </summary>
+
+	void UpdateQuantities(GameObject deposit)
     {
         int i = 0;
         GameObject resource = null;
-        while(!resDeposits[i].Equals(deposit))
+        while(!resourceDeposits[i].Equals(deposit))
         {
             i++;
         }
-        resource = resDeposits[i];
+        resource = resourceDeposits[i];
     }
 
-    public int GetNumber(GameObject gm)
-    {
-        int i = 0;
-        while(!resDeposits[i].Equals(gm))
-        {
-            i++;
-        }
-        return i;
-    }
+	public void Extract(GameObject deposit, int amount)
+	{
+		int i = GetNumber(deposit);
+		resourceQuantities[i] -= amount;
+		if (resourceQuantities[i] <= 0)
+		{
+			resourceDeposits[i].SetActive(false);
+		}
+	}
 
-    public void Extract(GameObject gm)
-    {
-        int i = GetNumber(gm);
-        resQuantities[i] -= 1;
-    }
+	public void Extract(int id, int amount)
+	{
+		resourceQuantities[id] -= amount;
+		if (resourceQuantities[id] <= 0)
+		{
+			resourceDeposits[id].SetActive(false);
+		}
+	}
 
-    //called when Fuel resource has been seized and
-    //on-route to the automoton
-    public void TakenFuel()
+	/// <summary>
+	/// UTILITY FUNCTIONS --------------------------------------------------------------------------------------------------------------------------->
+	/// </summary>
+
+	//called when Fuel resource has been seized and on-route to the automoton
+	public void TakenFuel()
     {
         fuelTaken = true;
     }
-
-    //called when fuel resource has arrived at automoton
-    //"fuelDropped" activates the ability to upgrade the generator
-    public void DroppedOffFuel()
+	//called when fuel resource has arrived at automoton "fuelDropped" activates the ability to upgrade the generator
+	public void DroppedOffFuel()
     {
         if (fuelTaken)
             fuelDropped = true;
     }
 
+    public void SetNewResourceDeposits(List<GameObject> newDeps)
+    {
+		GameObject[] newDeposits = new GameObject[newDeps.Count];
 
+		for (int i = 0; i < newDeps.Count; i++)
+		{
+			newDeposits[i] = newDeps[i];
+		}
+
+        int[] newQuantity = new int[newDeposits.Length];
+        
+        for (int i = 0; i < newQuantity.Length; i++)
+        {
+            newQuantity[i] = startQuantity;
+        }
+       
+        for (int i = 0; i < resourceDeposits.Length; i++)
+        {
+            int id = GetNumber(resourceDeposits[i]);
+            int amount = resourceQuantities[id];
+            newQuantity[id] = amount;
+        }
+
+		resourceDeposits = newDeposits;
+		resourceQuantities = newQuantity;
+    }
+
+	public int GetNumber(GameObject gm)
+	{
+		int i = 0;
+		while (i < resourceDeposits.Length && !resourceDeposits[i].Equals(gm))
+		{
+			i++;
+		}
+		return i;
+	}
 }

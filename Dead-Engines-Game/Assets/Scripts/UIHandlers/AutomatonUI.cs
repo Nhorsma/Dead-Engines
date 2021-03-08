@@ -36,14 +36,14 @@ public class AutomatonUI : MonoBehaviour
 
 	public int lastClickedID = -1;
 
+	public Button activationButton;
+
 	void Start()
     {
 		metalText.text = " ";
 		electronicsText.text = " ";
 		hudMetal.text = " ";
 		hudElectronics.text = " ";
-
-        //cameraM = GameObject.FindGameObjectWithTag("GameController").GetComponent<CameraMovement>();
 
 		debugText.Add(debug1);
 		debugText.Add(debug2);
@@ -59,37 +59,78 @@ public class AutomatonUI : MonoBehaviour
 		UpdateInfoTab();
 	}
 
-	private void OnMouseDown()
+	//private void OnMouseDown()
+	//{
+	//	if (!Pause.paused)
+	//	{
+	//		auto_main.SetActive(!auto_main.activeSelf);
+	//		tabs[0].SetActive(!tabs[0].activeSelf);
+	//		tabs[1].SetActive(false);								// ------------------------------------------> for some reason the room tab forces itself open at start, this is the *official* workaround
+	//	}
+	//}
+
+	public void OpenInfoTab()
 	{
-		auto_main.SetActive(!auto_main.activeSelf);
-		top_hud.SetActive(!top_hud.activeSelf);
+		for (int i = 0; i < tabs.Count; i++)
+		{
+			if (i != 0) // info tab index
+			{
+				tabs[i].SetActive(false);
+			}
+		}
+
+		if (auto_main.activeSelf == false && tabs[0].activeSelf == false) //if neither are turned on, turn both on
+		{
+			tabs[0].SetActive(true);
+			auto_main.SetActive(true);
+		}
+		else if (auto_main.activeSelf == true && tabs[0].activeSelf == false) //if main content is on but tab is off, turn on tab only
+		{
+			Debug.Log("hit");
+			tabs[0].SetActive(true);
+		}
+		else if (auto_main.activeSelf == true) // last - if main content and tab are both on, turn both off
+		{
+			tabs[0].SetActive(false);
+			auto_main.SetActive(false);
+		}
+
 	}
 
-	public void OpenTab1()
+	public void OpenRoomsTab()
 	{
-		foreach (GameObject t in tabs)
+		for (int i = 0; i < tabs.Count; i++)
+		{
+			if (i != 1) // room tab index
+			{
+				tabs[i].SetActive(false);
+			}
+		}
+		foreach (GameObject t in roomManager.roomTabs)
 		{
 			t.SetActive(false);
 		}
-		tabs[0].SetActive(true);
+		roomManager.controllerTab.gameObject.SetActive(false);
+		roomManager.generatorTab.gameObject.SetActive(false);
+
+		if (auto_main.activeSelf == false && tabs[1].activeSelf == false)
+		{
+			tabs[1].SetActive(true);
+			auto_main.SetActive(true);
+		}
+		else if (auto_main.activeSelf == true && tabs[1].activeSelf == false)
+		{
+			Debug.Log("hit");
+			tabs[1].SetActive(true);
+		}
+		else if (auto_main.activeSelf == true)
+		{
+			tabs[1].SetActive(false);
+			auto_main.SetActive(false);
+		}
 	}
 
-	public void OpenTab2()
-	{
-		foreach (GameObject t in tabs)
-		{
-			t.SetActive(false);
-		}
-		foreach (GameObject m in roomManager.miniTabs)
-		{
-			m.SetActive(false);
-		}
-		roomManager.ctrlMiniTab.gameObject.SetActive(false);
-		roomManager.genMiniTab.gameObject.SetActive(false);
-		tabs[1].SetActive(true);
-	}
-
-	public void OpenTab3()
+	public void OpenBuildTab()
 	{
 		foreach (GameObject t in tabs)
 		{
@@ -112,34 +153,37 @@ public class AutomatonUI : MonoBehaviour
 		hudMetal.text = "Metal: " + ResourceHandling.metal;
 		hudElectronics.text = "Electronics: " + ResourceHandling.electronics;
 
-		if (unitManager.units.Length > 0)
+		if (RoomManager.generatorRepaired && RoomManager.controllerRepaired)
 		{
-			for (int i = 0; i < unitManager.units.Length; i++)
-			{
-				unitViewport[i].GetComponentInChildren<Text>().text = unitManager.units[i].UnitName;
-			}
+			activationButton.enabled = true;
 		}
+		else
+		{
+			activationButton.enabled = false;
+		}
+
+		//if (unitManager.units != null)
+		//{
+		//	if (unitManager.units.Length > 0)
+		//	{
+		//		for (int i = 0; i < unitManager.units.Length; i++)
+		//		{
+		//			unitViewport[i].GetComponentInChildren<Text>().text = unitManager.units[i].UnitName;
+		//		}
+		//	}
+		//}
 	}
 
 	public void FindUnit(int i)
 	{
-		Vector3 unitPos = unitManager.unitsGM[i].transform.position;
+		Vector3 unitPos = unitManager.units[i].transform.position;
 		Debug.Log(unitPos);
-		lastClickedID = i; ////////////////////////////////////////////////
-        StartCoroutine(Teleport(unitPos, 10f));
+		lastClickedID = i;
+        Teleport(unitPos, 10f);
 	}
 
-
-    //It didnt like getting the CameraMovmeent for some reason
-    IEnumerator Teleport(Vector3 pos, float mod)
+    public void Teleport(Vector3 pos, float mod)
     {
-        Rigidbody rb = Camera.main.GetComponent<Rigidbody>();
-        pos = pos + new Vector3(0f, mod, -mod / 1.5f);
-
-        while (Vector3.Distance(rb.transform.position, pos) > 0.1f)
-        {
-            rb.transform.position = Vector3.Lerp(rb.transform.position, pos, 10f * Time.deltaTime);
-            yield return 0;
-        }
+        Camera.main.GetComponent<Rigidbody>().transform.position = pos + new Vector3(0f, mod, -mod);
     }
 }

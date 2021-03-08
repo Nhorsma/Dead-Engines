@@ -4,32 +4,53 @@ using UnityEngine;
 
 public class StartPhaseTwo : MonoBehaviour
 {
-    public bool endPhaseOne, startPhaseTwo;
-    public GameObject automoton, fog;
-    public Vector3 phasetwoPos;
-    public float speed;
+    public static bool endPhaseOne;
+    public static AutomotonAction automatonAction;
+    public static HunterHandler hunterHandler;
+
+	public AutomatonUI auto;
+	public SpawnRes spawnRes;
+	public GameObject autoObj;
+	public SelectItems selectItems;
+	public ResourceHandling resourceHandling;
+
+	public static bool isAutomatonRepaired = false;
+
+	public SphereCollider sphereThinner;
 
     void Start()
     {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        if (endPhaseOne == true)
-            StartCoroutine(RaiseAuto());
-    }
-
-    IEnumerator RaiseAuto()
-    {
+        automatonAction = GameObject.FindGameObjectWithTag("Robot").GetComponent<AutomotonAction>();
+        hunterHandler = GetComponent<HunterHandler>();
+        automatonAction.enabled = false;
+        hunterHandler.enabled = false;
         endPhaseOne = false;
-        //fog.SetActive(false);
-        Debug.Log("before");
-        yield return new WaitForSeconds(4f);
-       // automoton.transform.position = Vector3.MoveTowards(automoton.transform.position, phasetwoPos, speed * Time.deltaTime);
-        Debug.Log("after");
-        startPhaseTwo = true;
     }
+
+    public static void PhaseTwo()
+    {
+        automatonAction.enabled = true;
+        hunterHandler.enabled = true;
+        endPhaseOne = true;
+    }
+
+	public void RepairAutomaton()
+	{
+		isAutomatonRepaired = true;
+		Debug.Log("repaired automaton");
+
+		//activates automoton movement script
+		PhaseTwo();
+	}
+
+	public void ActivateAutomoton()
+	{
+		sphereThinner.enabled = false;	// so the automaton doesn't delete resources inadvertently
+		auto.activationButton.gameObject.SetActive(false);
+		autoObj.GetComponent<AutomotonAction>().enabled = true;
+		hunterHandler.enabled = true;
+		selectItems.enabled = false;
+		resourceHandling.SetNewResourceDeposits(spawnRes.GetAllResources());
+	}
 
 }

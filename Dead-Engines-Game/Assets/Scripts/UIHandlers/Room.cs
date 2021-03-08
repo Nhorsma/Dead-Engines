@@ -8,27 +8,42 @@ public class Room
 	private string type;
 	private int slot;
 	private int level;
-	private List<Unit> workers;
-	private int workMultiplier;
-	private string activeEffect;
-	private bool canRefine;
 
-	public Room (string t, int s, int l)
+	private List<GameObject> workers; //should this be an array? i think using lists is easier >;-0
+	private int workerCapacity;
+
+	private string activeEffect;
+
+	private int storageCapacity;
+
+	//private List<GameObject> workers;
+	//private string activeEffect;
+	//private bool canFunction;
+
+	public Room()
 	{
-		this.Type = t;
-		this.Slot = s;
-		this.Level = l;
-		this.WorkMultiplier = 0;
-		this.Workers = new List<Unit>();
-		this.ActiveEffect = "none";
-		this.CanRefine = false;
+
+	}
+
+	public Room (string type, int slot, int level)
+	{
+		this.Type = type;
+		this.Slot = slot;
+		this.Level = level;
 	}
 
 	public int Slot { get => slot; set => slot = value; }
 	public string Type { get => type; set => type = value; }
 	public int Level { get => level; set => level = value; }
-	public List<Unit> Workers { get => workers; set => workers = value; }
-	public int WorkMultiplier { get => workMultiplier; set => workMultiplier = value; }
+	public List<GameObject> Workers { get => workers; set => workers = value; }
+	public int WorkerCapacity { get => workerCapacity; set => workerCapacity = value; }
 	public string ActiveEffect { get => activeEffect; set => activeEffect = value; }
-	public bool CanRefine { get => canRefine; set => canRefine = value; }
+	public int StorageCapacity { get => storageCapacity; set => storageCapacity = value; }
+
+	public virtual void DestroyRoom() // give back % of resources used to build room -> so I guess Cost[] should be cost to upgrade? and then do the math based on that
+	{
+		return;
+	}
+
+
 }

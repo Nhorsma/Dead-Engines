@@ -37,7 +37,9 @@ public class CameraMovement : MonoBehaviour
         speedMulti = startSpeed;
         rb = maincam.GetComponent<Rigidbody>();
         DefaultKeys();
-    }
+
+		Teleport(ui.gameObject.transform.position, mod);//
+	}
 
     void Update()
     {
@@ -54,7 +56,7 @@ public class CameraMovement : MonoBehaviour
         }
         if(Input.GetKeyDown(KeyCode.Space))
         {
-            StartCoroutine(Teleport(ui.gameObject.transform.position,mod));
+            Teleport(ui.gameObject.transform.position, mod);
         }
 
 		//if (forceLock && ui.auto_main.activeInHierarchy)
@@ -143,15 +145,9 @@ public class CameraMovement : MonoBehaviour
         }
     }
 
-    IEnumerator Teleport(Vector3 pos, float mod)
-    {
-        pos = pos + new Vector3(0f, mod, -mod / 1.5f);
-
-        while(Vector3.Distance(rb.transform.position, pos) > 0.1f)
-        {
-            rb.transform.position = Vector3.Lerp(rb.transform.position, pos, 10f * Time.deltaTime);
-            yield return 0;
-        }
+    public void Teleport(Vector3 pos, float mod)
+    {       
+        rb.transform.position = pos + new Vector3(0f, mod, -mod/3);
     }
 
     void DetermineSpeedLimit()

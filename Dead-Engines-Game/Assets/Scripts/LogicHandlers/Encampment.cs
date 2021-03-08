@@ -2,13 +2,18 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Encampment
+public class Encampment : MonoBehaviour
 {
     private string[] deployment;
-    private bool canSpawn, playerInRange;
-    private int id, health, chance, onField;
-    private GameObject closestRec;
-
+	private bool canSpawn = true;
+	private bool playerInRange = false;
+	private int id = -1;
+	private int health = 100;
+	private int chance = 0;
+	private int onField = 0;
+    private string enemyJobs = null;
+    private GameObject closestResource = null;
+    private GameObject obj;
 
     public Encampment(int newid)
     {
@@ -18,8 +23,19 @@ public class Encampment
         health = 100;
         onField = 0;
         playerInRange = false;
+        deployment = new string[] {};
+        enemyJobs = "guard";
+    }
+
+    public Encampment()
+    {
+        canSpawn = true;
+        chance = 0;
+        id = 0;
+        health = 100;
+        onField = 0;
+        playerInRange = false;
         deployment = new string[] { "hellow" };
-      
     }
 
     public int Id
@@ -52,10 +68,10 @@ public class Encampment
         set { onField = value; }
     }
 
-    public GameObject ClosestRec
+    public GameObject ClosestResource
     {
-        get { return closestRec;}
-        set { closestRec = value; }
+        get { return closestResource;}
+        set { closestResource = value; }
     }
 
     public bool PlayerInRange
@@ -68,6 +84,18 @@ public class Encampment
     {
         get { return deployment; }
         set { deployment = value; }
+    }
+
+    public GameObject Obj
+    {
+        get { return obj; }
+        set { obj = value; }
+    }
+
+    public string EnemyJobs
+    {
+        get { return enemyJobs; }
+        set { enemyJobs = value; }
     }
 
 

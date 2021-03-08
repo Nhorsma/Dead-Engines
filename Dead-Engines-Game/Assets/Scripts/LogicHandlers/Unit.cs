@@ -2,38 +2,45 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Unit
+public class Unit : MonoBehaviour
 {
-	private string unitName;
-    private string job;
-    private GameObject jobPos;
-    private int health;
-    private bool justDroppedOff, justShot;
-    private int id;
-    private bool canSpawn;
 
-    public Unit()
-    {
-        canSpawn = false;
-        job = "none";
-        jobPos = null;
-        health = 10;
-        justDroppedOff = false;
-        id = -1;
-        justShot = false;
-    }
+	private string unitName = "u";			// unit's individual name
+    private string job = "none";			// what the unit is doing
+    private GameObject jobPos = null;		// where the unit is going
+    private int health = 10;					// how much damage the unit can take
+	private bool justDroppedOff = false;	// is the unit on the way to or from the automaton?
+	private bool justShot = false;			// has the unit fired its gun?
+	private int id = -1;                    // which unit is this?
+	private bool canSpawn = false;          // can the unit respawn?
+    private bool armorPiercing = false;
 
-    public Unit(int dec)
-    {
-        job = "none";
-        jobPos = null;
-        health = 3;
-        justDroppedOff = false;
-        id = dec;
-		unitName = "U" + id.ToString();
-    }
+	public Unit()
+	{
+		//canSpawn = false;
+		//job = "none";
+		//jobPos = null;
+		//health = 3;
+		//justDroppedOff = false;
+		//justShot = false;
+		//id = -1;
+		//justShot = false;
+		//unitName = "U";
+	}
 
-    public string Job
+	//  public Unit(int unit_id)
+	//  {
+	//canSpawn = false;
+	//job = "none";
+	//      jobPos = null;
+	//      health = 3;
+	//      justDroppedOff = false;
+	//justShot = false;
+	//id = unit_id;
+	//unitName = "U" + id.ToString();
+	//  }
+
+	public string Job
     {
         get { return job; }   
         set { job = value; }
@@ -79,6 +86,12 @@ public class Unit
     {
         get { return canSpawn; }
         set { canSpawn = value; }
+    }
+
+    public bool Piercing
+    {
+        get { return armorPiercing; }
+        set { armorPiercing = value; }
     }
 
 }

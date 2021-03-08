@@ -4,24 +4,28 @@ using UnityEngine;
 
 public class Hunter : Enemy
 {
-    protected GameObject obj;
-    protected bool canWalk, isWalking;
+	private bool canWalk = true;
+	private bool walkingForward = false;
+	private bool walkingBackward = false;
+	private bool firing = false;
+	private bool isDead = false;
+    private float speed = 10f;
+    private int range = 1;
 
-    public Hunter(GameObject g)
+    public Hunter(int hp, int dmg, float shootspeed)
     {
-        canWalk = true;
-        obj = g;
-        health = 5;
-        id = -1;
-        target = null;
-        justShot = false;
+        Health = hp;
+        Id = -1;
+        Target = null;
+		JustShot = false;
+        Armored = true;
+        Damage = 1;
+
+		canWalk = true;
+		range = 1; //not implemented yet
+        speed = 10f;
     }
 
-    public GameObject Obj
-    {
-        get { return obj; }
-        set { obj = value; }
-    }
 
     public bool CanWalk
     {
@@ -29,10 +33,40 @@ public class Hunter : Enemy
         set { canWalk = value; }
     }
 
-    public bool IsWalking
+    public bool WalkingForward
     {
-        get { return isWalking; }
-        set { isWalking = value; }
+        get { return walkingForward; }
+        set { walkingForward= value; }
+    }
+
+    public bool WalkingBackward
+    {
+        get { return walkingBackward; }
+        set { walkingBackward = value; }
+    }
+
+    public bool Firing
+    {
+        get { return firing; }
+        set { firing = value; }
+    }
+
+    public bool IsDead
+    {
+        get { return isDead; }
+        set { isDead = value; }
+    }
+
+    public float Speed
+    {
+        get { return speed; }
+        set { speed = value; }
+    }
+
+    public int Range
+    {
+        get { return range; }
+        set { range = value; }
     }
 
 

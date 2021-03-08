@@ -5,406 +5,319 @@ using UnityEngine.UI;
 
 public class RoomManager : MonoBehaviour
 {
-
-	public List<Room> rooms = new List<Room>();
-	public List<Text> display; //change to gameObject later
-
-	public int roomSlotClicked = 0;
+	public SetupRoom setupRoom;
 	public AutomatonUI auto;
-    public UnitManager um;
+	public UnitManager unitManager;
+
 	public GameObject autoObj;
 
-	public List<GameObject> miniTabs = new List<GameObject>();
-	public GameObject ctrlMiniTab;
-	public GameObject genMiniTab;
+	// room data & tabs
+	public List<Room> rooms = new List<Room>(); // room_data
+	public List<GameObject> roomTabs = new List<GameObject>(); // the individual room panel
+	public GameObject controllerTab;
+	public GameObject generatorTab;
 
-	public float refineryCost_M;
-	public float refineryCost_E;
+	public List<Text> roomTypesAtAGlance; //change to gameObject later -> do I still need to do this???
+	public List<GameObject> roomSpritesInOrder; // --------------------------------------------------> is this being used?
 
-	public float storageCost_M;
-	public float storageCost_E;
+	public Sprite generatorRepairedSprite;
+	public Sprite controllerRepairedSprite;
 
-	public float shrineCost_M;
-	public float shrineCost_E;
+	public int roomSlotClicked = 0;
 
-	public float studyCost_M;
-	public float studyCost_E;
+	// sound fx
+    public AudioSource audioSource;
+    public AudioClip wrenchClip;
+    public AudioClip hammerClip;
+    public AudioClip errorClip;
 
-	//origs
-	public float refineryCost_Mo;
-	public float refineryCost_Eo;
-
-	public float storageCost_Mo;
-	public float storageCost_Eo;
-
-	public float shrineCost_Mo;
-	public float shrineCost_Eo;
-
-	public float studyCost_Mo;
-	public float studyCost_Eo;
-
-	public int efficiency = 0;
-
+	// effects. this is where hella data is stored, mostly data that changes with room effects
 	public EffectConnector effectConnector;
+	public int efficiency = 0; // this needs to be here for some reason I can't remember at the moment
 
+	// repair individual rooms
+	public static bool generatorRepaired = false;
+	public static bool controllerRepaired = false;
+
+	// need to clean
 	void Start()
     {
+		// might have a problem with list passing?
+		InitializeRooms();
+
+		// this is actually important
+		UpdateRoomDisplay();
+	}
+
+    void Update()
+    {
+  //      if (Input.GetKeyDown(KeyCode.K))
+		//{
+		//	Debug.Log(CheckInfirmary());
+		//}
+    }
+
+	/// <summary>
+	/// INITIALIZE --------------------------------------------------------------------------------------------------------------------------->
+	/// </summary>
+
+	public void InitializeRooms()
+	{
 		for (int i = 0; i < 7; i++)
 		{
 			rooms.Add(new Room("empty", i, 0));
 		}
-		refineryCost_Mo = refineryCost_M;
-		refineryCost_Eo = refineryCost_E;
-
-		storageCost_Mo = storageCost_M;
-		storageCost_Eo = storageCost_E;
-
-		shrineCost_Mo = shrineCost_M;
-		shrineCost_Eo = shrineCost_E;
-
-		studyCost_Mo = studyCost_M;
-		studyCost_Eo = studyCost_E;
-}
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
-	public void OpenMiniTab(int clickedSlot)
-	{
-		miniTabs[clickedSlot].gameObject.SetActive(true);
-		Debug.Log("Current tab " + clickedSlot);
 	}
 
-	public void OpenController()
-	{
-		ctrlMiniTab.gameObject.SetActive(true);
-	}
-
-	public void OpenGenerator()
-	{
-		genMiniTab.gameObject.SetActive(true);
-	}
-
-	public void TakeToBuild(int clickedSlot)
-	{
-		roomSlotClicked = clickedSlot;
-		auto.OpenTab3();
-	}
+	/// <summary>
+	/// MAIN FUNCTIONS --------------------------------------------------------------------------------------------------------------------------->
+	/// </summary>
 
 	public void Build(string room)
 	{
-		if (room == "refinery" && ResourceHandling.metal >= refineryCost_M && ResourceHandling.electronics >= refineryCost_E)
+		if (room == "refinery" && ResourceHandling.metal >= CostData.build_refinery[2] && ResourceHandling.electronics >= CostData.build_refinery[3])
 		{
-			ResourceHandling.metal -= (int)refineryCost_M;
-			ResourceHandling.electronics -= (int)refineryCost_E;
-			rooms[roomSlotClicked] = new Room("refinery", roomSlotClicked, 1);
-			SetupRefinery(roomSlotClicked);
+			ResourceHandling.metal -= (int)CostData.build_refinery[2];
+			ResourceHandling.electronics -= (int)CostData.build_refinery[3];
+			rooms[roomSlotClicked] = new Refinery(roomSlotClicked, 1);
+			setupRoom.Setup(rooms[roomSlotClicked]); // ->
+			PlayClip("wrench");
 		}
-		else if (room == "storage" && ResourceHandling.metal >= storageCost_M && ResourceHandling.electronics >= refineryCost_E)
+		else if (room == "storage" && ResourceHandling.metal >= CostData.build_storage[2] && ResourceHandling.electronics >= CostData.build_storage[3])
 		{
-			ResourceHandling.metal -= (int)storageCost_M;
-			ResourceHandling.electronics -= (int)storageCost_E;
-			rooms[roomSlotClicked] = new Room("storage", roomSlotClicked, 1);
-			SetupStorage(roomSlotClicked);
+			ResourceHandling.metal -= (int)CostData.build_storage[2];
+			ResourceHandling.electronics -= (int)CostData.build_storage[3];
+			rooms[roomSlotClicked] = new Storage(roomSlotClicked, 1);
+			setupRoom.Setup(rooms[roomSlotClicked]);
+			PlayClip("wrench");
 		}
-		else if (room == "shrine" && ResourceHandling.metal >= shrineCost_M && ResourceHandling.electronics >= shrineCost_E)
+		else if (room == "shrine" && ResourceHandling.metal >= CostData.build_shrine[2] && ResourceHandling.electronics >= CostData.build_shrine[3])
 		{
-			ResourceHandling.metal -= (int)shrineCost_M;
-			ResourceHandling.electronics -= (int)shrineCost_E;
-			rooms[roomSlotClicked] = new Room("shrine", roomSlotClicked, 1);
-			SetupShrine(roomSlotClicked);
+			ResourceHandling.metal -= (int)CostData.build_shrine[2];
+			ResourceHandling.electronics -= (int)CostData.build_shrine[3];
+			rooms[roomSlotClicked] = new Shrine(roomSlotClicked, 1);
+			setupRoom.Setup(rooms[roomSlotClicked]);
+			PlayClip("wrench");
 		}
-		else if (room == "study" && ResourceHandling.metal >= studyCost_M && ResourceHandling.electronics >= studyCost_E)
+		else if (room == "study" && ResourceHandling.metal >= CostData.build_study[2] && ResourceHandling.electronics >= CostData.build_study[3])
 		{
-			ResourceHandling.metal -= (int)studyCost_M;
-			ResourceHandling.electronics -= (int)studyCost_E;
-			rooms[roomSlotClicked] = new Room("study", roomSlotClicked, 1);
-			SetupStudy(roomSlotClicked);
+			ResourceHandling.metal -= (int)CostData.build_study[2];
+			ResourceHandling.electronics -= (int)CostData.build_study[3];
+			rooms[roomSlotClicked] = new Study(roomSlotClicked, 1);
+			setupRoom.Setup(rooms[roomSlotClicked]);
+			PlayClip("wrench");
+		}
+		else if (room == "infirmary" && ResourceHandling.metal >= 10 && ResourceHandling.electronics >= 10)
+		{
+			ResourceHandling.metal -= 10;
+			ResourceHandling.electronics -= 10;
+			rooms[roomSlotClicked] = new Infirmary(roomSlotClicked, 1);
+			setupRoom.Setup(rooms[roomSlotClicked]);
+			PlayClip("wrench");
 		}
 		else
 		{
 			Debug.Log("Not enough resources to build a " + room + ".");
+			PlayClip("error");
 		}
 		UpdateRoomDisplay();
 	}
 
-	void SetupRefinery(int slot) //////////////////////////////		miniTabs[slot].GetComponent<MiniTabHolder>().func00.GetComponentInChildren<Text>().text = "Unassign Unit";
+	//add infirmary stuff
+	public void Assign(string roomType, int slot)
 	{
-		miniTabs[slot].GetComponent<MiniTabHolder>().build.gameObject.SetActive(false);
-
-		miniTabs[slot].GetComponent<MiniTabHolder>().func0.onClick.RemoveAllListeners();
-		miniTabs[slot].GetComponent<MiniTabHolder>().func0.GetComponentInChildren<Text>().text = "Assign Unit";
-		miniTabs[slot].GetComponent<MiniTabHolder>().func0.onClick.AddListener(delegate { Assign("refinery", rooms[slot]); });
-		miniTabs[slot].GetComponent<MiniTabHolder>().func0.gameObject.SetActive(true);
-
-		miniTabs[slot].GetComponent<MiniTabHolder>().upgrade.gameObject.SetActive(true);
-		miniTabs[slot].GetComponent<MiniTabHolder>().roomName.text = "Refinery";
-
-		miniTabs[slot].GetComponent<MiniTabHolder>().func1.GetComponentInChildren<Text>().text = "Refine Bolt";
-		miniTabs[slot].GetComponent<MiniTabHolder>().func2.GetComponentInChildren<Text>().text = "Refine Plate";
-		miniTabs[slot].GetComponent<MiniTabHolder>().func3.GetComponentInChildren<Text>().text = "Refine Part";
-
-		miniTabs[slot].GetComponent<MiniTabHolder>().func1.onClick.RemoveAllListeners();
-		miniTabs[slot].GetComponent<MiniTabHolder>().func1.onClick.AddListener(delegate{ Refine("bolt"); }); ///////////////////////////////
-		miniTabs[slot].GetComponent<MiniTabHolder>().func1.gameObject.SetActive(true);
-
-		miniTabs[slot].GetComponent<MiniTabHolder>().func2.onClick.RemoveAllListeners();
-		miniTabs[slot].GetComponent<MiniTabHolder>().func2.onClick.AddListener(delegate { Refine("plate"); }); ///////////////////////////////
-		miniTabs[slot].GetComponent<MiniTabHolder>().func2.gameObject.SetActive(true);
-
-		miniTabs[slot].GetComponent<MiniTabHolder>().func3.onClick.RemoveAllListeners();
-		miniTabs[slot].GetComponent<MiniTabHolder>().func3.onClick.AddListener(delegate { Refine("part"); }); ///////////////////////////////
-		miniTabs[slot].GetComponent<MiniTabHolder>().func3.gameObject.SetActive(true);
-
-		miniTabs[slot].GetComponent<MiniTabHolder>().func4.GetComponentInChildren<Text>().text = "Refine Wire";
-		miniTabs[slot].GetComponent<MiniTabHolder>().func5.GetComponentInChildren<Text>().text = "Refine Chip";
-		miniTabs[slot].GetComponent<MiniTabHolder>().func6.GetComponentInChildren<Text>().text = "Refine Board";
-
-		miniTabs[slot].GetComponent<MiniTabHolder>().func4.onClick.RemoveAllListeners();
-		miniTabs[slot].GetComponent<MiniTabHolder>().func4.onClick.AddListener(delegate { Refine("wire"); }); ///////////////////////////////
-		miniTabs[slot].GetComponent<MiniTabHolder>().func4.gameObject.SetActive(true);
-
-		miniTabs[slot].GetComponent<MiniTabHolder>().func5.onClick.RemoveAllListeners();
-		miniTabs[slot].GetComponent<MiniTabHolder>().func5.onClick.AddListener(delegate { Refine("chip"); }); ///////////////////////////////
-		miniTabs[slot].GetComponent<MiniTabHolder>().func5.gameObject.SetActive(true);
-
-		miniTabs[slot].GetComponent<MiniTabHolder>().func6.onClick.RemoveAllListeners();
-		miniTabs[slot].GetComponent<MiniTabHolder>().func6.onClick.AddListener(delegate { Refine("board"); }); ///////////////////////////////
-		miniTabs[slot].GetComponent<MiniTabHolder>().func6.gameObject.SetActive(true);
-	}
-
-	void SetupStorage(int slot)
-	{
-		miniTabs[slot].GetComponent<MiniTabHolder>().build.gameObject.SetActive(false);
-		miniTabs[slot].GetComponent<MiniTabHolder>().upgrade.gameObject.SetActive(true);
-		miniTabs[slot].GetComponent<MiniTabHolder>().roomName.text = "Storage";
-
-		miniTabs[slot].GetComponent<MiniTabHolder>().func1.GetComponentInChildren<Text>().text = "Sup";
-		miniTabs[slot].GetComponent<MiniTabHolder>().func2.GetComponentInChildren<Text>().text = "Discard 1 Electronics";
-		miniTabs[slot].GetComponent<MiniTabHolder>().func3.GetComponentInChildren<Text>().text = "Discard 1 Metal";
-
-		miniTabs[slot].GetComponent<MiniTabHolder>().func1.onClick.RemoveAllListeners();
-		miniTabs[slot].GetComponent<MiniTabHolder>().func1.onClick.AddListener(Sup); ///////////////////////////////
-		miniTabs[slot].GetComponent<MiniTabHolder>().func1.gameObject.SetActive(true);
-
-
-		miniTabs[slot].GetComponent<MiniTabHolder>().func2.onClick.RemoveAllListeners();
-		miniTabs[slot].GetComponent<MiniTabHolder>().func2.onClick.AddListener(delegate { Discard("electronics", 1); }); ///////////////////////////////
-
-		miniTabs[slot].GetComponent<MiniTabHolder>().func3.onClick.RemoveAllListeners();
-		miniTabs[slot].GetComponent<MiniTabHolder>().func3.onClick.AddListener(delegate { Discard("electronics", 1); }); ///////////////////////////////
-
-	}
-
-	void SetupShrine(int slot)
-	{
-		miniTabs[slot].GetComponent<MiniTabHolder>().build.gameObject.SetActive(false);
-		miniTabs[slot].GetComponent<MiniTabHolder>().upgrade.gameObject.SetActive(true);
-		miniTabs[slot].GetComponent<MiniTabHolder>().roomName.text = "Shrine";
-
-		miniTabs[slot].GetComponent<MiniTabHolder>().func1.GetComponentInChildren<Text>().text = "Assign Unit";
-		miniTabs[slot].GetComponent<MiniTabHolder>().func2.GetComponentInChildren<Text>().text = "Unassign Unit";
-		miniTabs[slot].GetComponent<MiniTabHolder>().func3.GetComponentInChildren<Text>().text = "Buff2";
-
-		miniTabs[slot].GetComponent<MiniTabHolder>().func1.onClick.RemoveAllListeners();
-		miniTabs[slot].GetComponent<MiniTabHolder>().func1.onClick.AddListener(delegate { Assign("shrine", rooms[slot]); } ); ///////////////////////////////
-		miniTabs[slot].GetComponent<MiniTabHolder>().func1.gameObject.SetActive(true);
-
-		miniTabs[slot].GetComponent<MiniTabHolder>().func2.onClick.RemoveAllListeners();
-		miniTabs[slot].GetComponent<MiniTabHolder>().func2.onClick.AddListener(Sup); ///////////////////////////////
-		miniTabs[slot].GetComponent<MiniTabHolder>().func2.gameObject.SetActive(true);
-
-		miniTabs[slot].GetComponent<MiniTabHolder>().func3.onClick.RemoveAllListeners();
-		miniTabs[slot].GetComponent<MiniTabHolder>().func3.onClick.AddListener(Sup); ///////////////////////////////
-		miniTabs[slot].GetComponent<MiniTabHolder>().func3.gameObject.SetActive(true);
-	}
-
-	void SetupStudy(int slot)
-	{
-		miniTabs[slot].GetComponent<MiniTabHolder>().build.gameObject.SetActive(false);
-		miniTabs[slot].GetComponent<MiniTabHolder>().upgrade.gameObject.SetActive(true);
-		miniTabs[slot].GetComponent<MiniTabHolder>().roomName.text = "Study";
-
-		miniTabs[slot].GetComponent<MiniTabHolder>().func1.GetComponentInChildren<Text>().text = "Assign Unit";
-		miniTabs[slot].GetComponent<MiniTabHolder>().func2.GetComponentInChildren<Text>().text = "Unassign Unit";
-		miniTabs[slot].GetComponent<MiniTabHolder>().func3.GetComponentInChildren<Text>().text = "Buff2";
-
-		miniTabs[slot].GetComponent<MiniTabHolder>().func1.onClick.RemoveAllListeners();
-		miniTabs[slot].GetComponent<MiniTabHolder>().func1.onClick.AddListener(delegate { Assign("study", rooms[slot]); }); ///////////////////////////////
-		miniTabs[slot].GetComponent<MiniTabHolder>().func1.gameObject.SetActive(true);
-
-		miniTabs[slot].GetComponent<MiniTabHolder>().func2.onClick.RemoveAllListeners();
-		miniTabs[slot].GetComponent<MiniTabHolder>().func2.onClick.AddListener(Sup); ///////////////////////////////
-		miniTabs[slot].GetComponent<MiniTabHolder>().func2.gameObject.SetActive(true);
-
-		miniTabs[slot].GetComponent<MiniTabHolder>().func3.onClick.RemoveAllListeners();
-		miniTabs[slot].GetComponent<MiniTabHolder>().func3.onClick.AddListener(Sup); ///////////////////////////////
-		miniTabs[slot].GetComponent<MiniTabHolder>().func3.gameObject.SetActive(true);
-	}
-
-	//this is a debug function for testing only!
-	public void Sup()
-	{
-		Debug.Log("Sup");
-	}
-
-	public void Refine(string what)
-	{
-		int eff = 0;
-		eff = Random.Range(1, 11);
-
-		if (EffectConnector.efficiency > 0)
+		if (roomType != "infirmary")
 		{
-			if (what == "plate")
+			if (unitManager.ReturnJoblessUnit() == null)
 			{
-				if (ResourceHandling.metal >= 3)
+				Debug.Log("No worker available");
+				return;
+			}
+			else
+			{
+				GameObject unit = unitManager.ReturnJoblessUnit();
+
+				if (rooms[slot].Workers.Count < rooms[slot].WorkerCapacity)
 				{
-					ResourceHandling.plate++;
-					ResourceHandling.metal -= 3;
-					Debug.Log("Success");
-					if (eff <= EffectConnector.efficiency)
+					unit.GetComponent<Unit>().Job = roomType;
+					unit.GetComponent<Unit>().JobPos = autoObj;
+					unitManager.SetJobFromRoom(unit, roomType);
+					rooms[slot].Workers.Add(unit);
+					setupRoom.roomComponents[slot].capacity.text = rooms[slot].Workers.Count.ToString() + " / " + rooms[slot].WorkerCapacity.ToString();
+
+					switch (roomType)
 					{
-						if (eff % 2 == 0)
-						{
-							ResourceHandling.metal++;
-						}
-						else
-						{
-							ResourceHandling.metal += 2;
-						}
+						case "refinery":
+							Produce();
+							break;
+						case "shrine":
+							Worship();
+							break;
+						case "study":
+							Research();
+							break;
 					}
+
+					Debug.Log("Assigned [" + unit.GetComponent<Unit>().UnitName + "] to[" + roomType + "][" + slot + "]");
 				}
 				else
 				{
-					Debug.Log("Failure");
+					Debug.Log("Room is full");
+					return;
 				}
 			}
-			else if (what == "bolt")
+		}
+		else if (roomType == "infirmary")
+		{
+			if (unitManager.ReturnKnockedOutUnit() == null)
 			{
-				if (ResourceHandling.metal >= 1)
+				Debug.Log("No knocked out units available");
+				return;
+			}
+			else
+			{
+				GameObject unit = unitManager.ReturnKnockedOutUnit(); //ReturnKnockedOutUnit()
+
+				if (rooms[slot].Workers.Count < rooms[slot].WorkerCapacity)
 				{
-					ResourceHandling.bolt++;
-					ResourceHandling.metal--;
-					Debug.Log("Success");
-					if (eff <= EffectConnector.efficiency)
-					{
-						if (eff % 2 == 0)
-						{
-							ResourceHandling.metal++;
-						}
-					}
+					//assign to this room
+					unit.GetComponent<Unit>().Job = roomType;
+					unit.GetComponent<Unit>().JobPos = autoObj;
+					unitManager.SetJobFromRoom(unit, roomType);
+					rooms[slot].Workers.Add(unit);
+					setupRoom.roomComponents[slot].capacity.text = rooms[slot].Workers.Count.ToString() + " / " + rooms[slot].WorkerCapacity.ToString();
+
+					Debug.Log("Assigned [" + unit.GetComponent<Unit>().UnitName + "] to[" + roomType + "][" + slot + "]");
 				}
 				else
 				{
-					Debug.Log("Failure");
+					Debug.Log("Room is full");
+					return;
 				}
 			}
-			else if (what == "part")
-			{
-				if (ResourceHandling.plate >= 2 && ResourceHandling.bolt >= 2)
-				{
-					ResourceHandling.part++;
-					ResourceHandling.plate -= 2;
-					ResourceHandling.bolt -= 2;
-					Debug.Log("Success");
-					if (eff <= EffectConnector.efficiency)
-					{
-						if (eff % 2 == 0)
-						{
-							ResourceHandling.bolt += 2;
-						}
-						else
-						{
-							ResourceHandling.plate++;
-						}
-					}
-				}
-				else
-				{
-					Debug.Log("Failure");
-				}
-			}
-			else if (what == "chip")
-			{
-				if (ResourceHandling.electronics >= 3)
-				{
-					ResourceHandling.chip++;
-					ResourceHandling.electronics -= 3;
-					Debug.Log("Success");
-					if (eff <= EffectConnector.efficiency)
-					{
-						if (eff % 2 == 0)
-						{
-							ResourceHandling.electronics++;
-						}
-						else
-						{
-							ResourceHandling.electronics += 2;
-						}
-					}
-				}
-				else
-				{
-					Debug.Log("Failure");
-				}
-			}
-			else if (what == "wire")
-			{
-				if (ResourceHandling.electronics >= 1)
-				{
-					ResourceHandling.wire++;
-					ResourceHandling.electronics--;
-					Debug.Log("Success");
-					if (eff <= EffectConnector.efficiency)
-					{
-						if (eff % 2 == 0)
-						{
-							ResourceHandling.electronics++;
-						}
-					}
-				}
-				else
-				{
-					Debug.Log("Failure");
-				}
-			}
-			else if (what == "board")
-			{
-				if (ResourceHandling.chip >= 1 && ResourceHandling.wire >= 2)
-				{
-					ResourceHandling.board++;
-					ResourceHandling.chip--;
-					ResourceHandling.wire -= 2;
-					Debug.Log("Success");
-					if (eff <= EffectConnector.efficiency)
-					{
-						if (eff % 2 == 0)
-						{
-							ResourceHandling.wire += 2;
-						}
-						else
-						{
-							ResourceHandling.chip++;
-						}
-					}
-				}
-				else
-				{
-					Debug.Log("Failure");
-				}
-			}
+		}
+	}
+
+	//add infirmary stuff -> a variation for a timed unassign of sorts to mimic healing, maybe in unit manager?
+	public void Unassign(string roomType, int slot)
+	{
+		if (rooms[slot].Workers.Count == 0)
+		{
+			Debug.Log("No worker to unassign");
+			return;
 		}
 		else
 		{
-			Debug.Log("No workers, can't refine!");
+			GameObject unit = rooms[slot].Workers[0]; //first unit
+
+			unit.GetComponent<Unit>().Job = "none";
+			unitManager.LeaveRoomJob(unit);
+			unitManager.TravelTo(unit, unit.transform.position, false, false);
+			rooms[slot].Workers.Remove(unit);
+
+			setupRoom.roomComponents[slot].capacity.text = rooms[slot].Workers.Count.ToString() + " / " + rooms[slot].WorkerCapacity.ToString();
+
+			switch (roomType)
+			{
+				case "refinery":
+					Produce();
+					break;
+				case "shrine":
+					Worship();
+					break;
+				case "study":
+					Research();
+					break;
+			}
+			Debug.Log("Unassigned [" + unit.GetComponent<Unit>().UnitName + "] from [" + roomType + "][" + slot + "]");
 		}
-		
 	}
 
-	//needs to be overhauled
+	public void Refine(string what, int howMany)
+	{
+		int efficiencyRand = 0;
+		int efficiencyBonus = 0;
+
+		if (EffectConnector.efficiency > 0)
+		{
+			if (CanAfford(what, howMany))
+			{
+				efficiencyRand = Random.Range(1, 11);
+
+				if (efficiencyRand <= EffectConnector.efficiency)
+				{
+					efficiencyBonus = 1;
+				}
+				else
+				{
+					efficiencyBonus = 0;
+				}
+
+				if (what == "bolt")
+				{
+					for (int i = 0; i < howMany; i++)
+					{
+						ResourceHandling.bolt++;
+						ResourceHandling.metal -= (CostData.metal_bolt - efficiencyBonus);
+					}
+				}
+				else if (what == "plate")
+				{
+					for (int i = 0; i < howMany; i++)
+					{
+						ResourceHandling.plate++;
+						ResourceHandling.metal -= (CostData.metal_plate - efficiencyBonus);
+					}
+				}
+				else if (what == "part")
+				{
+					for (int i = 0; i < howMany; i++)
+					{
+						ResourceHandling.part++;
+						ResourceHandling.bolt -= (CostData.special_part[0] - efficiencyBonus);
+						ResourceHandling.plate -= (CostData.special_part[1] - efficiencyBonus);
+					}
+				}
+				else if (what == "wire")
+				{
+					for (int i = 0; i < howMany; i++)
+					{
+						ResourceHandling.wire++;
+						ResourceHandling.electronics -= (CostData.electronics_wire - efficiencyBonus);
+					}
+				}
+				else if (what == "chip")
+				{
+					for (int i = 0; i < howMany; i++)
+					{
+						ResourceHandling.chip++;
+						ResourceHandling.electronics -= (CostData.electronics_chip - efficiencyBonus);
+					}
+				}
+				else if (what == "board")
+				{
+					for (int i = 0; i < howMany; i++)
+					{
+						ResourceHandling.board++;
+						ResourceHandling.wire -= (CostData.special_board[0] - efficiencyBonus);
+						ResourceHandling.chip -= (CostData.special_board[1] - efficiencyBonus);
+					}
+				}
+				PlayClip("hammer");
+			}
+			else
+			{
+				Debug.Log("Not enough resources");
+                PlayClip("error");
+            }
+		}
+		else
+		{
+			Debug.Log("No workers");
+			PlayClip("error");
+		}
+	} 
+
 	public void Discard(string what, int howMany)
 	{
 		if (what == "metal" && ResourceHandling.metal >= howMany)
@@ -445,87 +358,14 @@ public class RoomManager : MonoBehaviour
 		}
 	}
 
-	public void Assign(string where, Room r)
+	public void Bedrest(int slot)
 	{
+		Assign("infirmary", slot);
 		
-		if (um.ReturnJoblessUnit() == null)
-		{
-			Debug.Log("No worker available");
-			return;
-		}
-		else
-		{
-			Unit who = um.ReturnJoblessUnit();
-			Debug.Log("Assigned [" + who.UnitName + "] to[" + r.Type + "][" + r.Slot + "]");
-			who.Job = where;
-			who.JobPos = autoObj;
-			um.SetJobFromRoom(who, where);
-			r.Workers.Add(who);
-			r.WorkMultiplier = r.Workers.Count;
-
-			if (r.Type == "shrine")
-			{
-				r.ActiveEffect = "unitSpeed";
-				Worship();
-			}
-			else if (r.Type == "study")
-			{
-				r.ActiveEffect = "roomCost";
-				Research();
-			}
-			else if (r.Type == "refinery")
-			{
-				Produce();
-			}
-
-			//method does not exist yet
-			//info.UpdateUnitViewer();
-		}
 	}
 
-	public void Unassign(string where, Room r)
-	{
-
-		if (r.Workers.Count == 0)
-		{
-			Debug.Log("No worker available");
-			return;
-		}
-		else
-		{
-			Unit who = r.Workers[0]; //first unit
-			Debug.Log("Unassigned [" + who.UnitName + "] from [" + r.Type + "][" + r.Slot + "]");
-			who.Job = "none";
-
-			//who.JobPos = autoObj; // set it to outside ////////////////////////////////////////////////////////////////////
-            um.LeaveRoomJob(who);
-
-			um.SetJobFromRoom(who, where); // set it to be Outside the 'bot doing nothing /////////////////////////////////
-			r.Workers.Remove(who);
-			r.WorkMultiplier = r.Workers.Count;
-
-			if (r.Type == "shrine")
-			{
-				r.ActiveEffect = "unitSpeed";
-				Worship();
-			}
-			else if (r.Type == "study")
-			{
-				r.ActiveEffect = "roomCost";
-				Research();
-			}
-			else if (r.Type == "refinery")
-			{
-				Produce();
-			}
-
-			//method does not exist yet
-			//info.UpdateUnitViewer();
-		}
-	}
-
-	//worship and research methods only need to be called when their multiplier changes, or when a unit is assigned successfully
-	//this will definitely save on horsepower
+	// need to clean
+	// worship and research methods only need to be called when their multiplier changes, or when a unit is assigned successfully. this will definitely save on horsepower
 	public void Worship()
 	{
 		int combinedMultiplier = 0;
@@ -534,10 +374,10 @@ public class RoomManager : MonoBehaviour
 
 		foreach (Room r in rooms)
 		{
-			if (r.Type == "shrine" && r.Workers.Count > 0)
+			if (r.Type == "shrine")
 			{
-				Debug.Log("Shrine[" + r.Slot + "]: " + r.WorkMultiplier + "x boost");
-				combinedMultiplier += r.WorkMultiplier; //case for multiples of the same room
+				Debug.Log("Shrine[" + r.Slot + "]: " + r.Workers.Count + "x boost");
+				combinedMultiplier += r.Workers.Count; //case for multiples of the same room
 				effects.Add(r.ActiveEffect);
 			}
 		}
@@ -546,19 +386,19 @@ public class RoomManager : MonoBehaviour
 		//calculate effects
 		foreach (string e in effects)
 		{
-			if (e == "none")
+			if (e == "unitSpeed")  //-----------------------> r.ActiveEffect will be set by a button that is activated once room is upgraded
 			{
-				return;
+				EffectConnector.unitSpeed = EffectConnector.unitBaseSpeed + combinedMultiplier;
 			}
-			else if (e == "unitSpeed")	//-----------------------> r.ActiveEffect will be set by a button that is activated once room is upgraded
+			else if (e == "none")
 			{
-				EffectConnector.unitSpeed = EffectConnector.unitBaseSpeed + combinedMultiplier; ////////////////////////////////////////////////////////////
-				//Debug.Log("Unit Speed: " + EffectConnector.unitSpeed);
+				EffectConnector.unitSpeed = EffectConnector.unitBaseSpeed + 0; // --------------------------------------------------------------------> forseeable issues with multiple shrines
 			}
 		}
 		effectConnector.Recalculate();
 	}
 
+	// need to clean
 	public void Research()
 	{
 		int combinedMultiplier = 0;
@@ -567,10 +407,10 @@ public class RoomManager : MonoBehaviour
 
 		foreach (Room r in rooms)
 		{
-			if (r.Type == "study" && r.Workers.Count > 0)
+			if (r.Type == "study")
 			{
-				Debug.Log("Study[" + r.Slot + "]: " + r.WorkMultiplier + "x boost");
-				combinedMultiplier += r.WorkMultiplier; //case for multiples of the same room
+				Debug.Log("Study[" + r.Slot + "]: " + r.Workers.Count + "x boost");
+				combinedMultiplier += r.Workers.Count; //case for multiples of the same room
 				effects.Add(r.ActiveEffect);
 			}
 		}
@@ -579,16 +419,16 @@ public class RoomManager : MonoBehaviour
 		//calculate effects
 		foreach (string e in effects)
 		{
-
-			if (e == "none")
+			if (e == "roomCost")    //-----------------------> r.ActiveEffect will be set by a button that is activated once room is upgraded
 			{
-				return;
-			}
-			else if (e == "roomCost")    //-----------------------> r.ActiveEffect will be set by a button that is activated once room is upgraded
-			{
-				Debug.Log("hit?");
 				EffectConnector.roomCost = combinedMultiplier + 1;
 			}
+			else if (e == "none")
+			{
+				EffectConnector.roomCost = 1 + 0; // ------------------------------------------------------------------------------------------------> forseeable issues with multiple studies
+				return;
+			}
+
 		}
 		effectConnector.Recalculate();
 	}
@@ -598,25 +438,145 @@ public class RoomManager : MonoBehaviour
 		EffectConnector.efficiency = 0;
 		foreach (Room r in rooms)
 		{
-			if (r.Type == "refinery" && r.Workers.Count > 0)
+			if (r.Type == "refinery")
 			{
-				r.CanRefine = true;
-				Debug.Log("Refinery[" + r.Slot + "]: Running");
-				EffectConnector.efficiency += r.Workers.Count;
+				if (r.Workers.Count > 0)
+				{
+					Debug.Log("Refinery[" + r.Slot + "]: Running");
+					EffectConnector.efficiency += r.Workers.Count;
+				}
 			}
 		}
 		effectConnector.Recalculate();
 	}
 
+	/// <summary>
+	/// UTILITY FUNCTIONS --------------------------------------------------------------------------------------------------------------------------->
+	/// </summary>
 
+	public void OpenRoom(int clickedSlot)
+	{
+		roomTabs[clickedSlot].gameObject.SetActive(true); //...which is different. this is the panel itself
+		Debug.Log("Current tab " + clickedSlot);
+	}
+	public void OpenController()
+	{
+		controllerTab.gameObject.SetActive(true);
+	}
+	public void OpenGenerator()
+	{
+		generatorTab.gameObject.SetActive(true);
+	}
+	public void TakeToBuild(int clickedSlot)
+	{
+		roomSlotClicked = clickedSlot;
+		auto.OpenBuildTab();
+	}
+
+	// this will need to get moved to SetupRoom once I make it a functional room
+	public void RepairGenerator()
+	{
+		if (ResourceHandling.metal >= CostData.repair_generator)
+		{
+			ResourceHandling.metal -= CostData.repair_generator;
+			generatorRepaired = true;
+			generatorTab.GetComponent<RoomComponents>().build.gameObject.SetActive(false);
+			generatorTab.GetComponent<RoomComponents>().pic.sprite = generatorRepairedSprite;
+		}
+	}
+	public void RepairController()
+	{
+		if (ResourceHandling.electronics >= CostData.repair_controller)
+		{
+			ResourceHandling.electronics -= CostData.repair_controller;
+			controllerRepaired = true;
+			controllerTab.GetComponent<RoomComponents>().build.gameObject.SetActive(false);
+			controllerTab.GetComponent<RoomComponents>().pic.sprite = controllerRepairedSprite;
+		}
+	}
 
 	public void UpdateRoomDisplay()
 	{
 		for (int i = 0; i < rooms.Count; i++)
 		{
-			display[i].text = rooms[i].Type;
+			roomTypesAtAGlance[i].text = rooms[i].Type;
+			roomSpritesInOrder[i].GetComponent<Image>().sprite = setupRoom.roomComponents[i].pic.sprite;
 		}
+
 		Debug.Log("Updated Rooms");
-		auto.OpenTab2();
+		auto.OpenRoomsTab();
+	}
+
+	public bool CanAfford(string what, int howMany)
+	{
+		switch (what)
+		{
+			case "bolt":
+				return (ResourceHandling.metal >= 1 * howMany);
+			case "plate":
+				return (ResourceHandling.metal >= 3 * howMany);
+			case "part":
+				return (ResourceHandling.bolt >= 3 * howMany && ResourceHandling.plate >= 2 * howMany);
+			case "wire":
+				return (ResourceHandling.electronics >= 1 * howMany);
+			case "chip":
+				return (ResourceHandling.electronics >= 3 * howMany);
+			case "board":
+				return (ResourceHandling.wire >= 2 * howMany && ResourceHandling.chip >= 3 * howMany);
+			default:
+				return false;
+		}
+	}
+
+	public void SetActiveEffect(string buff, int slot)
+	{
+		rooms[slot].ActiveEffect = buff;
+		switch (rooms[slot].Type)
+		{
+			case "shrine":
+				Worship();
+				break;
+			case "study":
+				Research();
+				break;
+		}
+		Debug.Log("Active effect of [ " + rooms[slot].Type + " " + slot + " ] is now : " + rooms[slot].ActiveEffect + ".");
+	}
+
+    void PlayClip(string str)
+    {
+		switch (str)
+		{
+			case "wrench":
+				audioSource.PlayOneShot(wrenchClip);
+				break;
+			case "hammer":
+				audioSource.PlayOneShot(hammerClip);
+				break;
+			case "error":
+				audioSource.PlayOneShot(errorClip);
+				break;
+		}
+    }
+
+	public bool CheckInfirmary()
+	{
+		foreach (Room r in rooms)
+		{
+			if (r.Type == "infirmary")
+			{
+				if (r.Workers.Count < r.WorkerCapacity)
+				{
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+
+	//this is a debug function for testing only!
+	public void Sup()
+	{
+		Debug.Log("Sup");
 	}
 }

@@ -14,12 +14,12 @@ public class HoverInfo : MonoBehaviour
 	private Ray ray;
 	private RaycastHit hit;
 
-	public ResourceHandling resHandling;
+	public ResourceHandling resourceHandling;
 	private GameObject resourceObj;
 
-	public EncampmentHandler encHandling;
-	private GameObject encObj;
-	private int encHealth;
+	public EncampmentHandler encampmentHandling;
+	private GameObject encampmentObj;
+	private int encampmentHealth;
 
     void Start()
     {
@@ -38,15 +38,15 @@ public class HoverInfo : MonoBehaviour
 			{
 				//display
 				resourceObj = hit.collider.gameObject;
-				depositQuantity = resHandling.resQuantities[resHandling.GetNumber(resourceObj)];
+				depositQuantity = resourceHandling.resourceQuantities[resourceHandling.GetNumber(resourceObj)];
 				SetupHoverBox(resourceObj, depositQuantity);
 				DisplayHoverBox();
 			}
 			else if (hit.collider.tag == "Encampment")
 			{
-				encObj = hit.collider.gameObject;
-				encHealth = encHandling.GetEncampment(encObj).Health;
-				SetupHoverBox(encObj, encHealth);
+				encampmentObj = hit.collider.gameObject;
+				encampmentHealth = encampmentObj.GetComponent<Encampment>().Health;
+				SetupHoverBox(encampmentObj, encampmentHealth);
 				DisplayHoverBox();
 			}
 			else if (hit.collider.tag != "Metal" || hit.collider.tag != "Electronics" || hit.collider.tag != "Encampment")

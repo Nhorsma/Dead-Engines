@@ -12,6 +12,9 @@ TagManager:
   - Electronics
   - Robot
   - HoverUI
+  - Hunter
+  - Gun
+  - Bumpable
   layers:
   - Default
   - TransparentFX
@@ -21,9 +24,9 @@ TagManager:
   - UI
   - 
   - 
-  - 
-  - 
-  - 
+  - Floor
+  - Minimap
+  - CombatCollider
   - 
   - 
   - 

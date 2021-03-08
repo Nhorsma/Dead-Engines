@@ -1,267 +1,273 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class EncampmentHandler : MonoBehaviour
 {
-    public static int metal;
-    public static int electronics;
-    public int startingHealth;
+    public static int metal;			//why did i put these here???
+    public static int electronics;		//
+	public int startingHealth;			//
 
-    public GameObject[] eGM;
-    public Encampment[] encamps;
-    public EnemyHandler eh;
+    public List<Encampment> encampments;
 
-    public SpawnRes spawn;
-    public ResourceHandling rh;
-    public float spawnTime, spawnDistance;
+    public EnemyHandler enemyHandler;
+    public UnitManager unitManager;
+    public SpawnRes spawnRes;
+    public ResourceHandling resourceHandling;
+    public GameObject automaton;
 
-    string[] depRec43 = { "gun", "gun", "gun" };
-    string[] depRec33 = { "gun", "APC", "gun" };
-    string[] depRec23 = { "gun", "gun", "APC", "APC" };
-    string[] depRec13 = { "gun", "APC", "gun", "APC" };
+    public float startSpawnTime,spawnTime, spawnDistance; //
+    public bool startSpawning;
 
-    string[] depRec42 = { "gun", "gun", "APC" };
-    string[] depRec32 = { "gun", "APC", "gun", "APC"};
-    string[] depRec22 = { "APC", "APC", "Mech" };
-    string[] depRec12 = { "MECH", "APC", "Mech" };
+    public AudioSource audioSource;
+    public AudioClip attackClip1, attackClip2, deathClip, destroyClip;
+    public float volume;
 
-    string[] depRec41 = { "gun", "gun", "gun", "APC"};
-    string[] depRec31 = { "gun", "gun", "APC", "APC", "Mech" };
-    string[] depRec21 = { "gun", "gun", "gun", "APC", "APC", "Mech", "Mech" };
-    string[] depRec11 = { "Mech", "gun", "gun", "APC", "APC", "Mech", "APC" };
+    public GameObject enemy_model1, enemy_model2, enemy_model3;
+    Enemy enemy_type_1 = new Enemy(5, 1, 1.5f, false);
+    Enemy enemy_type_2 = new Enemy(10, 1, 0.5f, false);
+    Enemy enemy_type_3 = new Enemy(50, 3, 3f, true);
 
     void Start()
     {
-        rh = GetComponent<ResourceHandling>();
-        eh = GetComponent<EnemyHandler>();
-        eGM = GameObject.FindGameObjectsWithTag("Encampment");
-        encamps = new Encampment[eGM.Length];
-        SetUpCamps();
+        resourceHandling = GetComponent<ResourceHandling>(); //fishy
+        enemyHandler = GetComponent<EnemyHandler>(); //fishy
+		encampments = new List<Encampment>();
+
+        SetUpCamps(); //fishy
+        startSpawning = true;
+        startSpawnTime = spawnTime;
     }
 
-    void Update()
+	//-----------------------------------------------------------------------------------------
+	//-----------------------------------------------------------------------------------------
+
+	/// <summary>
+	/// INITIALIZE --------------------------------------------------------------------------------------------------------------------------->
+	/// </summary>
+	//this will establish that spawned enemies travel to this resource as well as will attack player units that get too close to it.
+	void SetUpCamps()
     {
-        for(int i =0;i<encamps.Length;i++)
+        GameObject[] encampmentObjects = GameObject.FindGameObjectsWithTag("Encampment");
+        for (int i = 0; i < encampmentObjects.Length; i++)
         {
-            CheckUnitNear(encamps[i]);
+            encampmentObjects[i].GetComponent<Encampment>().Id = i;
+            encampmentObjects[i].GetComponent<Encampment>().Obj = encampmentObjects[i];
+            encampmentObjects[i].GetComponent<Encampment>().ClosestResource = GetClosestResource(encampmentObjects[i].GetComponent<Encampment>());
+            encampmentObjects[i].GetComponent<Encampment>().Deployment = new string[]{enemy_model1.name};
+
+            encampments.Add(encampmentObjects[i].GetComponent<Encampment>());
         }
     }
 
-    //-----------------------------------------------------------------------------------------
-    //-----------------------------------------------------------------------------------------
+	/// <summary>
+	/// MAIN FUNCTIONS --------------------------------------------------------------------------------------------------------------------------->
+	/// </summary>
+
+	public void BeDestroyed()
+	{
+		for (int i = 0; i < encampments.Count; i++)
+		{
+			if (encampments[i].Health <= 0)
+			{
+				PlayClip(encampments[i].Obj, "death");
+				startSpawning = false;
+				encampments[i].Obj.SetActive(false);
+				//encamps[i] = null;
+			}
+			else
+			{
+				if (encampments[i].Health >= startSpawnTime * 0.75f)
+				{
+					spawnTime--;
+				}
+				if (encampments[i].Health >= startSpawnTime * 0.5f)
+				{
+					spawnTime--;
+				}
+				else if (encampments[i].Health >= startSpawnTime * 0.25f)
+				{
+					spawnTime--;
+				}
+			}
+		}
+	}
 
 
-
-    //this will establish that spawned enemies travel to this resource...
-    //as well as will attack player units that get too close to it.
-    void SetUpCamps()
+    public void SetEnemyJobs(GameObject encampment)
     {
-        for (int i = 0; i < encamps.Length; i++)
+        Encampment encampment_data = encampment.GetComponent<Encampment>();
+        if(encampment_data.Health > startingHealth/2) //startinghealth/2 normally
         {
-            encamps[i] = new Encampment(i);
-            encamps[i].ClosestRec = GetClosestResource(encamps[i]);
-            encamps[i].Deployment = depRec33;
-        }
-    }
-
-
-    public Encampment GetEncampment(GameObject gm)
-    {
-        for (int i = 0; i < eGM.Length; i++)
-        {
-            if (eGM[i] == gm)
-                return encamps[i];
-        }
-        return null;
-    }
-
-
-    public GameObject GetEncampmentGM(Encampment e)
-    {
-        return eGM[e.Id];
-    }
-
-
-    void BeDestroyed()
-    {
-        for (int i = 0; i < encamps.Length; i++)
-        {
-            if (encamps[i].Health <= 0)
-            {
-                Destroy(eGM[i]);
-                encamps[i] = null;
-            }
-        }
-    }
-
-
-    void CheckUnitNear(Encampment e)
-    {
-        foreach (GameObject u in GetComponent<UnitManager>().unitsGM)
-        {
-            if (Vector3.Distance(u.transform.position, GetEncampmentGM(e).transform.position) < eh.tresspassingRange ||
-                Vector3.Distance(u.transform.position, e.ClosestRec.transform.position) < eh.tresspassingRange)
-            {
-                CheckSpawnEnemy(e);
-            }
-        }
-    }
-
-
-    void CheckSpawnEnemy(Encampment e)
-    {
-            if (e.CanSpawn)
-            {
-                int hit = Random.Range(1, 5);
-                if (e.OnField<e.Deployment.Length && hit < e.Chance)
-                {
-                    SpawnEnemy(e);
-                    e.Chance = 0;
-                }
-                else
-                {
-                    e.Chance++;
-                }
-            //Debug.Log(e.Chance + "0%");
-                StartCoroutine(ChangeSpawnChance(e));
-            }
-    }
-
-    IEnumerator ChangeSpawnChance(Encampment e)
-    {
-        e.CanSpawn = false;
-        yield return new WaitForSeconds(spawnTime);
-        e.CanSpawn = true;
-    }
-
-
-    void SpawnEnemy(Encampment e)
-    {
-        CheckDeployment(e);
-        Vector3 spawnPlace = eGM[e.Id].transform.position + new Vector3(Random.Range(1, 3), 0, Random.Range(1, 3));
-
-        for(int i=0;i<e.Deployment.Length;i++)
-            Debug.Log(e.Deployment[i] +" : "+e.OnField);
-        var gm = Instantiate(Resources.Load(e.Deployment[e.OnField]), spawnPlace, transform.rotation);
-
-        Enemy enemy = new Enemy();
-        enemy.Rec = e.ClosestRec;
-        enemy.Camp = GetEncampmentGM(e);
-        enemy.Id = eh.enemiesGM.Count;
-
-        eh.enemiesGM.Add((GameObject)gm);
-        eh.enemies.Add(enemy);
-
-        eh.FindSpot(enemy);
-        e.OnField++;
-    }
-
-
-    //adds "gun", "APC", or "Mech"
-    void CheckDeployment(Encampment e)
-    {
-        int quant = rh.resQuantities[rh.GetNumber(e.ClosestRec)];
-
-        if (quant<=0)
-        {
-            e.Deployment = new string[50];
-            Debug.Log("whoops");
-            return;
-        }
-
-        if (rh.recsLeft == 3)
-        {
-            if (e.Health < 25 || quant < rh.startQuantity / 4)
-            {
-                e.Deployment = depRec13;
-            }
-            if (e.Health < 50 || quant < (rh.startQuantity / 2))
-            {
-                e.Deployment = depRec23;
-            }
-            else if (e.Health < 75 || quant < rh.startQuantity*0.25f)
-            {
-                e.Deployment = depRec33;
-            }
-            else
-            {
-                e.Deployment = depRec43;
-            }
-        }
-        else if(rh.recsLeft == 2)
-        {
-            if (e.Health < 25 || quant < rh.startQuantity / 4)
-            {
-                e.Deployment = depRec12;
-            }
-            if (e.Health < 50 || quant < (rh.startQuantity / 2))
-            {
-                e.Deployment = depRec22;
-            }
-            else if (e.Health < 75 || quant < rh.startQuantity * 0.25f)
-            {
-                e.Deployment = depRec32;
-            }
-            else
-            {
-                e.Deployment = depRec42;
-            }
-        }
-        else if(rh.recsLeft == 1)
-        {
-            if (e.Health < 25 || quant < rh.startQuantity / 4)
-            {
-                e.Deployment = depRec11;
-            }
-            if (e.Health < 50 || quant < (rh.startQuantity / 2))
-            {
-                e.Deployment = depRec21;
-            }
-            else if (e.Health < 75 || quant < rh.startQuantity * 0.25f)
-            {
-                e.Deployment = depRec31;
-            }
-            else
-            {
-                e.Deployment = depRec41;
-            }
+            encampment.GetComponent<Encampment>().EnemyJobs = "guard";
         }
         else
         {
-            return;
+            encampment.GetComponent<Encampment>().EnemyJobs = "destroy";
         }
-        
     }
 
 
-    GameObject GetClosestResource(Encampment camp)
+
+    /// <summary>
+    /// UTILITY FUNCTIONS --------------------------------------------------------------------------------------------------------------------------->
+    /// </summary>
+
+    public void CheckForTrigger(Encampment encampment)
+    { 
+        if (encampment.OnField < 2 && (encampment.Health < 90 || resourceHandling.resourceQuantities[resourceHandling.GetNumber(encampment.ClosestResource)]<40))
+        {
+            int hit = Random.Range(1, 10);
+
+            if (hit < encampment.Chance)
+            {
+                SpawnEnemy(encampment);
+                encampment.Chance = 0;
+            }
+            else
+            {
+                encampment.Chance++;
+            }
+            return;
+        }
+        SetEnemyJobs(encampment.Obj);
+    }
+
+
+    void SpawnEnemy(Encampment encampment)
+    {
+        PlayClip(encampment.Obj, "attack");
+        CheckDeployment(encampment);
+        GameObject enemyObj = new GameObject();
+        Vector3 autoPos = automaton.transform.position;
+
+        for (int i=0;i<encampment.Deployment.Length;i++)
+        {
+            Vector3 spawnPlace = encampments[encampment.Id].Obj.transform.position+EnemySpawnPlacement(i,20);
+            enemyObj = (GameObject)Instantiate(Resources.Load(encampment.Deployment[i]), spawnPlace, transform.rotation);
+
+            Enemy new_enemy = SetEnemyDataOfSpawned(encampment.Deployment[i]);
+            enemyObj.GetComponent<Enemy>().Health = new_enemy.Health;
+            enemyObj.GetComponent<Enemy>().Damage = new_enemy.Damage;
+            enemyObj.GetComponent<Enemy>().FireSpeed = new_enemy.FireSpeed;
+            enemyObj.GetComponent<Enemy>().Armored = new_enemy.Armored;
+
+            enemyObj.GetComponent<Enemy>().Resource = encampment.ClosestResource;
+            enemyObj.GetComponent<Enemy>().CampObj = encampment.Obj;
+            enemyObj.GetComponent<Enemy>().CampData = encampment;
+            enemyObj.GetComponent<Enemy>().Id = enemyHandler.enemies.Count;
+            enemyHandler.enemies.Add(enemyObj);
+            enemyHandler.FindSpot(enemyObj);
+            encampment.OnField++;
+        }
+    }
+
+    Vector3 EnemySpawnPlacement(int number, int multi)
+    {
+        switch (number)
+        {
+            case 0:
+                return new Vector3(multi, 0, multi);
+            case 1:
+                return new Vector3(multi, 0, -multi);
+            case 2:
+                return new Vector3(-multi, 0, multi);
+            case 3:
+                return new Vector3(-multi, 0, -multi);
+        }
+        return new Vector3(1, 0, 1);
+    }
+
+    IEnumerator WaitUntilCanSpawn(Encampment encampment_data)
+    {
+        encampment_data.CanSpawn = false;
+        yield return new WaitForSeconds(spawnTime);
+
+        if(encampment_data.OnField < 2)
+            encampment_data.CanSpawn = true;
+    }
+
+    void CheckDeployment(Encampment encampment_data)
+    {
+        int quantity = resourceHandling.resourceQuantities[resourceHandling.GetNumber(encampment_data.ClosestResource)];
+
+        if (quantity <= 0)
+        {
+            encampment_data.Deployment = new string[50];
+            return;
+        }
+
+        //default is 4 gunners
+        string[] deployment = new string[] { enemy_model1.name, enemy_model1.name, enemy_model1.name, enemy_model1.name };
+
+        if (resourceHandling.resourcesLeft <= 2 || encampment_data.Health < startingHealth/2 || quantity < (resourceHandling.startQuantity / 2))
+        {
+            deployment[3] = enemy_model2.name;
+        }
+        if(resourceHandling.resourcesLeft <= 2)
+        {
+            if (encampment_data.Health < startingHealth / 3 || quantity < (resourceHandling.startQuantity / 2))
+                deployment[2] = enemy_model3.name;
+            else
+                deployment[2] = enemy_model2.name;
+        }
+        if(resourceHandling.resourcesLeft <= 1)
+        {
+            if (encampment_data.Health < startingHealth / 3 || quantity < (resourceHandling.startQuantity / 2))
+                deployment[1] = enemy_model3.name;
+            else
+                deployment[1] = enemy_model2.name;
+        }
+        
+        encampment_data.Deployment = deployment;
+        
+    }
+
+    Enemy SetEnemyDataOfSpawned(string name)
+    {
+            if (name==enemy_model1.name)
+                return enemy_type_1;
+            else if (name == enemy_model2.name)
+                return enemy_type_2;
+            else if (name == enemy_model3.name)
+                return enemy_type_3;
+
+        return null;
+
+    }
+
+
+	GameObject GetClosestResource(Encampment encampment)
     {
         float distance = Mathf.Infinity;
         GameObject chosen = new GameObject();
-        foreach(GameObject rec in GetComponent<SpawnRes>().GetResources())
+        foreach (GameObject r in spawnRes.GetResources())
         {
-            if(Vector3.Distance(rec.transform.position, GetEncampmentGM(camp).transform.position) < distance)
+            if (Vector3.Distance(r.transform.position, encampment.Obj.transform.position) < distance)
             {
-                distance = Vector3.Distance(rec.transform.position, GetEncampmentGM(camp).transform.position);
-                chosen = rec;
+                distance = Vector3.Distance(r.transform.position, encampment.Obj.transform.position);
+                chosen = r;
             }
         }
         return chosen;
     }
 
-
-    void SetDeployment(Encampment e, int recsLeft)
+    public void PlayClip(GameObject encampment_Object, string str)
     {
-        
-    }
-    
-
-
-    //as the player explores and finds new encampments, new encampments should be entered into
-    //the array, we might need to make the array a list if it gets too big.
-    void ReplaceEncampment()
-    {
-
+        AudioSource tempSource = encampment_Object.GetComponent<AudioSource>();
+        //tempSource.volume = volume;
+        if (str.Equals("attack"))
+        {
+            if (Random.Range(0, 2) == 0)
+                tempSource.PlayOneShot(attackClip1);
+            else
+                tempSource.PlayOneShot(attackClip2);
+        }
+        else if (str.Equals("death"))
+        {
+            tempSource.PlayOneShot(deathClip);
+            tempSource.PlayOneShot(destroyClip);
+        }
     }
 }
