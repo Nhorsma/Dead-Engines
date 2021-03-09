@@ -65,9 +65,10 @@ public class AutomotonAction : MonoBehaviour
     {
         if (endPhaseOne && isSelected && autoHealth>0)
         {
-            Movement();
+            StartMovement();
             Controls();
         }
+        Movement();
     }
 
     RaycastHit Hit()
@@ -98,12 +99,12 @@ public class AutomotonAction : MonoBehaviour
         float angle = Mathf.Abs(target - transform.rotation.eulerAngles.y);
         if (startAngle < 180)
         {
-            if(startAngle < target && target < ny)
+            anim.SetBool("isWalking", false);
+            if (startAngle < target && target < ny)
             {
                 //Debug.Log("clockwise");
                 anim.SetBool("isRotatingLeft", false);
                 anim.SetBool("isRotatingRight", true);
-                anim.SetBool("isWalking", false);
                 isWalking = false;
                 rotRight = true;
                 rotLeft = false;
@@ -115,7 +116,6 @@ public class AutomotonAction : MonoBehaviour
                 //Debug.Log("counter clockwise");
                 anim.SetBool("isRotatingRight", false);
                 anim.SetBool("isRotatingLeft", true);
-                anim.SetBool("isWalking", false);
                 isWalking = false;
                 rotRight = false;
                 rotLeft = true;
@@ -130,7 +130,6 @@ public class AutomotonAction : MonoBehaviour
                // Debug.Log("clockwise");
                 anim.SetBool("isRotatingLeft", false);
                 anim.SetBool("isRotatingRight", true);
-                anim.SetBool("isWalking", false);
                 isWalking = false;
                 rotRight = true;
                 rotLeft = false;
@@ -142,7 +141,6 @@ public class AutomotonAction : MonoBehaviour
                 //Debug.Log("counter clockwise");
                 anim.SetBool("isRotatingRight", false);
                 anim.SetBool("isRotatingLeft", true);
-                anim.SetBool("isWalking", false);
                 isWalking = false;
                 rotRight = false;
                 rotLeft = true;
@@ -169,7 +167,7 @@ public class AutomotonAction : MonoBehaviour
     {
         //rb.MovePosition(position * movementSpeed * Time.deltaTime);
         transform.position = Vector3.MoveTowards(transform.position, position, movementSpeed*Time.deltaTime);
-        if (Vector3.Distance(pos,position)<1)
+        if (Vector3.Distance(transform.position, position)<1)
         {
             canMove = false;
             anim.SetBool("isWalking", false);
@@ -187,20 +185,24 @@ public class AutomotonAction : MonoBehaviour
 
     }
 
-    void Movement()
+    void StartMovement()
     {
         pos = transform.position;
         if (Input.GetMouseButtonDown(1) && Hit().point != null)
         {
-            turnSpeed = startTurnSpeed;
             PlayClip("confirm1");
-            walkTo = Hit().point;
-            canMove = false;
             anim.SetBool("isWalking", false);
+            canMove = false;
             canRotate = true;
+            turnSpeed = startTurnSpeed;
+            walkTo = Hit().point;
             startAngle = transform.rotation.eulerAngles.y;
             SetUpRotate(walkTo);
         }
+    }
+
+    void Movement()
+    {
         if (canRotate && walkTo != null)
         {
             Rotate();
@@ -209,9 +211,13 @@ public class AutomotonAction : MonoBehaviour
         {
             Walk(walkTo);
         }
-        Debug.Log("walk to: " + walkTo);
-           
-
+        else
+        {
+            anim.SetBool("isRotatingRight", false);
+            anim.SetBool("isRotatingLeft", false);
+            anim.SetBool("isWalking", false);
+        }
+        Debug.Log("canRotate: " + canRotate+" & canWalk: "+canMove);
     }
 
 
@@ -389,9 +395,6 @@ public class AutomotonAction : MonoBehaviour
     public void SetSeleted(bool set,Color c)
     {
         isSelected = set;
-        if(set)
-        {
-            transform.Find("Ring").GetComponent<SpriteRenderer>().color = c;
-        }
+        transform.Find("Ring").GetComponent<SpriteRenderer>().color = c;
     }
 }
