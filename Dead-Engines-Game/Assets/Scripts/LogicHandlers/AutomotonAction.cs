@@ -176,15 +176,6 @@ public class AutomotonAction : MonoBehaviour
 
     }
 
-    void TravelTo(Vector3 place)
-    {
-        if (nv != null && canMove)
-        {
-            nv.SetDestination(place);
-        }
-
-    }
-
     void StartMovement()
     {
         pos = transform.position;
