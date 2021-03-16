@@ -36,6 +36,16 @@ public class HudView : MonoBehaviour
 		healthSlider.value = unit.Health;
 	}
 
+	public void UpdateGroup(Unit unit)
+	{
+		hudPanel.SetActive(true);
+		objectName.text = "Unit Group";
+		objectInfo_1.text = unit.Job;
+		healthNumber.text = " ";
+		healthSlider.maxValue = unit.Health; // fix
+		healthSlider.value = unit.Health;
+	}
+
 	public void UpdateEnemy(Enemy enemy)
 	{
 		hudPanel.SetActive(true);
@@ -55,5 +65,16 @@ public class HudView : MonoBehaviour
 		healthSlider.maxValue = camp.Health; // fix
 		healthSlider.value = camp.Health;
 	}
+
+	//public void UpdateResource(GameObject resource)
+	//{
+	//	resource.
+	//	hudPanel.SetActive(true);
+	//	objectName.text = "Resource Deposit";
+	//	objectInfo_1.text = " ";
+	//	objectInfo_2.text = .Health.ToString();
+	//	healthSlider.maxValue = camp.Health; // fix
+	//	healthSlider.value = camp.Health;
+	//}
 
 }

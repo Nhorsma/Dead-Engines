@@ -3710,7 +3710,7 @@ GameObject:
   - component: {fileID: 264010220}
   - component: {fileID: 264010219}
   m_Layer: 5
-  m_Name: Unit Job
+  m_Name: Object Desc 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -6475,14 +6475,9 @@ MonoBehaviour:
   normalMaterial: {fileID: 2100000, guid: 80d99d111da86da41951967e4aad5f9e, type: 2}
   highlightMaterial: {fileID: 2100000, guid: 95ccc95e68534fa4b92d3c0d16d17b2a, type: 2}
   selectedMaterial: {fileID: 2100000, guid: 64d79bbb5de2c4740a8b70494ce6c403, type: 2}
+  hudView: {fileID: 2075244116}
   g1: {fileID: 0}
   g2: {fileID: 0}
-  unitUIPanel: {fileID: 522037732}
-  unitName: {fileID: 1205106272}
-  unitJob: {fileID: 264010219}
-  unitItem: {fileID: 1771740820}
-  unitHealth: {fileID: 613000535}
-  healthSlider: {fileID: 1539122358}
   audioSource: {fileID: 0}
   readyClip1: {fileID: 8300000, guid: 5c50c6726d22fdc4583834c823c61523, type: 3}
   readyClip2: {fileID: 8300000, guid: d9de8a7be7489b34fa4c10c2f6e3f862, type: 3}
@@ -7290,7 +7285,7 @@ GameObject:
   - component: {fileID: 522037735}
   - component: {fileID: 522037734}
   m_Layer: 5
-  m_Name: HUD Unit Viewer
+  m_Name: HUD Viewer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -8786,7 +8781,7 @@ GameObject:
   - component: {fileID: 613000536}
   - component: {fileID: 613000535}
   m_Layer: 5
-  m_Name: Unit Health
+  m_Name: Health Number
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -17231,7 +17226,7 @@ GameObject:
   - component: {fileID: 1205106273}
   - component: {fileID: 1205106272}
   m_Layer: 5
-  m_Name: Unit Name
+  m_Name: Object Name
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -25676,7 +25671,7 @@ GameObject:
   - component: {fileID: 1771740821}
   - component: {fileID: 1771740820}
   m_Layer: 5
-  m_Name: Unit Held Item
+  m_Name: Object Desc 2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -30245,6 +30240,8 @@ GameObject:
   - component: {fileID: 2075244112}
   - component: {fileID: 2075244110}
   - component: {fileID: 2075244111}
+  - component: {fileID: 2075244116}
+  - component: {fileID: 2075244115}
   m_Layer: 0
   m_Name: logic block 2
   m_TagString: Untagged
@@ -30386,6 +30383,37 @@ MonoBehaviour:
   errorClip: {fileID: 8300000, guid: 2987a47a1130cf44abfd1d14c267d138, type: 3}
   effectConnector: {fileID: 2075244111}
   efficiency: 0
+--- !u!114 &2075244115
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2075244108}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 91b96cc15eaec0a4696ecb44fc9bc0b7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  hudView: {fileID: 2075244116}
+--- !u!114 &2075244116
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2075244108}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 910f55a58a2886d4f9e5a4ac53e164e2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  hudPanel: {fileID: 522037732}
+  objectName: {fileID: 1205106272}
+  objectInfo_1: {fileID: 264010219}
+  objectInfo_2: {fileID: 1771740820}
+  healthNumber: {fileID: 613000535}
+  healthSlider: {fileID: 1539122358}
 --- !u!1 &2076324046
 GameObject:
   m_ObjectHideFlags: 0

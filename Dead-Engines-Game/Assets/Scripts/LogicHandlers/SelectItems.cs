@@ -86,7 +86,7 @@ public class SelectItems : MonoBehaviour
         {
             if (!hasCreatedSquare)
             {
-                ClearAll();
+				ClearAll(false);
                 if (hit.collider.CompareTag("Friendly") && !UnitManager.selectedUnits.Contains(hit.collider.gameObject) && hit.collider.gameObject.activeInHierarchy)
                 {
                     UnitManager.selectedUnits.Add(hit.collider.gameObject);
@@ -99,7 +99,7 @@ public class SelectItems : MonoBehaviour
             }
             else //group select
             {
-                ClearAll();
+                ClearAll(false);
                 GroupSelect();
 			}
         }
@@ -228,33 +228,39 @@ public class SelectItems : MonoBehaviour
 
 
 
-    void GroupSelect()
-    {
-        for (int i = 0; i < unitManager.units.Count; i++)
-        {
-            GameObject currentUnit = unitManager.units[i];
+	void GroupSelect()
+	{
+		for (int i = 0; i < unitManager.units.Count; i++)
+		{
+			GameObject currentUnit = unitManager.units[i];
 
-            //Is this unit within the square
-            if (InRect(currentUnit.transform.position) && currentUnit.activeInHierarchy)
-            {
-                //currentUnit.GetComponentInChildren<SpriteRenderer>().color = selectedC;
-                SetColor(currentUnit, false);
+			//Is this unit within the square
+			if (InRect(currentUnit.transform.position) && currentUnit.activeInHierarchy)
+			{
+				//currentUnit.GetComponentInChildren<SpriteRenderer>().color = selectedC;
+				SetColor(currentUnit, false);
 
-                UnitManager.selectedUnits.Add(currentUnit);
-                ReadyClip();
-            }
-            //Otherwise deselect the unit if it's not in the square
-            else
-            {
-                //currentUnit.GetComponentInChildren<SpriteRenderer>().color = normalC;
-                SetColor(currentUnit, true);
-            }
-        }
+				UnitManager.selectedUnits.Add(currentUnit);
+				ReadyClip();
+			}
+			//Otherwise deselect the unit if it's not in the square
+			else
+			{
+				//currentUnit.GetComponentInChildren<SpriteRenderer>().color = normalC;
+				SetColor(currentUnit, true);
+			}
+		}
 		if (UnitManager.selectedUnits.Count == 1)
 		{
 			//UpdateUnitUI(UnitManager.selectedUnits[0].GetComponent<Unit>()); ------------------------------------->
 			hudView.hudPanel.SetActive(true);
 		}
+
+		if (UnitManager.selectedUnits.Count > 1)
+		{
+			hudView.UpdateGroup(UnitManager.selectedUnits[0].GetComponent<Unit>());
+		}
+
     }
 
 
@@ -291,15 +297,18 @@ public class SelectItems : MonoBehaviour
 
 
 
-    void ClearAll()
-    {
-        for(int i=0;i< UnitManager.selectedUnits.Count;i++)
-        {
-            //UnitManager.selectedUnits[i].GetComponentInChildren<SpriteRenderer>().color = normalC;
-            SetColor(UnitManager.selectedUnits[i], true);
-        }
-        UnitManager.selectedUnits.Clear();
-		hudView.hudPanel.SetActive(false);
+	void ClearAll(bool includeHudPanel)
+	{
+		for (int i = 0; i < UnitManager.selectedUnits.Count; i++)
+		{
+			//UnitManager.selectedUnits[i].GetComponentInChildren<SpriteRenderer>().color = normalC;
+			SetColor(UnitManager.selectedUnits[i], true);
+		}
+		UnitManager.selectedUnits.Clear();
+		if (includeHudPanel)
+		{
+			hudView.hudPanel.SetActive(false);
+		}
 	}
 
 
