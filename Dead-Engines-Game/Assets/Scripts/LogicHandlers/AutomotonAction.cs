@@ -48,7 +48,7 @@ public class AutomotonAction : MonoBehaviour
         anim = automoton.GetComponent<Animator>();
         aa = automoton.GetComponent<AutomotonAction>();
         //aa.enabled = false;
-        endPhaseOne = false;
+        endPhaseOne = true;
 
         footCollider = footObject.GetComponent<BoxCollider>();
         fistCollider = fistObject.GetComponent<BoxCollider>();
@@ -208,7 +208,6 @@ public class AutomotonAction : MonoBehaviour
             anim.SetBool("isRotatingLeft", false);
             anim.SetBool("isWalking", false);
         }
-        Debug.Log("canRotate: " + canRotate+" & canWalk: "+canMove);
     }
 
 

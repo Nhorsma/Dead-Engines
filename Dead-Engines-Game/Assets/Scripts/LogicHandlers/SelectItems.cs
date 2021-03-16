@@ -9,6 +9,7 @@ public class SelectItems : MonoBehaviour
     RectTransform selectionSquareTrans;
     public float dragLimit;
     public UnitManager unitManager;
+    public AutomotonAction autoAction;
 
     //The materials
     public Material normalMaterial;
@@ -95,6 +96,10 @@ public class SelectItems : MonoBehaviour
 
 					//UpdateUnitUI(hit.collider.gameObject.GetComponent<Unit>()); ////////////////////////////////////////// ------------------------------------->
 					ReadyClip();
+                }
+                if(hit.collider.CompareTag("Robot") && autoAction.enabled==true)
+                {
+                    autoAction.SetSeleted(true, selectedC);
                 }
             }
             else //group select
@@ -247,9 +252,14 @@ public class SelectItems : MonoBehaviour
 			else
 			{
 				//currentUnit.GetComponentInChildren<SpriteRenderer>().color = normalC;
+
 				SetColor(currentUnit, true);
 			}
-		}
+            if (InRect(autoAction.gameObject.transform.position) && autoAction.enabled==true)
+            { 
+                autoAction.SetSeleted(true, selectedC);
+            }
+        }
 		if (UnitManager.selectedUnits.Count == 1)
 		{
 			//UpdateUnitUI(UnitManager.selectedUnits[0].GetComponent<Unit>()); ------------------------------------->
@@ -309,7 +319,8 @@ public class SelectItems : MonoBehaviour
 		{
 			hudView.hudPanel.SetActive(false);
 		}
-	}
+        autoAction.SetSeleted(false, normalC);
+    }
 
 
     public List<GameObject> GetSelected()
