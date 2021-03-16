@@ -96,7 +96,7 @@ public class UnitManager : MonoBehaviour
                 Hit().collider.gameObject.tag == "Encampment")
             {
                 SetJobOfSelected(Hit().collider.gameObject);
-                selectItems.UpdateUnitUI(selectedUnits[0].GetComponent<Unit>());
+                selectItems.hudView.UpdateUnit(selectedUnits[0].GetComponent<Unit>());
             }
             else
             {

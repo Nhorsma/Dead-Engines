@@ -15,6 +15,8 @@ public class SelectItems : MonoBehaviour
     public Material highlightMaterial;
     public Material selectedMaterial;
 
+	public HudView hudView;
+
     Color normalC = new Color32(250, 250, 250, 200);
     Color highLightedC = new Color32(255, 0, 255, 200);
     Color selectedC = new Color32(255, 255, 0, 200);
@@ -33,13 +35,6 @@ public class SelectItems : MonoBehaviour
 
     Vector3 clickSpot;
     RaycastHit hit;
-
-	public GameObject unitUIPanel;
-	public Text unitName;
-	public Text unitJob;
-	public Text unitItem;
-	public Text unitHealth;
-	public Slider healthSlider;
 
     public AudioSource audioSource;
     public AudioClip readyClip1, readyClip2;
@@ -87,27 +82,27 @@ public class SelectItems : MonoBehaviour
 
     void Select()
     {
-            if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit, Mathf.Infinity))
+        if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit, Mathf.Infinity))
+        {
+            if (!hasCreatedSquare)
             {
-                if (!hasCreatedSquare)
+                ClearAll();
+                if (hit.collider.CompareTag("Friendly") && !UnitManager.selectedUnits.Contains(hit.collider.gameObject) && hit.collider.gameObject.activeInHierarchy)
                 {
-                    ClearAll();
-                    if (hit.collider.CompareTag("Friendly") && !UnitManager.selectedUnits.Contains(hit.collider.gameObject) && hit.collider.gameObject.activeInHierarchy)
-                    {
-                        UnitManager.selectedUnits.Add(hit.collider.gameObject);
-                        SetColor(hit.collider.gameObject, false);
-                    //hit.collider.gameObject.GetComponentInChildren<SpriteRenderer>().color = selectedC;
+                    UnitManager.selectedUnits.Add(hit.collider.gameObject);
+                    SetColor(hit.collider.gameObject, false);
+					//hit.collider.gameObject.GetComponentInChildren<SpriteRenderer>().color = selectedC;
 
-					    UpdateUnitUI(hit.collider.gameObject.GetComponent<Unit>()); //////////////////////////////////////////
-                        ReadyClip();
-                    }
+					//UpdateUnitUI(hit.collider.gameObject.GetComponent<Unit>()); ////////////////////////////////////////// ------------------------------------->
+					ReadyClip();
                 }
-                else //group select
-                {
-                    ClearAll();
-                    GroupSelect();
             }
-            }
+            else //group select
+            {
+                ClearAll();
+                GroupSelect();
+			}
+        }
     }
 
     void Highlight()
@@ -257,8 +252,8 @@ public class SelectItems : MonoBehaviour
         }
 		if (UnitManager.selectedUnits.Count == 1)
 		{
-			UpdateUnitUI(UnitManager.selectedUnits[0].GetComponent<Unit>());
-			unitUIPanel.SetActive(true);
+			//UpdateUnitUI(UnitManager.selectedUnits[0].GetComponent<Unit>()); ------------------------------------->
+			hudView.hudPanel.SetActive(true);
 		}
     }
 
@@ -304,7 +299,7 @@ public class SelectItems : MonoBehaviour
             SetColor(UnitManager.selectedUnits[i], true);
         }
         UnitManager.selectedUnits.Clear();
-		unitUIPanel.SetActive(false);
+		hudView.hudPanel.SetActive(false);
 	}
 
 
@@ -320,17 +315,6 @@ public class SelectItems : MonoBehaviour
         //gm.GetComponentInChildren<SpriteRenderer>().color = normalC;
         SetColor(gm, true);
     }
-
-	public void UpdateUnitUI(Unit u)
-	{
-		unitUIPanel.SetActive(true);
-		unitName.text = u.UnitName;
-		unitJob.text = u.Job;
-		//unitItem.text = u.Holding;
-		unitHealth.text = u.Health.ToString();
-		healthSlider.maxValue = 3;
-		healthSlider.value = u.Health;
-	}
 
     void ReadyClip()
     {
