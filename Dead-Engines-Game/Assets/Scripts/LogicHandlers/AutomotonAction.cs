@@ -8,15 +8,17 @@ public class AutomotonAction : MonoBehaviour
     public Animator anim;
     public AudioClip hitgroundClip, robotSounds, confirmClip1, confirmClip2, alarmClip;
     public AudioSource audioSource;
-    public float movementSpeed, turnSpeed;
+    public float movementSpeed, startTurnSpeed, turnSpeed;
     public float startAngle, target, ny;
     public bool canMove,canRotate, isWalking, rotLeft, rotRight;
     public bool tempmove, temprotate, tempwalking, tempLeft, tempRight;
     Vector3 pos, walkTo;
     NavMeshAgent nv;
     Rigidbody rb;
+    int layer_mask;
 
     public static bool endPhaseOne;
+    public bool isSelected;
     public GameObject automoton, fog, footObject, fistObject, dustCloud,explosion;
     public Vector3 phaseOnePos, phaseTwoPos;
     public Animation climbOut;
@@ -32,12 +34,13 @@ public class AutomotonAction : MonoBehaviour
 
     private void Start()
     {
+        layer_mask = LayerMask.GetMask("Ignore Raycast");
         audioSource = GetComponent<AudioSource>();
         audioSource.Play();
         rb = GetComponent<Rigidbody>();
         nv = GetComponent<NavMeshAgent>();
         nv.speed = movementSpeed;
-        canMove = canRotate = isWalking = false;
+        canMove = canRotate = isWalking = isSelected = false;
 
         phaseTwoPos = phaseOnePos = automoton.transform.position;
         phaseTwoPos -= new Vector3(13.2f, -41.49f, 12.3f);
@@ -45,36 +48,37 @@ public class AutomotonAction : MonoBehaviour
         anim = automoton.GetComponent<Animator>();
         aa = automoton.GetComponent<AutomotonAction>();
         //aa.enabled = false;
-        endPhaseOne = true;
+        endPhaseOne = false;
 
         footCollider = footObject.GetComponent<BoxCollider>();
         fistCollider = fistObject.GetComponent<BoxCollider>();
         footCollider.enabled = false;
         fistCollider.enabled = false;
 
-        StartCoroutine(RaiseAuto());
         DefaultControls();
         unitManager.PhaseTwoUnits();
-
         autoHealth = startingAutoHealth;
+        StartCoroutine(RaiseAuto());
     }
 
     private void LateUpdate()
     {
-        if (endPhaseOne && autoHealth>0)
+        if (endPhaseOne && isSelected && autoHealth>0)
         {
-            Movement();
+            StartMovement();
             Controls();
         }
+        Movement();
     }
 
     RaycastHit Hit()
     {
         RaycastHit hit;
-        if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit, Mathf.Infinity, 1<<8))
+        if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit, Mathf.Infinity, ~layer_mask))//, 1<<8,layer_mask
         {
             return hit;
         }
+        Debug.Log("HIt: " + hit.point);
         return hit;
     }
 
@@ -91,15 +95,16 @@ public class AutomotonAction : MonoBehaviour
 
     public void Rotate()
     {
-        
-        if(startAngle < 180)
+        //Debug.Log("Angle: " + Mathf.Abs(target - transform.rotation.eulerAngles.y));
+        float angle = Mathf.Abs(target - transform.rotation.eulerAngles.y);
+        if (startAngle < 180)
         {
-            if(startAngle < target && target < ny)
+            anim.SetBool("isWalking", false);
+            if (startAngle < target && target < ny)
             {
-                //clockwise
+                //Debug.Log("clockwise");
                 anim.SetBool("isRotatingLeft", false);
                 anim.SetBool("isRotatingRight", true);
-                anim.SetBool("isWalking", false);
                 isWalking = false;
                 rotRight = true;
                 rotLeft = false;
@@ -108,10 +113,9 @@ public class AutomotonAction : MonoBehaviour
             }
             else
             {
-                //counter clockwise
+                //Debug.Log("counter clockwise");
                 anim.SetBool("isRotatingRight", false);
                 anim.SetBool("isRotatingLeft", true);
-                anim.SetBool("isWalking", false);
                 isWalking = false;
                 rotRight = false;
                 rotLeft = true;
@@ -123,10 +127,9 @@ public class AutomotonAction : MonoBehaviour
         {
             if (startAngle < target && target < 360 || target < ny)
             {
-                //clockwise
+               // Debug.Log("clockwise");
                 anim.SetBool("isRotatingLeft", false);
                 anim.SetBool("isRotatingRight", true);
-                anim.SetBool("isWalking", false);
                 isWalking = false;
                 rotRight = true;
                 rotLeft = false;
@@ -135,16 +138,19 @@ public class AutomotonAction : MonoBehaviour
             }
             else
             {
-                //counter clockwise
+                //Debug.Log("counter clockwise");
                 anim.SetBool("isRotatingRight", false);
                 anim.SetBool("isRotatingLeft", true);
-                anim.SetBool("isWalking", false);
                 isWalking = false;
                 rotRight = false;
                 rotLeft = true;
                 canMove = false;
                 transform.Rotate(-Vector3.up * turnSpeed * Time.deltaTime);
             }
+        }
+        if(Mathf.Abs(target - transform.rotation.eulerAngles.y) < 1.5f)
+        {
+            turnSpeed /= 2;
         }
         if (Mathf.Abs(target - transform.rotation.eulerAngles.y) < 0.5f)
         {
@@ -161,7 +167,7 @@ public class AutomotonAction : MonoBehaviour
     {
         //rb.MovePosition(position * movementSpeed * Time.deltaTime);
         transform.position = Vector3.MoveTowards(transform.position, position, movementSpeed*Time.deltaTime);
-        if (Vector3.Distance(pos,position)<1)
+        if (Vector3.Distance(transform.position, position)<1)
         {
             canMove = false;
             anim.SetBool("isWalking", false);
@@ -170,28 +176,24 @@ public class AutomotonAction : MonoBehaviour
 
     }
 
-    void TravelTo(Vector3 place)
-    {
-        if (nv != null && canMove)
-        {
-            nv.SetDestination(place);
-        }
-
-    }
-
-    void Movement()
+    void StartMovement()
     {
         pos = transform.position;
         if (Input.GetMouseButtonDown(1) && Hit().point != null)
         {
             PlayClip("confirm1");
-            walkTo = Hit().point;
-            canMove = false;
             anim.SetBool("isWalking", false);
+            canMove = false;
             canRotate = true;
+            turnSpeed = startTurnSpeed;
+            walkTo = Hit().point;
             startAngle = transform.rotation.eulerAngles.y;
             SetUpRotate(walkTo);
         }
+    }
+
+    void Movement()
+    {
         if (canRotate && walkTo != null)
         {
             Rotate();
@@ -200,7 +202,13 @@ public class AutomotonAction : MonoBehaviour
         {
             Walk(walkTo);
         }
-
+        else
+        {
+            anim.SetBool("isRotatingRight", false);
+            anim.SetBool("isRotatingLeft", false);
+            anim.SetBool("isWalking", false);
+        }
+        Debug.Log("canRotate: " + canRotate+" & canWalk: "+canMove);
     }
 
 
@@ -373,5 +381,11 @@ public class AutomotonAction : MonoBehaviour
             audioSource.PlayOneShot(confirmClip2);
         else if (str == "alarm")
             audioSource.PlayOneShot(alarmClip);
+    }
+
+    public void SetSeleted(bool set,Color c)
+    {
+        isSelected = set;
+        transform.Find("Ring").GetComponent<SpriteRenderer>().color = c;
     }
 }
