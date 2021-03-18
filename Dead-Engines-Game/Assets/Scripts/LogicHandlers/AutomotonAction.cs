@@ -56,7 +56,7 @@ public class AutomotonAction : MonoBehaviour
         fistCollider.enabled = false;
 
         DefaultControls();
-        unitManager.PhaseTwoUnits();
+        //unitManager.PhaseTwoUnits();
         autoHealth = startingAutoHealth;
         StartCoroutine(RaiseAuto());
     }
@@ -108,7 +108,7 @@ public class AutomotonAction : MonoBehaviour
                 isWalking = false;
                 rotRight = true;
                 rotLeft = false;
-                canMove = false;
+ //               canMove = false;
                 transform.Rotate(Vector3.up * turnSpeed * Time.deltaTime);
             }
             else
@@ -119,7 +119,7 @@ public class AutomotonAction : MonoBehaviour
                 isWalking = false;
                 rotRight = false;
                 rotLeft = true;
-                canMove = false;
+ //               canMove = false;
                 transform.Rotate(-Vector3.up * turnSpeed * Time.deltaTime);
             }
         }
@@ -133,7 +133,7 @@ public class AutomotonAction : MonoBehaviour
                 isWalking = false;
                 rotRight = true;
                 rotLeft = false;
-                canMove = false;
+//               canMove = false;
                 transform.Rotate(Vector3.up * turnSpeed * Time.deltaTime);
             }
             else
@@ -144,13 +144,13 @@ public class AutomotonAction : MonoBehaviour
                 isWalking = false;
                 rotRight = false;
                 rotLeft = true;
-                canMove = false;
+ //               canMove = false;
                 transform.Rotate(-Vector3.up * turnSpeed * Time.deltaTime);
             }
         }
         if(Mathf.Abs(target - transform.rotation.eulerAngles.y) < 1.5f)
         {
-            turnSpeed /= 2;
+            turnSpeed /= 1.5f;
         }
         if (Mathf.Abs(target - transform.rotation.eulerAngles.y) < 0.5f)
         {
@@ -202,12 +202,14 @@ public class AutomotonAction : MonoBehaviour
         {
             Walk(walkTo);
         }
+        /*
         else
         {
             anim.SetBool("isRotatingRight", false);
             anim.SetBool("isRotatingLeft", false);
             anim.SetBool("isWalking", false);
         }
+        */
     }
 
 
