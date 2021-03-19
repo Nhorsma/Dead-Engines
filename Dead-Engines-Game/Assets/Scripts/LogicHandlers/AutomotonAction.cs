@@ -6,8 +6,6 @@ using UnityEngine.AI;
 public class AutomotonAction : MonoBehaviour
 {
     public Animator anim;
-    public AudioClip hitgroundClip, robotSounds, confirmClip1, confirmClip2, alarmClip;
-    public AudioSource audioSource;
     public float movementSpeed, startTurnSpeed, turnSpeed;
     public float startAngle, target, ny;
     public bool canMove,canRotate, isWalking, rotLeft, rotRight;
@@ -24,6 +22,8 @@ public class AutomotonAction : MonoBehaviour
     public Animation climbOut;
     public AutomotonAction aa;
     public UnitManager unitManager;
+    public AudioSource ambientSource;
+    public AudioHandler audioHandler;
 
     KeyCode move_q, move_w, move_e, move_r;
     Collider footCollider, fistCollider;
@@ -35,8 +35,7 @@ public class AutomotonAction : MonoBehaviour
     private void Start()
     {
         layer_mask = LayerMask.GetMask("Ignore Raycast");
-        audioSource = GetComponent<AudioSource>();
-        audioSource.Play();
+        ambientSource.Play();
         rb = GetComponent<Rigidbody>();
         nv = GetComponent<NavMeshAgent>();
         nv.speed = movementSpeed;
@@ -181,7 +180,7 @@ public class AutomotonAction : MonoBehaviour
         pos = transform.position;
         if (Input.GetMouseButtonDown(1) && Hit().point != null)
         {
-            PlayClip("confirm1");
+            audioHandler.PlayClip(gameObject, "robotConfirm1");
             anim.SetBool("isWalking", false);
             canMove = false;
             canRotate = true;
@@ -218,7 +217,7 @@ public class AutomotonAction : MonoBehaviour
 
     IEnumerator RaiseAuto()
     {
-        PlayClip("confirm2");
+        audioHandler.PlayClip(gameObject, "robotConfirm2");
         automoton.transform.position = phaseTwoPos;
         anim.SetBool("StartPhaseTwo", true);
         yield return new WaitForSeconds(1f);
@@ -253,12 +252,12 @@ public class AutomotonAction : MonoBehaviour
     IEnumerator GroundPound()
     {
         //play ground pound animation
-        PlayClip("confirm2");
+        audioHandler.PlayClip(gameObject, "robotConfirm2");
         ContinueAnimations(false);
         anim.SetBool("GroundPound", true);
         yield return new WaitForSeconds(2f);
         SpawnDust(footObject);
-        PlayClip("hit");
+        audioHandler.PlayClip(gameObject, "robotGround");
         //hit ground
         footCollider.enabled = true;
         while (anim.GetCurrentAnimatorStateInfo(0).normalizedTime < 1.0f)
@@ -271,7 +270,7 @@ public class AutomotonAction : MonoBehaviour
 
     IEnumerator Punch()
     {
-        PlayClip("confirm2");
+        audioHandler.PlayClip(gameObject, "robotConfirm2");
         ContinueAnimations(false);
         anim.SetBool("Punch", true);
         yield return new WaitForSeconds(1f);
@@ -330,25 +329,23 @@ public class AutomotonAction : MonoBehaviour
 
         if(autoHealth >= startingAutoHealth*0.75f)
         {
-            
         }
-        else if(autoHealth >= startingAutoHealth*0.5f)
+        else if(autoHealth == startingAutoHealth*0.5f)
         {
-            audioSource.PlayOneShot(alarmClip);
+            audioHandler.PlayClip(gameObject, "robotAlarm");
         }
-        else if (autoHealth >= startingAutoHealth * 0.25f)
+        else if (autoHealth == startingAutoHealth * 0.25f)
         {
-            audioSource.PlayOneShot(alarmClip);
+            audioHandler.PlayClip(gameObject, "robotAlarm");
         }
-        else if(autoHealth >= 0)
+        else if(autoHealth == 0)
         {
-            audioSource.PlayOneShot(alarmClip);
+            audioHandler.PlayClip(gameObject, "robotAlarm");
         }
         else
         {
             SpawnExplosion(gameObject);
-            PlayClip("hit");
-            Debug.Log("auto is Dead");
+            audioHandler.PlayClip(gameObject, "explosion");
         }
 
     }
@@ -370,18 +367,6 @@ public class AutomotonAction : MonoBehaviour
         explosion.GetComponent<ParticleSystem>().Play();
         yield return new WaitForSeconds(time);
         Destroy(explosion);
-    }
-
-    public void PlayClip(string str)
-    {
-        if (str == "hit")
-            audioSource.PlayOneShot(hitgroundClip);
-        else if (str == "confirm1")
-            audioSource.PlayOneShot(confirmClip1);
-        else if (str == "confirm2")
-            audioSource.PlayOneShot(confirmClip2);
-        else if (str == "alarm")
-            audioSource.PlayOneShot(alarmClip);
     }
 
     public void SetSeleted(bool set,Color c)

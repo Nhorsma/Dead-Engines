@@ -5,15 +5,15 @@ using UnityEngine.AI;
 
 public class HunterHandler : MonoBehaviour
 {
-    public GameObject automaton, h1, h2, h3;
+    public GameObject automaton, h1, h2, h3, anteater;
     public AutomotonAction autoAction;
+    public AudioHandler audioHandler;
 
     public List<GameObject> deployedHunters;
 
-    public float spawnRadius, stoppingDistance, movementSpeed;
+    public float spawnRadius, stoppingDistance, movementSpeed, closeRange, tooCloseRange;
     public bool canSpawn, isDeployed;
     public float chance, spawnTime;
-    public AudioClip attack1Clip, attack2Clip, shootClip, hitClip, destroyClip, enemyDetectedClip;
 
     Vector3 last;
 
@@ -46,22 +46,36 @@ public class HunterHandler : MonoBehaviour
 				hunterObj.GetComponent<Hunter>().Speed = 7f;
 				hunterObj.GetComponent<Hunter>().Health = 2;
 				hunterObj.GetComponent<Hunter>().Damage = 2;
-				break;
+                hunterObj.GetComponent<Hunter>().FiringSpeed = 2f;
+                hunterObj.GetComponent<Hunter>().CanRetreat = true;
+                break;
 			case 2:
 				hunterObj = (GameObject)Instantiate(Resources.Load("hunter 2"));
 				hunterObj.GetComponent<Hunter>().Speed = 10f;
 				hunterObj.GetComponent<Hunter>().Health = 1;
 				hunterObj.GetComponent<Hunter>().Damage = 1;
+                hunterObj.GetComponent<Hunter>().FiringSpeed = 3.5f;
+                hunterObj.GetComponent<Hunter>().CanRetreat = true;
 				break;
 			case 3:
 				hunterObj = (GameObject)Instantiate(Resources.Load("hunter 3"));
 				hunterObj.GetComponent<Hunter>().Speed = 3f;
 				hunterObj.GetComponent<Hunter>().Health = 3;
 				hunterObj.GetComponent<Hunter>().Damage = 3;
-				break;
-		}
+                hunterObj.GetComponent<Hunter>().FiringSpeed = 5f;
+                break;
+        }
 
-		hunterObj.GetComponent<Hunter>().Target = automaton;
+        /*
+         * Anteater
+            hunterObj = (GameObject)Instantiate(Resources.Load("hunter 3"));
+            hunterObj.GetComponent<Hunter>().Speed = 4f;
+            hunterObj.GetComponent<Hunter>().Health = 10;
+            hunterObj.GetComponent<Hunter>().Damage = 10;
+            hunterObj.GetComponent<Hunter>().FiringSpeed = 6f;
+        */
+
+        hunterObj.GetComponent<Hunter>().Target = automaton;
 		return hunterObj;
 	}
 
@@ -93,37 +107,37 @@ public class HunterHandler : MonoBehaviour
                 if (h == null)
                     break;
 
-                Transform hunterTransform = h.GetComponentInChildren<Transform>();
+                if (!checkIfAtDestination(h))
+                    h.GetComponent<Hunter>().NextMove = false;
+                else
+                    h.GetComponent<Hunter>().NextMove = true;
 
-                if (Vector3.Distance(h.transform.position, automaton.transform.position) > stoppingDistance * 1.5f)
+
+                Transform hunterTransform = h.GetComponentInChildren<Transform>();
+                float distance = Vector3.Distance(h.transform.position, automaton.transform.position);
+
+                if (h.GetComponent<Hunter>().NextMove)
                 {
-                    TravelTo(h, automaton.transform.position, true);
-                    h.GetComponent<Animator>().SetBool("isShooting", false);
-                }
-                else if (Vector3.Distance(h.transform.position, automaton.transform.position) < stoppingDistance)
-                {
-                    h.GetComponent<Animator>().SetBool("isShooting", true);
-                    if (!h.GetComponent<Hunter>().JustShot)
+                    if (distance > closeRange)
                     {
-                        Fire(h, h.GetComponent<Hunter>());
-                        StartCoroutine(FireCoolDown(h.GetComponent<Hunter>()));
+                        GetClose(automaton.transform.position, h);
+                        h.GetComponent<Animator>().SetBool("isShooting", false);
+                    }
+                    else
+                    {
+                        h.GetComponent<Animator>().SetBool("isShooting", true);
+                        if (!h.GetComponent<Hunter>().JustShot)
+                        {
+                            Fire(h, h.GetComponent<Hunter>());
+                            StartCoroutine(FireCoolDown(h.GetComponent<Hunter>()));
+                        }
                     }
                 }
-
-                /*
-                if (Vector3.Distance(ho.transform.position,automoton.transform.position)<stoppingDistance/3
-                    && h.CanWalk)
+                if (h.GetComponent<Hunter>().CanRetreat && distance < tooCloseRange)//if very close, walk backwards
                 {
-                    // mid = 2xy - xy
-                    float x1 = ho.transform.position.x;
-                    float y1 = ho.transform.position.z;
-                    float x2 = automoton.transform.position.x;
-                    float y2 = automoton.transform.position.z;
-                    Vector3 position = new Vector3(2*(2 * x1) - x2, ho.transform.position.y, 2*(2 * y1) - y2);
-                    TravelTo(ho, position, true);
-                    ho.GetComponent<Animator>().SetBool("isShooting", false);
+                    BackUp(automaton.transform.position,h);
                 }
-                */
+
                 hunterTransform.forward = automaton.transform.position - h.transform.position;
             }
     }
@@ -156,8 +170,8 @@ public class HunterHandler : MonoBehaviour
 			int hit = Random.Range(0, 2);
 			if (hit < chance)
 			{
-				PlayClip("enemy");
-				SpawnHunter();
+                audioHandler.PlayClip(Camera.main.gameObject, "enemyDetected");
+                SpawnHunter();
 				chance = 0;
 				isDeployed = true;
 			}
@@ -239,13 +253,8 @@ public class HunterHandler : MonoBehaviour
 			}
 
 			deployedHunters.Remove(hunter);
-            PlayClip("death");
-			Destroy(hunter);
-
-            //if (deployedHunters.Equals(new Hunter[] { null, null, null }))
-            //{
-            //    isDeployed = false;
-            //}
+            audioHandler.PlayClip(hunter, "explosion");
+            Destroy(hunter);
 
 			if (deployedHunters.Count <= 0)
 			{
@@ -254,7 +263,7 @@ public class HunterHandler : MonoBehaviour
         }
         else
         {
-            PlayClip("hit");
+            audioHandler.PlayClip(hunter, "metalHit");
         }
     }
 
@@ -263,7 +272,7 @@ public class HunterHandler : MonoBehaviour
         if (hunter_data.Target != null)
         {
             Vector3 direction = hunter_data.Target.transform.position - hunter.transform.position;
-            PlayClip("shoot");
+            audioHandler.PlayClip(hunter, "bigLaz");
 
             Vector3 shootFrom = hunter.transform.Find("FireFrom").position;
             StartCoroutine(TrailOff(0.07f, shootFrom, hunter_data.Target.transform.position + new Vector3(0, 50, 0)));
@@ -274,7 +283,7 @@ public class HunterHandler : MonoBehaviour
 	IEnumerator FireCoolDown(Hunter hunter_data)
 	{
 		hunter_data.JustShot = true;
-		yield return new WaitForSeconds(2f);
+		yield return new WaitForSeconds(hunter_data.FiringSpeed);
 		hunter_data.JustShot = false;
 	}
 
@@ -300,23 +309,43 @@ public class HunterHandler : MonoBehaviour
         Destroy(t);
     }
 
-    public void PlayClip(string str)
+    bool checkIfAtDestination(GameObject hunter)
     {
-        AudioSource tempSource = automaton.GetComponent<AudioSource>();
-        if (str.Equals("attack"))
-        {
-            if (Random.Range(0, 2) == 0)
-                tempSource.PlayOneShot(attack1Clip);
-            else
-                tempSource.PlayOneShot(attack2Clip);
-        }
-        else if (str.Equals("shoot"))
-            tempSource.PlayOneShot(shootClip);
-        else if (str.Equals("hit"))
-            tempSource.PlayOneShot(hitClip);
-        else if (str.Equals("death"))
-            tempSource.PlayOneShot(destroyClip);
-        else if (str.Equals("enemy"))
-            tempSource.PlayOneShot(enemyDetectedClip);
+        return hunter.GetComponent<NavMeshAgent>().remainingDistance < 1f;
+    }
+
+    void GetClose(Vector3 robot, GameObject hunter)
+    {
+        Vector3 diff = (transform.position - robot) * 1 / 2;
+        robot += diff;
+        TravelTo(hunter,robot,false);
+    }
+
+    void BackUp(Vector3 robot, GameObject hunter)
+    {
+        /*
+        Vector3 difference = transform.position - backFrom;
+        Vector3 a = difference*2;
+        Vector3 b = a + backFrom;
+        //move to b
+        */
+
+        Vector3 backUp = ((transform.position - robot) * 2) + robot;
+        TravelTo(hunter, robot, false);
+    }
+
+    void FindFlank(Vector3 robot, GameObject hunter)
+    {
+        /*
+        Vector3 difference = transform.position - backFrom;
+        Vector3 a = (difference/z,y,difference.x)
+        Vector3 b = a + backFrom;
+        //move to b
+        */
+
+        Vector3 diff = transform.position - robot;
+        Vector3 flank = new Vector3(diff.z, transform.position.y, diff.x);
+        robot += flank;
+        TravelTo(hunter, robot, false);
     }
 }

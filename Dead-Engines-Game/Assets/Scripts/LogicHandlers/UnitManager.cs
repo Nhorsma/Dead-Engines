@@ -11,6 +11,7 @@ public class UnitManager : MonoBehaviour
     public EncampmentHandler encampmentHandler;
     public SpawningPoolController spawnPool;
     public RoomManager roomManager;
+    public AudioHandler audioHandler;
 
     public Vector3 robotPos;
     public GameObject robot;
@@ -32,10 +33,6 @@ public class UnitManager : MonoBehaviour
     public float downTime;
     public float piercingMultiplier;
 
-    AudioSource audioSource;
-    public AudioClip goingClip1, goingClip2, confirmPing, deadClip, shootClip,
-                        dropOffClop, pickAxeClip;
-
     Color enemyRed = new Color32(207, 67, 74, 100);
     Color resourceGreen = new Color32(69, 207, 69, 100);
     Color selectedYellow = new Color32(255, 255, 0, 100);
@@ -45,8 +42,6 @@ public class UnitManager : MonoBehaviour
     {
         selectedUnits = new List<GameObject>();
         robotPos = new Vector3(robot.transform.position.x, 0, robot.transform.position.z);
-
-        audioSource = Camera.main.GetComponent<AudioSource>();
         SetUpUnits(startingUnits);
     }
 
@@ -102,7 +97,7 @@ public class UnitManager : MonoBehaviour
             {
                 MoveAllSelected();
             }
-            ReadyClip();
+            PlayConfirmClip(selectedUnits[0]);
         }
     }
 
@@ -146,7 +141,7 @@ public class UnitManager : MonoBehaviour
                 TravelTo(units[unit_data.Id], unit_data.JobPos.transform.position, true, true);
             }
         }
-        PlayClip("ping");
+        audioHandler.PlayClip(clickedObj, "confirmPing");
     }
 
     void RunAllJobs()
@@ -187,7 +182,7 @@ public class UnitManager : MonoBehaviour
                         SetSpawnedUnitInfo(u, true);
 
                         TravelTo(u, new Vector3(robotPos.x - 20, 0, robotPos.z - 20),false,true);
-                        ReadyClip();
+                        PlayReadyClip(u);
                     }
                 }
                 else
@@ -367,18 +362,18 @@ public class UnitManager : MonoBehaviour
     {
         //rh.resQuantities[id] -= 1;
         resourceHandling.Extract(id, 1);
-        PlayClip("pickaxe");
+        audioHandler.PlayClip(robot, "pickaxeClang");
     }
 
     public void SetJobFromRoom(GameObject unit, string roomJob)
     {
-        PlayClip("ping");
+        audioHandler.PlayClip(unit, "confirmPing");
         ShowGun(unit, false);
         TravelTo(unit, robotPos, false, false);
     }
     public void LeaveRoomJob(GameObject unit)
     {
-        ReadyClip();
+        PlayReadyClip(unit);
         ResetJob(unit.GetComponent<Unit>());
 
         if (!AutomotonAction.endPhaseOne)
@@ -435,7 +430,7 @@ public class UnitManager : MonoBehaviour
     void Fire(GameObject unit)
     {
         Vector3 direction = unit.GetComponent<Unit>().JobPos.transform.position - unit.transform.position;
-        PlayClip("shoot");
+        audioHandler.PlayClip(unit, "smallGun");
         float hitChance = Random.Range(0, 2);
         if (hitChance > 0.5f)
         {
@@ -527,7 +522,7 @@ public class UnitManager : MonoBehaviour
             ShowGun(unit, false);
             SetAnimation(unit, "inCombat", false);
             SetAnimation(unit, "knockedOut", true);
-            PlayClip("dead");
+            audioHandler.PlayClip(unit, "unitDead");
             unit.GetComponent<NavMeshAgent>().enabled = false;
 
             if (roomManager.CheckInfirmary())
@@ -560,12 +555,12 @@ public class UnitManager : MonoBehaviour
     void AddMetal()
     {
         ResourceHandling.metal++;
-        PlayClip("drop");
+        audioHandler.PlayClip(robot, "dropOffClop");
     }
     void AddElectronics()
     {
         ResourceHandling.electronics++;
-        PlayClip("drop");
+        audioHandler.PlayClip(robot, "dropOffClop");
     }
 
     public GameObject BulletTrail(Vector3 start, Vector3 end)
@@ -592,50 +587,6 @@ public class UnitManager : MonoBehaviour
         yield return new WaitForSeconds(time);
         spawnPool.poolDictionary["trails"].Enqueue(t);
         t.SetActive(false);
-    }
-
-    void ReadyClip()
-    {
-        if (!audioSource.isPlaying)
-            if (Random.Range(0, 2) == 0)
-            {
-                audioSource.PlayOneShot(goingClip1);
-            }
-            else
-            {
-                audioSource.PlayOneShot(goingClip2);
-            }
-    }
-    void PlayClip(string str)
-    {
-        if (str.Equals("ping"))
-        {
-            audioSource.PlayOneShot(confirmPing);
-            if (Random.Range(0, 2) == 0)
-            {
-                audioSource.PlayOneShot(goingClip1);
-            }
-            else
-            {
-                audioSource.PlayOneShot(goingClip2);
-            }
-        }
-        else if (str.Equals("drop"))
-        {
-            audioSource.PlayOneShot(dropOffClop);
-        }
-        else if (str.Equals("pickaxe"))
-        {
-            audioSource.PlayOneShot(pickAxeClip);
-        }
-        else if (str.Equals("shoot"))
-        {
-            audioSource.PlayOneShot(shootClip);
-        }
-        else if (str.Equals("dead"))
-        {
-            audioSource.PlayOneShot(deadClip);
-        }
     }
 
     public void SetJobCircleColor(Unit unit_data, Color colorChange)
@@ -684,6 +635,18 @@ public class UnitManager : MonoBehaviour
         {
             unit_object.transform.Find("Rifle").gameObject.SetActive(showGun);
         }
+    }
+
+    public void PlayReadyClip(GameObject unit)
+    {
+        int num = Random.Range(1, 2);
+        audioHandler.PlayClip(unit, "unitReady" + num);
+    }
+
+    public void PlayConfirmClip(GameObject unit)
+    {
+        int num = Random.Range(1, 2);
+        audioHandler.PlayClip(unit, "unitConfirm" + num);
     }
 
 }

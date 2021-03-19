@@ -7,9 +7,12 @@ public class Hunter : Enemy
 	private bool canWalk = true;
 	private bool walkingForward = false;
 	private bool walkingBackward = false;
+    private bool canRetreat = false;
 	private bool firing = false;
 	private bool isDead = false;
+    private bool nextMove = true;
     private float speed = 10f;
+    private float firingSpeed = 2f;
     private int range = 1;
 
     public Hunter(int hp, int dmg, float shootspeed)
@@ -69,5 +72,22 @@ public class Hunter : Enemy
         set { range = value; }
     }
 
+    public bool CanRetreat
+    {
+        get { return canRetreat; }
+        set { canRetreat = value; }
+    }
+
+    public bool NextMove
+    {
+        get { return nextMove; }
+        set { nextMove = value; }
+    }
+
+    public float FiringSpeed
+    {
+        get { return firingSpeed; }
+        set { firingSpeed = value; }
+    }
 
 }

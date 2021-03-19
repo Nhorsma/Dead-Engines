@@ -1,0 +1,35 @@
+fileFormatVersion: 2
+guid: 0f9cafbfb8356c44088f8639eec15ce3
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - robotGound: {fileID: 8300000, guid: b6248d1d4ba53734c97dda60ed2c8b26, type: 3}
+  - robotAmbient: {fileID: 8300000, guid: 93dbebd631da9fa4292466417219de4d, type: 3}
+  - robotConfirm1: {instanceID: 0}
+  - robotConfirm2: {instanceID: 0}
+  - robotAlarm: {instanceID: 0}
+  - robotAudioSource: {instanceID: 0}
+  - unitReady1: {instanceID: 0}
+  - unitReady2: {instanceID: 0}
+  - unitConfirm1: {instanceID: 0}
+  - unitConfirm2: {instanceID: 0}
+  - confirmPing: {instanceID: 0}
+  - unitDead: {instanceID: 0}
+  - dropOffClop: {instanceID: 0}
+  - pickAxeClang: {instanceID: 0}
+  - unitAudioSource: {instanceID: 0}
+  - enemyAttack1: {instanceID: 0}
+  - enemyAttack2: {instanceID: 0}
+  - enemyDead1: {instanceID: 0}
+  - enemyDead2: {instanceID: 0}
+  - enemyAudioSource: {instanceID: 0}
+  - smallGun: {instanceID: 0}
+  - smallLaz: {instanceID: 0}
+  - bigGun: {instanceID: 0}
+  - bigLaz: {instanceID: 0}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

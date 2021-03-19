@@ -8,15 +8,13 @@ public class EnemyHandler : MonoBehaviour
     SpawnRes spawnResources;
     UnitManager unitManager;
     EncampmentHandler encampmentHandler;
+    public AudioHandler audioHandler;
     public GameObject automoton;
     public SpawningPoolController spawnPool;
 
     public List<GameObject> enemies;
 
     public float stoppingDistance, shootingRange, tresspassingRange;
-
-    public AudioSource audioSource;
-    public AudioClip attackClip1, attackClip2, dieClip1, dieClip2, shootClip;
 
     Vector3 robotPos;
 
@@ -48,7 +46,7 @@ public class EnemyHandler : MonoBehaviour
             Enemy enemy_data = e.GetComponent<Enemy>();
             if (enemy_data.Health <= 0)
             {
-                PlayClip(enemy_data.CampObj, "die");
+                audioHandler.PlayClip(e, "enemyDead1");
                 enemies.Remove(e);
                 Destroy(e);
                 enemy_data.CampData.OnField--; // fishy
@@ -197,7 +195,7 @@ public class EnemyHandler : MonoBehaviour
                 Vector3 targetPos = new Vector3(enemy_data.Target.transform.position.x, 1, enemy_data.Target.transform.position.z);
                 Vector3 direction = targetPos - enemy.transform.position;
 
-                PlayClip(enemy_data.CampObj, "shoot");
+                audioHandler.PlayClip(enemy, "smallLaz");
                 AssignAnimation(enemy, "firing", true);
                 StartCoroutine(TrailOff(0.05f, enemy.transform.position, enemy_data.Target.transform.position));
 
@@ -214,7 +212,7 @@ public class EnemyHandler : MonoBehaviour
             {
                 Vector3 targetPos = new Vector3(enemy_data.Target.transform.position.x, 1, enemy_data.Target.transform.position.z);
                 Vector3 direction = targetPos - enemy.transform.position;
-                PlayClip(enemy_data.CampObj, "shoot");
+                audioHandler.PlayClip(enemy, "smallLaz");
                 StartCoroutine(TrailOff(0.05f, enemy.transform.position, enemy_data.Target.transform.position));
             }
             PointTurret(enemy);
@@ -288,26 +286,7 @@ public class EnemyHandler : MonoBehaviour
         t.SetActive(false);
     }
 
-    void PlayClip(GameObject encampment, string str)
-    {
-        AudioSource tempSource = encampment.GetComponent<AudioSource>();
-        if (str.Equals("attack"))
-        {
-            if (Random.Range(0, 2) == 0)
-                tempSource.PlayOneShot(attackClip1);
-            else
-                tempSource.PlayOneShot(attackClip2);
-        }
-        else if (str.Equals("die"))
-        {
-            if (Random.Range(0, 2) == 0)
-                tempSource.PlayOneShot(dieClip1);
-            else
-                tempSource.PlayOneShot(dieClip2);
-        }
-        else if (str.Equals("shoot"))
-            tempSource.PlayOneShot(shootClip);
-    }
+
     void AssignAnimation(GameObject enemy, string anim, bool play)
     {
         if (enemy!=null && enemy.GetComponent<Animator>() != null)

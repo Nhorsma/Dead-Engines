@@ -8,6 +8,7 @@ public class AutoCombatCollider : MonoBehaviour
     public EncampmentHandler encampmentHandler;
     public EnemyHandler enemyHandler;
     public HunterHandler hunterHandler;
+    public AudioHandler audioHandler;
     public GameObject explosion;
 
 	public float spawnBuffer = 100;
@@ -56,8 +57,8 @@ public class AutoCombatCollider : MonoBehaviour
 				else
 					ResourceHandling.metal += 50;
 
-				hunterHandler.PlayClip("hit");
-				hunterHandler.CheckSpawnHunter();
+                audioHandler.PlayClip(other.gameObject, "robotGround");
+                hunterHandler.CheckSpawnHunter();
 			}
 			if (other.gameObject.tag == "Electronics")
 			{
@@ -68,7 +69,7 @@ public class AutoCombatCollider : MonoBehaviour
 				else
 					ResourceHandling.electronics += 50;
 
-				hunterHandler.PlayClip("hit");
+                audioHandler.PlayClip(other.gameObject, "robotGround");
 				hunterHandler.CheckSpawnHunter();
 			}
 		}

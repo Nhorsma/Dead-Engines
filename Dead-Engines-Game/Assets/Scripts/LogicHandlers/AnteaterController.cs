@@ -62,11 +62,11 @@ public class AnteaterController : MonoBehaviour
             }
             else if (distance < tooCloseRange)//if very close, walk backwards
             {
-
+                BackUp(robotPos);
             }
             else
             {
-
+                FindFlank(robotPos);
             }
         }
         //if close, be evasive and walk to beside them
@@ -167,7 +167,23 @@ public class AnteaterController : MonoBehaviour
         Vector3 b = a + backFrom;
         //move to b
         */
+
         Vector3 backUp = ((transform.position - backFrom) * 2) + backFrom;
         TravelTo(backFrom);
+    }
+
+    void FindFlank(Vector3 robot)
+    {
+        /*
+        Vector3 difference = transform.position - backFrom;
+        Vector3 a = (difference/z,y,difference.x)
+        Vector3 b = a + backFrom;
+        //move to b
+        */
+
+        Vector3 diff = transform.position - robot;
+        Vector3 flank = new Vector3(diff.z, transform.position.y, diff.x);
+        robot += flank;
+        TravelTo(robot);
     }
 }

@@ -6473,15 +6473,13 @@ MonoBehaviour:
   dragLimit: 0
   unitManager: {fileID: 467610732}
   autoAction: {fileID: 5905536743914566333}
+  audioHandler: {fileID: 467610736}
   normalMaterial: {fileID: 2100000, guid: 80d99d111da86da41951967e4aad5f9e, type: 2}
   highlightMaterial: {fileID: 2100000, guid: 95ccc95e68534fa4b92d3c0d16d17b2a, type: 2}
   selectedMaterial: {fileID: 2100000, guid: 64d79bbb5de2c4740a8b70494ce6c403, type: 2}
   hudView: {fileID: 2075244116}
   g1: {fileID: 0}
   g2: {fileID: 0}
-  audioSource: {fileID: 0}
-  readyClip1: {fileID: 8300000, guid: 5c50c6726d22fdc4583834c823c61523, type: 3}
-  readyClip2: {fileID: 8300000, guid: d9de8a7be7489b34fa4c10c2f6e3f862, type: 3}
 --- !u!114 &467610732
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6500,6 +6498,7 @@ MonoBehaviour:
   encampmentHandler: {fileID: 467610733}
   spawnPool: {fileID: 1102157339}
   roomManager: {fileID: 2075244114}
+  audioHandler: {fileID: 467610736}
   robotPos: {x: 10, y: 3, z: 8}
   robot: {fileID: 5905536743914566335}
   startingUnits: 3
@@ -6513,13 +6512,6 @@ MonoBehaviour:
   unitFireCooldown: 1
   downTime: 15
   piercingMultiplier: 5
-  goingClip1: {fileID: 8300000, guid: 7c5852769ae1a8542b517f5684cc949d, type: 3}
-  goingClip2: {fileID: 8300000, guid: 497a967409f647b49bed041dc65ae899, type: 3}
-  confirmPing: {fileID: 8300000, guid: a8cef582cb23de74cab8c8e9b3cad780, type: 3}
-  deadClip: {fileID: 8300000, guid: 82b6ed86c112ca847b46b68db095e909, type: 3}
-  shootClip: {fileID: 8300000, guid: b9c9944ad7d784d419890defc6644d04, type: 3}
-  dropOffClop: {fileID: 8300000, guid: b43b0a4db5d3f9d4795efd9bf517dcbd, type: 3}
-  pickAxeClip: {fileID: 8300000, guid: 3dde2ea3743dd104ba8c127a4018b94f, type: 3}
 --- !u!114 &467610733
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6567,18 +6559,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8dda09e0f725015479faec45bd01d30d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  audioHandler: {fileID: 467610736}
   automoton: {fileID: 5905536743914566335}
   spawnPool: {fileID: 1102157339}
   enemies: []
   stoppingDistance: 30
   shootingRange: 40
   tresspassingRange: 80
-  audioSource: {fileID: 1457351892}
-  attackClip1: {fileID: 8300000, guid: 36b38c779753480409e3882c07bce9cb, type: 3}
-  attackClip2: {fileID: 8300000, guid: 5928cf0709df648459e5156d29193f0d, type: 3}
-  dieClip1: {fileID: 8300000, guid: dea962989df3fa2478729985a431e863, type: 3}
-  dieClip2: {fileID: 8300000, guid: 2b83e8ae179647a43b341ac011b688de, type: 3}
-  shootClip: {fileID: 8300000, guid: 0af2ba29fd2324844b3cd52d2efefcfd, type: 3}
 --- !u!114 &467610735
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6609,14 +6596,32 @@ MonoBehaviour:
   m_GameObject: {fileID: 467610729}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 88f00369ea8a71546a406972528c739f, type: 3}
+  m_Script: {fileID: 11500000, guid: 0f9cafbfb8356c44088f8639eec15ce3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  audioSources: []
-  cameraSource: {fileID: 1457351892}
-  encampmentSource: {fileID: 0}
-  musicSource: {fileID: 2091814167}
-  ambientMusic: {fileID: 8300000, guid: 9705b2e9572535b4795f7fce4580cdea, type: 3}
+  robotGound: {fileID: 8300000, guid: 02572af0cc044db4891f811648d9cac8, type: 3}
+  robotAmbient: {fileID: 8300000, guid: 93dbebd631da9fa4292466417219de4d, type: 3}
+  robotConfirm1: {fileID: 8300000, guid: 9faede8e29549084783c81fa193d714a, type: 3}
+  robotConfirm2: {fileID: 8300000, guid: 62ec5201ebe5992458c62e1ca741d7bb, type: 3}
+  robotAlarm: {fileID: 8300000, guid: 80bbb99b2868e6b4cbdf203b7ec9ec7a, type: 3}
+  unitReady1: {fileID: 8300000, guid: 5c50c6726d22fdc4583834c823c61523, type: 3}
+  unitReady2: {fileID: 8300000, guid: d9de8a7be7489b34fa4c10c2f6e3f862, type: 3}
+  unitConfirm1: {fileID: 8300000, guid: 7c5852769ae1a8542b517f5684cc949d, type: 3}
+  unitConfirm2: {fileID: 8300000, guid: 497a967409f647b49bed041dc65ae899, type: 3}
+  confirmPing: {fileID: 8300000, guid: a8cef582cb23de74cab8c8e9b3cad780, type: 3}
+  unitDead: {fileID: 8300000, guid: 82b6ed86c112ca847b46b68db095e909, type: 3}
+  dropOffClop: {fileID: 8300000, guid: b43b0a4db5d3f9d4795efd9bf517dcbd, type: 3}
+  pickaxeClang: {fileID: 0}
+  enemyAttack1: {fileID: 8300000, guid: 5928cf0709df648459e5156d29193f0d, type: 3}
+  enemyAttack2: {fileID: 8300000, guid: 36b38c779753480409e3882c07bce9cb, type: 3}
+  enemyDead1: {fileID: 8300000, guid: 2b83e8ae179647a43b341ac011b688de, type: 3}
+  enemyDead2: {fileID: 8300000, guid: dea962989df3fa2478729985a431e863, type: 3}
+  smallGun: {fileID: 8300000, guid: b9c9944ad7d784d419890defc6644d04, type: 3}
+  smallLaz: {fileID: 8300000, guid: 0af2ba29fd2324844b3cd52d2efefcfd, type: 3}
+  bigGun: {fileID: 8300000, guid: 71db32ea772028a4fb440e8d09bfa212, type: 3}
+  bigLaz: {fileID: 8300000, guid: 951b372f5a4c9034da5b380f12d74eec, type: 3}
+  explosion: {fileID: 0}
+  metalHit: {fileID: 0}
 --- !u!1 &470087636
 GameObject:
   m_ObjectHideFlags: 0
@@ -19908,6 +19913,7 @@ MonoBehaviour:
   encampmentHandler: {fileID: 0}
   enemyHandler: {fileID: 0}
   hunterHandler: {fileID: 0}
+  audioHandler: {fileID: 0}
   explosion: {fileID: 3118891267616825007, guid: 33b774b5819a306478e54bab16c216bb,
     type: 3}
   spawnBuffer: 100
@@ -26669,21 +26675,19 @@ MonoBehaviour:
   h1: {fileID: 7984746186806774821, guid: 885c2fefa067bba4a89e61a5e1dcf802, type: 3}
   h2: {fileID: 7816565298225748079, guid: 73c5358c9ec28d647a502447b57c808a, type: 3}
   h3: {fileID: 2844502961085742202, guid: 280aff34cf62f864ba8eb71207a5a037, type: 3}
+  anteater: {fileID: 0}
   autoAction: {fileID: 5905536743914566333}
+  audioHandler: {fileID: 467610736}
   deployedHunters: []
   spawnRadius: 200
   stoppingDistance: 100
   movementSpeed: 10
+  closeRange: 0
+  tooCloseRange: 0
   canSpawn: 1
   isDeployed: 0
   chance: 0
   spawnTime: 1
-  attack1Clip: {fileID: 8300000, guid: 6dcbe007c3139dc4d98b0eb830b7d4a4, type: 3}
-  attack2Clip: {fileID: 8300000, guid: 7ed3016b4083c1745b5294c55e206bd2, type: 3}
-  shootClip: {fileID: 8300000, guid: 951b372f5a4c9034da5b380f12d74eec, type: 3}
-  hitClip: {fileID: 8300000, guid: 02572af0cc044db4891f811648d9cac8, type: 3}
-  destroyClip: {fileID: 8300000, guid: b6248d1d4ba53734c97dda60ed2c8b26, type: 3}
-  enemyDetectedClip: {fileID: 8300000, guid: 29d4c792753c221468d4ec2cb2628cee, type: 3}
 --- !u!114 &1822839397
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -27568,6 +27572,7 @@ MonoBehaviour:
   encampmentHandler: {fileID: 0}
   enemyHandler: {fileID: 0}
   hunterHandler: {fileID: 0}
+  audioHandler: {fileID: 0}
   explosion: {fileID: 0}
   spawnBuffer: 100
   canTrigger: 0
@@ -34167,14 +34172,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   anim: {fileID: 5905536743914566306}
-  hitgroundClip: {fileID: 8300000, guid: 3c0ac81be53db384aa49aff7875576ed, type: 3}
-  robotSounds: {fileID: 8300000, guid: 93dbebd631da9fa4292466417219de4d, type: 3}
-  confirmClip1: {fileID: 8300000, guid: 62ec5201ebe5992458c62e1ca741d7bb, type: 3}
-  confirmClip2: {fileID: 8300000, guid: 9faede8e29549084783c81fa193d714a, type: 3}
-  alarmClip: {fileID: 8300000, guid: 80bbb99b2868e6b4cbdf203b7ec9ec7a, type: 3}
-  audioSource: {fileID: 0}
   movementSpeed: 8
-  startTurnSpeed: 0
+  startTurnSpeed: 80
   turnSpeed: 80
   startAngle: 0
   target: 0
@@ -34203,6 +34202,8 @@ MonoBehaviour:
   climbOut: {fileID: 0}
   aa: {fileID: 0}
   unitManager: {fileID: 467610732}
+  ambientSource: {fileID: 0}
+  audioHandler: {fileID: 0}
   autoHealth: 0
   startingAutoHealth: 100
 --- !u!114 &5905536743914566334
@@ -34260,6 +34261,7 @@ GameObject:
   - component: {fileID: 5905536743914566332}
   - component: {fileID: 5905536743914566333}
   - component: {fileID: 5905536743914566334}
+  - component: {fileID: 5905536743914566338}
   - component: {fileID: 5905536743914566336}
   - component: {fileID: 5905536743914566337}
   m_Layer: 0
@@ -34378,6 +34380,102 @@ SphereCollider:
   serializedVersion: 2
   m_Radius: 40
   m_Center: {x: 0, y: 13.14, z: 0}
+--- !u!82 &5905536743914566338
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5905536743914566335}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 0}
+  m_audioClip: {fileID: 0}
+  m_PlayOnAwake: 1
+  m_Volume: 1
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!1 &5939330328289042567
 GameObject:
   m_ObjectHideFlags: 0

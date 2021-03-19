@@ -10,6 +10,7 @@ public class SelectItems : MonoBehaviour
     public float dragLimit;
     public UnitManager unitManager;
     public AutomotonAction autoAction;
+    public AudioHandler audioHandler;
 
     //The materials
     public Material normalMaterial;
@@ -37,17 +38,12 @@ public class SelectItems : MonoBehaviour
     Vector3 clickSpot;
     RaycastHit hit;
 
-    public AudioSource audioSource;
-    public AudioClip readyClip1, readyClip2;
-
     private void Start()
     {
         hasCreatedSquare = false;
         unitManager = this.gameObject.GetComponent<UnitManager>(); // why
         selectionSquareTrans = selectionSquare.rectTransform;
-        mouseSecond = mouseFirst = (Input.mousePosition);
-
-        audioSource = Camera.main.GetComponent<AudioSource>();
+        mouseSecond = mouseFirst = Input.mousePosition;
     }
 
     private void Update()
@@ -338,12 +334,8 @@ public class SelectItems : MonoBehaviour
 
     void ReadyClip()
     {
-        //audioSource.Stop();
-        if (!audioSource.isPlaying)
-            if (Random.Range(0, 2) == 0)
-            audioSource.PlayOneShot(readyClip1);
-        else
-            audioSource.PlayOneShot(readyClip2);
+        int num = Random.Range(1, 3);
+        audioHandler.PlayClip(Camera.main.gameObject, "unitReady" + num);
     }
 
     void SetColor(GameObject gameObj, bool reset)
