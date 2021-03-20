@@ -25,7 +25,7 @@ public class SnoutBehavior : MonoBehaviour
     {
         var relativePos = pointTo.transform.position - transform.position;
         var forward = transform.forward;
-        var angle = Vector3.Angle(relativePos, forward)-120f; //the -120 is for correcting weird angles, 0 should be infront of it
+        var angle = Vector3.Angle(relativePos, forward) - 90;//the -90 is for correcting weird angles, 0 should be infront of it
         Debug.Log(angle);
         Quaternion newAngle;
         for (int i=0;i<6;i++)

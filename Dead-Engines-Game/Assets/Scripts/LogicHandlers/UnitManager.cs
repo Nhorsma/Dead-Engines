@@ -150,11 +150,10 @@ public class UnitManager : MonoBehaviour
         {
             Animator anim = u.GetComponent<Animator>();
             Unit unit_data = u.GetComponent<Unit>();
-            //Debug.Log(u + " - " + unit_data.Job);
             Vector3 navmesh_velocity = u.GetComponent<NavMeshAgent>().velocity;
 
             SetAnimation(u, "walkingSpeed", Mathf.Abs(navmesh_velocity.x + navmesh_velocity.z) / 2);
-
+            robotPos = new Vector3(robot.transform.position.x, 0, robot.transform.position.z);
 
             if (unit_data.Job != "none")//&& !unit.JobPos.Equals(null)
             {

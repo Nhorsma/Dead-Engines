@@ -22,7 +22,7 @@ public class AutomotonAction : MonoBehaviour
     public Animation climbOut;
     public AutomotonAction aa;
     public UnitManager unitManager;
-    public AudioSource ambientSource;
+    public AudioSource robotSources;
     public AudioHandler audioHandler;
 
     KeyCode move_q, move_w, move_e, move_r;
@@ -35,7 +35,7 @@ public class AutomotonAction : MonoBehaviour
     private void Start()
     {
         layer_mask = LayerMask.GetMask("Ignore Raycast");
-        ambientSource.Play();
+        robotSources.enabled = true;
         rb = GetComponent<Rigidbody>();
         nv = GetComponent<NavMeshAgent>();
         nv.speed = movementSpeed;
@@ -165,7 +165,8 @@ public class AutomotonAction : MonoBehaviour
     public void Walk(Vector3 position)
     {
         //rb.MovePosition(position * movementSpeed * Time.deltaTime);
-        transform.position = Vector3.MoveTowards(transform.position, position, movementSpeed*Time.deltaTime);
+        transform.position = Vector3.MoveTowards(transform.position, position, movementSpeed * Time.deltaTime);
+
         if (Vector3.Distance(transform.position, position)<1)
         {
             canMove = false;

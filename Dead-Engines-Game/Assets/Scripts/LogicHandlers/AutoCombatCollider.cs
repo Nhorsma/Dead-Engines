@@ -41,7 +41,8 @@ public class AutoCombatCollider : MonoBehaviour
 				encampmentHandler.PlayClip(other.gameObject, "death");
 				other.gameObject.GetComponent<Encampment>().Health -= 100;
 				encampmentHandler.BeDestroyed();
-				SpawnExplosion(other.gameObject);
+                audioHandler.PlayClip(other.gameObject, "explosion");
+                SpawnExplosion(other.gameObject);
 			}
 			if (other.gameObject.tag == "Hunter")
 			{
@@ -57,7 +58,7 @@ public class AutoCombatCollider : MonoBehaviour
 				else
 					ResourceHandling.metal += 50;
 
-                audioHandler.PlayClip(other.gameObject, "robotGround");
+                audioHandler.PlayClip(other.gameObject, "explosion");
                 hunterHandler.CheckSpawnHunter();
 			}
 			if (other.gameObject.tag == "Electronics")
@@ -69,7 +70,7 @@ public class AutoCombatCollider : MonoBehaviour
 				else
 					ResourceHandling.electronics += 50;
 
-                audioHandler.PlayClip(other.gameObject, "robotGround");
+                audioHandler.PlayClip(other.gameObject, "explosion");
 				hunterHandler.CheckSpawnHunter();
 			}
 		}
