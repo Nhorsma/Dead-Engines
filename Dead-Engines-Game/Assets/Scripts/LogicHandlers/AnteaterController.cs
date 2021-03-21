@@ -86,7 +86,7 @@ public class AnteaterController : MonoBehaviour
         if (enemy != null)
         {
             enemy.GetComponent<Enemy>().JustShot = true;
-            yield return new WaitForSeconds(enemy.GetComponent<Enemy>().FireSpeed + extratime / 2);
+            yield return new WaitForSeconds(enemy.GetComponent<Enemy>().FiringSpeed + extratime / 2);
             enemy.GetComponent<Enemy>().JustShot = false;
             nextMove = true;
         }

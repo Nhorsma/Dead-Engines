@@ -5,9 +5,7 @@ using UnityEngine.AI;
 
 public class EncampmentHandler : MonoBehaviour
 {
-    public static int metal;			//why did i put these here???
-    public static int electronics;		//
-	public int startingHealth;			//
+	public int startingHealth;			
 
     public List<Encampment> encampments;
 
@@ -16,18 +14,16 @@ public class EncampmentHandler : MonoBehaviour
     public SpawnRes spawnRes;
     public ResourceHandling resourceHandling;
     public GameObject automaton;
+    public AudioHandler audioHandler;
 
     public float startSpawnTime,spawnTime, spawnDistance; //
     public bool startSpawning;
-
-    public AudioSource audioSource;
-    public AudioClip attackClip1, attackClip2, deathClip, destroyClip;
     public float volume;
 
     public GameObject enemy_model1, enemy_model2, enemy_model3;
-    Enemy enemy_type_1 = new Enemy(5, 1, 1.5f, false);
-    Enemy enemy_type_2 = new Enemy(10, 1, 0.5f, false);
-    Enemy enemy_type_3 = new Enemy(50, 3, 3f, true);
+    Enemy enemy_type_1 = new Enemy(5, 1, 1, 1.5f, false);
+    Enemy enemy_type_2 = new Enemy(10, 2, 2, 0.5f, false);
+    Enemy enemy_type_3 = new Enemy(50, 3, 3, 3f, true);
 
     void Start()
     {
@@ -56,6 +52,7 @@ public class EncampmentHandler : MonoBehaviour
             encampmentObjects[i].GetComponent<Encampment>().Obj = encampmentObjects[i];
             encampmentObjects[i].GetComponent<Encampment>().ClosestResource = GetClosestResource(encampmentObjects[i].GetComponent<Encampment>());
             encampmentObjects[i].GetComponent<Encampment>().Deployment = new string[]{enemy_model1.name};
+            encampmentObjects[i].GetComponent<Encampment>().Health = startingHealth;
 
             encampments.Add(encampmentObjects[i].GetComponent<Encampment>());
         }
@@ -71,7 +68,7 @@ public class EncampmentHandler : MonoBehaviour
 		{
 			if (encampments[i].Health <= 0)
 			{
-				PlayClip(encampments[i].Obj, "death");
+                audioHandler.PlayClip(encampments[i].Obj, "explosion");
 				startSpawning = false;
 				encampments[i].Obj.SetActive(false);
 				//encamps[i] = null;
@@ -116,7 +113,7 @@ public class EncampmentHandler : MonoBehaviour
 
     public void CheckForTrigger(Encampment encampment)
     { 
-        if (encampment.OnField < 2 && (encampment.Health < 90 || resourceHandling.resourceQuantities[resourceHandling.GetNumber(encampment.ClosestResource)]<40))
+        if (encampment.OnField < 2 && (encampment.Health < startingHealth-10 || resourceHandling.resourceQuantities[resourceHandling.GetNumber(encampment.ClosestResource)]<40))
         {
             int hit = Random.Range(1, 10);
 
@@ -137,7 +134,7 @@ public class EncampmentHandler : MonoBehaviour
 
     void SpawnEnemy(Encampment encampment)
     {
-        PlayClip(encampment.Obj, "attack");
+        audioHandler.PlayClip(encampment.Obj, "enemyAttack2");
         CheckDeployment(encampment);
         GameObject enemyObj = new GameObject();
         Vector3 autoPos = automaton.transform.position;
@@ -149,8 +146,9 @@ public class EncampmentHandler : MonoBehaviour
 
             Enemy new_enemy = SetEnemyDataOfSpawned(encampment.Deployment[i]);
             enemyObj.GetComponent<Enemy>().Health = new_enemy.Health;
-            enemyObj.GetComponent<Enemy>().Damage = new_enemy.Damage;
-            enemyObj.GetComponent<Enemy>().FireSpeed = new_enemy.FireSpeed;
+            enemyObj.GetComponent<Enemy>().Attack = new_enemy.Attack;
+            enemyObj.GetComponent<Enemy>().Defense = new_enemy.Defense;
+            enemyObj.GetComponent<Enemy>().FiringSpeed = new_enemy.FiringSpeed;
             enemyObj.GetComponent<Enemy>().Armored = new_enemy.Armored;
 
             enemyObj.GetComponent<Enemy>().Resource = encampment.ClosestResource;
@@ -238,7 +236,7 @@ public class EncampmentHandler : MonoBehaviour
     }
 
 
-	GameObject GetClosestResource(Encampment encampment)
+    GameObject GetClosestResource(Encampment encampment)
     {
         float distance = Mathf.Infinity;
         GameObject chosen = new GameObject();
@@ -251,23 +249,5 @@ public class EncampmentHandler : MonoBehaviour
             }
         }
         return chosen;
-    }
-
-    public void PlayClip(GameObject encampment_Object, string str)
-    {
-        AudioSource tempSource = encampment_Object.GetComponent<AudioSource>();
-        //tempSource.volume = volume;
-        if (str.Equals("attack"))
-        {
-            if (Random.Range(0, 2) == 0)
-                tempSource.PlayOneShot(attackClip1);
-            else
-                tempSource.PlayOneShot(attackClip2);
-        }
-        else if (str.Equals("death"))
-        {
-            tempSource.PlayOneShot(deathClip);
-            tempSource.PlayOneShot(destroyClip);
-        }
     }
 }

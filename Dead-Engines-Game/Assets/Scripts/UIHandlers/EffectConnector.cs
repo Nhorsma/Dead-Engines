@@ -19,7 +19,7 @@ public class EffectConnector : MonoBehaviour
 
 	//study
 	public static float roomCost = 1;
-	public static int unitWeaponDamage = 1;
+	public static int unitWeaponDamage = 2;
 	//public static int autoWeaponDamage;
 	//public static int autoHealth;
 	//public static int autoWeaponUpgrades;
@@ -53,7 +53,7 @@ public class EffectConnector : MonoBehaviour
 
 		//study related
 		CostData.ChangeRoomCost();
-		unitManager.unitDamage = unitWeaponDamage;
+		//unitManager.unitDamage = unitWeaponDamage;
 
 		//refinery related
 		roomManager.efficiency = efficiency;

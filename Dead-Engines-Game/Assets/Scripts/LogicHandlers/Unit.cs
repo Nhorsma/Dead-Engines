@@ -13,32 +13,15 @@ public class Unit : MonoBehaviour
 	private bool justShot = false;			// has the unit fired its gun?
 	private int id = -1;                    // which unit is this?
 	private bool canSpawn = false;          // can the unit respawn?
-    private bool armorPiercing = false;
+    private bool armorPiercing = false;     //whether it can pierce armor
+    private int attack = 2;
+    private int defense = 1;
+    private float firingSpeed = 1f;
 
 	public Unit()
 	{
-		//canSpawn = false;
-		//job = "none";
-		//jobPos = null;
-		//health = 3;
-		//justDroppedOff = false;
-		//justShot = false;
-		//id = -1;
-		//justShot = false;
-		//unitName = "U";
-	}
 
-	//  public Unit(int unit_id)
-	//  {
-	//canSpawn = false;
-	//job = "none";
-	//      jobPos = null;
-	//      health = 3;
-	//      justDroppedOff = false;
-	//justShot = false;
-	//id = unit_id;
-	//unitName = "U" + id.ToString();
-	//  }
+	}
 
 	public string Job
     {
@@ -92,6 +75,24 @@ public class Unit : MonoBehaviour
     {
         get { return armorPiercing; }
         set { armorPiercing = value; }
+    }
+
+    public int Attack
+    {
+        get { return attack; }
+        set { attack = value; }
+    }
+
+    public int Defense
+    {
+        get { return defense; }
+        set { defense = value; }
+    }
+
+    public float FiringSpeed
+    {
+        get { return firingSpeed; }
+        set { firingSpeed = value; }
     }
 
 }

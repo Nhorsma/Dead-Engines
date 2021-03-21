@@ -38,7 +38,6 @@ public class AutoCombatCollider : MonoBehaviour
 			}
 			if (other.gameObject.tag == "Encampment")
 			{
-				encampmentHandler.PlayClip(other.gameObject, "death");
 				other.gameObject.GetComponent<Encampment>().Health -= 100;
 				encampmentHandler.BeDestroyed();
                 audioHandler.PlayClip(other.gameObject, "explosion");

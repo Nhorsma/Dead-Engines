@@ -52,7 +52,7 @@ public class HunterHandler : MonoBehaviour
 				hunterObj = (GameObject)Instantiate(h1);
 				hunterObj.GetComponent<Hunter>().Speed = 7f;
 				hunterObj.GetComponent<Hunter>().Health = 2;
-				hunterObj.GetComponent<Hunter>().Damage = 2;
+				hunterObj.GetComponent<Hunter>().Attack = 2;
                 hunterObj.GetComponent<Hunter>().FiringSpeed = 2f;
                 hunterObj.GetComponent<Hunter>().CanRetreat = true;
                 break;
@@ -60,7 +60,7 @@ public class HunterHandler : MonoBehaviour
 				hunterObj = (GameObject)Instantiate(h2);
 				hunterObj.GetComponent<Hunter>().Speed = 10f;
 				hunterObj.GetComponent<Hunter>().Health = 1;
-				hunterObj.GetComponent<Hunter>().Damage = 1;
+				hunterObj.GetComponent<Hunter>().Attack = 1;
                 hunterObj.GetComponent<Hunter>().FiringSpeed = 3.5f;
                 hunterObj.GetComponent<Hunter>().CanRetreat = true;
 				break;
@@ -68,7 +68,7 @@ public class HunterHandler : MonoBehaviour
 				hunterObj = (GameObject)Instantiate(h2);
 				hunterObj.GetComponent<Hunter>().Speed = 3f;
 				hunterObj.GetComponent<Hunter>().Health = 3;
-				hunterObj.GetComponent<Hunter>().Damage = 3;
+				hunterObj.GetComponent<Hunter>().Attack = 3;
                 hunterObj.GetComponent<Hunter>().FiringSpeed = 5f;
                 break;
         }
@@ -78,7 +78,7 @@ public class HunterHandler : MonoBehaviour
             hunterObj = (GameObject)Instantiate(Resources.Load("hunter 3"));
             hunterObj.GetComponent<Hunter>().Speed = 4f;
             hunterObj.GetComponent<Hunter>().Health = 10;
-            hunterObj.GetComponent<Hunter>().Damage = 10;
+            hunterObj.GetComponent<Hunter>().Attack = 10;
             hunterObj.GetComponent<Hunter>().FiringSpeed = 6f;
         */
 
@@ -284,7 +284,7 @@ public class HunterHandler : MonoBehaviour
             Vector3 shootFrom = hunter.transform.Find("FireFrom").position;
             StartCoroutine(TrailOff(0.07f, shootFrom, hunter_data.Target.transform.position + new Vector3(0, 50, 0)));
 
-            autoAction.RecieveDamage(hunter_data.Damage);
+            autoAction.RecieveDamage(hunter_data.Attack);
         }
     }
 	IEnumerator FireCoolDown(Hunter hunter_data)
@@ -365,7 +365,7 @@ public class HunterHandler : MonoBehaviour
         GameObject hunterObj = Instantiate(anteater);
         hunterObj.GetComponent<Hunter>().Speed = 4f;
         hunterObj.GetComponent<Hunter>().Health = 10;
-        hunterObj.GetComponent<Hunter>().Damage = 10;
+        hunterObj.GetComponent<Hunter>().Attack = 10;
         hunterObj.GetComponent<Hunter>().FiringSpeed = 6f;
 
         hunterObj.transform.position = spawnPlace;

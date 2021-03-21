@@ -63,7 +63,6 @@ public class EnemyHandler : MonoBehaviour
                     if (enemy_data.Target == null)
                     {
                         TravelTo(e, unitsTresspassing(enemy_data.CampObj).transform.position, true, false);
-                        //Debug.Log("tresspassing Unit:" + unitsTresspassing(enemy_data.CampObj).transform.position);
                     }
                 }
                 else
@@ -155,7 +154,6 @@ public class EnemyHandler : MonoBehaviour
         if (enemy_object.GetComponent<Enemy>().Target == null)
         {
             TravelTo(enemy_object, robotPos, true, true);
-            Debug.Log("Lets get the Robot:" + robotPos);
         }
     }
 
@@ -186,12 +184,11 @@ public class EnemyHandler : MonoBehaviour
 
 	void Fire(GameObject enemy, Enemy enemy_data)
 	{
-		if (enemy_data.Target != null)
+		if (enemy_data.Target != null && enemy_data.Health > 0)
 		{
-            float hitChance = 1;
-            if (enemy_data.Target.tag == "Friendly" && enemy_data.Target.GetComponent<Unit>().Health > 0)
+            if (enemy_data.Target.tag == "Friendly")
             {
-                hitChance = Random.Range(0f, 2f);
+                Unit unit_target = enemy_data.Target.GetComponent<Unit>();
                 Vector3 targetPos = new Vector3(enemy_data.Target.transform.position.x, 1, enemy_data.Target.transform.position.z);
                 Vector3 direction = targetPos - enemy.transform.position;
 
@@ -199,14 +196,11 @@ public class EnemyHandler : MonoBehaviour
                 AssignAnimation(enemy, "firing", true);
                 StartCoroutine(TrailOff(0.05f, enemy.transform.position, enemy_data.Target.transform.position));
 
-                if (hitChance > 0.5f)
-                {
-                    enemy_data.Target.GetComponent<Unit>().Health--;
-                    unitManager.UnitDown(enemy_data.Target);
+                enemy_data.Target.GetComponent<Unit>().Health-=CalculateDamage(enemy_data.Attack,unit_target.Defense);
+                unitManager.UnitDown(enemy_data.Target);
 
-                    if (enemy_data.Target.GetComponent<Unit>().Health <= 0)
-                        enemy.GetComponent<Enemy>().Target = null;
-                }
+                if (enemy_data.Target.GetComponent<Unit>().Health <= 0)
+                    enemy.GetComponent<Enemy>().Target = null;
             }
             else if(enemy_data.Target.tag=="Robot")
             {
@@ -216,18 +210,33 @@ public class EnemyHandler : MonoBehaviour
                 StartCoroutine(TrailOff(0.05f, enemy.transform.position, enemy_data.Target.transform.position));
             }
             PointTurret(enemy);
-            StartCoroutine(FireCoolDown(hitChance, enemy));
+            StartCoroutine(FireCoolDown(enemy));
         }
     }
-	IEnumerator FireCoolDown(float extratime, GameObject enemy)
+	IEnumerator FireCoolDown(GameObject enemy)
     {
         if (enemy != null)
         {
+            float extraTime = Random.Range(0f, 1.5f);
             enemy.GetComponent<Enemy>().JustShot = true;
-            yield return new WaitForSeconds(enemy.GetComponent<Enemy>().FireSpeed + extratime / 2);
-            AssignAnimation(enemy, "firing", false);
-            enemy.GetComponent<Enemy>().JustShot = false;
+            yield return new WaitForSeconds(enemy.GetComponent<Enemy>().FiringSpeed + extraTime);
+
+            if (enemy != null)
+            {
+                AssignAnimation(enemy, "firing", false);
+                enemy.GetComponent<Enemy>().JustShot = false;
+            }
         }
+    }
+
+        int CalculateDamage(int attack, int defense)
+    {
+        int dmg = attack - defense;
+
+        if (dmg <= 0)
+            return 1;
+        else
+            return dmg;
     }
 
     void TravelTo(GameObject enemy, Vector3 place, bool stop, bool randomize)

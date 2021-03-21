@@ -28,7 +28,6 @@ public class UnitManager : MonoBehaviour
     public float pickUpDistance;
     public float shootingDistance;
 
-    public int unitDamage;
     public float unitFireCooldown = 1f;
     public float downTime;
     public float piercingMultiplier;
@@ -142,6 +141,7 @@ public class UnitManager : MonoBehaviour
             }
         }
         audioHandler.PlayClip(clickedObj, "confirmPing");
+        Debug.Log("CLicked Thing: " + clickedObj+", " +clickedObj.tag);
     }
 
     void RunAllJobs()
@@ -428,35 +428,33 @@ public class UnitManager : MonoBehaviour
 
     void Fire(GameObject unit)
     {
-        Vector3 direction = unit.GetComponent<Unit>().JobPos.transform.position - unit.transform.position;
+        Unit unit_data = unit.GetComponent<Unit>();
+        Vector3 direction = unit_data.JobPos.transform.position - unit.transform.position;
         audioHandler.PlayClip(unit, "smallGun");
-        float hitChance = Random.Range(0, 2);
-        if (hitChance > 0.5f)
-        {
+
             StartCoroutine(TrailOff(0.05f, unit.transform.position, unit.GetComponent<Unit>().JobPos.transform.position));
             if (unit.GetComponent<Unit>().JobPos.tag == "Enemy")
             {
-                //access's the enemy via the enemyHandler, and reduces the enemie's health by one
-                if (unit.GetComponent<Unit>().JobPos.GetComponent<Enemy>() == null || unit.GetComponent<Unit>().JobPos.GetComponent<Enemy>().Health <= 0) //fishy
+                Enemy enemy_target = unit.GetComponent<Unit>().JobPos.GetComponent<Enemy>();
+                if (enemy_target == null || enemy_target.Health <= 0)
                 {
                     ResetJob(unit.GetComponent<Unit>());
                 }
                 else
                 {
-                    if(unit.GetComponent<Unit>().JobPos.GetComponent<Enemy>().Armored &&
-                        unit.GetComponent<Unit>().Piercing)
-                        unit.GetComponent<Unit>().JobPos.GetComponent<Enemy>().Health -= (int)(unitDamage*piercingMultiplier);
+                    if(enemy_target.Armored && !unit_data.Piercing)
+                        enemy_target.Health -= 1;
                     else
-                        unit.GetComponent<Unit>().JobPos.GetComponent<Enemy>().Health -= unitDamage;
+                        enemy_target.Health -= CalculateDamage(unit_data.Attack, enemy_target.Defense);
                 }
             }
             else if (unit.GetComponent<Unit>().JobPos.tag == "Encampment")
             {
                 Encampment encampmentTarget = unit.GetComponent<Unit>().JobPos.GetComponent<Encampment>();
-                encampmentTarget.Health -= unitDamage;
+                encampmentTarget.Health -= unit_data.Attack;
                 encampmentHandler.CheckForTrigger(unit.GetComponent<Unit>().JobPos.GetComponent<Encampment>());
 
-                if (unit.GetComponent<Unit>().JobPos.GetComponent<Encampment>().Health <= unitDamage) // fishy
+                if (unit.GetComponent<Unit>().JobPos.GetComponent<Encampment>().Health <= unit_data.Attack) // fishy
                 {
                     gameObject.GetComponent<EncampmentHandler>().BeDestroyed();
                     ResetJob(unit.GetComponent<Unit>());
@@ -464,17 +462,29 @@ public class UnitManager : MonoBehaviour
                 else
                 {
                     gameObject.GetComponent<EncampmentHandler>().BeDestroyed();
-                    unit.GetComponent<Unit>().JobPos.GetComponent<Encampment>().Health -= unitDamage; //fishy
+                    unit.GetComponent<Unit>().JobPos.GetComponent<Encampment>().Health -= unit_data.Attack; //fishy
                 }
             }
-        }
-        StartCoroutine(FireCoolDown(hitChance, unit.GetComponent<Unit>()));
+        StartCoroutine(FireCoolDown(unit.GetComponent<Unit>()));
     }
-    IEnumerator FireCoolDown(float extratime, Unit unit_data)
+
+
+    IEnumerator FireCoolDown(Unit unit_data)
     {
+        float extratime = Random.Range(-0.3f, 0.3f);
         unit_data.JustShot = true;
-        yield return new WaitForSeconds(unitFireCooldown + extratime / 2);
+        yield return new WaitForSeconds(unitFireCooldown + extratime);
         unit_data.JustShot = false;
+    }
+
+    int CalculateDamage(int attack, int defense)
+    {
+        int dmg = attack - defense;
+
+        if (dmg <= 0)
+            return 1;
+        else
+            return dmg;
     }
 
     public void UnitDown(GameObject unit)

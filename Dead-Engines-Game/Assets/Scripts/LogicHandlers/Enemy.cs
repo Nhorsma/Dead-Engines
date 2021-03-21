@@ -13,29 +13,31 @@ public class Enemy : MonoBehaviour
 	//protected GameObject rec, camp;
 	//protected bool justShot;
 
-	private int id = -1;
-	private int health = 5;
-	private int damage = 1;
-	private bool armored = false;
+	protected int id = -1;
+	protected int health = 5;
+	protected int attack = 1;
+    protected int defense = 1;
+	protected bool armored = false;
 
-	private float fireSpeed = 1f; // fishy
-	private bool justShot = false;
-    private string job = "";
+	protected float firingSpeed = 1f; // fishy
+	protected bool justShot = false;
+    protected string job = "";
 
-	private GameObject target = null;
-	private GameObject resource = null;
-	private GameObject campObj = null;
-    private Encampment campData = null;
+	protected GameObject target = null;
+	protected GameObject resource = null;
+	protected GameObject campObj = null;
+    protected Encampment campData = null;
 
-	public Enemy(int hp, int dmg, float shootspeed, bool isArmored)
+	public Enemy(int hp, int att, int def, float shootspeed, bool isArmored)
     {
         armored = isArmored;
-        damage = dmg;
+        attack = att;
+        defense = def;
 		health = hp;
         id = -1;
 
 		justShot = false;
-		fireSpeed = shootspeed;
+		firingSpeed = shootspeed;
 
 		target = null;
 		campObj = null;
@@ -46,26 +48,19 @@ public class Enemy : MonoBehaviour
     public Enemy()
     {
         armored = false;
-        damage = 1;
+        attack = 1;
+        defense = 1;
         health = 1;
         id = -1;
 
         justShot = false;
-        fireSpeed = 1f;
+        firingSpeed = 1f;
 
         target = null;
         campObj = null;
         campData = null;
         resource = null;
     }
-
-    //public Enemy(int newID)
-    //{
-    //    health = 100;
-    //    id = newID;
-    //    target = null;
-    //    justShot = false;
-    //}
 
     public int Health
     {
@@ -79,16 +74,22 @@ public class Enemy : MonoBehaviour
         set { armored = value; }
     }
 
-	public int Damage
+	public int Attack
 	{
-		get { return damage; }
-		set { damage = value; }
+		get { return attack; }
+		set { attack = value; }
 	}
 
-	public float FireSpeed
+    public int Defense
     {
-        get { return fireSpeed; }
-        set { fireSpeed = value; }
+        get { return defense; }
+        set { defense = value; }
+    }
+
+    public float FiringSpeed
+    {
+        get { return firingSpeed; }
+        set { firingSpeed = value; }
     }
 
     public int Id

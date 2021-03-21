@@ -6346,7 +6346,6 @@ MonoBehaviour:
   stoppingDistance: 49
   pickUpDistance: 20
   shootingDistance: 50
-  unitDamage: 0
   unitFireCooldown: 1
   downTime: 15
   piercingMultiplier: 5
@@ -6362,22 +6361,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 536887f337eaf5042936cd4e55aa4165, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  startingHealth: 200
+  startingHealth: 100
   encampments: []
   enemyHandler: {fileID: 467610734}
   unitManager: {fileID: 467610732}
   spawnRes: {fileID: 1102157336}
   resourceHandling: {fileID: 467610735}
   automaton: {fileID: 5905536743914566335}
+  audioHandler: {fileID: 467610736}
   startSpawnTime: 0
   spawnTime: 10
   spawnDistance: 5
   startSpawning: 0
-  audioSource: {fileID: 1457351892}
-  attackClip1: {fileID: 8300000, guid: 5928cf0709df648459e5156d29193f0d, type: 3}
-  attackClip2: {fileID: 8300000, guid: 36b38c779753480409e3882c07bce9cb, type: 3}
-  deathClip: {fileID: 8300000, guid: dea962989df3fa2478729985a431e863, type: 3}
-  destroyClip: {fileID: 8300000, guid: b6248d1d4ba53734c97dda60ed2c8b26, type: 3}
   volume: 1
   enemy_model1: {fileID: 6180372181544574514, guid: 60ca0186f1838ad47bb07ef9905de507,
     type: 3}
