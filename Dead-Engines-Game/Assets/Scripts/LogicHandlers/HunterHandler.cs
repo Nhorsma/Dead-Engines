@@ -29,6 +29,7 @@ public class HunterHandler : MonoBehaviour
         if(Input.GetKeyDown(KeyCode.P))
         {
             //SpawnAnteater();
+            isDeployed = true;
             SpawnHunter();
         }
     }
@@ -118,7 +119,6 @@ public class HunterHandler : MonoBehaviour
                 else
                     h.GetComponent<Hunter>().NextMove = true;
 
-
                 Transform hunterTransform = h.GetComponentInChildren<Transform>();
                 float distance = Vector3.Distance(h.transform.position, automaton.transform.position);
 
@@ -128,6 +128,7 @@ public class HunterHandler : MonoBehaviour
                     {
                         GetClose(automaton.transform.position, h);
                         h.GetComponent<Animator>().SetBool("isShooting", false);
+                        
                     }
                     else
                     {
@@ -325,6 +326,7 @@ public class HunterHandler : MonoBehaviour
         Vector3 diff = (transform.position - robot) * 1 / 2;
         robot += diff;
         TravelTo(hunter,robot,false);
+        Debug.Log("Getting Closer");
     }
 
     void BackUp(Vector3 robot, GameObject hunter)
@@ -338,6 +340,7 @@ public class HunterHandler : MonoBehaviour
 
         Vector3 backUp = ((transform.position - robot) * 2) + robot;
         TravelTo(hunter, robot, false);
+        Debug.Log("Backign Up");
     }
 
     void FindFlank(Vector3 robot, GameObject hunter)
@@ -353,6 +356,7 @@ public class HunterHandler : MonoBehaviour
         Vector3 flank = new Vector3(diff.z, transform.position.y, diff.x);
         robot += flank;
         TravelTo(hunter, robot, false);
+        Debug.Log("Flanking");
     }
 
     void SpawnAnteater()
