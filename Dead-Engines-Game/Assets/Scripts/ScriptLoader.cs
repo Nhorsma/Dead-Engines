@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEditor.AI;
 
 public class ScriptLoader : MonoBehaviour
 {
@@ -12,6 +13,7 @@ public class ScriptLoader : MonoBehaviour
 	public GameObject block1, block2, block3, block_test;
 	public AutomatonUI automatonUI;
 	public GameObject automatonObj;
+	public GameObject loadingScreen;
 	//public AutomotonAction automatonAction;
 
 	void Start()
@@ -21,6 +23,8 @@ public class ScriptLoader : MonoBehaviour
 
 	IEnumerator Buffer()
 	{
+		loadingScreen.SetActive(true);
+
 		Debug.Log("start loading");
 
 		startTilePlacement.enabled = true;
@@ -63,7 +67,11 @@ public class ScriptLoader : MonoBehaviour
 
 		spawnRes.TurnOffThinners();
 
+		NavMeshBuilder.BuildNavMesh();
+
 		Debug.Log("end loading");
+
+		loadingScreen.SetActive(false);
 	}
 
 }

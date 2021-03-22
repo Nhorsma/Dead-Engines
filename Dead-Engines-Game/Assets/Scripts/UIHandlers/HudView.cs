@@ -41,6 +41,7 @@ public class HudView : MonoBehaviour
 		hudPanel.SetActive(true);
 		objectName.text = "Unit Group";
 		objectInfo_1.text = unit.Job;
+		objectInfo_2.text = "Held Item";
 		healthNumber.text = " ";
 		healthSlider.maxValue = unit.Health; // fix
 		healthSlider.value = unit.Health;
@@ -49,9 +50,9 @@ public class HudView : MonoBehaviour
 	public void UpdateEnemy(Enemy enemy)
 	{
 		hudPanel.SetActive(true);
-		objectName.text = "Enemy";
-		objectInfo_1.text = " ";
-		objectInfo_2.text = enemy.Health.ToString();
+		objectName.text = enemy.name;
+		objectInfo_1.text = "Stats";
+		objectInfo_2.text = "Resource Drop";
 		healthSlider.maxValue = enemy.Health; // fix
 		healthSlider.value = enemy.Health;
 	}
@@ -60,8 +61,8 @@ public class HudView : MonoBehaviour
 	{
 		hudPanel.SetActive(true);
 		objectName.text = "Encampment";
-		objectInfo_1.text = " ";
-		objectInfo_2.text = camp.Health.ToString();
+		objectInfo_1.text = "Stats";
+		objectInfo_2.text = "Resource Drop";
 		healthSlider.maxValue = camp.Health; // fix
 		healthSlider.value = camp.Health;
 	}
