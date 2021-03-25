@@ -141,7 +141,6 @@ public class HunterHandler : MonoBehaviour
                             StartCoroutine(FireCoolDown(h.GetComponent<Hunter>()));
                         }
                     }
-                    Debug.Log("IM at "+hunterTransform.position +" and going to "+h.GetComponent<NavMeshAgent>().destination);
                 }
                 if (h.GetComponent<Hunter>().CanRetreat && distance < tooCloseRange)//if very close, walk backwards
                 {

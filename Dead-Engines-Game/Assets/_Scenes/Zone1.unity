@@ -6519,7 +6519,7 @@ MonoBehaviour:
   confirmPing: {fileID: 8300000, guid: a8cef582cb23de74cab8c8e9b3cad780, type: 3}
   unitDead: {fileID: 8300000, guid: 82b6ed86c112ca847b46b68db095e909, type: 3}
   dropOffClop: {fileID: 8300000, guid: b43b0a4db5d3f9d4795efd9bf517dcbd, type: 3}
-  pickaxeClang: {fileID: 0}
+  pickaxeClang: {fileID: 8300000, guid: 3dde2ea3743dd104ba8c127a4018b94f, type: 3}
   enemyAttack1: {fileID: 8300000, guid: 5928cf0709df648459e5156d29193f0d, type: 3}
   enemyAttack2: {fileID: 8300000, guid: 36b38c779753480409e3882c07bce9cb, type: 3}
   enemyDead1: {fileID: 8300000, guid: 2b83e8ae179647a43b341ac011b688de, type: 3}
@@ -18948,7 +18948,7 @@ MonoBehaviour:
   audioHandler: {fileID: 467610736}
   explosion: {fileID: 3118891267616825007, guid: 33b774b5819a306478e54bab16c216bb,
     type: 3}
-  spawnBuffer: 100
+  spawnBuffer: 5
   canTrigger: 0
 --- !u!1 &1379266040
 GameObject:
@@ -26614,7 +26614,8 @@ MonoBehaviour:
   enemyHandler: {fileID: 467610734}
   hunterHandler: {fileID: 1822839396}
   audioHandler: {fileID: 467610736}
-  explosion: {fileID: 0}
+  explosion: {fileID: 3118891267616825007, guid: 33b774b5819a306478e54bab16c216bb,
+    type: 3}
   spawnBuffer: 100
   canTrigger: 0
 --- !u!65 &1881537981

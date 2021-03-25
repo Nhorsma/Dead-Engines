@@ -27,6 +27,7 @@ public class AutomotonAction : MonoBehaviour
 
     KeyCode move_q, move_w, move_e, move_r;
     Collider footCollider, fistCollider;
+    GameObject jobObject;
 
     public int autoHealth;
     public int startingAutoHealth;
@@ -64,8 +65,9 @@ public class AutomotonAction : MonoBehaviour
     {
         if (endPhaseOne && isSelected && autoHealth>0)
         {
-            StartMovement();
+            RightClick();
             Controls();
+            Debug.Log("job: " + jobObject);
         }
         Movement();
     }
@@ -77,9 +79,34 @@ public class AutomotonAction : MonoBehaviour
         {
             return hit;
         }
-        Debug.Log("HIt: " + hit.point);
         return hit;
     }
+
+
+    void RightClick()
+    {
+        if(Input.GetMouseButtonDown(1) && Hit().point != null)
+        {
+            if (Hit().collider.gameObject.tag == "Metal" ||
+                Hit().collider.gameObject.tag == "Electronics" ||
+                Hit().collider.gameObject.tag == "Encampment")
+            {
+                SetJob(Hit().collider.gameObject);
+            }
+            else
+            {
+                jobObject = null;
+            }
+            StartMovement();
+        }
+    }
+
+    void SetJob(GameObject target)
+    {
+        jobObject = target;
+        Debug.Log("new job");
+    }
+
 
     public void SetUpRotate(Vector3 hit)
     {
@@ -179,8 +206,6 @@ public class AutomotonAction : MonoBehaviour
     void StartMovement()
     {
         pos = transform.position;
-        if (Input.GetMouseButtonDown(1) && Hit().point != null)
-        {
             audioHandler.PlayClip(gameObject, "robotConfirm1");
             anim.SetBool("isWalking", false);
             canMove = false;
@@ -189,27 +214,28 @@ public class AutomotonAction : MonoBehaviour
             walkTo = Hit().point;
             startAngle = transform.rotation.eulerAngles.y;
             SetUpRotate(walkTo);
-        }
     }
 
     void Movement()
     {
-        if (canRotate && walkTo != null)
+        if (jobObject != null && Vector3.Distance(automoton.transform.position, jobObject.transform.position) < 15f
+            + automoton.transform.position.y - jobObject.transform.position.y)
         {
-            Rotate();
+            StartCoroutine(GroundPound());
+            jobObject = null;
+            
         }
-        if (canMove && walkTo != null)
-        {
-            Walk(walkTo);
-        }
-        /*
         else
         {
-            anim.SetBool("isRotatingRight", false);
-            anim.SetBool("isRotatingLeft", false);
-            anim.SetBool("isWalking", false);
+            if (canRotate && walkTo != null)
+            {
+                Rotate();
+            }
+            if (canMove && walkTo != null)
+            {
+                Walk(walkTo);
+            }
         }
-        */
     }
 
 
@@ -258,7 +284,7 @@ public class AutomotonAction : MonoBehaviour
         anim.SetBool("GroundPound", true);
         yield return new WaitForSeconds(2f);
         SpawnDust(footObject);
-        audioHandler.PlayClip(gameObject, "robotGround");
+        audioHandler.PlayClip(gameObject, "robotGound");
         //hit ground
         footCollider.enabled = true;
         while (anim.GetCurrentAnimatorStateInfo(0).normalizedTime < 1.0f)
