@@ -3049,12 +3049,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 225863631}
   m_CullTransparentMesh: 0
---- !u!1 &226741649 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 9188639198428461334, guid: 77f0ca5f0dfdb6e48bc491bc516bf306,
-    type: 3}
-  m_PrefabInstance: {fileID: 2350065416393755359}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &232077921
 GameObject:
   m_ObjectHideFlags: 0
@@ -3635,17 +3629,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4125bdce8b64e6a48b4f910302b12f99, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  func0: {fileID: 0}
-  func1: {fileID: 913005947}
-  func2: {fileID: 116700545}
-  func3: {fileID: 1088133956}
-  func4: {fileID: 41391499}
-  func5: {fileID: 1920971403}
-  func6: {fileID: 1349174065}
   pic: {fileID: 2137665157}
   roomName: {fileID: 1771958591}
   build: {fileID: 854868771}
   upgrade: {fileID: 783559962}
+  assign: {fileID: 0}
+  unassign: {fileID: 0}
+  scroller: {fileID: 0}
+  capacity: {fileID: 0}
 --- !u!114 &266609240
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4713,17 +4704,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4125bdce8b64e6a48b4f910302b12f99, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  func0: {fileID: 0}
-  func1: {fileID: 947782245}
-  func2: {fileID: 676951404}
-  func3: {fileID: 350923177}
-  func4: {fileID: 1311502245}
-  func5: {fileID: 99606180}
-  func6: {fileID: 1392072508}
   pic: {fileID: 580786245}
   roomName: {fileID: 140982127}
   build: {fileID: 1367315885}
   upgrade: {fileID: 1914266179}
+  assign: {fileID: 0}
+  unassign: {fileID: 0}
+  scroller: {fileID: 0}
+  capacity: {fileID: 0}
 --- !u!114 &326462736
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5692,17 +5680,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4125bdce8b64e6a48b4f910302b12f99, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  func0: {fileID: 0}
-  func1: {fileID: 1349363299}
-  func2: {fileID: 954320905}
-  func3: {fileID: 1915707267}
-  func4: {fileID: 1268727325}
-  func5: {fileID: 508396330}
-  func6: {fileID: 610882038}
   pic: {fileID: 360188111}
   roomName: {fileID: 1365635659}
   build: {fileID: 1185968807}
   upgrade: {fileID: 644458736}
+  assign: {fileID: 0}
+  unassign: {fileID: 0}
+  scroller: {fileID: 0}
+  capacity: {fileID: 0}
 --- !u!114 &435826482
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9659,17 +9644,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4125bdce8b64e6a48b4f910302b12f99, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  func0: {fileID: 0}
-  func1: {fileID: 187829780}
-  func2: {fileID: 34090916}
-  func3: {fileID: 834089249}
-  func4: {fileID: 225863633}
-  func5: {fileID: 644667806}
-  func6: {fileID: 1565856528}
   pic: {fileID: 630777457}
   roomName: {fileID: 1476019177}
   build: {fileID: 1454661399}
   upgrade: {fileID: 2034924414}
+  assign: {fileID: 0}
+  unassign: {fileID: 0}
+  scroller: {fileID: 0}
+  capacity: {fileID: 0}
 --- !u!114 &635521956
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11142,17 +11124,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4125bdce8b64e6a48b4f910302b12f99, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  func0: {fileID: 0}
-  func1: {fileID: 474267291}
-  func2: {fileID: 541508147}
-  func3: {fileID: 1715949831}
-  func4: {fileID: 598269495}
-  func5: {fileID: 1109138898}
-  func6: {fileID: 1867699039}
   pic: {fileID: 491396206}
   roomName: {fileID: 238035804}
   build: {fileID: 2067382923}
   upgrade: {fileID: 552238254}
+  assign: {fileID: 0}
+  unassign: {fileID: 0}
+  scroller: {fileID: 0}
+  capacity: {fileID: 0}
 --- !u!114 &732753156
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11402,7 +11381,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &742551318
 Transform:
   m_ObjectHideFlags: 0
@@ -13218,8 +13197,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   unitManager: {fileID: 906018195}
   roomManager: {fileID: 906018191}
-  storageSpace: 25
-  hasSpace: 1
 --- !u!114 &906018189
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -13234,8 +13211,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   hoverBox: {fileID: 983873204}
   amountText: {fileID: 1264736932}
-  resHandling: {fileID: 906018194}
-  encHandling: {fileID: 906018193}
+  resourceHandling: {fileID: 0}
+  encampmentHandling: {fileID: 0}
 --- !u!114 &906018190
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -13273,46 +13250,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 470fad9b36a43154c8a140fc0a07fb8e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  display:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  roomSlotClicked: 0
+  setupRoom: {fileID: 0}
   auto: {fileID: 8172259170838100589}
-  um: {fileID: 906018195}
+  unitManager: {fileID: 906018195}
   autoObj: {fileID: 8172259170838100588}
-  miniTabs:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  ctrlMiniTab: {fileID: 0}
-  genMiniTab: {fileID: 0}
-  refineryCost_M: 10
-  refineryCost_E: 10
-  storageCost_M: 50
-  storageCost_E: 50
-  shrineCost_M: 0
-  shrineCost_E: 0
-  studyCost_M: 100
-  studyCost_E: 100
-  refineryCost_Mo: 0
-  refineryCost_Eo: 0
-  storageCost_Mo: 0
-  storageCost_Eo: 0
-  shrineCost_Mo: 0
-  shrineCost_Eo: 0
-  studyCost_Mo: 0
-  studyCost_Eo: 0
-  efficiency: 1
+  roomTabs: []
+  controllerTab: {fileID: 732753153}
+  generatorTab: {fileID: 732753153}
+  roomTypesAtAGlance: []
+  roomSpritesInOrder: []
+  generatorRepairedSprite: {fileID: 0}
+  controllerRepairedSprite: {fileID: 0}
+  roomSlotClicked: 0
+  audioSource: {fileID: 0}
+  wrenchClip: {fileID: 0}
+  hammerClip: {fileID: 0}
+  errorClip: {fileID: 0}
   effectConnector: {fileID: 0}
+  efficiency: 1
 --- !u!114 &906018192
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -13325,7 +13280,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8dda09e0f725015479faec45bd01d30d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enemiesGM: []
+  audioHandler: {fileID: 0}
+  automoton: {fileID: 8172259170838100588}
+  spawnPool: {fileID: 0}
+  enemies: []
   stoppingDistance: 5
   shootingRange: 8
   tresspassingRange: 10
@@ -13342,12 +13300,21 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   startingHealth: 10
-  eGM: []
-  eh: {fileID: 906018192}
-  spawn: {fileID: 906018196}
-  rh: {fileID: 906018194}
+  encampments: []
+  enemyHandler: {fileID: 0}
+  unitManager: {fileID: 0}
+  spawnRes: {fileID: 0}
+  resourceHandling: {fileID: 0}
+  automaton: {fileID: 0}
+  audioHandler: {fileID: 0}
+  startSpawnTime: 0
   spawnTime: 1
   spawnDistance: 0
+  startSpawning: 0
+  volume: 0
+  enemy_model1: {fileID: 0}
+  enemy_model2: {fileID: 0}
+  enemy_model3: {fileID: 0}
 --- !u!114 &906018194
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -13361,13 +13328,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   startQuantity: 50
-  fuel: {fileID: 0}
+  fuel: {fileID: 3113173182971870230, guid: 0a83527885cd7f241b7c22ece9f51c39, type: 3}
   fuelTaken: 0
   fuelDropped: 0
-  resDeposits: []
-  resQuantities: 
-  spawn: {fileID: 906018196}
-  recsLeft: 0
+  resourceDeposits: []
+  resourceQuantities: 
+  spawnRes: {fileID: 906018196}
+  resourcesLeft: 0
+  resTranslator: []
 --- !u!114 &906018195
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -13380,19 +13348,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a4ad199838f944e499004c0a2c8a823e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  si: {fileID: 906018197}
-  rh: {fileID: 906018194}
-  eh: {fileID: 906018192}
+  selectItems: {fileID: 0}
+  resourceHandling: {fileID: 0}
+  enemyHandler: {fileID: 0}
+  encampmentHandler: {fileID: 0}
+  spawnPool: {fileID: 0}
+  roomManager: {fileID: 0}
+  audioHandler: {fileID: 0}
   robotPos: {x: 10, y: 3, z: 8}
   robot: {fileID: 8172259170838100588}
+  startingUnits: 0
+  unitPrefab: {fileID: 0}
+  units: []
   stoppingDistance: 8
+  pickUpDistance: 0
   shootingDistance: 12
-  downTime: 5
-  unitDamage: 0
-  unitsGM: []
-  auto: {fileID: 8172259170838100589}
   unitFireCooldown: 1
-  effConnector: {fileID: 906018188}
+  downTime: 5
+  piercingMultiplier: 0
 --- !u!114 &906018196
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -13409,6 +13382,11 @@ MonoBehaviour:
   res2: {fileID: 6625301941321825569, guid: babc57232b4ad00408ed5e64c5faf108, type: 3}
   res3: {fileID: 6918073762920412359, guid: 8ac11d87adbfa564391425271f158bc9, type: 3}
   enemy: {fileID: 3095501986510504359, guid: 67d77ea79edff4841a2a9aa6009a82bd, type: 3}
+  thin_res1: {fileID: 0}
+  thin_res2: {fileID: 0}
+  thin_res3: {fileID: 0}
+  thin_encampment: {fileID: 0}
+  autoObj: {fileID: 0}
   startPos: {fileID: 0}
   s_maxDistance: 100
   s_minDistance: 50
@@ -13416,9 +13394,23 @@ MonoBehaviour:
   r_minDistance: 50
   e_maxDistance: 20
   e_minDistance: 10
-  howMany: 1
+  howManyEncampments: 0
   low_range: 200
   high_range: 200
+  outer_low_range: 0
+  outer_high_range: 0
+  outerResources: []
+  outerSpawnDensity: 0
+  inner_low_range: 0
+  inner_high_range: 0
+  innerResources: []
+  innerSpawnDensity: 0
+  core_low_range: 0
+  core_high_range: 0
+  coreResources: []
+  coreSpawnDensity: 0
+  recHandle: {fileID: 0}
+  spawnWithEncampmentProbability: 0
 --- !u!114 &906018197
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -13433,18 +13425,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   selectionSquare: {fileID: 925003893}
   dragLimit: 0
-  um: {fileID: 906018195}
+  unitManager: {fileID: 0}
+  autoAction: {fileID: 0}
+  audioHandler: {fileID: 0}
   normalMaterial: {fileID: 2100000, guid: 80d99d111da86da41951967e4aad5f9e, type: 2}
   highlightMaterial: {fileID: 2100000, guid: 95ccc95e68534fa4b92d3c0d16d17b2a, type: 2}
   selectedMaterial: {fileID: 2100000, guid: 64d79bbb5de2c4740a8b70494ce6c403, type: 2}
+  hudView: {fileID: 0}
   g1: {fileID: 0}
   g2: {fileID: 0}
-  unitUIPanel: {fileID: 4571247}
-  unitName: {fileID: 1175944617}
-  unitJob: {fileID: 1958865924}
-  unitItem: {fileID: 1228950009}
-  unitHealth: {fileID: 569946154}
-  healthSlider: {fileID: 252584092}
 --- !u!4 &906018198
 Transform:
   m_ObjectHideFlags: 0
@@ -13471,13 +13460,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7c12db2259dd6644bb0347633d1dfcbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  automoton: {fileID: 8172259170838100588}
+  automaton: {fileID: 8172259170838100588}
   h1: {fileID: 3279273732068940755, guid: f3ad217f0f39b0d469595ef5181ddd5d, type: 3}
   h2: {fileID: 2845934144848803937, guid: 7adcec9a75964174faa9859e24918f35, type: 3}
   h3: {fileID: 2986977932535562071, guid: f874be8518647fa479b21128d199ce7b, type: 3}
-  spawnRadius: 50
+  anteater: {fileID: 0}
+  autoAction: {fileID: 8172259170838100590}
+  audioHandler: {fileID: 0}
+  deployedHunters: []
+  spawnRadius: 200
   stoppingDistance: 30
   movementSpeed: 10
+  closeRange: 50
+  tooCloseRange: 10
   canSpawn: 1
   isDeployed: 0
   chance: 3
@@ -13489,18 +13484,17 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 906018187}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d0b5383961e3f0845b54ec950b0bd334, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  automoton: {fileID: 8172259170838100588}
-  fog: {fileID: 0}
-  phaseOnePos: {x: -14.6, y: -16.1, z: 21.05}
-  phaseTwoPos: {x: -15, y: -2.3, z: 15}
-  climbOut: {fileID: 0}
-  anim: {fileID: 8172259170838100593}
-  aa: {fileID: 8172259170838100590}
+  auto: {fileID: 0}
+  spawnRes: {fileID: 0}
+  autoObj: {fileID: 0}
+  selectItems: {fileID: 0}
+  resourceHandling: {fileID: 0}
+  sphereThinner: {fileID: 0}
 --- !u!1 &906857907
 GameObject:
   m_ObjectHideFlags: 0
@@ -18027,17 +18021,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4125bdce8b64e6a48b4f910302b12f99, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  func0: {fileID: 0}
-  func1: {fileID: 1069666902}
-  func2: {fileID: 374035643}
-  func3: {fileID: 1894240371}
-  func4: {fileID: 389531819}
-  func5: {fileID: 1860103894}
-  func6: {fileID: 906857909}
   pic: {fileID: 1601502088}
   roomName: {fileID: 515443653}
   build: {fileID: 730079842}
   upgrade: {fileID: 1578192116}
+  assign: {fileID: 0}
+  unassign: {fileID: 0}
+  scroller: {fileID: 0}
+  capacity: {fileID: 0}
 --- !u!114 &1210570488
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -22116,17 +22107,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4125bdce8b64e6a48b4f910302b12f99, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  func0: {fileID: 0}
-  func1: {fileID: 200346757}
-  func2: {fileID: 889783178}
-  func3: {fileID: 751881723}
-  func4: {fileID: 774562885}
-  func5: {fileID: 1285863618}
-  func6: {fileID: 1424122394}
   pic: {fileID: 1400768666}
   roomName: {fileID: 1022195580}
   build: {fileID: 1927191694}
   upgrade: {fileID: 769003685}
+  assign: {fileID: 0}
+  unassign: {fileID: 0}
+  scroller: {fileID: 0}
+  capacity: {fileID: 0}
 --- !u!114 &1580615368
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -24451,17 +24439,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4125bdce8b64e6a48b4f910302b12f99, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  func0: {fileID: 0}
-  func1: {fileID: 1286896454}
-  func2: {fileID: 641893518}
-  func3: {fileID: 503031368}
-  func4: {fileID: 2056133693}
-  func5: {fileID: 737795975}
-  func6: {fileID: 1720510887}
   pic: {fileID: 1187596771}
   roomName: {fileID: 293265112}
   build: {fileID: 462312710}
   upgrade: {fileID: 1686304429}
+  assign: {fileID: 0}
+  unassign: {fileID: 0}
+  scroller: {fileID: 0}
+  capacity: {fileID: 0}
 --- !u!114 &1834668618
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -25062,6 +25047,7 @@ GameObject:
   - component: {fileID: 1883162301}
   - component: {fileID: 1883162300}
   - component: {fileID: 1883162304}
+  - component: {fileID: 1883162305}
   m_Layer: 0
   m_Name: Plane
   m_TagString: Untagged
@@ -25160,6 +25146,35 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 126
   m_CollisionDetection: 0
+--- !u!114 &1883162305
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1883162299}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7c12db2259dd6644bb0347633d1dfcbb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  automaton: {fileID: 0}
+  h1: {fileID: 7984746186806774821, guid: 885c2fefa067bba4a89e61a5e1dcf802, type: 3}
+  h2: {fileID: 7816565298225748079, guid: 73c5358c9ec28d647a502447b57c808a, type: 3}
+  h3: {fileID: 2844502961085742202, guid: 280aff34cf62f864ba8eb71207a5a037, type: 3}
+  anteater: {fileID: 963534896745187385, guid: 2918e0da1528d924abc56e8aaed90160, type: 3}
+  autoAction: {fileID: 0}
+  audioHandler: {fileID: 0}
+  deployedHunters: []
+  spawnRadius: 200
+  stoppingDistance: 0
+  movementSpeed: 10
+  closeRange: 50
+  tooCloseRange: 10
+  canSpawn: 1
+  isDeployed: 0
+  chance: 0
+  spawnTime: 1
 --- !u!1 &1884488623
 GameObject:
   m_ObjectHideFlags: 0
@@ -27619,17 +27634,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4125bdce8b64e6a48b4f910302b12f99, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  func0: {fileID: 0}
-  func1: {fileID: 1114227059}
-  func2: {fileID: 2088624561}
-  func3: {fileID: 1280897041}
-  func4: {fileID: 1961192468}
-  func5: {fileID: 240571169}
-  func6: {fileID: 1067342542}
   pic: {fileID: 1128244342}
   roomName: {fileID: 485232649}
   build: {fileID: 672703990}
   upgrade: {fileID: 1919775115}
+  assign: {fileID: 0}
+  unassign: {fileID: 0}
+  scroller: {fileID: 0}
+  capacity: {fileID: 0}
 --- !u!114 &2111745456
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -28240,7 +28252,37 @@ PrefabInstance:
         type: 3}
       propertyPath: footObject
       value: 
-      objectReference: {fileID: 226741649}
+      objectReference: {fileID: 8172259170838100588}
+    - target: {fileID: 5905536744587997361, guid: 77f0ca5f0dfdb6e48bc491bc516bf306,
+        type: 3}
+      propertyPath: fog
+      value: 
+      objectReference: {fileID: 732753153}
+    - target: {fileID: 5905536744587997361, guid: 77f0ca5f0dfdb6e48bc491bc516bf306,
+        type: 3}
+      propertyPath: fistObject
+      value: 
+      objectReference: {fileID: 8172259170838100588}
+    - target: {fileID: 5905536744587997361, guid: 77f0ca5f0dfdb6e48bc491bc516bf306,
+        type: 3}
+      propertyPath: dustCloud
+      value: 
+      objectReference: {fileID: 732753153}
+    - target: {fileID: 5905536744587997361, guid: 77f0ca5f0dfdb6e48bc491bc516bf306,
+        type: 3}
+      propertyPath: explosion
+      value: 
+      objectReference: {fileID: 732753153}
+    - target: {fileID: 5905536744587997361, guid: 77f0ca5f0dfdb6e48bc491bc516bf306,
+        type: 3}
+      propertyPath: aa
+      value: 
+      objectReference: {fileID: 8172259170838100590}
+    - target: {fileID: 5905536744587997361, guid: 77f0ca5f0dfdb6e48bc491bc516bf306,
+        type: 3}
+      propertyPath: unitManager
+      value: 
+      objectReference: {fileID: 906018195}
     - target: {fileID: 5905536744587997362, guid: 77f0ca5f0dfdb6e48bc491bc516bf306,
         type: 3}
       propertyPath: auto_main
@@ -28331,6 +28373,11 @@ PrefabInstance:
       propertyPath: debug3
       value: 
       objectReference: {fileID: 1870193395}
+    - target: {fileID: 5905536744587997362, guid: 77f0ca5f0dfdb6e48bc491bc516bf306,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5905536744587997363, guid: 77f0ca5f0dfdb6e48bc491bc516bf306,
         type: 3}
       propertyPath: m_Name
@@ -28398,44 +28445,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 77f0ca5f0dfdb6e48bc491bc516bf306, type: 3}
---- !u!1 &2350065416393755360 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 268998167913880729, guid: 77f0ca5f0dfdb6e48bc491bc516bf306,
-    type: 3}
-  m_PrefabInstance: {fileID: 2350065416393755359}
-  m_PrefabAsset: {fileID: 0}
---- !u!1 &2350065416393755361 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 850159304862711740, guid: 77f0ca5f0dfdb6e48bc491bc516bf306,
-    type: 3}
-  m_PrefabInstance: {fileID: 2350065416393755359}
-  m_PrefabAsset: {fileID: 0}
---- !u!65 &2350065416393755362
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2350065416393755360}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 0.45909172, y: 1.9730406, z: 1.2800754}
-  m_Center: {x: -0.000000014901163, y: 0.0000011920929, z: -0.000000029802315}
---- !u!65 &2350065416393755363
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2350065416393755361}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 0.45909125, y: 1.9730408, z: 1.2800753}
-  m_Center: {x: -0.0000009834766, y: -0.00000166893, z: 0.0000018775463}
 --- !u!1 &8172259170838100588 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 5905536744587997363, guid: 77f0ca5f0dfdb6e48bc491bc516bf306,
@@ -28449,7 +28458,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 2350065416393755359}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8172259170838100588}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4f8c42e377bc28d48b4c05343df3f1be, type: 3}
   m_Name: 
@@ -28466,9 +28475,99 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 57d5ecc92ed93b94ba6e895526d7ae42, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!95 &8172259170838100593 stripped
-Animator:
-  m_CorrespondingSourceObject: {fileID: 5905536744587997358, guid: 77f0ca5f0dfdb6e48bc491bc516bf306,
-    type: 3}
-  m_PrefabInstance: {fileID: 2350065416393755359}
+--- !u!82 &8172259170838100596
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8172259170838100588}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 0}
+  m_audioClip: {fileID: 0}
+  m_PlayOnAwake: 1
+  m_Volume: 1
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4

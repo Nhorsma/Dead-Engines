@@ -94,7 +94,9 @@ public class HunterHandler : MonoBehaviour
 	{
 		for (int i = 0; i < 3; i++)
 		{
-			Vector3 spawnPlace = automaton.transform.position + RandomSpawnPoint();
+            Vector3 place = RandomSpawnPoint();
+
+            Vector3 spawnPlace = automaton.transform.position + place;
 			//Hunter h = SetHunter().GetComponent<Hunter>();
 			GameObject hunterObj = SetHunter(); // fishy
 			hunterObj.transform.position = spawnPlace;
@@ -114,7 +116,7 @@ public class HunterHandler : MonoBehaviour
                 if (h == null)
                     break;
 
-                if (!checkIfAtDestination(h))
+                if (!CheckIfAtDestination(h))
                     h.GetComponent<Hunter>().NextMove = false;
                 else
                     h.GetComponent<Hunter>().NextMove = true;
@@ -139,6 +141,7 @@ public class HunterHandler : MonoBehaviour
                             StartCoroutine(FireCoolDown(h.GetComponent<Hunter>()));
                         }
                     }
+                    Debug.Log("IM at "+hunterTransform.position +" and going to "+h.GetComponent<NavMeshAgent>().destination);
                 }
                 if (h.GetComponent<Hunter>().CanRetreat && distance < tooCloseRange)//if very close, walk backwards
                 {
@@ -193,7 +196,7 @@ public class HunterHandler : MonoBehaviour
 	Vector3 RandomSpawnPoint()
 	{
 		int r = Random.Range(1, 4);
-
+        
 		if (r < 3)
 		{
 			if (r == 1)
@@ -216,7 +219,8 @@ public class HunterHandler : MonoBehaviour
 				return new Vector3(-spawnRadius, 0, Random.Range(-spawnRadius, spawnRadius));
 			}
 		}
-	}
+        
+    }
 	IEnumerator ChangeSpawnChance()
 	{
 		canSpawn = false;
@@ -316,14 +320,14 @@ public class HunterHandler : MonoBehaviour
         Destroy(t);
     }
 
-    bool checkIfAtDestination(GameObject hunter)
+    bool CheckIfAtDestination(GameObject hunter)
     {
-        return hunter.GetComponent<NavMeshAgent>().remainingDistance < 1f;
+        return hunter.GetComponent<NavMeshAgent>().remainingDistance < 50f;
     }
 
     void GetClose(Vector3 robot, GameObject hunter)
     {
-        Vector3 diff = (transform.position - robot) * 1 / 2;
+        Vector3 diff = (hunter.transform.position - robot) * 1 / 2;
         robot += diff;
         TravelTo(hunter,robot,false);
         Debug.Log("Getting Closer");
@@ -338,7 +342,7 @@ public class HunterHandler : MonoBehaviour
         //move to b
         */
 
-        Vector3 backUp = ((transform.position - robot) * 2) + robot;
+        Vector3 backUp = ((hunter.transform.position - robot) * 2) + robot;
         TravelTo(hunter, robot, false);
         Debug.Log("Backign Up");
     }
@@ -352,8 +356,8 @@ public class HunterHandler : MonoBehaviour
         //move to b
         */
 
-        Vector3 diff = transform.position - robot;
-        Vector3 flank = new Vector3(diff.z, transform.position.y, diff.x);
+        Vector3 diff = hunter.transform.position - robot;
+        Vector3 flank = new Vector3(diff.z, hunter.transform.position.y, diff.x);
         robot += flank;
         TravelTo(hunter, robot, false);
         Debug.Log("Flanking");
