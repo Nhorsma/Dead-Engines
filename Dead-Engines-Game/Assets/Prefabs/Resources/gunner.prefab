@@ -1992,6 +1992,21 @@ PrefabInstance:
       propertyPath: m_Name
       value: Firing Rifle
       objectReference: {fileID: 0}
+    - target: {fileID: 8355850933822209689, guid: 902cea3b59373084f86a8c98617f5573,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 71f797081c21d624eb7466698af6b1b0, type: 2}
+    - target: {fileID: 8355850933822209689, guid: 902cea3b59373084f86a8c98617f5573,
+        type: 3}
+      propertyPath: m_Materials.Array.data[2]
+      value: 
+      objectReference: {fileID: 2100000, guid: 49a527a05c0e8f54fbf5c9681d8018e8, type: 2}
+    - target: {fileID: 8355850933822209689, guid: 902cea3b59373084f86a8c98617f5573,
+        type: 3}
+      propertyPath: m_Materials.Array.data[1]
+      value: 
+      objectReference: {fileID: 2100000, guid: 59eef0508ef7f8940a1b4db2115fb8ea, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 902cea3b59373084f86a8c98617f5573, type: 3}
 --- !u!4 &6387974749892285046 stripped
