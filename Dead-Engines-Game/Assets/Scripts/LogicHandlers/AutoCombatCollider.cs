@@ -42,7 +42,7 @@ public class AutoCombatCollider : MonoBehaviour
             }
 			if (other.gameObject.tag == "Hunter")
 			{
-				hunterHandler.DealHunterDamage(other.gameObject);
+				hunterHandler.DealHunterDamage(other.gameObject,15);
 				SpawnExplosion(other.gameObject);
                 canTrigger = false;
             }

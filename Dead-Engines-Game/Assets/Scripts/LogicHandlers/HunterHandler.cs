@@ -50,24 +50,24 @@ public class HunterHandler : MonoBehaviour
 		{
 			case 1:
 				hunterObj = (GameObject)Instantiate(h1);
-				hunterObj.GetComponent<Hunter>().Speed = 7f;
-				hunterObj.GetComponent<Hunter>().Health = 2;
+				hunterObj.GetComponent<Hunter>().Speed = 30f;
+				hunterObj.GetComponent<Hunter>().Health = 20;
 				hunterObj.GetComponent<Hunter>().Attack = 2;
                 hunterObj.GetComponent<Hunter>().FiringSpeed = 2f;
                 hunterObj.GetComponent<Hunter>().CanRetreat = true;
                 break;
 			case 2:
 				hunterObj = (GameObject)Instantiate(h2);
-				hunterObj.GetComponent<Hunter>().Speed = 10f;
-				hunterObj.GetComponent<Hunter>().Health = 1;
+				hunterObj.GetComponent<Hunter>().Speed = 15f;
+				hunterObj.GetComponent<Hunter>().Health = 15;
 				hunterObj.GetComponent<Hunter>().Attack = 1;
                 hunterObj.GetComponent<Hunter>().FiringSpeed = 3.5f;
                 hunterObj.GetComponent<Hunter>().CanRetreat = true;
 				break;
 			case 3:
 				hunterObj = (GameObject)Instantiate(h2);
-				hunterObj.GetComponent<Hunter>().Speed = 3f;
-				hunterObj.GetComponent<Hunter>().Health = 3;
+				hunterObj.GetComponent<Hunter>().Speed = 10f;
+				hunterObj.GetComponent<Hunter>().Health = 50;
 				hunterObj.GetComponent<Hunter>().Attack = 3;
                 hunterObj.GetComponent<Hunter>().FiringSpeed = 5f;
                 break;
@@ -227,7 +227,7 @@ public class HunterHandler : MonoBehaviour
 		canSpawn = true;
 	}
 
-	public void DealHunterDamage(GameObject hunter) //fishy
+	public void DealHunterDamage(GameObject hunter, int amount) //fishy
     {
         Hunter hunter_data = deployedHunters[0].GetComponent<Hunter>();
         foreach (GameObject h in deployedHunters)
@@ -238,7 +238,7 @@ public class HunterHandler : MonoBehaviour
                 break;
             }
         }
-        hunter_data.Health--;
+        hunter_data.Health-=amount;
         Debug.Log("shots recieved");
         HunterDeath(hunter, hunter_data);
 
@@ -341,9 +341,9 @@ public class HunterHandler : MonoBehaviour
         //move to b
         */
 
-        Vector3 backUp = ((hunter.transform.position - robot) * 2) + robot;
-        TravelTo(hunter, robot, false);
-        Debug.Log("Backign Up");
+        Vector3 backUp = ((hunter.transform.position - robot) * 3) + robot;
+        TravelTo(hunter, backUp, false);
+        Debug.Log("Backign Up to "+backUp);
     }
 
     void FindFlank(Vector3 robot, GameObject hunter)

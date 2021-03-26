@@ -87,7 +87,8 @@ public class UnitManager : MonoBehaviour
                 Hit().collider.gameObject.tag == "Metal" ||
                 Hit().collider.gameObject.tag == "Electronics" ||
                 Hit().collider.gameObject.tag == "Enemy" ||
-                Hit().collider.gameObject.tag == "Encampment")
+                Hit().collider.gameObject.tag == "Encampment" ||
+                Hit().collider.gameObject.tag == "Hunter")
             {
                 SetJobOfSelected(Hit().collider.gameObject);
                 selectItems.hudView.UpdateUnit(selectedUnits[0].GetComponent<Unit>());
@@ -126,7 +127,7 @@ public class UnitManager : MonoBehaviour
                 TravelTo(units[unit_data.Id], unit_data.JobPos.transform.position, false, false);
             }
         }
-        if (clickedObj.tag == "Enemy" || clickedObj.tag == "Encampment")
+        if (clickedObj.tag == "Enemy" || clickedObj.tag == "Encampment" || clickedObj.tag == "Hunter")
         {
             foreach (GameObject u in selectedUnits)
             {
@@ -465,7 +466,22 @@ public class UnitManager : MonoBehaviour
                     unit.GetComponent<Unit>().JobPos.GetComponent<Encampment>().Health -= unit_data.Attack; //fishy
                 }
             }
-        StartCoroutine(FireCoolDown(unit.GetComponent<Unit>()));
+            else if (unit.GetComponent<Unit>().JobPos.tag == "Hunter")
+            {
+                Hunter hunter_target = unit.GetComponent<Unit>().JobPos.GetComponent<Hunter>();
+                if (hunter_target == null || hunter_target.Health <= 0)
+                {
+                    ResetJob(unit.GetComponent<Unit>());
+                }
+                else
+                {
+                    if (hunter_target.Armored && !unit_data.Piercing)
+                        hunter_target.Health -= 1;
+                    else
+                        hunter_target.Health -= CalculateDamage(unit_data.Attack, hunter_target.Defense);
+                }
+            }
+            StartCoroutine(FireCoolDown(unit.GetComponent<Unit>()));
     }
 
 

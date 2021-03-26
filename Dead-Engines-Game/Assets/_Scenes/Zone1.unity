@@ -25759,11 +25759,11 @@ MonoBehaviour:
   autoAction: {fileID: 5905536743914566333}
   audioHandler: {fileID: 467610736}
   deployedHunters: []
-  spawnRadius: 500
+  spawnRadius: 200
   stoppingDistance: 0
   movementSpeed: 10
-  closeRange: 50
-  tooCloseRange: 10
+  closeRange: 200
+  tooCloseRange: 100
   canSpawn: 1
   isDeployed: 0
   chance: 0
