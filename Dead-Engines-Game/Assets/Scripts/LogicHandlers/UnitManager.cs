@@ -66,7 +66,7 @@ public class UnitManager : MonoBehaviour
             u.GetComponent<Unit>().Id = i;
             u.GetComponent<Unit>().UnitName = "U" + u.GetComponent<Unit>().Id.ToString();
             units.Add(u);
-            ShowGun(u, false);
+            ShowGun(u, false,"Both");
         }
     }
 
@@ -195,7 +195,7 @@ public class UnitManager : MonoBehaviour
             }
             else
             {
-                ShowGun(u, false);
+                ShowGun(u, false,"Both");
             }
         }
     }
@@ -206,14 +206,14 @@ public class UnitManager : MonoBehaviour
         {
             ResetJob(selectedUnits[0].GetComponent<Unit>());
             TravelTo(selectedUnits[0], Hit().point, false, false);
-            ShowGun(selectedUnits[0], false);
+            ShowGun(selectedUnits[0], false,"Both");
         }
         else if (selectedUnits.Count > 0)
         {
             for (int i = 0; i < selectedUnits.Count; i++)
             {
                 SetAnimation(selectedUnits[i], "inCombat", false);
-                ShowGun(selectedUnits[i], false);
+                ShowGun(selectedUnits[i], false,"Both");
                 Unit unit_data = selectedUnits[i].GetComponent<Unit>();
                 if (unit_data.Job != "shrine" || unit_data.Job != "study"
                     || unit_data.Job != "refinery" || unit_data.Job != "storage") // && selectedUnits[i].activeSelf
@@ -255,7 +255,7 @@ public class UnitManager : MonoBehaviour
         {
             return;
         }
-        ShowGun(unit, false);
+        ShowGun(unit, false, "Both");
         Unit unit_data = unit.GetComponent<Unit>();
 
         Vector3 depositPos = resourceHandling.resourceDeposits[resourceId].transform.position;
@@ -298,7 +298,10 @@ public class UnitManager : MonoBehaviour
     {
         NavMeshAgent nv = unit.GetComponent<NavMeshAgent>();
         Unit unit_data = unit.GetComponent<Unit>();
-        ShowGun(unit, true);
+        if(unit_data.Piercing)
+            ShowGun(unit, true,"Piercing_Rifle");
+        else
+            ShowGun(unit, true, "Rifle");
 
         if (unit_data.JobPos != null &&
             Vector3.Distance(unit_data.JobPos.transform.position, unit.transform.position) > stoppingDistance)
@@ -320,7 +323,7 @@ public class UnitManager : MonoBehaviour
         wanderingUnit.GetComponent<Unit>().UnitName = "U" + wanderingUnit.GetComponent<Unit>().Id.ToString();
 
         units.Add(wanderingUnit);
-        ShowGun(wanderingUnit, false);
+        ShowGun(wanderingUnit, false,"Both");
     }
 
     /// <summary>
@@ -368,7 +371,7 @@ public class UnitManager : MonoBehaviour
     public void SetJobFromRoom(GameObject unit, string roomJob)
     {
         audioHandler.PlayClip(unit, "confirmPing");
-        ShowGun(unit, false);
+        ShowGun(unit, false, "Both");
         TravelTo(unit, robotPos, false, false);
     }
     public void LeaveRoomJob(GameObject unit)
@@ -544,7 +547,7 @@ public class UnitManager : MonoBehaviour
     {
         if (!isSpawned)
         {
-            ShowGun(unit, false);
+            ShowGun(unit, false, "Both");
             SetAnimation(unit, "inCombat", false);
             SetAnimation(unit, "knockedOut", true);
             audioHandler.PlayClip(unit, "unitDead");
@@ -654,11 +657,17 @@ public class UnitManager : MonoBehaviour
             unit_object.GetComponent<Animator>().SetFloat(animationSetting, value);
     }
 
-    public void ShowGun(GameObject unit_object,bool showGun)
+    public void ShowGun(GameObject unit_object, bool showGun, string gunType)
     {
-        if(unit_object.transform.Find("Rifle")!=null)
+        if(gunType=="Both")
         {
             unit_object.transform.Find("Rifle").gameObject.SetActive(showGun);
+            unit_object.transform.Find("Piercing_Rifle").gameObject.SetActive(showGun);
+        }
+
+        if(unit_object.transform.Find(gunType)!=null)
+        {
+            unit_object.transform.Find(gunType).gameObject.SetActive(showGun);
         }
     }
 
