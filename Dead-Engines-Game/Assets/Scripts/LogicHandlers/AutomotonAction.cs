@@ -8,7 +8,7 @@ public class AutomotonAction : MonoBehaviour
     public Animator anim;
     public float movementSpeed, startTurnSpeed, turnSpeed;
     public float startAngle, target, ny;
-    public bool canMove,canRotate, isWalking, rotLeft, rotRight;
+    public bool canMove,canRotate, isWalking, rotLeft, rotRight, canAct;
     public bool tempmove, temprotate, tempwalking, tempLeft, tempRight;
     Vector3 pos, walkTo;
     NavMeshAgent nv;
@@ -17,13 +17,14 @@ public class AutomotonAction : MonoBehaviour
 
     public static bool endPhaseOne;
     public bool isSelected;
-    public GameObject automoton, fog, footObject, fistObject, dustCloud,explosion;
+    public GameObject automoton, fog, footObject, fistObject, headObject, dustCloud, explosion;
     public Vector3 phaseOnePos, phaseTwoPos;
     public Animation climbOut;
     public AutomotonAction aa;
     public UnitManager unitManager;
     public AudioSource robotSources;
     public AudioHandler audioHandler;
+    public SpawningPoolController spawnPool;
 
     KeyCode move_q, move_w, move_e, move_r;
     Collider footCollider, fistCollider;
@@ -48,7 +49,7 @@ public class AutomotonAction : MonoBehaviour
         anim = automoton.GetComponent<Animator>();
         aa = automoton.GetComponent<AutomotonAction>();
         //aa.enabled = false;
-        endPhaseOne = true;
+        endPhaseOne = canAct = true;
 
         footCollider = footObject.GetComponent<BoxCollider>();
         fistCollider = fistObject.GetComponent<BoxCollider>();
@@ -67,7 +68,6 @@ public class AutomotonAction : MonoBehaviour
         {
             RightClick();
             Controls();
-            Debug.Log("job: " + jobObject);
         }
         Movement();
     }
@@ -266,19 +266,26 @@ public class AutomotonAction : MonoBehaviour
 
     void Controls()
     {
-        if(Input.GetKeyDown(move_q))
+        if (canAct)
         {
-            StartCoroutine(GroundPound());
-        }
-        if(Input.GetKeyDown(move_w))
-        {
-            StartCoroutine(Punch());
+            if (Input.GetKeyDown(move_q))
+            {
+                StartCoroutine(GroundPound());
+            }
+            if (Input.GetKeyDown(move_w))
+            {
+                StartCoroutine(Punch());
+            }
+            if (Input.GetKeyDown(move_e))
+            {
+                StartCoroutine(Laser());
+            }
         }
     }
 
     IEnumerator GroundPound()
     {
-        //play ground pound animation
+        canAct = false;
         audioHandler.PlayClip(gameObject, "robotConfirm2");
         ContinueAnimations(false);
         anim.SetBool("GroundPound", true);
@@ -292,11 +299,13 @@ public class AutomotonAction : MonoBehaviour
         footCollider.enabled = false;
         anim.SetBool("GroundPound", false);
         ContinueAnimations(true);
+        canAct = true;
 
     }
 
     IEnumerator Punch()
     {
+        canAct = false;
         audioHandler.PlayClip(gameObject, "robotConfirm2");
         ContinueAnimations(false);
         anim.SetBool("Punch", true);
@@ -310,11 +319,66 @@ public class AutomotonAction : MonoBehaviour
         fistCollider.enabled = false;
         fistCollider.enabled = false;
         ContinueAnimations(true);
+        canAct = true;
     }
 
-    void Laser()
+    IEnumerator Laser()
     {
+        canAct = false;
+        audioHandler.PlayClip(gameObject, "robotConfirm2");
+        ContinueAnimations(false);
+        anim.SetBool("inLaser", true);
+        audioHandler.PlayClip(gameObject, "bigLaz");
 
+        //      while (anim.GetCurrentAnimatorStateInfo(0).normalizedTime < 1.0f)
+        //          yield return null;
+        yield return new WaitForSeconds(2f);
+
+        //shoot lazer [here]
+        ShootLaser();
+
+        yield return new WaitForSeconds(2f);
+        anim.SetBool("inLaser", false);
+
+        yield return new WaitForSeconds(3f);
+        ContinueAnimations(true);
+        canAct = true;
+    }
+
+    void ShootLaser()
+    {
+        Vector3 head = headObject.transform.position;
+        Vector3 shootAt = walkTo;
+        if (jobObject != null)
+            shootAt = jobObject.transform.position;
+        StartCoroutine(TrailOff(0.5f, head, shootAt));
+    }
+
+    IEnumerator TrailOff(float time, Vector3 start, Vector3 end)
+    {
+        GameObject t = BulletTrail(start, end);
+        yield return new WaitForSeconds(time);
+        spawnPool.poolDictionary["trails"].Enqueue(t);
+        t.SetActive(false);
+    }
+
+    public GameObject BulletTrail(Vector3 start, Vector3 end)
+    {
+        float x, y, z;
+        x = Random.Range(-1.2f, 1.2f);
+        y = Random.Range(-1.2f, 1.2f);
+        z = Random.Range(-1.2f, 1.2f);
+        Quaternion offset = Quaternion.Euler(x, y, z);
+        Vector3 dif = (start - end) / 2;
+        Quaternion angle = Quaternion.LookRotation(start - end);
+
+        GameObject trail = spawnPool.poolDictionary["trails"].Dequeue();
+        trail.transform.position = start - dif;
+        trail.transform.rotation = angle * offset;
+        trail.SetActive(true);
+
+        trail.transform.localScale = new Vector3(0.05f, 0.05f, Vector3.Distance(start, end));
+        return trail;
     }
 
     void GunBattery()
