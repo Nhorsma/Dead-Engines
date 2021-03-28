@@ -67,7 +67,7 @@ public class ScriptLoader : MonoBehaviour
 
 		spawnRes.TurnOffThinners();
 
-		NavMeshBuilder.BuildNavMesh();
+		//NavMeshBuilder.BuildNavMesh();
 
 		Debug.Log("end loading");
 

@@ -115,6 +115,30 @@ public class RoomManager : MonoBehaviour
 			setupRoom.Setup(rooms[roomSlotClicked]);
 			PlayClip("wrench");
 		}
+		else if (room == "clonery" && ResourceHandling.metal >= 10 && ResourceHandling.electronics >= 10)
+		{
+			ResourceHandling.metal -= 10;
+			ResourceHandling.electronics -= 10;
+			rooms[roomSlotClicked] = new Clonery(roomSlotClicked, 1);
+			setupRoom.Setup(rooms[roomSlotClicked]);
+			PlayClip("wrench");
+		}
+		else if (room == "barracks" && ResourceHandling.metal >= 10 && ResourceHandling.electronics >= 10)
+		{
+			ResourceHandling.metal -= 10;
+			ResourceHandling.electronics -= 10;
+			rooms[roomSlotClicked] = new Barracks(roomSlotClicked, 1);
+			setupRoom.Setup(rooms[roomSlotClicked]);
+			PlayClip("wrench");
+		}
+		else if (room == "dormitory" && ResourceHandling.metal >= 10 && ResourceHandling.electronics >= 10)
+		{
+			ResourceHandling.metal -= 10;
+			ResourceHandling.metal -= 10;
+			rooms[roomSlotClicked] = new Dormitory(roomSlotClicked, 1);
+			setupRoom.Setup(rooms[roomSlotClicked]);
+			PlayClip("wrench");
+		}
 		else
 		{
 			Debug.Log("Not enough resources to build a " + room + ".");

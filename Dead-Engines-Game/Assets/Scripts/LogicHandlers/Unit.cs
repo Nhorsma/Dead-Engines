@@ -8,7 +8,7 @@ public class Unit : MonoBehaviour
 	private string unitName = "u";			// unit's individual name
     private string job = "none";			// what the unit is doing
     private GameObject jobPos = null;		// where the unit is going
-    private int health = 10;					// how much damage the unit can take
+    private int health = 10;				// how much damage the unit can take
 	private bool justDroppedOff = false;	// is the unit on the way to or from the automaton?
 	private bool justShot = false;			// has the unit fired its gun?
 	private int id = -1;                    // which unit is this?
@@ -17,6 +17,8 @@ public class Unit : MonoBehaviour
     private int attack = 2;
     private int defense = 1;
     private float firingSpeed = 1f;
+
+	private string type;
 
 	public Unit()
 	{
@@ -94,5 +96,35 @@ public class Unit : MonoBehaviour
         get { return firingSpeed; }
         set { firingSpeed = value; }
     }
+
+	public string Type
+	{
+		get { return type; }
+		set { type = value; }
+	}
+
+	public void ChangeType(string newType)
+	{
+		Type = newType;
+
+		if (Type == "standard")
+		{
+			Attack = 2;
+			Defense = 2;
+			Health = 10;
+		}
+		else if (Type == "turtle")
+		{
+			Attack = 1;
+			Defense = 5;
+			Health = 20;
+		}
+		else if (Type == "ambusher")
+		{
+			Attack = 5;
+			Defense = 1;
+			Health = 5;
+		}
+	}
 
 }

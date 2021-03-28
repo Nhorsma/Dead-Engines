@@ -131,6 +131,7 @@ public class SpawnRes : MonoBehaviour
 	/// 1. randomize x & z coords while too close or too far from spawn + matching resource location
 	///	-----[ie first enemy camp spawns near resource 1]
 	/// 2. instantiate the resource
+	/// 3. DO NOT USE, OUTDATED!
 	/// </summary>
 	void SpawnEnemies(int howMany)
 	{

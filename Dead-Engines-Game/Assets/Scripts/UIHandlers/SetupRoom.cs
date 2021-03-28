@@ -50,10 +50,25 @@ public class SetupRoom : MonoBehaviour
 		roomComponents[slot].build.gameObject.SetActive(false);
 		roomComponents[slot].upgrade.gameObject.SetActive(true);
 
-		if (room.Type == "storage")
+		if (room.Type == "storage" || room.Type == "clonery" || room.Type == "barracks" || room.Type == "dormitory")
 		{
-			roomComponents[slot].capacity.text = "0 / " + room.StorageCapacity.ToString();
-			SetupStorage(slot);
+			switch (room.Type)
+			{
+				case "storage":
+					roomComponents[slot].capacity.text = "0 / " + room.StorageCapacity.ToString();
+					SetupStorage(slot);
+					break;
+				case "clonery":
+					SetupClonery(slot);
+					break;
+				case "barracks":
+					SetupBarracks(slot);
+					break;
+				case "dormitory":
+					SetupDormitory(slot);
+					break;
+			}
+
 		}
 		else
 		{
@@ -223,7 +238,34 @@ public class SetupRoom : MonoBehaviour
 
 		roomComponents[slot].scroller.gameObject.SetActive(true);
 
-		LeftOrRight(slot, 1); //change 1 to 4 later 
+		LeftOrRight(slot, 4); //change to real 4 later 
+	}
+
+	public void SetupClonery(int slot)
+	{
+		GameObject scrollerContent = roomComponents[slot].scroller.GetComponent<ScrollRect>().content.gameObject;
+		scrollerContent.GetComponent<GridLayoutGroup>().constraintCount = 2;
+		scrollerContent.GetComponent<GridLayoutGroup>().cellSize = new Vector2(112.5f, 50);
+
+		roomComponents[slot].scroller.gameObject.SetActive(true);
+
+		LeftOrRight(slot, 4); //change to 5 later 
+	}
+
+	public void SetupBarracks(int slot)
+	{
+		GameObject scrollerContent = roomComponents[slot].scroller.GetComponent<ScrollRect>().content.gameObject;
+		scrollerContent.GetComponent<GridLayoutGroup>().constraintCount = 2;
+		scrollerContent.GetComponent<GridLayoutGroup>().cellSize = new Vector2(112.5f, 50);
+
+		roomComponents[slot].scroller.gameObject.SetActive(true);
+
+		LeftOrRight(slot, 4); //change to 6 later 
+	}
+
+	public void SetupDormitory(int slot)
+	{
+		LeftOrRight(slot, 4); //change to 7 later 
 	}
 
 	public void LeftOrRight(int slot, int spriteInList)
