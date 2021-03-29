@@ -22,7 +22,7 @@ public class AutomotonAction : MonoBehaviour
     public Animation climbOut;
     public AutomotonAction aa;
     public UnitManager unitManager;
-    public AudioSource robotSources;
+    public AudioSource robotAmbientSource;
     public AudioHandler audioHandler;
     public SpawningPoolController spawnPool;
 
@@ -37,7 +37,7 @@ public class AutomotonAction : MonoBehaviour
     private void Start()
     {
         layer_mask = LayerMask.GetMask("Ignore Raycast");
-        robotSources.enabled = true;
+        robotAmbientSource.Play();
         rb = GetComponent<Rigidbody>();
         nv = GetComponent<NavMeshAgent>();
         nv.speed = movementSpeed;
