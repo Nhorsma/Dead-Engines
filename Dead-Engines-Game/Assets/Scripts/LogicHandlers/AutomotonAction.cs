@@ -64,7 +64,7 @@ public class AutomotonAction : MonoBehaviour
 
     private void LateUpdate()
     {
-        if (endPhaseOne && isSelected && autoHealth>0)
+        if (endPhaseOne && isSelected && autoHealth>0 && canAct)
         {
             RightClick();
             Controls();
@@ -206,7 +206,7 @@ public class AutomotonAction : MonoBehaviour
     void StartMovement()
     {
         pos = transform.position;
-            audioHandler.PlayClip(gameObject, "robotConfirm1");
+            audioHandler.PlayClip(Camera.main.gameObject, "robotConfirm1");
             anim.SetBool("isWalking", false);
             canMove = false;
             canRotate = true;
@@ -244,7 +244,7 @@ public class AutomotonAction : MonoBehaviour
 
     IEnumerator RaiseAuto()
     {
-        audioHandler.PlayClip(gameObject, "robotConfirm2");
+        audioHandler.PlayClip(Camera.main.gameObject, "robotConfirm2");
         automoton.transform.position = phaseTwoPos;
         anim.SetBool("StartPhaseTwo", true);
         yield return new WaitForSeconds(1f);
@@ -286,7 +286,7 @@ public class AutomotonAction : MonoBehaviour
     IEnumerator GroundPound()
     {
         canAct = false;
-        audioHandler.PlayClip(gameObject, "robotConfirm2");
+        audioHandler.PlayClip(Camera.main.gameObject, "robotConfirm2");
         ContinueAnimations(false);
         anim.SetBool("GroundPound", true);
         yield return new WaitForSeconds(2f);
@@ -306,7 +306,7 @@ public class AutomotonAction : MonoBehaviour
     IEnumerator Punch()
     {
         canAct = false;
-        audioHandler.PlayClip(gameObject, "robotConfirm2");
+        audioHandler.PlayClip(Camera.main.gameObject, "robotConfirm2");
         ContinueAnimations(false);
         anim.SetBool("Punch", true);
         yield return new WaitForSeconds(1f);
@@ -325,14 +325,14 @@ public class AutomotonAction : MonoBehaviour
     IEnumerator Laser()
     {
         canAct = false;
-        audioHandler.PlayClip(gameObject, "robotConfirm2");
+        audioHandler.PlayClip(Camera.main.gameObject, "robotConfirm2");
         ContinueAnimations(false);
         anim.SetBool("inLaser", true);
         audioHandler.PlayClip(gameObject, "bigLaz");
 
         //      while (anim.GetCurrentAnimatorStateInfo(0).normalizedTime < 1.0f)
         //          yield return null;
-        yield return new WaitForSeconds(2f);
+        yield return new WaitForSeconds(2.7f);
 
         //shoot lazer [here]
         ShootLaser();
@@ -354,14 +354,6 @@ public class AutomotonAction : MonoBehaviour
         StartCoroutine(TrailOff(0.5f, head, shootAt));
     }
 
-    IEnumerator TrailOff(float time, Vector3 start, Vector3 end)
-    {
-        GameObject t = BulletTrail(start, end);
-        yield return new WaitForSeconds(time);
-        spawnPool.poolDictionary["trails"].Enqueue(t);
-        t.SetActive(false);
-    }
-
     public GameObject BulletTrail(Vector3 start, Vector3 end)
     {
         float x, y, z;
@@ -372,13 +364,21 @@ public class AutomotonAction : MonoBehaviour
         Vector3 dif = (start - end) / 2;
         Quaternion angle = Quaternion.LookRotation(start - end);
 
-        GameObject trail = spawnPool.poolDictionary["trails"].Dequeue();
+        GameObject trail = spawnPool.poolDictionary["autoLaz"].Dequeue();
         trail.transform.position = start - dif;
         trail.transform.rotation = angle * offset;
         trail.SetActive(true);
 
-        trail.transform.localScale = new Vector3(0.05f, 0.05f, Vector3.Distance(start, end));
+        trail.transform.localScale = new Vector3(1f, 1f, Vector3.Distance(start, end));
         return trail;
+    }
+
+    IEnumerator TrailOff(float time, Vector3 start, Vector3 end)
+    {
+        GameObject t = BulletTrail(start, end);
+        yield return new WaitForSeconds(time);
+        spawnPool.poolDictionary["autoLaz"].Enqueue(t);
+        t.SetActive(false);
     }
 
     void GunBattery()
@@ -410,6 +410,7 @@ public class AutomotonAction : MonoBehaviour
             anim.SetBool("isRotatingLeft", tempLeft);
             anim.SetBool("isRotatingRight", tempRight);
             anim.SetBool("isWalking", tempmove);
+            audioHandler.PlayClip(gameObject, "robotConfirm1");
         }
     }
 

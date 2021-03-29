@@ -15704,6 +15704,14 @@ MonoBehaviour:
     prefab: {fileID: 5961106698798059313, guid: 60dc6924f9da7974f84019a57441fa3d,
       type: 3}
     size: 10
+  - tag: hunterLaz
+    prefab: {fileID: 4267937178310715878, guid: dfba40c89d7e6264592f0e1b18da285b,
+      type: 3}
+    size: 10
+  - tag: autoLaz
+    prefab: {fileID: 3804134668651701739, guid: cff8647eb5cea8549a38ef01b846f5f2,
+      type: 3}
+    size: 2
 --- !u!1 &1107264130
 GameObject:
   m_ObjectHideFlags: 0
@@ -26504,6 +26512,7 @@ MonoBehaviour:
   anteater: {fileID: 963534896745187385, guid: 2918e0da1528d924abc56e8aaed90160, type: 3}
   autoAction: {fileID: 5905536743914566333}
   audioHandler: {fileID: 467610736}
+  spawnPool: {fileID: 1102157339}
   deployedHunters: []
   spawnRadius: 200
   stoppingDistance: 0
@@ -34094,7 +34103,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
   m_PlayOnAwake: 1
-  m_Volume: 1
+  m_Volume: 0.5
   m_Pitch: 1
   Loop: 0
   Mute: 0

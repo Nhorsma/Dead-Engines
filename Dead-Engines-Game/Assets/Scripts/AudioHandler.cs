@@ -27,7 +27,10 @@ public class AudioHandler : MonoBehaviour
             audio = source.GetComponent<AudioSource>();
 
         if (audio.isPlaying)
+        {
+            Debug.Log("something is already playing from "+source);
             return;
+        }
 
         AudioClip clipVar = (AudioClip)this.GetType().GetField(clip).GetValue(this);
 

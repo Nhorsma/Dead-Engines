@@ -8,6 +8,7 @@ public class HunterHandler : MonoBehaviour
     public GameObject automaton, h1, h2, h3, anteater;
     public AutomotonAction autoAction;
     public AudioHandler audioHandler;
+    public SpawningPoolController spawnPool;
 
     public List<GameObject> deployedHunters;
 
@@ -297,26 +298,30 @@ public class HunterHandler : MonoBehaviour
 		hunter_data.JustShot = false;
 	}
 
-	GameObject BulletTrail(Vector3 start, Vector3 end)
+    public GameObject BulletTrail(Vector3 start, Vector3 end)
     {
         float x, y, z;
         x = Random.Range(-1.2f, 1.2f);
         y = Random.Range(-1.2f, 1.2f);
         z = Random.Range(-1.2f, 1.2f);
         Quaternion offset = Quaternion.Euler(x, y, z);
-
         Vector3 dif = (start - end) / 2;
         Quaternion angle = Quaternion.LookRotation(start - end);
-        GameObject trail = (GameObject)Instantiate(Resources.Load("RedBulletTrail"), start - dif, angle * offset);
 
-        trail.transform.localScale = new Vector3(0.05f, 0.05f, Vector3.Distance(start, end));
+        GameObject trail = spawnPool.poolDictionary["hunterLaz"].Dequeue();
+        trail.transform.position = start - dif;
+        trail.transform.rotation = angle * offset;
+        trail.SetActive(true);
+
+        trail.transform.localScale = new Vector3(0.5f, 0.5f, Vector3.Distance(start, end));
         return trail;
     }
     IEnumerator TrailOff(float time, Vector3 start, Vector3 end)
     {
         GameObject t = BulletTrail(start, end);
         yield return new WaitForSeconds(time);
-        Destroy(t);
+        spawnPool.poolDictionary["hunterLaz"].Enqueue(t);
+        t.SetActive(false);
     }
 
     bool CheckIfAtDestination(GameObject hunter)
