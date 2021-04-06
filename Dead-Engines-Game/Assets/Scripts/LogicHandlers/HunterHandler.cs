@@ -29,9 +29,9 @@ public class HunterHandler : MonoBehaviour
 
         if(Input.GetKeyDown(KeyCode.P))
         {
-            //SpawnAnteater();
-            isDeployed = true;
-            SpawnHunter();
+            SpawnAnteater();
+            //isDeployed = true;
+            //SpawnHunter();
         }
     }
 
