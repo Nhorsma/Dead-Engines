@@ -8,7 +8,7 @@ public class AutomotonAction : MonoBehaviour
     public Animator anim;
     public float movementSpeed, startTurnSpeed, turnSpeed;
     public float startAngle, target, ny;
-    public bool canMove,canRotate, isWalking, rotLeft, rotRight, canAct;
+    public bool canMove,canRotate, isWalking, rotLeft, rotRight, canAct, canLazer, canBarrage;
     public bool tempmove, temprotate, tempwalking, tempLeft, tempRight;
     Vector3 pos, walkTo;
     NavMeshAgent nv;
@@ -276,9 +276,13 @@ public class AutomotonAction : MonoBehaviour
             {
                 StartCoroutine(Punch());
             }
-            if (Input.GetKeyDown(move_e))
+            if (canLazer && Input.GetKeyDown(move_e))
             {
                 StartCoroutine(Laser());
+            }
+            if(canBarrage && Input.GetKeyDown(move_r))
+            {
+                StartCoroutine(GunBarrage());
             }
         }
     }
@@ -351,7 +355,7 @@ public class AutomotonAction : MonoBehaviour
         Vector3 shootAt = walkTo;
         if (jobObject != null)
             shootAt = jobObject.transform.position;
-        StartCoroutine(TrailOff(0.5f, head, shootAt));
+        StartCoroutine(TrailOff("autoLaz",0.5f, head, shootAt));
     }
 
     public GameObject BulletTrail(Vector3 start, Vector3 end)
@@ -373,17 +377,44 @@ public class AutomotonAction : MonoBehaviour
         return trail;
     }
 
-    IEnumerator TrailOff(float time, Vector3 start, Vector3 end)
+    IEnumerator TrailOff(string type, float time, Vector3 start, Vector3 end)
     {
         GameObject t = BulletTrail(start, end);
         yield return new WaitForSeconds(time);
-        spawnPool.poolDictionary["autoLaz"].Enqueue(t);
+        spawnPool.poolDictionary[type].Enqueue(t);
         t.SetActive(false);
+        Debug.Log("spawned " + type);
     }
 
-    void GunBattery()
+    IEnumerator GunBarrage()
     {
+        canAct = false;
+        audioHandler.PlayClip(Camera.main.gameObject, "robotConfirm2");
+        yield return new WaitForSeconds(0.75f);
+        Debug.Log("shooting");
+        StartCoroutine(ShootGun());
+        yield return new WaitForSeconds(0.75f);
 
+        canAct = true;
+    }
+
+    IEnumerator ShootGun()
+    {
+        float x, y, z;
+        x = Random.Range(-10f, 10f);
+        y = Random.Range(-10f, 10f);
+        z = Random.Range(-10f, 10f);
+        Vector3 offset = new Vector3(x, y, z);
+
+        Vector3 shootAt = walkTo + offset;
+        if (jobObject != null)
+            shootAt = jobObject.transform.position;
+        audioHandler.PlayClip(automoton, "machineGun");
+        for (int i = 0; i < 10; i++)
+        {
+            yield return new WaitForSeconds(0.15f);
+            StartCoroutine(TrailOff("trails",0.05f, transform.position + new Vector3(0, 50f, 0), shootAt));
+        }
     }
 
     void ContinueAnimations(bool a)

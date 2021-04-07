@@ -15,7 +15,7 @@ public class AudioHandler : MonoBehaviour
     public AudioClip enemyAttack1, enemyAttack2, enemyDead1, enemyDead2;
 
     //shooting and stuff
-    public AudioClip smallGun, smallLaz, bigGun, bigLaz, explosion, metalHit;
+    public AudioClip smallGun, smallLaz, bigGun, bigLaz, explosion, metalHit, machineGun;
 
 
     public void PlayClip(GameObject source, string clip)
