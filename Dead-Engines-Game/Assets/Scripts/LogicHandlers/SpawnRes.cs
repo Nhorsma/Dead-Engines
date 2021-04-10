@@ -6,15 +6,15 @@ using UnityEngine.SceneManagement;
 public class SpawnRes : MonoBehaviour
 {
 
-	public GameObject res1, res2, res3, enemy;          // resource + enemy game objects (prefabs)
-	public GameObject thin_res1, thin_res2, thin_res3, thin_encampment;  // thinOut attached
-    private GameObject r1, r2, r3;                      // the clones/instantiations of the resources (to be returned)
+	public GameObject metal1, metal2, electronics, crater, enemy;          // resource + enemy game objects (prefabs)
+	public GameObject thin_metal1, thin_metal2, thin_electronics, thin_oil, thin_encampment;  // thinOut attached
+    private GameObject m1, m2, e, c;                      // the clones/instantiations of the resources (to be returned)
 	public GameObject autoObj;
 	public Transform startPos;							// where the robot body is located
 	public int s_maxDistance, s_minDistance;			// max/min distance from the start position
 	public int r_maxDistance, r_minDistance;			// max/min distance from an unspecified resource
 	public float e_maxDistance, e_minDistance;			// max/min distance from an enemy camp
-	private Transform t_res1, t_res2, t_res3;			// transforms used to calculate the above distances
+	private Transform t_metal1, t_metal2, t_electronics;			// transforms used to calculate the above distances
 	public int howManyEncampments;                      // how many enemies to spawn
 	public int low_range;
 	public int high_range;
@@ -96,8 +96,8 @@ public class SpawnRes : MonoBehaviour
 				z = Random.Range(-(low_range - 1), (high_range));
 			} while (Vector3.Distance(new Vector3(startPos.position.x+x, 0, startPos.position.z+z), startPos.position) >= s_maxDistance || Vector3.Distance(new Vector3(startPos.position.x + x, 0, startPos.position.z + z), startPos.position) <= s_minDistance);
 		//	Debug.Log("Spawned res1");
-			r1 = Instantiate(res1, new Vector3(startPos.position.x + x, -6.5f, startPos.position.z + z), Quaternion.identity);
-			t_res1 = r1.transform;
+			m1 = Instantiate(metal1, new Vector3(startPos.position.x + x, -6.5f, startPos.position.z + z), Quaternion.identity);
+			t_metal1 = m1.transform;
 		}
 		if (resNum == 2)
 		{
@@ -106,10 +106,10 @@ public class SpawnRes : MonoBehaviour
 				x = Random.Range(-(low_range - 1), (high_range));
 				z = Random.Range(-(low_range - 1), (high_range));
 			} while (Vector3.Distance(new Vector3(startPos.position.x + x, 0, startPos.position.z + z), startPos.position) >= s_maxDistance || Vector3.Distance(new Vector3(startPos.position.x + x, 0, startPos.position.z + z), startPos.position) <= s_minDistance 
-				|| Vector3.Distance(new Vector3(startPos.position.x + x, 0, startPos.position.z + z), t_res1.position) >= r_maxDistance || Vector3.Distance(new Vector3(startPos.position.x + x, 0, startPos.position.z + z), t_res1.position) <= r_minDistance);
+				|| Vector3.Distance(new Vector3(startPos.position.x + x, 0, startPos.position.z + z), t_metal1.position) >= r_maxDistance || Vector3.Distance(new Vector3(startPos.position.x + x, 0, startPos.position.z + z), t_metal1.position) <= r_minDistance);
 		//	Debug.Log("Spawned res2");
-			r2 = Instantiate(res2, new Vector3(startPos.position.x + x, -6.5f, startPos.position.z + z), Quaternion.identity);
-			t_res2 = r2.transform;
+			m2 = Instantiate(metal2, new Vector3(startPos.position.x + x, -6.5f, startPos.position.z + z), Quaternion.identity);
+			t_metal2 = m2.transform;
 		}
 		if (resNum == 3)
 		{
@@ -118,11 +118,11 @@ public class SpawnRes : MonoBehaviour
 				x = Random.Range(-(low_range - 1), (high_range));
 				z = Random.Range(-(low_range - 1), (high_range));
 			} while (Vector3.Distance(new Vector3(startPos.position.x + x, 0, startPos.position.z + z), startPos.position) >= s_maxDistance || Vector3.Distance(new Vector3(startPos.position.x + x, 0, startPos.position.z + z), startPos.position) <= s_minDistance 
-				|| Vector3.Distance(new Vector3(startPos.position.x + x, 0, startPos.position.z + z), t_res1.position) >= r_maxDistance || Vector3.Distance(new Vector3(startPos.position.x + x, 0, startPos.position.z + z), t_res1.position) <= r_minDistance 
-				|| Vector3.Distance(new Vector3(startPos.position.x + x, 0, startPos.position.z + z), t_res2.position) >= r_maxDistance || Vector3.Distance(new Vector3(startPos.position.x + x, 0, startPos.position.z + z), t_res2.position) <= r_minDistance);
+				|| Vector3.Distance(new Vector3(startPos.position.x + x, 0, startPos.position.z + z), t_metal1.position) >= r_maxDistance || Vector3.Distance(new Vector3(startPos.position.x + x, 0, startPos.position.z + z), t_metal1.position) <= r_minDistance 
+				|| Vector3.Distance(new Vector3(startPos.position.x + x, 0, startPos.position.z + z), t_metal2.position) >= r_maxDistance || Vector3.Distance(new Vector3(startPos.position.x + x, 0, startPos.position.z + z), t_metal2.position) <= r_minDistance);
 		//	Debug.Log("Spawned res3");
-			r3 = Instantiate(res3, new Vector3(startPos.position.x + x, -6.5f, startPos.position.z + z), Quaternion.identity);
-			t_res3 = r3.transform;
+			e = Instantiate(electronics, new Vector3(startPos.position.x + x, -6.5f, startPos.position.z + z), Quaternion.identity);
+			t_electronics = e.transform;
 		}
 		else return;
 	}
@@ -145,7 +145,7 @@ public class SpawnRes : MonoBehaviour
 					x = Random.Range(-(low_range - 1), (high_range));
 					z = Random.Range(-(low_range - 1), (high_range));
 				} while (Vector3.Distance(new Vector3(startPos.position.x + x, 0, startPos.position.z + z), startPos.position) >= s_maxDistance || Vector3.Distance(new Vector3(startPos.position.x + x, 0, startPos.position.z + z), startPos.position) <= s_minDistance
-				|| Vector3.Distance(new Vector3(startPos.position.x + x, 0, startPos.position.z + z), t_res1.position) >= e_maxDistance || Vector3.Distance(new Vector3(startPos.position.x + x, 0, startPos.position.z + z), t_res1.position) <= e_minDistance
+				|| Vector3.Distance(new Vector3(startPos.position.x + x, 0, startPos.position.z + z), t_metal1.position) >= e_maxDistance || Vector3.Distance(new Vector3(startPos.position.x + x, 0, startPos.position.z + z), t_metal1.position) <= e_minDistance
 				);
 			//	Debug.Log("Spawned enemy");
 				var e = Instantiate(enemy, new Vector3(startPos.position.x + x, -6.5f, startPos.position.z + z), Quaternion.identity);
@@ -157,7 +157,7 @@ public class SpawnRes : MonoBehaviour
 					x = Random.Range(-(low_range - 1), (high_range));
 					z = Random.Range(-(low_range - 1), (high_range));
 				} while (Vector3.Distance(new Vector3(startPos.position.x + x, 0, startPos.position.z + z), startPos.position) >= s_maxDistance || Vector3.Distance(new Vector3(startPos.position.x + x, 0, startPos.position.z + z), startPos.position) <= s_minDistance
-				|| Vector3.Distance(new Vector3(startPos.position.x + x, 0, startPos.position.z + z), t_res2.position) >= e_maxDistance || Vector3.Distance(new Vector3(startPos.position.x + x, 0, startPos.position.z + z), t_res2.position) <= e_minDistance
+				|| Vector3.Distance(new Vector3(startPos.position.x + x, 0, startPos.position.z + z), t_metal2.position) >= e_maxDistance || Vector3.Distance(new Vector3(startPos.position.x + x, 0, startPos.position.z + z), t_metal2.position) <= e_minDistance
 				);
 			//	Debug.Log("Spawned enemy");
 				var e = Instantiate(enemy, new Vector3(startPos.position.x + x, -6.5f, startPos.position.z + z), Quaternion.identity);
@@ -169,7 +169,7 @@ public class SpawnRes : MonoBehaviour
 					x = Random.Range(-(low_range - 1), (high_range));
 					z = Random.Range(-(low_range - 1), (high_range));
 				} while (Vector3.Distance(new Vector3(startPos.position.x + x, 0, startPos.position.z + z), startPos.position) >= s_maxDistance || Vector3.Distance(new Vector3(startPos.position.x + x, 0, startPos.position.z + z), startPos.position) <= s_minDistance
-				|| Vector3.Distance(new Vector3(startPos.position.x + x, 0, startPos.position.z + z), t_res3.position) >= e_maxDistance || Vector3.Distance(new Vector3(startPos.position.x + x, 0, startPos.position.z + z), t_res3.position) <= e_minDistance
+				|| Vector3.Distance(new Vector3(startPos.position.x + x, 0, startPos.position.z + z), t_electronics.position) >= e_maxDistance || Vector3.Distance(new Vector3(startPos.position.x + x, 0, startPos.position.z + z), t_electronics.position) <= e_minDistance
 				);
 			//	Debug.Log("Spawned enemy");
 				var e = Instantiate(enemy, new Vector3(startPos.position.x + x, -6.5f, startPos.position.z + z), Quaternion.identity);
@@ -209,15 +209,15 @@ public class SpawnRes : MonoBehaviour
 
 			if (x % 2 == 0 && z % 2 == 0)
 			{
-				outer_res = Instantiate(thin_res1, new Vector3(x, -6.5f, z), Quaternion.identity);
+				outer_res = Instantiate(thin_metal1, new Vector3(x, -6.5f, z), Quaternion.identity);
 			}
 			else if (x % 2 != 0 && z % 2 != 0)
 			{
-				outer_res = Instantiate(thin_res2, new Vector3(x, -6.5f, z), Quaternion.identity);
+				outer_res = Instantiate(thin_metal2, new Vector3(x, -6.5f, z), Quaternion.identity);
 			}
 			else if ((x % 2 != 0 && z % 2 == 0) || (x % 2 == 0 && z % 2 != 0))
 			{
-				outer_res = Instantiate(thin_res3, new Vector3(x, -6.5f, z), Quaternion.identity);
+				outer_res = Instantiate(thin_electronics, new Vector3(x, -6.5f, z), Quaternion.identity);
 			}
 			outerResources[i] = outer_res;
 		}
@@ -235,15 +235,15 @@ public class SpawnRes : MonoBehaviour
 
 			if (x % 2 == 0 && z % 2 == 0)
 			{
-				inner_res = Instantiate(thin_res1, new Vector3(x, -6.5f, z), Quaternion.identity);				// change res1 with new resource later
+				inner_res = Instantiate(thin_oil, new Vector3(x, -6.5f, z), Quaternion.identity);				// right now, oil is 2x as likely to spawn than crater
 			}
 			else if (x % 2 != 0 && z % 2 != 0)
 			{
-				inner_res = Instantiate(thin_res2, new Vector3(x, -6.5f, z), Quaternion.identity);
+				inner_res = Instantiate(crater, new Vector3(x, -6.5f, z), Quaternion.identity);
 			}
 			else if ((x % 2 != 0 && z % 2 == 0) || (x % 2 == 0 && z % 2 != 0))
 			{
-				inner_res = Instantiate(thin_res3, new Vector3(x, -6.5f, z), Quaternion.identity);
+				inner_res = Instantiate(thin_oil, new Vector3(x, -6.5f, z), Quaternion.identity);
 			}
 			innerResources[i] = inner_res;
 		}
@@ -264,34 +264,34 @@ public class SpawnRes : MonoBehaviour
 
 			if (x % 2 == 0 && z % 2 == 0)
 			{
-				core_res = Instantiate(thin_res1, new Vector3(x, -6.5f, z), Quaternion.identity);				// change res1 with new resource later
+				core_res = Instantiate(thin_metal1, new Vector3(x, -6.5f, z), Quaternion.identity);				// change thin_res with new resource later
 			}
 			else if (x % 2 != 0 && z % 2 != 0)
 			{
-				core_res = Instantiate(thin_res2, new Vector3(x, -6.5f, z), Quaternion.identity);
+				core_res = Instantiate(thin_metal2, new Vector3(x, -6.5f, z), Quaternion.identity);
 			}
 			else if ((x % 2 != 0 && z % 2 == 0) || (x % 2 == 0 && z % 2 != 0))
 			{
-				core_res = Instantiate(thin_res3, new Vector3(x, -6.5f, z), Quaternion.identity);
+				core_res = Instantiate(thin_electronics, new Vector3(x, -6.5f, z), Quaternion.identity);
 			}
 			coreResources[i] = core_res;
 		}
 	}
 
-	//needs to be reworked
+	//needs to be reworked ... uh still not sure about this one???
 	public GameObject[] GetResources()
 	{
-		return new GameObject[] { r1, r2, r3};
+		return new GameObject[] { metal1, metal2, electronics};
 	}
 
-	//needs to be reworked
+	//needs to be reworked ... I think it's done?
 	public List<GameObject> GetAllResources()
 	{
 		List<GameObject> allResources = new List<GameObject>();
 
-		allResources.Add(r1);
-		allResources.Add(r2);
-		allResources.Add(r3);
+		allResources.Add(metal1);
+		allResources.Add(metal2);
+		allResources.Add(electronics);
 
 		foreach (GameObject o in outerResources)
 		{
