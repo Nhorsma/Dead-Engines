@@ -30,7 +30,7 @@ public class HunterHandler : MonoBehaviour
         if(Input.GetKeyDown(KeyCode.P))
         {
             SpawnAnteater();
-            //isDeployed = true;
+            isDeployed = true;
             //SpawnHunter();
         }
     }
@@ -383,7 +383,6 @@ public class HunterHandler : MonoBehaviour
         hunterObj.GetComponent<Hunter>().Id = 100;
         hunterObj.GetComponent<NavMeshAgent>().speed = hunterObj.GetComponent<Hunter>().Speed;
 
-        Debug.Log(" snout: " + hunterObj.GetComponent<SnoutBehavior>());
         hunterObj.GetComponent<SnoutBehavior>().pointTo = automaton;
     }
 }
