@@ -333,7 +333,6 @@ GameObject:
   - component: {fileID: 5605635196790160352}
   - component: {fileID: 892236682729146428}
   - component: {fileID: 1931198819485540340}
-  - component: {fileID: 4605641178989040248}
   m_Layer: 0
   m_Name: Anteater_Boss
   m_TagString: Untagged
@@ -352,7 +351,8 @@ Transform:
   m_LocalPosition: {x: 38.526173, y: -7.010162, z: 17.97}
   m_LocalScale: {x: 1.5, y: 1.5, z: 1.5}
   m_Children:
-  - {fileID: 2830129495292524495}
+  - {fileID: 6287944622631174824}
+  - {fileID: 4090266948963729583}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -365,7 +365,7 @@ NavMeshAgent:
   m_GameObject: {fileID: 963534896745187385}
   m_Enabled: 1
   m_AgentTypeID: 0
-  m_Radius: 14.63
+  m_Radius: 13.49
   m_Speed: 10
   m_Acceleration: 8
   avoidancePriority: 50
@@ -375,7 +375,7 @@ NavMeshAgent:
   m_AutoBraking: 1
   m_AutoRepath: 1
   m_Height: 35.54
-  m_BaseOffset: 0
+  m_BaseOffset: -5.86
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
 --- !u!65 &4484421922898435958
@@ -389,8 +389,8 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 25.62971, y: 40.05267, z: 25.483286}
-  m_Center: {x: -7.5962343, y: 19.526335, z: 1.3282862}
+  m_Size: {x: 24.781965, y: 36.821884, z: 19.306755}
+  m_Center: {x: 0.9219653, y: 25.19158, z: 4.416558}
 --- !u!114 &5605635196790160352
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -519,25 +519,6 @@ MonoBehaviour:
   - {fileID: 8742503284409471642}
   - {fileID: 1160092570034537806}
   - {fileID: 1235933293492956050}
---- !u!95 &4605641178989040248
-Animator:
-  serializedVersion: 3
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 963534896745187385}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 3c9f70ab5d5d0704c86e86df41ba4f55, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &994385375108210980
 GameObject:
   m_ObjectHideFlags: 0
@@ -683,6 +664,8 @@ Transform:
   - {fileID: 7546121348326166646}
   - {fileID: 1436717715800340176}
   - {fileID: 8299808428801741419}
+  - {fileID: 4879098638171289316}
+  - {fileID: 7478440798971386472}
   m_Father: {fileID: 7607759552599265412}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -762,40 +745,6 @@ Transform:
   m_Children:
   - {fileID: 2574494975699183294}
   m_Father: {fileID: 7346417320064664695}
-  m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &1216897710334113669
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 2830129495292524495}
-  m_Layer: 0
-  m_Name: Rotation GameObject
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &2830129495292524495
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1216897710334113669}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -10.316291, y: 27.298832, z: 11.121451}
-  m_LocalScale: {x: 0.6666667, y: 0.6666667, z: 0.6666667}
-  m_Children:
-  - {fileID: 4879098638171289316}
-  - {fileID: 7478440798971386472}
-  - {fileID: 6287944622631174824}
-  - {fileID: 4090266948963729583}
-  m_Father: {fileID: 438249180041892483}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1235933293492956050
@@ -1010,14 +959,14 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1805658550958259496}
-  m_LocalRotation: {x: 0.00049368397, y: 0.70710665, z: 0.00049368397, w: 0.70710665}
-  m_LocalPosition: {x: 9.7, y: 12.8, z: 5.7}
-  m_LocalScale: {x: 1.5000002, y: 1.5000001, z: 1.5000001}
+  m_LocalRotation: {x: -0, y: -0, z: -0.17675759, w: 0.9842544}
+  m_LocalPosition: {x: -1.594799, y: 18.888395, z: -0.30517292}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 317482095639265914}
-  m_Father: {fileID: 2830129495292524495}
-  m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0.080000006}
+  m_Father: {fileID: 2075871392359255326}
+  m_RootOrder: 6
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0.080000006}
 --- !u!1 &1814461524755690020
 GameObject:
   m_ObjectHideFlags: 0
@@ -1542,6 +1491,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4090266948963729583}
+  - component: {fileID: 80330180366004966}
   m_Layer: 0
   m_Name: Anteater_Animated
   m_TagString: Untagged
@@ -1556,15 +1506,34 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3713319816286788117}
-  m_LocalRotation: {x: 0, y: 0.7071068, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: 13.1, y: -32.7, z: -7}
-  m_LocalScale: {x: 1.5, y: 1.5, z: 1.5}
+  m_LocalRotation: {x: -0, y: 0.7071068, z: -0, w: 0.7071068}
+  m_LocalPosition: {x: 2.9666672, y: 5.498831, z: -1.166667}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 5207753403557509180}
   - {fileID: 7607759552599265412}
-  m_Father: {fileID: 2830129495292524495}
-  m_RootOrder: 3
+  m_Father: {fileID: 438249180041892483}
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
+--- !u!95 &80330180366004966
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3713319816286788117}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 3c9f70ab5d5d0704c86e86df41ba4f55, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &3774907068176599462
 GameObject:
   m_ObjectHideFlags: 0
@@ -2369,12 +2338,12 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5772816211174067950}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 15.388525, y: -58.438007, z: 28.02725}
-  m_LocalScale: {x: 1.5, y: 1.5, z: 1.5}
+  m_LocalRotation: {x: -0, y: -0, z: -0.17744471, w: 0.9841308}
+  m_LocalPosition: {x: -32.12923, y: -20.414242, z: 3.4871802}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
-  m_Father: {fileID: 2830129495292524495}
-  m_RootOrder: 1
+  m_Father: {fileID: 2075871392359255326}
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!137 &4894322351389901687
 SkinnedMeshRenderer:
@@ -2693,12 +2662,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6913503468696503562}
   m_LocalRotation: {x: -0, y: 0.7071068, z: -0, w: 0.7071068}
-  m_LocalPosition: {x: 15.474436, y: -40.94825, z: -10.532177}
-  m_LocalScale: {x: 1.75, y: 1.75, z: 1.75}
+  m_LocalPosition: {x: 4.5496244, y: 0, z: -3.5214515}
+  m_LocalScale: {x: 1.1666667, y: 1.1666667, z: 1.1666667}
   m_Children:
   - {fileID: 2457152682897039154}
-  m_Father: {fileID: 2830129495292524495}
-  m_RootOrder: 2
+  m_Father: {fileID: 438249180041892483}
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
 --- !u!1 &7000502119448434470
 GameObject:

@@ -125,19 +125,26 @@ public class HunterHandler : MonoBehaviour
                 Transform hunterTransform = h.GetComponentInChildren<Transform>();
                 float distance = Vector3.Distance(h.transform.position, automaton.transform.position);
 
+                Animator anim = h.GetComponent<Animator>();
+                if (h.name.Equals(anteater.name+"(Clone)"))
+                {
+                    Debug.Log(" this is anteater");
+                    anim = h.GetComponentInChildren<Animator>();
+                }
+
                 if (h.GetComponent<Hunter>().NextMove)
                 {
                     if (distance > closeRange)
                     {
                         GetClose(automaton.transform.position, h);
-                        h.GetComponent<Animator>().SetBool("isShooting", false);
-                        h.GetComponent<Animator>().SetBool("isWalking", true);
+                        anim.SetBool("isShooting", false);
+                        anim.SetBool("isWalking", true);
 
                     }
                     else
                     {
-                        h.GetComponent<Animator>().SetBool("isShooting", true);
-                        h.GetComponent<Animator>().SetBool("isWalking", false);
+                        anim.SetBool("isShooting", true);
+                        anim.SetBool("isWalking", false);
                         if (!h.GetComponent<Hunter>().JustShot)
                         {
                             Fire(h, h.GetComponent<Hunter>());
@@ -373,7 +380,7 @@ public class HunterHandler : MonoBehaviour
     {
         Vector3 spawnPlace = automaton.transform.position + RandomSpawnPoint();
         GameObject hunterObj = Instantiate(anteater);
-        hunterObj.GetComponent<Hunter>().Speed = 4f;
+        hunterObj.GetComponent<Hunter>().Speed = 20f;
         hunterObj.GetComponent<Hunter>().Health = 10;
         hunterObj.GetComponent<Hunter>().Attack = 10;
         hunterObj.GetComponent<Hunter>().FiringSpeed = 6f;
