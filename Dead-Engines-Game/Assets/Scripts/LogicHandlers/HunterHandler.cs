@@ -131,11 +131,13 @@ public class HunterHandler : MonoBehaviour
                     {
                         GetClose(automaton.transform.position, h);
                         h.GetComponent<Animator>().SetBool("isShooting", false);
-                        
+                        h.GetComponent<Animator>().SetBool("isWalking", true);
+
                     }
                     else
                     {
                         h.GetComponent<Animator>().SetBool("isShooting", true);
+                        h.GetComponent<Animator>().SetBool("isWalking", false);
                         if (!h.GetComponent<Hunter>().JustShot)
                         {
                             Fire(h, h.GetComponent<Hunter>());
