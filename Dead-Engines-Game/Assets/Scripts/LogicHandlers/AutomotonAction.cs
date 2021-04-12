@@ -6,10 +6,11 @@ using UnityEngine.AI;
 public class AutomotonAction : MonoBehaviour
 {
     public Animator anim;
+
     public float movementSpeed, startTurnSpeed, turnSpeed;
-    public float startAngle, target, ny;
-    public bool canMove,canRotate, isWalking, rotLeft, rotRight, canAct, canLazer, canBarrage;
-    public bool tempmove, temprotate, tempwalking, tempLeft, tempRight;
+    private float startAngle, target, ny;
+    private bool canMove,canRotate, isWalking, rotLeft, rotRight, canAct, canLazer, canBarrage;
+    private bool tempmove, temprotate, tempwalking, tempLeft, tempRight;
     Vector3 pos, walkTo;
     NavMeshAgent nv;
     Rigidbody rb;
@@ -17,7 +18,7 @@ public class AutomotonAction : MonoBehaviour
 
     public static bool endPhaseOne;
     public bool isSelected;
-    public GameObject automoton, fog, footObject, fistObject, headObject, dustCloud, explosion;
+    public GameObject automoton, fog, footObject, fistObject, headObject, dustCloud, explosion, lazer;
     public Vector3 phaseOnePos, phaseTwoPos;
     public Animation climbOut;
     public AutomotonAction aa;
@@ -25,6 +26,8 @@ public class AutomotonAction : MonoBehaviour
     public AudioSource robotAmbientSource;
     public AudioHandler audioHandler;
     public SpawningPoolController spawnPool;
+    public HunterHandler hunterHandler;
+    public EncampmentHandler encampHandler;
 
     KeyCode move_q, move_w, move_e, move_r;
     Collider footCollider, fistCollider;
@@ -42,6 +45,7 @@ public class AutomotonAction : MonoBehaviour
         nv = GetComponent<NavMeshAgent>();
         nv.speed = movementSpeed;
         canMove = canRotate = isWalking = isSelected = false;
+        canLazer = canBarrage = true;
 
         phaseTwoPos = phaseOnePos = automoton.transform.position;
         phaseTwoPos -= new Vector3(13.2f, -41.49f, 12.3f);
@@ -345,7 +349,6 @@ public class AutomotonAction : MonoBehaviour
         anim.SetBool("inLaser", false);
 
         yield return new WaitForSeconds(3f);
-        ContinueAnimations(true);
         canAct = true;
     }
 
@@ -354,11 +357,24 @@ public class AutomotonAction : MonoBehaviour
         Vector3 head = headObject.transform.position;
         Vector3 shootAt = walkTo;
         if (jobObject != null)
+        {
             shootAt = jobObject.transform.position;
-        StartCoroutine(TrailOff("autoLaz",0.5f, head, shootAt));
+        }
+        StartCoroutine(TrailOff("auto",0.5f, head, shootAt));
     }
 
-    public GameObject BulletTrail(Vector3 start, Vector3 end)
+    IEnumerator TrailOff(string type, float time, Vector3 start, Vector3 end)
+    {
+        GameObject t = BulletTrail(type, start, end);
+        yield return new WaitForSeconds(time);
+
+        if (type == "auto")
+            Destroy(t);
+        else
+            t.SetActive(false);
+    }
+
+    public GameObject BulletTrail(string type, Vector3 start, Vector3 end)
     {
         float x, y, z;
         x = Random.Range(-1.2f, 1.2f);
@@ -368,7 +384,12 @@ public class AutomotonAction : MonoBehaviour
         Vector3 dif = (start - end) / 2;
         Quaternion angle = Quaternion.LookRotation(start - end);
 
-        GameObject trail = spawnPool.poolDictionary["autoLaz"].Dequeue();
+        GameObject trail;
+        if (type == "auto")
+            trail = Instantiate(lazer);
+        else
+            trail = spawnPool.poolDictionary["trails"].Dequeue();
+
         trail.transform.position = start - dif;
         trail.transform.rotation = angle * offset;
         trail.SetActive(true);
@@ -377,21 +398,11 @@ public class AutomotonAction : MonoBehaviour
         return trail;
     }
 
-    IEnumerator TrailOff(string type, float time, Vector3 start, Vector3 end)
-    {
-        GameObject t = BulletTrail(start, end);
-        yield return new WaitForSeconds(time);
-        spawnPool.poolDictionary[type].Enqueue(t);
-        t.SetActive(false);
-        Debug.Log("spawned " + type);
-    }
-
     IEnumerator GunBarrage()
     {
         canAct = false;
         audioHandler.PlayClip(Camera.main.gameObject, "robotConfirm2");
         yield return new WaitForSeconds(0.75f);
-        Debug.Log("shooting");
         StartCoroutine(ShootGun());
         yield return new WaitForSeconds(0.75f);
 

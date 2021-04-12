@@ -19634,8 +19634,9 @@ MonoBehaviour:
   audioHandler: {fileID: 467610736}
   explosion: {fileID: 3118891267616825007, guid: 33b774b5819a306478e54bab16c216bb,
     type: 3}
-  spawnBuffer: 5
-  canTrigger: 0
+  spawnBuffer: 3
+  damage: 15
+  canCollect: 1
 --- !u!1 &1379266040
 GameObject:
   m_ObjectHideFlags: 0
@@ -27508,8 +27509,9 @@ MonoBehaviour:
   audioHandler: {fileID: 467610736}
   explosion: {fileID: 3118891267616825007, guid: 33b774b5819a306478e54bab16c216bb,
     type: 3}
-  spawnBuffer: 100
-  canTrigger: 0
+  spawnBuffer: 3
+  damage: 15
+  canCollect: 1
 --- !u!65 &1881537981
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -33888,22 +33890,6 @@ MonoBehaviour:
   movementSpeed: 8
   startTurnSpeed: 80
   turnSpeed: 80
-  startAngle: 0
-  target: 0
-  ny: 0
-  canMove: 0
-  canRotate: 0
-  isWalking: 0
-  rotLeft: 0
-  rotRight: 0
-  canAct: 0
-  canLazer: 0
-  canBarrage: 0
-  tempmove: 0
-  temprotate: 0
-  tempwalking: 0
-  tempLeft: 0
-  tempRight: 0
   isSelected: 0
   automoton: {fileID: 5905536743914566335}
   fog: {fileID: 1951739293}
@@ -33914,6 +33900,7 @@ MonoBehaviour:
     type: 3}
   explosion: {fileID: 3118891267616825007, guid: 33b774b5819a306478e54bab16c216bb,
     type: 3}
+  lazer: {fileID: 3804134668651701739, guid: cff8647eb5cea8549a38ef01b846f5f2, type: 3}
   phaseOnePos: {x: 0, y: 0, z: 0}
   phaseTwoPos: {x: 0, y: 0, z: 0}
   climbOut: {fileID: 0}
@@ -33922,6 +33909,8 @@ MonoBehaviour:
   robotAmbientSource: {fileID: 8015631915230817966}
   audioHandler: {fileID: 467610736}
   spawnPool: {fileID: 1102157339}
+  hunterHandler: {fileID: 0}
+  encampHandler: {fileID: 0}
   autoHealth: 0
   startingAutoHealth: 100
 --- !u!114 &5905536743914566334

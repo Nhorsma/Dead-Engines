@@ -11,10 +11,21 @@ public class AutoCombatCollider : MonoBehaviour
     public AudioHandler audioHandler;
     public GameObject explosion;
 
-    public float spawnBuffer;
-	public bool canTrigger = false;
+    public float spawnBuffer, damage;
+	bool canTrigger = false;
+    public bool canCollect;
 
-	void Update()
+    private void Awake()
+    {
+        resourceHandling = FindObjectOfType<ResourceHandling>();
+        encampmentHandler = FindObjectOfType<EncampmentHandler>();
+        //enemyHandler = FindObjectOfType<EnemyHandler>();
+        enemyHandler = (EnemyHandler)FindObjectOfType(typeof(EnemyHandler));
+        hunterHandler = FindObjectOfType<HunterHandler>();
+        audioHandler = FindObjectOfType<AudioHandler>();
+    }
+
+    void Update()
 	{
         if (!canTrigger)
         {
@@ -42,11 +53,11 @@ public class AutoCombatCollider : MonoBehaviour
             }
 			if (other.gameObject.tag == "Hunter")
 			{
-				hunterHandler.DealHunterDamage(other.gameObject,15);
+				hunterHandler.DealHunterDamage(other.gameObject, (int)damage);
 				SpawnExplosion(other.gameObject);
                 canTrigger = false;
             }
-			if (other.gameObject.tag == "Metal")
+			if (canCollect && other.gameObject.tag == "Metal")
 			{
 				resourceHandling.Extract(other.gameObject, 50);
 
@@ -59,7 +70,7 @@ public class AutoCombatCollider : MonoBehaviour
                 audioHandler.PlayClip(other.gameObject, "explosion");
                 hunterHandler.CheckSpawnHunter();
             }
-			if (other.gameObject.tag == "Electronics")
+			if (canCollect && other.gameObject.tag == "Electronics")
 			{
 				resourceHandling.Extract(other.gameObject, 50);
 
