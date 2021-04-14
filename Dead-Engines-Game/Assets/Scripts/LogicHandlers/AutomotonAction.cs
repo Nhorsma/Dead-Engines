@@ -478,8 +478,8 @@ public class AutomotonAction : MonoBehaviour
         }
         else
         {
-            SpawnExplosion(gameObject);
-            audioHandler.PlayClip(gameObject, "explosion");
+            //SpawnExplosion(gameObject);
+            audioHandler.PlayClipIgnore(gameObject, "smallEchoBoom");
         }
 
     }

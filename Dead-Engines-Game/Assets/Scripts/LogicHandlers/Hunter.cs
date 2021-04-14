@@ -12,6 +12,7 @@ public class Hunter : Enemy
 	private bool isDead = false;
     private bool nextMove = true;
     private float speed = 10f;
+    private GameObject fireFrom;
 
     public Hunter(int hp, int dmg, float shootspeed)
     {
@@ -75,4 +76,9 @@ public class Hunter : Enemy
         set { nextMove = value; }
     }
 
+    public GameObject FireFrom
+    {
+        get { return fireFrom; }
+        set { fireFrom = value; }
+    }
 }

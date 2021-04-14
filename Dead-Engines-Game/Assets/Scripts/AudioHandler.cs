@@ -15,7 +15,7 @@ public class AudioHandler : MonoBehaviour
     public AudioClip enemyAttack1, enemyAttack2, enemyDead1, enemyDead2;
 
     //shooting and stuff
-    public AudioClip smallGun, smallLaz, bigGun, bigLaz, explosion, metalHit, machineGun;
+    public AudioClip smallGun, smallLaz, bigGun, bigLaz, explosion, metalHit, machineGun, railGun, smallEchoBoom;
 
 
     public void PlayClip(GameObject source, string clip)
@@ -31,6 +31,22 @@ public class AudioHandler : MonoBehaviour
             Debug.Log("something is already playing from "+source);
             return;
         }
+
+        AudioClip clipVar = (AudioClip)this.GetType().GetField(clip).GetValue(this);
+
+        if (clipVar == null)
+            return;
+
+        audio.PlayOneShot(clipVar);
+    }
+
+    public void PlayClipIgnore(GameObject source, string clip)
+    {
+        AudioSource audio;
+        if (source.GetComponent<AudioSource>() == null)
+            audio = Camera.main.GetComponent<AudioSource>();
+        else
+            audio = source.GetComponent<AudioSource>();
 
         AudioClip clipVar = (AudioClip)this.GetType().GetField(clip).GetValue(this);
 

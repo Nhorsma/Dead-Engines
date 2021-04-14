@@ -51,7 +51,7 @@ public class HunterHandler : MonoBehaviour
 		{
 			case 1:
 				hunterObj = (GameObject)Instantiate(h1);
-				hunterObj.GetComponent<Hunter>().Speed = 30f;
+				hunterObj.GetComponent<Hunter>().Speed = 10f;
 				hunterObj.GetComponent<Hunter>().Health = 20;
 				hunterObj.GetComponent<Hunter>().Attack = 2;
                 hunterObj.GetComponent<Hunter>().FiringSpeed = 2f;
@@ -73,16 +73,7 @@ public class HunterHandler : MonoBehaviour
                 hunterObj.GetComponent<Hunter>().FiringSpeed = 5f;
                 break;
         }
-
-        /*
-         * Anteater
-            hunterObj = (GameObject)Instantiate(Resources.Load("hunter 3"));
-            hunterObj.GetComponent<Hunter>().Speed = 4f;
-            hunterObj.GetComponent<Hunter>().Health = 10;
-            hunterObj.GetComponent<Hunter>().Attack = 10;
-            hunterObj.GetComponent<Hunter>().FiringSpeed = 6f;
-        */
-
+        hunterObj.GetComponent<Hunter>().FireFrom = hunterObj.transform.Find("FireFrom").gameObject;
         hunterObj.GetComponent<Hunter>().Target = automaton;
 		return hunterObj;
 	}
@@ -106,10 +97,32 @@ public class HunterHandler : MonoBehaviour
 			deployedHunters.Add(hunterObj);
 			hunterObj.GetComponent<Hunter>().Id = i;
 			hunterObj.GetComponent<NavMeshAgent>().speed = hunterObj.GetComponent<Hunter>().Speed;
-		}
+        }
 	}
 
-	void HappyHunting()
+    void SpawnAnteater()
+    {
+        Vector3 spawnPlace = automaton.transform.position + RandomSpawnPoint();
+        GameObject hunterObj = Instantiate(anteater);
+        hunterObj.GetComponent<Hunter>().Speed = 20f;
+        hunterObj.GetComponent<Hunter>().Health = 10;
+        hunterObj.GetComponent<Hunter>().Attack = 10;
+        hunterObj.GetComponent<Hunter>().FiringSpeed = 6f;
+        hunterObj.GetComponent<Hunter>().Target = automaton;
+
+        hunterObj.transform.position = spawnPlace;
+        hunterObj.transform.rotation = transform.rotation;
+
+        deployedHunters.Add(hunterObj);
+        hunterObj.GetComponent<Hunter>().Id = 100;
+        hunterObj.GetComponent<NavMeshAgent>().speed = hunterObj.GetComponent<Hunter>().Speed;
+
+        //hunterObj.GetComponent<SnoutBehavior>().pointTo = automaton;
+        hunterObj.GetComponent<Hunter>().FireFrom = hunterObj.GetComponent<SnoutBehavior>().GetJointSix();
+    }
+
+
+    void HappyHunting()
     {
         if (isDeployed)
             foreach (GameObject h in deployedHunters)
@@ -128,7 +141,6 @@ public class HunterHandler : MonoBehaviour
                 Animator anim = h.GetComponent<Animator>();
                 if (h.name.Equals(anteater.name+"(Clone)"))
                 {
-                    Debug.Log(" this is anteater");
                     anim = h.GetComponentInChildren<Animator>();
                 }
 
@@ -289,13 +301,14 @@ public class HunterHandler : MonoBehaviour
 
     void Fire(GameObject hunter, Hunter hunter_data)
     {
+        Debug.Log("Shooting Robot 1 ");
         if (hunter_data.Target != null)
         {
+            Debug.Log("Shooting Robot 2");
             Vector3 direction = hunter_data.Target.transform.position - hunter.transform.position;
-            audioHandler.PlayClip(hunter, "bigLaz");
+            audioHandler.PlayClipIgnore(hunter, "railGun");
 
-            Vector3 shootFrom = hunter.transform.Find("FireFrom").position;
-            StartCoroutine(TrailOff(0.07f, shootFrom, hunter_data.Target.transform.position + new Vector3(0, 50, 0)));
+            StartCoroutine(TrailOff(0.07f, hunter_data.FireFrom.transform.position, hunter_data.Target.transform.position + new Vector3(0, 50, 0)));
 
             autoAction.RecieveDamage(hunter_data.Attack);
         }
@@ -374,24 +387,5 @@ public class HunterHandler : MonoBehaviour
         robot += flank;
         TravelTo(hunter, robot, false);
         Debug.Log("Flanking");
-    }
-
-    void SpawnAnteater()
-    {
-        Vector3 spawnPlace = automaton.transform.position + RandomSpawnPoint();
-        GameObject hunterObj = Instantiate(anteater);
-        hunterObj.GetComponent<Hunter>().Speed = 20f;
-        hunterObj.GetComponent<Hunter>().Health = 10;
-        hunterObj.GetComponent<Hunter>().Attack = 10;
-        hunterObj.GetComponent<Hunter>().FiringSpeed = 6f;
-
-        hunterObj.transform.position = spawnPlace;
-        hunterObj.transform.rotation = transform.rotation;
-
-        deployedHunters.Add(hunterObj);
-        hunterObj.GetComponent<Hunter>().Id = 100;
-        hunterObj.GetComponent<NavMeshAgent>().speed = hunterObj.GetComponent<Hunter>().Speed;
-
-        hunterObj.GetComponent<SnoutBehavior>().pointTo = automaton;
     }
 }

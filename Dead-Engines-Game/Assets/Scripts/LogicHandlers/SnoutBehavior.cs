@@ -11,10 +11,11 @@ public class SnoutBehavior : MonoBehaviour
     void Update()
     {
         var relativePos = pointTo.transform.position - transform.position;
-        var forward = transform.forward;
+        var forward = transform.right;
         var angle = Vector3.Angle(relativePos, forward);//the -90 is for correcting weird angles, 0 should be infront of it
         Debug.Log(angle);
         Quaternion newAngle;
+
         for (int i=0;i<6;i++)
         {
             newAngle = joints[i].transform.rotation;
@@ -23,5 +24,10 @@ public class SnoutBehavior : MonoBehaviour
 
             joints[i].transform.rotation = newAngle;
         }
+    }
+
+    public GameObject GetJointSix()
+    {
+        return joints[5];
     }
 }
