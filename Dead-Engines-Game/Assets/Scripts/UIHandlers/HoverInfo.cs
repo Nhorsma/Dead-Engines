@@ -38,7 +38,9 @@ public class HoverInfo : MonoBehaviour
 			{
 				//display
 				resourceObj = hit.collider.gameObject;
-				depositQuantity = resourceHandling.resourceQuantities[resourceHandling.GetNumber(resourceObj)];
+				//further proof we should just rewrite Resources like actual objects imo
+				//depositQuantity = resourceHandling.resourceQuantities[resourceHandling.GetNumber(resourceObj)]; //here
+				
 				SetupHoverBox(resourceObj, depositQuantity);
 				DisplayHoverBox();
 			}

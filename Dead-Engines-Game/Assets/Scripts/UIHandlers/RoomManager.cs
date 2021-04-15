@@ -8,6 +8,7 @@ public class RoomManager : MonoBehaviour
 	public SetupRoom setupRoom;
 	public AutomatonUI auto;
 	public UnitManager unitManager;
+	public LimbSystem limbSystem;
 
 	public GameObject autoObj;
 
@@ -81,6 +82,7 @@ public class RoomManager : MonoBehaviour
 			ResourceHandling.electronics -= (int)CostData.build_refinery[3];
 			rooms[roomSlotClicked] = new Refinery(roomSlotClicked, 1);
 			setupRoom.Setup(rooms[roomSlotClicked]); // ->
+			//CalculateLimbStats();
 			PlayClip("wrench");
 		}
 		else if (room == "storage" && ResourceHandling.metal >= CostData.build_storage[2] && ResourceHandling.electronics >= CostData.build_storage[3])
@@ -89,6 +91,7 @@ public class RoomManager : MonoBehaviour
 			ResourceHandling.electronics -= (int)CostData.build_storage[3];
 			rooms[roomSlotClicked] = new Storage(roomSlotClicked, 1);
 			setupRoom.Setup(rooms[roomSlotClicked]);
+			//CalculateLimbStats();
 			PlayClip("wrench");
 		}
 		else if (room == "shrine" && ResourceHandling.metal >= CostData.build_shrine[2] && ResourceHandling.electronics >= CostData.build_shrine[3])
@@ -97,6 +100,7 @@ public class RoomManager : MonoBehaviour
 			ResourceHandling.electronics -= (int)CostData.build_shrine[3];
 			rooms[roomSlotClicked] = new Shrine(roomSlotClicked, 1);
 			setupRoom.Setup(rooms[roomSlotClicked]);
+			//CalculateLimbStats();
 			PlayClip("wrench");
 		}
 		else if (room == "study" && ResourceHandling.metal >= CostData.build_study[2] && ResourceHandling.electronics >= CostData.build_study[3])
@@ -105,6 +109,7 @@ public class RoomManager : MonoBehaviour
 			ResourceHandling.electronics -= (int)CostData.build_study[3];
 			rooms[roomSlotClicked] = new Study(roomSlotClicked, 1);
 			setupRoom.Setup(rooms[roomSlotClicked]);
+			//CalculateLimbStats();
 			PlayClip("wrench");
 		}
 		else if (room == "infirmary" && ResourceHandling.metal >= 10 && ResourceHandling.electronics >= 10)
@@ -113,6 +118,7 @@ public class RoomManager : MonoBehaviour
 			ResourceHandling.electronics -= 10;
 			rooms[roomSlotClicked] = new Infirmary(roomSlotClicked, 1);
 			setupRoom.Setup(rooms[roomSlotClicked]);
+			//CalculateLimbStats();
 			PlayClip("wrench");
 		}
 		else if (room == "clonery" && ResourceHandling.metal >= 10 && ResourceHandling.electronics >= 10)
@@ -121,6 +127,7 @@ public class RoomManager : MonoBehaviour
 			ResourceHandling.electronics -= 10;
 			rooms[roomSlotClicked] = new Clonery(roomSlotClicked, 1);
 			setupRoom.Setup(rooms[roomSlotClicked]);
+			//CalculateLimbStats();
 			PlayClip("wrench");
 		}
 		else if (room == "barracks" && ResourceHandling.metal >= 10 && ResourceHandling.electronics >= 10)
@@ -129,6 +136,7 @@ public class RoomManager : MonoBehaviour
 			ResourceHandling.electronics -= 10;
 			rooms[roomSlotClicked] = new Barracks(roomSlotClicked, 1);
 			setupRoom.Setup(rooms[roomSlotClicked]);
+			//CalculateLimbStats();
 			PlayClip("wrench");
 		}
 		else if (room == "dormitory" && ResourceHandling.metal >= 10 && ResourceHandling.electronics >= 10)
@@ -137,6 +145,7 @@ public class RoomManager : MonoBehaviour
 			ResourceHandling.metal -= 10;
 			rooms[roomSlotClicked] = new Dormitory(roomSlotClicked, 1);
 			setupRoom.Setup(rooms[roomSlotClicked]);
+			//CalculateLimbStats();
 			PlayClip("wrench");
 		}
 		else
@@ -596,6 +605,16 @@ public class RoomManager : MonoBehaviour
 			}
 		}
 		return false;
+	}
+
+	public void CalculateLimbStats(int attack, int defense, int health)
+	{
+		//determine limb from slot
+		string limbToUpdate = "limb";
+		limbSystem.ChangeAttack(limbToUpdate, attack);
+		limbSystem.ChangeDefense(limbToUpdate, defense);
+		limbSystem.ChangeHealth(limbToUpdate, health);
+		limbSystem.performedUpdate = true;
 	}
 
 	//this is a debug function for testing only!
