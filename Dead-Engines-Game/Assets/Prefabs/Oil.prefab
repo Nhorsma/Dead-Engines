@@ -206,7 +206,7 @@ GameObject:
   - component: {fileID: 2400597089635343640}
   - component: {fileID: -4010736353721795132}
   m_Layer: 0
-  m_Name: Oil_placeholder
+  m_Name: Oil
   m_TagString: Oil
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -220,7 +220,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8510683415502693747}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 24.766024, y: -7.01, z: -32.284843}
+  m_LocalPosition: {x: 24.766024, y: -4.12, z: -32.284843}
   m_LocalScale: {x: 1, y: 6.2766, z: 1}
   m_Children:
   - {fileID: 6356158077406878386}

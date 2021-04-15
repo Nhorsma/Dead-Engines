@@ -235,7 +235,7 @@ public class SpawnRes : MonoBehaviour
 
 			if (x % 2 == 0 && z % 2 == 0)
 			{
-				inner_res = Instantiate(thin_oil, new Vector3(x, -6.5f, z), Quaternion.identity);				// right now, oil is 2x as likely to spawn than crater
+				inner_res = Instantiate(thin_oil, new Vector3(x, -4.12f, z), Quaternion.identity);				// right now, oil is 2x as likely to spawn than crater
 			}
 			else if (x % 2 != 0 && z % 2 != 0)
 			{
@@ -243,7 +243,7 @@ public class SpawnRes : MonoBehaviour
 			}
 			else if ((x % 2 != 0 && z % 2 == 0) || (x % 2 == 0 && z % 2 != 0))
 			{
-				inner_res = Instantiate(thin_oil, new Vector3(x, -6.5f, z), Quaternion.identity);
+				inner_res = Instantiate(thin_oil, new Vector3(x, -4.12f, z), Quaternion.identity);
 			}
 			innerResources[i] = inner_res;
 		}
