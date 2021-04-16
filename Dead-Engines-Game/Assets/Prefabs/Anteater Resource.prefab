@@ -853,6 +853,7 @@ GameObject:
   - component: {fileID: 699964796679471677}
   - component: {fileID: 4780854046898460387}
   - component: {fileID: 3819136089624623312}
+  - component: {fileID: -906692692096731921}
   m_Layer: 0
   m_Name: Anteater Resource
   m_TagString: Metal
@@ -935,6 +936,18 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 126
   m_CollisionDetection: 0
+--- !u!114 &-906692692096731921
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3113173182971870230}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e67d5d15944e52749b571f0b9b9ad773, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &3615658596662086282
 GameObject:
   m_ObjectHideFlags: 0

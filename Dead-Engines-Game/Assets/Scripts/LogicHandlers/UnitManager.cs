@@ -113,7 +113,7 @@ public class UnitManager : MonoBehaviour
         if (clickedObj.tag == "Metal" ||
             clickedObj.tag == "Electronics")
         {
-            int ri = GetResourceID(clickedObj);
+            int ri = resourceHandling.GetNumber(clickedObj);
             foreach (GameObject u in selectedUnits)
             {
                 Unit unit_data = u.GetComponent<Unit>();
@@ -164,7 +164,7 @@ public class UnitManager : MonoBehaviour
                 }
                 else if (unit_data.Job.Equals("ExtractionMetal") || unit_data.Job.Equals("ExtractionElectronics"))
                 {
-                    Extraction(u, GetResourceID(unit_data.JobPos), unit_data.Job); //
+                    Extraction(u, resourceHandling.GetNumber(unit_data.JobPos), unit_data.Job); //
                 }
                 else if (unit_data.Job == "shrine" || unit_data.Job == "refinery"
                     || unit_data.Job == "storage" || unit_data.Job == "study")
@@ -249,6 +249,7 @@ public class UnitManager : MonoBehaviour
     /// <summary>
     /// edit this for storageCheck
     /// </summary>
+    /// 
     void Extraction(GameObject unit, int resourceId, string resource)
     {
         if (unit.GetComponent<Unit>().JobPos == null)
@@ -258,17 +259,18 @@ public class UnitManager : MonoBehaviour
         ShowGun(unit, false, "Both");
         Unit unit_data = unit.GetComponent<Unit>();
 
-        Vector3 depositPos = resourceHandling.resourceDeposits[resourceId].transform.position;
+        //Vector3 depositPos = resourceHandling.resourceDeposits[resourceId].transform.position;
+        Vector3 depositPos = unit_data.JobPos.transform.position;
         Vector3 unitPos = unit.transform.position;
 
-        if (unit_data.JustDroppedOff && Vector3.Distance(unit.transform.position, unit_data.JobPos.transform.position) < pickUpDistance)
+        if (unit_data.JustDroppedOff && Vector3.Distance(unitPos, depositPos) < pickUpDistance)
         {
             Extract(resourceId);
             IsDepositProtected(unit_data.JobPos);
             unit_data.JustDroppedOff = false;
             TravelTo(unit, robotPos, false, false);
         }
-        else if (!unit_data.JustDroppedOff && Vector3.Distance(unit.transform.position, robotPos) < pickUpDistance) //reaches robot
+        else if (!unit_data.JustDroppedOff && Vector3.Distance(unitPos, robotPos) < pickUpDistance) //reaches robot
         {
             if (resource.Equals("ExtractionMetal"))
             {
@@ -286,12 +288,15 @@ public class UnitManager : MonoBehaviour
     }
 
     void IsDepositProtected(GameObject deposit)
-    {
+    {/*
         foreach (Encampment encampment in encampmentHandler.encampments)
         {
             if (deposit == encampment.ClosestResource)
                 encampmentHandler.CheckForTrigger(encampment);
         }
+        */
+        if (deposit.GetComponent<Resource>() != null && deposit.GetComponent<Resource>().Level != null)
+            encampmentHandler.CheckForTrigger(deposit.GetComponent<Resource>().Level);
     }
 
     void Combat(GameObject unit)
@@ -396,7 +401,6 @@ public class UnitManager : MonoBehaviour
         }
         return null;
     }
-
     public List<GameObject> ReturnDeadUnits()
     {
         List<GameObject> dead_units = new List<GameObject>();
@@ -409,7 +413,6 @@ public class UnitManager : MonoBehaviour
         }
         return dead_units;
     }
-
 	// my version of the method above, pls use it instead
 	public GameObject ReturnKnockedOutUnit()
 	{
@@ -422,14 +425,12 @@ public class UnitManager : MonoBehaviour
 		}
 		return null;
 	}
-
 	void ResetJob(Unit unit_data)
     {
         ResetColor(unit_data);
         unit_data.Job = "none";
         unit_data.JobPos = null;
     }
-
     void Fire(GameObject unit)
     {
         Unit unit_data = unit.GetComponent<Unit>();
@@ -486,8 +487,6 @@ public class UnitManager : MonoBehaviour
             }
             StartCoroutine(FireCoolDown(unit.GetComponent<Unit>()));
     }
-
-
     IEnumerator FireCoolDown(Unit unit_data)
     {
         float extratime = Random.Range(-0.3f, 0.3f);
@@ -495,7 +494,6 @@ public class UnitManager : MonoBehaviour
         yield return new WaitForSeconds(unitFireCooldown + extratime);
         unit_data.JustShot = false;
     }
-
     int CalculateDamage(int attack, int defense)
     {
         int dmg = attack - defense;
@@ -505,7 +503,6 @@ public class UnitManager : MonoBehaviour
         else
             return dmg;
     }
-
     public void UnitDown(GameObject unit)
     {
         if (unit.GetComponent<Unit>().Health <= 0)
@@ -514,8 +511,6 @@ public class UnitManager : MonoBehaviour
             StartCoroutine(WaitToDespawn(unit));
         }
     }
-
-    //lets the "dying" animation play out, then makes the unit disappear
     IEnumerator WaitToDespawn(GameObject unit)
     {
         yield return new WaitForSeconds(5f);
@@ -527,8 +522,6 @@ public class UnitManager : MonoBehaviour
         StartCoroutine(WaitToRespawn(unit));
 
     }
-
-    //waits to allow the unit to respawn, see "RunAllJobs" for the "dead" job
     IEnumerator WaitToRespawn(GameObject unit)
     {
         Unit unit_data = unit.GetComponent<Unit>();
@@ -542,7 +535,6 @@ public class UnitManager : MonoBehaviour
         yield return new WaitForSeconds(temp_downtime);
         unit.GetComponent<Unit>().CanSpawn = true;
     }
-
     void SetSpawnedUnitInfo(GameObject unit, bool isSpawned)
     {
         if (!isSpawned)
@@ -570,7 +562,7 @@ public class UnitManager : MonoBehaviour
         }
     }
 
-
+    /*
     int GetResourceID(GameObject clickedObj)
     {
         for (int i = 0; i < resourceHandling.resourceDeposits.Length; i++)
@@ -580,6 +572,8 @@ public class UnitManager : MonoBehaviour
         }
         return -1;
     }
+    */
+
     void AddMetal()
     {
         ResourceHandling.metal++;
@@ -616,7 +610,6 @@ public class UnitManager : MonoBehaviour
         spawnPool.poolDictionary["trails"].Enqueue(t);
         t.SetActive(false);
     }
-
     public void SetJobCircleColor(Unit unit_data, Color colorChange)
     {
         if (unit_data.JobPos != null && unit_data.JobPos.GetComponentInChildren<SpriteRenderer>() != null)

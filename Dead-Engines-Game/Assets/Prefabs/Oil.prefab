@@ -205,6 +205,7 @@ GameObject:
   - component: {fileID: 4733255636115961946}
   - component: {fileID: 2400597089635343640}
   - component: {fileID: -4010736353721795132}
+  - component: {fileID: 6258029262135438150}
   m_Layer: 0
   m_Name: Oil
   m_TagString: Oil
@@ -329,6 +330,18 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 126
   m_CollisionDetection: 0
+--- !u!114 &6258029262135438150
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8510683415502693747}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e67d5d15944e52749b571f0b9b9ad773, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &8846181394275109284
 GameObject:
   m_ObjectHideFlags: 0

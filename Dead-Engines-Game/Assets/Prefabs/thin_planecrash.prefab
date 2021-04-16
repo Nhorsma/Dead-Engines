@@ -174,6 +174,7 @@ GameObject:
   - component: {fileID: 4201645154045124888}
   - component: {fileID: 6341225007911671320}
   - component: {fileID: 696245962249298756}
+  - component: {fileID: 4585504022364948374}
   m_Layer: 0
   m_Name: thin_planecrash
   m_TagString: Metal
@@ -266,6 +267,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 94e1cb6ab58bd9e4f8fd47162b606ab2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &4585504022364948374
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6267019455420572033}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e67d5d15944e52749b571f0b9b9ad773, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &8153904533864987201

@@ -60,9 +60,10 @@ public class AutoCombatCollider : MonoBehaviour
 			if (canCollect && other.gameObject.tag == "Metal")
 			{
 				resourceHandling.Extract(other.gameObject, 50);
+                int left = resourceHandling.resourceData[resourceHandling.GetNumber(other.gameObject)].Quantity;
 
-				if (resourceHandling.resourceQuantities[resourceHandling.GetNumber(other.gameObject)] < 0)
-					ResourceHandling.metal -= resourceHandling.resourceQuantities[resourceHandling.GetNumber(other.gameObject)]; //subtracting a negative is positive
+                if (left < 0)
+					ResourceHandling.metal -= left; //subtracting a negative is positive
 				else
 					ResourceHandling.metal += 50;
                 canTrigger = false;
@@ -73,9 +74,10 @@ public class AutoCombatCollider : MonoBehaviour
 			if (canCollect && other.gameObject.tag == "Electronics")
 			{
 				resourceHandling.Extract(other.gameObject, 50);
+                int left = resourceHandling.resourceData[resourceHandling.GetNumber(other.gameObject)].Quantity;
 
-				if (resourceHandling.resourceQuantities[resourceHandling.GetNumber(other.gameObject)] < 0)
-					ResourceHandling.electronics -= resourceHandling.resourceQuantities[resourceHandling.GetNumber(other.gameObject)]; //subtracting a negative is positive
+                if (left < 0)
+					ResourceHandling.electronics -= left; //subtracting a negative is positive
 				else
 					ResourceHandling.electronics += 50;
                 canTrigger = false;

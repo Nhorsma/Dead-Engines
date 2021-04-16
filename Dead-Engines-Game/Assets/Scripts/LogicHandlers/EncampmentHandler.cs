@@ -113,7 +113,7 @@ public class EncampmentHandler : MonoBehaviour
 
     public void CheckForTrigger(Encampment encampment)
     { 
-        if (encampment.OnField < 2 && (encampment.Health < startingHealth-10 || resourceHandling.resourceQuantities[resourceHandling.GetNumber(encampment.ClosestResource)]<40))
+        if (encampment.OnField < 2 && (encampment.Health < startingHealth-10) || encampment.ClosestResource.GetComponent<Resource>().Quantity<40) // || resourceHandling.resourceQuantities[resourceHandling.GetNumber(encampment.ClosestResource)]<40)
         {
             int hit = Random.Range(1, 10);
 
@@ -188,7 +188,7 @@ public class EncampmentHandler : MonoBehaviour
 
     void CheckDeployment(Encampment encampment_data)
     {
-        int quantity = resourceHandling.resourceQuantities[resourceHandling.GetNumber(encampment_data.ClosestResource)];
+        int quantity = encampment_data.ClosestResource.GetComponent<Resource>().Quantity;
 
         if (quantity <= 0)
         {
