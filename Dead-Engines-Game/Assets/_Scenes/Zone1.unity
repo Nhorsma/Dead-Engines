@@ -7284,15 +7284,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b48af9ec90cfc67488f457187f602e43, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  startQuantity: 50
+  startQuantity: 15
   fuel: {fileID: 0}
   fuelTaken: 0
   fuelDropped: 0
-  resourceDeposits: []
-  resourceQuantities: 
   spawnRes: {fileID: 1102157336}
   resourcesLeft: 0
   resTranslator: []
+  resourceObjects: []
+  resourceData: []
 --- !u!114 &467610736
 MonoBehaviour:
   m_ObjectHideFlags: 0

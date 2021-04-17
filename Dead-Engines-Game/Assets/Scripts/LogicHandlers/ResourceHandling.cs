@@ -21,24 +21,18 @@ public class ResourceHandling : MonoBehaviour
     public bool fuelTaken;
     public bool fuelDropped;
 
-   // public GameObject[] resourceDeposits;
-   // public int[] resourceQuantities;
     public SpawnRes spawnRes;
     public int resourcesLeft;
 
 	public List<GameObject> resTranslator = new List<GameObject>();
 
-    public List<GameObject> resourceObj = new List<GameObject>();
+    public List<GameObject> resourceObjects = new List<GameObject>();
     public List<Resource> resourceData = new List<Resource>();
 
     void Start()
     {
-        //resourcesLeft = 3;   //represents how many deposits have not been fully depleted
-
 		resTranslator = spawnRes.GetAllResources();
 
-        //resourceDeposits = new GameObject[resTranslator.Count]; //sorry had to change because of list vs array
-        //resourceQuantities = new int[resourceDeposits.Length];
         SetUpResources();
 
         fuelDropped = fuelTaken = false;
@@ -62,37 +56,22 @@ public class ResourceHandling : MonoBehaviour
     /// </summary>
 
     void SetUpResources()
-    {/*
-		if (spawnRes.isActiveAndEnabled)
-		{
-			for (int i = 0; i < resourceQuantities.Length; i++)
-			{
-				resourceQuantities[i] = startQuantity;
-
-			}
-			for (int i = 0; i < resTranslator.Count; i++)
-			{
-				resourceDeposits[i] = resTranslator[i];
-			}
-			//resourceDeposits = spawnRes.GetAllResources();		// this won't work because GetAllResources returns a list now
-		}
-        */
-
-
+    {
         if (spawnRes.isActiveAndEnabled)
         {
-            Debug.Log(" resTranslator count: " + resTranslator.Count);
-            for (int i = 0; i < resTranslator.Count; i++)
-            {
-                if (resTranslator[i] != null)
-                {
-                    resourceObj.Add(resTranslator[i]);
-                    resourceData.Add(resourceObj[i].GetComponent<Resource>());
-                    resourceData[i].Quantity = startQuantity;
-                    resourceData[i].Id = i;
-                    resourceData[i].Type = resourceObj[i].tag;
-                }
-            }
+			int tick = 0;
+			foreach (GameObject o in resTranslator)
+			{
+				if (o != null)
+				{
+					resourceObjects.Add(o);
+					resourceData.Add(o.GetComponent<Resource>());
+					resourceData[tick].Quantity = startQuantity;
+					resourceData[tick].Id = tick;
+					resourceData[tick].Type = resourceObjects[tick].tag;
+					tick++;
+				}
+			}
         }
     }
 
@@ -119,7 +98,7 @@ public class ResourceHandling : MonoBehaviour
         resourceData[i].Subtract(1);
 		if (resourceData[i].Quantity <= 0)
 		{
-			resourceObj[i].SetActive(false);
+			resourceObjects[i].SetActive(false);
 		}
 	}
 
@@ -128,7 +107,7 @@ public class ResourceHandling : MonoBehaviour
 		resourceData[id].Subtract(amount);
 		if (resourceData[id].Quantity <= 0)
 		{
-            resourceObj[id].SetActive(false);
+            resourceObjects[id].SetActive(false);
 		}
 	}
 
@@ -150,7 +129,7 @@ public class ResourceHandling : MonoBehaviour
 
     public void SetNewResourceDeposits(List<GameObject> newDeps)
     {
-        resourceObj = newDeps;
+        resourceObjects = newDeps;
 
         for (int i = 0; i < newDeps.Count; i++)
         {

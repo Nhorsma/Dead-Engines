@@ -289,9 +289,9 @@ public class SpawnRes : MonoBehaviour
 	{
 		List<GameObject> allResources = new List<GameObject>();
 
-		allResources.Add(metal1);
-		allResources.Add(metal2);
-		allResources.Add(electronics);
+		allResources.Add(m1);
+		allResources.Add(m2);
+		allResources.Add(e);
 
 		foreach (GameObject o in outerResources)
 		{

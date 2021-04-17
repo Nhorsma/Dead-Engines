@@ -9,7 +9,7 @@ public class HoverInfo : MonoBehaviour
 	public GameObject hoverBox;
 
 	public Text amountText;
-	private int depositQuantity;
+	//private int depositQuantity;
 
 	private Ray ray;
 	private RaycastHit hit;
@@ -34,14 +34,14 @@ public class HoverInfo : MonoBehaviour
 		ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 		if (Physics.Raycast(ray, out hit))
 		{
-			if (hit.collider.tag == "Metal" || hit.collider.tag == "Electronics")
+			if (hit.collider.tag == "Metal" || hit.collider.tag == "Electronics" || hit.collider.tag == "Oil")
 			{
 				//display
 				resourceObj = hit.collider.gameObject;
 				//further proof we should just rewrite Resources like actual objects imo
 				//depositQuantity = resourceHandling.resourceQuantities[resourceHandling.GetNumber(resourceObj)]; //here
 				
-				SetupHoverBox(resourceObj, depositQuantity);
+				SetupHoverBox(resourceObj, resourceObj.GetComponent<Resource>().Quantity);
 				DisplayHoverBox();
 			}
 			else if (hit.collider.tag == "Encampment")
