@@ -18,8 +18,8 @@ public class RoomManager : MonoBehaviour
 	public GameObject controllerTab;
 	public GameObject generatorTab;
 
-	public List<Text> roomTypesAtAGlance; //change to gameObject later -> do I still need to do this???
-	public List<GameObject> roomSpritesInOrder; // --------------------------------------------------> is this being used?
+	public List<Sprite> roomIcons;	//stored in script
+	public List<Button> displayedIcons; //the ones being shown to the player in the automaton
 
 	public Sprite generatorRepairedSprite;
 	public Sprite controllerRepairedSprite;
@@ -47,7 +47,7 @@ public class RoomManager : MonoBehaviour
 		InitializeRooms();
 
 		// this is actually important
-		UpdateRoomDisplay();
+		//UpdateRoomDisplay();
 	}
 
     void Update()
@@ -91,6 +91,7 @@ public class RoomManager : MonoBehaviour
 			ResourceHandling.electronics -= (int)CostData.build_storage[3];
 			rooms[roomSlotClicked] = new Storage(roomSlotClicked, 1);
 			setupRoom.Setup(rooms[roomSlotClicked]);
+
 			//CalculateLimbStats();
 			PlayClip("wrench");
 		}
@@ -100,6 +101,7 @@ public class RoomManager : MonoBehaviour
 			ResourceHandling.electronics -= (int)CostData.build_shrine[3];
 			rooms[roomSlotClicked] = new Shrine(roomSlotClicked, 1);
 			setupRoom.Setup(rooms[roomSlotClicked]);
+
 			//CalculateLimbStats();
 			PlayClip("wrench");
 		}
@@ -109,6 +111,7 @@ public class RoomManager : MonoBehaviour
 			ResourceHandling.electronics -= (int)CostData.build_study[3];
 			rooms[roomSlotClicked] = new Study(roomSlotClicked, 1);
 			setupRoom.Setup(rooms[roomSlotClicked]);
+
 			//CalculateLimbStats();
 			PlayClip("wrench");
 		}
@@ -118,24 +121,7 @@ public class RoomManager : MonoBehaviour
 			ResourceHandling.electronics -= 10;
 			rooms[roomSlotClicked] = new Infirmary(roomSlotClicked, 1);
 			setupRoom.Setup(rooms[roomSlotClicked]);
-			//CalculateLimbStats();
-			PlayClip("wrench");
-		}
-		else if (room == "clonery" && ResourceHandling.metal >= 10 && ResourceHandling.electronics >= 10)
-		{
-			ResourceHandling.metal -= 10;
-			ResourceHandling.electronics -= 10;
-			rooms[roomSlotClicked] = new Clonery(roomSlotClicked, 1);
-			setupRoom.Setup(rooms[roomSlotClicked]);
-			//CalculateLimbStats();
-			PlayClip("wrench");
-		}
-		else if (room == "barracks" && ResourceHandling.metal >= 10 && ResourceHandling.electronics >= 10)
-		{
-			ResourceHandling.metal -= 10;
-			ResourceHandling.electronics -= 10;
-			rooms[roomSlotClicked] = new Barracks(roomSlotClicked, 1);
-			setupRoom.Setup(rooms[roomSlotClicked]);
+
 			//CalculateLimbStats();
 			PlayClip("wrench");
 		}
@@ -145,6 +131,27 @@ public class RoomManager : MonoBehaviour
 			ResourceHandling.metal -= 10;
 			rooms[roomSlotClicked] = new Dormitory(roomSlotClicked, 1);
 			setupRoom.Setup(rooms[roomSlotClicked]);
+
+			//CalculateLimbStats();
+			PlayClip("wrench");
+		}
+		else if (room == "barracks" && ResourceHandling.metal >= 10 && ResourceHandling.electronics >= 10)
+		{
+			ResourceHandling.metal -= 10;
+			ResourceHandling.electronics -= 10;
+			rooms[roomSlotClicked] = new Barracks(roomSlotClicked, 1);
+			setupRoom.Setup(rooms[roomSlotClicked]);
+
+			//CalculateLimbStats();
+			PlayClip("wrench");
+		}
+		else if (room == "clonery" && ResourceHandling.metal >= 10 && ResourceHandling.electronics >= 10)
+		{
+			ResourceHandling.metal -= 10;
+			ResourceHandling.electronics -= 10;
+			rooms[roomSlotClicked] = new Clonery(roomSlotClicked, 1);
+			setupRoom.Setup(rooms[roomSlotClicked]);
+
 			//CalculateLimbStats();
 			PlayClip("wrench");
 		}
@@ -153,7 +160,7 @@ public class RoomManager : MonoBehaviour
 			Debug.Log("Not enough resources to build a " + room + ".");
 			PlayClip("error");
 		}
-		UpdateRoomDisplay();
+		UpdateIcon(roomSlotClicked, room);
 	}
 
 	//add infirmary stuff
@@ -487,11 +494,13 @@ public class RoomManager : MonoBehaviour
 	/// UTILITY FUNCTIONS --------------------------------------------------------------------------------------------------------------------------->
 	/// </summary>
 
+	//rewrite???
 	public void OpenRoom(int clickedSlot)
 	{
 		roomTabs[clickedSlot].gameObject.SetActive(true); //...which is different. this is the panel itself
 		Debug.Log("Current tab " + clickedSlot);
 	}
+
 	public void OpenController()
 	{
 		controllerTab.gameObject.SetActive(true);
@@ -500,6 +509,8 @@ public class RoomManager : MonoBehaviour
 	{
 		generatorTab.gameObject.SetActive(true);
 	}
+
+	//rewrite???
 	public void TakeToBuild(int clickedSlot)
 	{
 		roomSlotClicked = clickedSlot;
@@ -528,15 +539,41 @@ public class RoomManager : MonoBehaviour
 		}
 	}
 
-	public void UpdateRoomDisplay()
+	public void UpdateIcon(int slot, string type)
 	{
-		for (int i = 0; i < rooms.Count; i++)
+		switch (type)
 		{
-			roomTypesAtAGlance[i].text = rooms[i].Type;
-			roomSpritesInOrder[i].GetComponent<Image>().sprite = setupRoom.roomComponents[i].pic.sprite;
+			case "empty":
+				displayedIcons[slot].GetComponent<Image>().sprite = roomIcons[0];
+				break;
+			case "refinery":
+				displayedIcons[slot].GetComponent<Image>().sprite = roomIcons[1];
+				break;
+			case "storage":
+				displayedIcons[slot].GetComponent<Image>().sprite = roomIcons[2];
+				break;
+			case "shrine":
+				displayedIcons[slot].GetComponent<Image>().sprite = roomIcons[3];
+				break;
+			case "study":
+				displayedIcons[slot].GetComponent<Image>().sprite = roomIcons[4];
+				break;
+			case "infirmary":
+				displayedIcons[slot].GetComponent<Image>().sprite = roomIcons[5];
+				break;
+			case "dormitory":
+				displayedIcons[slot].GetComponent<Image>().sprite = roomIcons[6];
+				break;
+			case "barracks":
+				displayedIcons[slot].GetComponent<Image>().sprite = roomIcons[7];
+				break;
+			case "clonery":
+				displayedIcons[slot].GetComponent<Image>().sprite = roomIcons[8];
+				break;
+			default:
+				break;
 		}
 
-		Debug.Log("Updated Rooms");
 		auto.OpenRoomsTab();
 	}
 
