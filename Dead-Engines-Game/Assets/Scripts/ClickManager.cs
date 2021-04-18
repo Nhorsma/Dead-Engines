@@ -36,9 +36,13 @@ public class ClickManager : MonoBehaviour
 				{
 					hudView.UpdateEnemy(hit.collider.gameObject.GetComponent<Enemy>());
 				}
-				else if (hit.collider.gameObject.tag == "Metal" || hit.collider.gameObject.tag == "Electronics")
+				else if (hit.collider.gameObject.tag == "Metal" || hit.collider.gameObject.tag == "Electronics" || hit.collider.gameObject.tag == "Oil")
 				{
-					//change display to be for resources
+					hudView.UpdateResource(hit.collider.gameObject.GetComponent<Resource>());
+				}
+				else
+				{
+					hudView.CloseBox();
 				}
 			}
 		}

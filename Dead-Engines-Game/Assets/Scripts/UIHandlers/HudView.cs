@@ -67,15 +67,18 @@ public class HudView : MonoBehaviour
 		healthSlider.value = camp.Health;
 	}
 
-	//public void UpdateResource(GameObject resource)
-	//{
-	//	resource.
-	//	hudPanel.SetActive(true);
-	//	objectName.text = "Resource Deposit";
-	//	objectInfo_1.text = " ";
-	//	objectInfo_2.text = .Health.ToString();
-	//	healthSlider.maxValue = camp.Health; // fix
-	//	healthSlider.value = camp.Health;
-	//}
+	public void UpdateResource(Resource resource)
+	{
+		hudPanel.SetActive(true);
+		objectName.text = "Resource Deposit";
+		objectInfo_1.text = " ";
+		objectInfo_2.text = resource.Type;
+		healthSlider.maxValue = resource.Quantity; // fix
+		healthSlider.value = resource.Quantity;
+	}
 
+	public void CloseBox()
+	{
+		hudPanel.SetActive(false);
+	}
 }
