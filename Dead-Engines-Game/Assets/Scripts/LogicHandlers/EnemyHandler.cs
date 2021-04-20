@@ -85,8 +85,7 @@ public class EnemyHandler : MonoBehaviour
     {
         foreach(GameObject u in unitManager.units)
         {
-            if(Vector3.Distance(u.transform.position,encampment.transform.position)<tresspassingRange
-                || Vector3.Distance(u.transform.position, encampment.GetComponent<Encampment>().ClosestResource.transform.position) < tresspassingRange)
+            if(Vector3.Distance(u.transform.position,encampment.transform.position) < tresspassingRange)
             {
                 return u;
             }

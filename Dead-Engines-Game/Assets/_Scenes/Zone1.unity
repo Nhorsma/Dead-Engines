@@ -5178,6 +5178,7 @@ MonoBehaviour:
   spawnDistance: 5
   startSpawning: 0
   volume: 1
+  distanceToProtect: 80
   enemy_model1: {fileID: 6180372181544574514, guid: 60ca0186f1838ad47bb07ef9905de507,
     type: 3}
   enemy_model2: {fileID: 7763235492483150828, guid: 29ab567c5440d8846a24cf4a119f9462,
@@ -11943,7 +11944,7 @@ MonoBehaviour:
   electronics: {fileID: 8849693777513822540, guid: a0f0ed08341d7c44ba74309fa42dbc13,
     type: 3}
   crater: {fileID: 8510683415502693747, guid: 678f3cdc62e431a44bfe3bd3a9ce502f, type: 3}
-  enemy: {fileID: 3500671454363015440, guid: 79a02ea539ec3c54ebab16eeef8dc84f, type: 3}
+  enemy: {fileID: 6625934082898223612, guid: e2ad133342c93a642bb0af64442e503f, type: 3}
   thin_metal1: {fileID: 7422429180628986571, guid: fb022d89c8412e845925e5b3851fe4aa,
     type: 3}
   thin_metal2: {fileID: 6267019455420572033, guid: 17145d3838a67b84298e8a3d9e279bd8,

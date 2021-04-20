@@ -12,7 +12,7 @@ public class Encampment : MonoBehaviour
 	private int chance = 0;
 	private int onField = 0;
     private string enemyJobs = null;
-    private GameObject closestResource = null;
+    private List<GameObject> closestResource = null;
     private GameObject obj;
 
     public Encampment(int newid)
@@ -68,7 +68,7 @@ public class Encampment : MonoBehaviour
         set { onField = value; }
     }
 
-    public GameObject ClosestResource
+    public List<GameObject> ClosestResources
     {
         get { return closestResource;}
         set { closestResource = value; }

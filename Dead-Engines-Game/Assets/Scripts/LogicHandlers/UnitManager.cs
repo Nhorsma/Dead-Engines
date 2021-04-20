@@ -296,7 +296,7 @@ public class UnitManager : MonoBehaviour
         }
         */
         if (deposit.GetComponent<Resource>() != null && deposit.GetComponent<Resource>().Level != null)
-            encampmentHandler.CheckForTrigger(deposit.GetComponent<Resource>().Level);
+            encampmentHandler.CheckForTrigger(deposit.GetComponent<Resource>());
     }
 
     void Combat(GameObject unit)

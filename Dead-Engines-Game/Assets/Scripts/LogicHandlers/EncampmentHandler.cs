@@ -19,6 +19,7 @@ public class EncampmentHandler : MonoBehaviour
     public float startSpawnTime,spawnTime, spawnDistance; //
     public bool startSpawning;
     public float volume;
+    public float distanceToProtect;
 
     public GameObject enemy_model1, enemy_model2, enemy_model3;
     Enemy enemy_type_1 = new Enemy(5, 1, 1, 1.5f, false);
@@ -50,7 +51,8 @@ public class EncampmentHandler : MonoBehaviour
         {
             encampmentObjects[i].GetComponent<Encampment>().Id = i;
             encampmentObjects[i].GetComponent<Encampment>().Obj = encampmentObjects[i];
-            encampmentObjects[i].GetComponent<Encampment>().ClosestResource = GetClosestResource(encampmentObjects[i].GetComponent<Encampment>());
+            //encampmentObjects[i].GetComponent<Encampment>().ClosestResource = GetClosestResource(encampmentObjects[i].GetComponent<Encampment>());
+            GetClosestResource(encampmentObjects[i].GetComponent<Encampment>());
             encampmentObjects[i].GetComponent<Encampment>().Deployment = new string[]{enemy_model1.name};
             encampmentObjects[i].GetComponent<Encampment>().Health = startingHealth;
 
@@ -113,7 +115,28 @@ public class EncampmentHandler : MonoBehaviour
 
     public void CheckForTrigger(Encampment encampment)
     { 
-        if (encampment.OnField < 2 && (encampment.Health < startingHealth-10) || encampment.ClosestResource.GetComponent<Resource>().Quantity<40) // || resourceHandling.resourceQuantities[resourceHandling.GetNumber(encampment.ClosestResource)]<40)
+        if (encampment.OnField < 2 && (encampment.Health < startingHealth-10))// || encampment.ClosestResource.GetComponent<Resource>().Quantity<40)
+        {
+            int hit = Random.Range(1, 10);
+
+            if (hit < encampment.Chance)
+            {
+                SpawnEnemy(encampment);
+                encampment.Chance = 0;
+            }
+            else
+            {
+                encampment.Chance++;
+            }
+            return;
+        }
+        SetEnemyJobs(encampment.Obj);
+    }
+
+    public void CheckForTrigger(Resource resource)
+    {
+        Encampment encampment = resource.Level;
+        if (encampment.OnField < 2 || resource.Quantity<40)
         {
             int hit = Random.Range(1, 10);
 
@@ -151,7 +174,7 @@ public class EncampmentHandler : MonoBehaviour
             enemyObj.GetComponent<Enemy>().FiringSpeed = new_enemy.FiringSpeed;
             enemyObj.GetComponent<Enemy>().Armored = new_enemy.Armored;
 
-            enemyObj.GetComponent<Enemy>().Resource = encampment.ClosestResource;
+            enemyObj.GetComponent<Enemy>().Resource = GetRandomProtectedResource(encampment);
             enemyObj.GetComponent<Enemy>().CampObj = encampment.Obj;
             enemyObj.GetComponent<Enemy>().CampData = encampment;
             enemyObj.GetComponent<Enemy>().Id = enemyHandler.enemies.Count;
@@ -188,7 +211,13 @@ public class EncampmentHandler : MonoBehaviour
 
     void CheckDeployment(Encampment encampment_data)
     {
-        int quantity = encampment_data.ClosestResource.GetComponent<Resource>().Quantity;
+        int quantity = 0;
+
+        foreach(GameObject resource in encampment_data.ClosestResources)
+        {
+            quantity += resource.GetComponent<Resource>().Quantity;
+        }
+        quantity = quantity / encampment_data.ClosestResources.Count;
 
         if (quantity <= 0)
         {
@@ -236,18 +265,20 @@ public class EncampmentHandler : MonoBehaviour
     }
 
 
-    GameObject GetClosestResource(Encampment encampment)
+    public void GetClosestResource(Encampment encampment)
     {
-        float distance = Mathf.Infinity;
-        GameObject chosen = new GameObject();
-        foreach (GameObject r in spawnRes.GetResources())
+        foreach (GameObject r in spawnRes.GetAllResources())
         {
-            if (Vector3.Distance(r.transform.position, encampment.Obj.transform.position) < distance)
+            if (Vector3.Distance(r.transform.position, encampment.Obj.transform.position) < distanceToProtect)
             {
-                distance = Vector3.Distance(r.transform.position, encampment.Obj.transform.position);
-                chosen = r;
+                encampment.ClosestResources.Add(r);
             }
         }
-        return chosen;
+    }
+
+    public GameObject GetRandomProtectedResource(Encampment encampment)
+    {
+        int i = Random.Range(0, encampment.ClosestResources.Count);
+        return encampment.ClosestResources[i];
     }
 }

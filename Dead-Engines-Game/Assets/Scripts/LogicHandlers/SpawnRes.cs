@@ -279,10 +279,11 @@ public class SpawnRes : MonoBehaviour
 	}
 
 	//needs to be reworked ... uh still not sure about this one???
-	public GameObject[] GetResources()
+/*	public GameObject[] GetResources()
 	{
 		return new GameObject[] { metal1, metal2, electronics};
 	}
+    */
 
 	//needs to be reworked ... I think it's done?
 	public List<GameObject> GetAllResources()
