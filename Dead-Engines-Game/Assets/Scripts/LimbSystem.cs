@@ -36,6 +36,11 @@ public class LimbSystem : MonoBehaviour
 			Debug.Log("performedUpdate");
 			performedUpdate = false;
 		}
+		//if (Input.GetKeyDown(KeyCode.C))
+		//{
+		//	//checker
+		//	Debug.Log(TabCreation.FindSlot(0).Type);
+		//}
     }
 
 	public int CheckAttack(string part)

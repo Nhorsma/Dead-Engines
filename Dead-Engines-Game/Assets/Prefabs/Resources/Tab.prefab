@@ -1340,8 +1340,9 @@ GameObject:
   - component: {fileID: 1107861419891028849}
   - component: {fileID: 1107861419891028850}
   - component: {fileID: 1107861419891028851}
+  - component: {fileID: 2678083064116802822}
   m_Layer: 5
-  m_Name: A Tab
+  m_Name: Tab
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1431,6 +1432,24 @@ MonoBehaviour:
   unassign: {fileID: 1107861418193196886}
   scroller: {fileID: 1107861420003236677}
   capacity: {fileID: 1107861419515938270}
+--- !u!114 &2678083064116802822
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1107861419891028852}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 488831b7caff3904bad49de434eed041, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  roomTab: {fileID: 1107861419891028852}
+  nameText: {fileID: 1107861419213981841}
+  capacityText: {fileID: 1107861419515938270}
+  roomPic: {fileID: 1107861418254902425}
+  buildButton: {fileID: 1107861419651378112}
+  upgradeButton: {fileID: 1107861418112034256}
 --- !u!1 &1107861419916606467
 GameObject:
   m_ObjectHideFlags: 0

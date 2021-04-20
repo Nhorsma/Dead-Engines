@@ -64,7 +64,7 @@ public class RoomManager : MonoBehaviour
 
 	public void InitializeRooms()
 	{
-		for (int i = 0; i < 7; i++)
+		for (int i = 0; i < 17; i++)
 		{
 			rooms.Add(new Room("empty", i, 0));
 		}
@@ -82,6 +82,7 @@ public class RoomManager : MonoBehaviour
 			ResourceHandling.electronics -= (int)CostData.build_refinery[3];
 			rooms[roomSlotClicked] = new Refinery(roomSlotClicked, 1);
 			setupRoom.Setup(rooms[roomSlotClicked]); // ->
+			UpdateIcon(roomSlotClicked, room);
 			//CalculateLimbStats();
 			PlayClip("wrench");
 		}
@@ -91,7 +92,7 @@ public class RoomManager : MonoBehaviour
 			ResourceHandling.electronics -= (int)CostData.build_storage[3];
 			rooms[roomSlotClicked] = new Storage(roomSlotClicked, 1);
 			setupRoom.Setup(rooms[roomSlotClicked]);
-
+			UpdateIcon(roomSlotClicked, room);
 			//CalculateLimbStats();
 			PlayClip("wrench");
 		}
@@ -101,7 +102,7 @@ public class RoomManager : MonoBehaviour
 			ResourceHandling.electronics -= (int)CostData.build_shrine[3];
 			rooms[roomSlotClicked] = new Shrine(roomSlotClicked, 1);
 			setupRoom.Setup(rooms[roomSlotClicked]);
-
+			UpdateIcon(roomSlotClicked, room);
 			//CalculateLimbStats();
 			PlayClip("wrench");
 		}
@@ -111,7 +112,7 @@ public class RoomManager : MonoBehaviour
 			ResourceHandling.electronics -= (int)CostData.build_study[3];
 			rooms[roomSlotClicked] = new Study(roomSlotClicked, 1);
 			setupRoom.Setup(rooms[roomSlotClicked]);
-
+			UpdateIcon(roomSlotClicked, room);
 			//CalculateLimbStats();
 			PlayClip("wrench");
 		}
@@ -121,7 +122,7 @@ public class RoomManager : MonoBehaviour
 			ResourceHandling.electronics -= 10;
 			rooms[roomSlotClicked] = new Infirmary(roomSlotClicked, 1);
 			setupRoom.Setup(rooms[roomSlotClicked]);
-
+			UpdateIcon(roomSlotClicked, room);
 			//CalculateLimbStats();
 			PlayClip("wrench");
 		}
@@ -131,7 +132,7 @@ public class RoomManager : MonoBehaviour
 			ResourceHandling.metal -= 10;
 			rooms[roomSlotClicked] = new Dormitory(roomSlotClicked, 1);
 			setupRoom.Setup(rooms[roomSlotClicked]);
-
+			UpdateIcon(roomSlotClicked, room);
 			//CalculateLimbStats();
 			PlayClip("wrench");
 		}
@@ -141,7 +142,7 @@ public class RoomManager : MonoBehaviour
 			ResourceHandling.electronics -= 10;
 			rooms[roomSlotClicked] = new Barracks(roomSlotClicked, 1);
 			setupRoom.Setup(rooms[roomSlotClicked]);
-
+			UpdateIcon(roomSlotClicked, room);
 			//CalculateLimbStats();
 			PlayClip("wrench");
 		}
@@ -151,7 +152,7 @@ public class RoomManager : MonoBehaviour
 			ResourceHandling.electronics -= 10;
 			rooms[roomSlotClicked] = new Clonery(roomSlotClicked, 1);
 			setupRoom.Setup(rooms[roomSlotClicked]);
-
+			UpdateIcon(roomSlotClicked, room);
 			//CalculateLimbStats();
 			PlayClip("wrench");
 		}
@@ -160,7 +161,6 @@ public class RoomManager : MonoBehaviour
 			Debug.Log("Not enough resources to build a " + room + ".");
 			PlayClip("error");
 		}
-		UpdateIcon(roomSlotClicked, room);
 	}
 
 	//add infirmary stuff
@@ -497,7 +497,7 @@ public class RoomManager : MonoBehaviour
 	//rewrite???
 	public void OpenRoom(int clickedSlot)
 	{
-		roomTabs[clickedSlot].gameObject.SetActive(true); //...which is different. this is the panel itself
+		roomTabs[clickedSlot].gameObject.SetActive(true); //...which is different. this is the panel itself -> room tabs
 		Debug.Log("Current tab " + clickedSlot);
 	}
 
