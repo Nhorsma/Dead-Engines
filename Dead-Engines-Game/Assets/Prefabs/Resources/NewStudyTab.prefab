@@ -1339,10 +1339,9 @@ GameObject:
   - component: {fileID: 1107861419891028848}
   - component: {fileID: 1107861419891028849}
   - component: {fileID: 1107861419891028850}
-  - component: {fileID: 1107861419891028851}
-  - component: {fileID: 2678083064116802822}
+  - component: {fileID: 5249173714928059887}
   m_Layer: 5
-  m_Name: Tab
+  m_Name: NewStudyTab
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1412,7 +1411,7 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &1107861419891028851
+--- !u!114 &5249173714928059887
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1421,27 +1420,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1107861419891028852}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4125bdce8b64e6a48b4f910302b12f99, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  pic: {fileID: 1107861418254902425}
-  roomName: {fileID: 1107861419213981841}
-  build: {fileID: 1107861419651378112}
-  upgrade: {fileID: 1107861418112034256}
-  assign: {fileID: 1107861419916606465}
-  unassign: {fileID: 1107861418193196886}
-  scroller: {fileID: 1107861420003236677}
-  capacity: {fileID: 1107861419515938270}
---- !u!114 &2678083064116802822
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1107861419891028852}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 488831b7caff3904bad49de434eed041, type: 3}
+  m_Script: {fileID: 11500000, guid: 227e280e67b910b459de0b1279571936, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   roomTab: {fileID: 1107861419891028852}

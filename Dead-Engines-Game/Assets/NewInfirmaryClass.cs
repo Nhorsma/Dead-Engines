@@ -3,12 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class NewRefinery : NewRoomClass
+public class NewInfirmaryClass : NewRoomClass
 {
+
 	private int workerCapacity;
 	private List<GameObject> workers;
 
-	public NewRefinery()
+	public NewInfirmaryClass()
 	{
 
 	}
@@ -20,8 +21,8 @@ public class NewRefinery : NewRoomClass
 	{
 		//delete from the collection???
 		this.Slot = oldSlot;
-		this.Type = "refinery";
-		nameText.text = "ref";
+		this.Type = "infirmary";
+		nameText.text = "inf";
 		Debug.Log("replaced old room");
 	}
 

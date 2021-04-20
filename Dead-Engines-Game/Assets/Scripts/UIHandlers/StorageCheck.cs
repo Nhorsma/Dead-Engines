@@ -23,7 +23,7 @@ public class StorageCheck : MonoBehaviour
 	//should refining perform CanStore()?
 	public bool CanStore()
 	{
-		foreach (Storage s in roomManager.rooms)
+		foreach (NewStorageClass s in TabCreation.rooms)
 		{
 			if (s.Level == 1)
 			{

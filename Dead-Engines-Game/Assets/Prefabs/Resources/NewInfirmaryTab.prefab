@@ -1339,9 +1339,9 @@ GameObject:
   - component: {fileID: 1107861419891028848}
   - component: {fileID: 1107861419891028849}
   - component: {fileID: 1107861419891028850}
-  - component: {fileID: 1400744632889448326}
+  - component: {fileID: 5808465919915458579}
   m_Layer: 5
-  m_Name: NewRefineryTab
+  m_Name: NewInfirmaryTab
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1411,7 +1411,7 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &1400744632889448326
+--- !u!114 &5808465919915458579
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1420,7 +1420,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1107861419891028852}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8baccc0cd055b6a4f8ddaa87ebe8746e, type: 3}
+  m_Script: {fileID: 11500000, guid: d348352160c7898409ffe79ff45b29a6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   roomTab: {fileID: 1107861419891028852}

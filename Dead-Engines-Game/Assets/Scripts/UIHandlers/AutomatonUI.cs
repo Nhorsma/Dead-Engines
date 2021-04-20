@@ -106,9 +106,9 @@ public class AutomatonUI : MonoBehaviour
 				tabs[i].SetActive(false);
 			}
 		}
-		foreach (GameObject t in roomManager.roomTabs)
+		foreach (NewRoomClass r in TabCreation.rooms)
 		{
-			t.SetActive(false);
+			r.roomTab.SetActive(false);
 		}
 		roomManager.controllerTab.gameObject.SetActive(false);
 		roomManager.generatorTab.gameObject.SetActive(false);

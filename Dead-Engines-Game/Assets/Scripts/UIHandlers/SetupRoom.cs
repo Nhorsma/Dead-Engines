@@ -227,7 +227,7 @@ public class SetupRoom : MonoBehaviour
 		scrollerContent.GetComponent<GridLayoutGroup>().constraintCount = 2;
 		scrollerContent.GetComponent<GridLayoutGroup>().cellSize = new Vector2(112.5f, 50);
 
-		for (int i = 0; i < roomManager.rooms[slot].WorkerCapacity; i++) //3 entries : bed 0, 1, 2
+		for (int i = 0; i < TabCreation.FindSlot(slot).GetComponent<NewInfirmaryClass>().WorkerCapacity; i++) //3 entries : bed 0, 1, 2
 		{
 			Instantiate(infirmaryEntries[0], scrollerContent.transform); // bed 0-2
 
