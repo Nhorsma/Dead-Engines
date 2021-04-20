@@ -595,7 +595,7 @@ public class UnitManager : MonoBehaviour
         Vector3 dif = (start - end) / 2;
         Quaternion angle = Quaternion.LookRotation(start - end);
 
-        GameObject trail = spawnPool.poolDictionary["trails"].Dequeue();
+        GameObject trail = spawnPool.poolDictionary["small"].Dequeue();
         trail.transform.position = start - dif;
         trail.transform.rotation = angle * offset;
         trail.SetActive(true);
@@ -607,7 +607,7 @@ public class UnitManager : MonoBehaviour
     {
         GameObject t = BulletTrail(start, end);
         yield return new WaitForSeconds(time);
-        spawnPool.poolDictionary["trails"].Enqueue(t);
+        spawnPool.poolDictionary["small"].Enqueue(t);
         t.SetActive(false);
     }
     public void SetJobCircleColor(Unit unit_data, Color colorChange)

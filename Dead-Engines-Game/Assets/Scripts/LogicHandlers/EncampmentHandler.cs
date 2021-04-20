@@ -51,7 +51,7 @@ public class EncampmentHandler : MonoBehaviour
         {
             encampmentObjects[i].GetComponent<Encampment>().Id = i;
             encampmentObjects[i].GetComponent<Encampment>().Obj = encampmentObjects[i];
-            //encampmentObjects[i].GetComponent<Encampment>().ClosestResource = GetClosestResource(encampmentObjects[i].GetComponent<Encampment>());
+            encampmentObjects[i].GetComponent<Encampment>().ClosestResources = new List<GameObject>();
             GetClosestResource(encampmentObjects[i].GetComponent<Encampment>());
             encampmentObjects[i].GetComponent<Encampment>().Deployment = new string[]{enemy_model1.name};
             encampmentObjects[i].GetComponent<Encampment>().Health = startingHealth;
@@ -94,16 +94,16 @@ public class EncampmentHandler : MonoBehaviour
 	}
 
 
-    public void SetEnemyJobs(GameObject encampment)
+    public void SetEnemyJobs(Encampment encampment)
     {
-        Encampment encampment_data = encampment.GetComponent<Encampment>();
-        if(encampment_data.Health > startingHealth/2) //startinghealth/2 normally
+        if(encampment!=null)
+        if(encampment.Health > startingHealth/2) //startinghealth/2 normally
         {
-            encampment.GetComponent<Encampment>().EnemyJobs = "guard";
+            encampment.EnemyJobs = "guard";
         }
         else
         {
-            encampment.GetComponent<Encampment>().EnemyJobs = "destroy";
+            encampment.EnemyJobs = "destroy";
         }
     }
 
@@ -115,7 +115,7 @@ public class EncampmentHandler : MonoBehaviour
 
     public void CheckForTrigger(Encampment encampment)
     { 
-        if (encampment.OnField < 2 && (encampment.Health < startingHealth-10))// || encampment.ClosestResource.GetComponent<Resource>().Quantity<40)
+        if (encampment.OnField < 2 && (encampment.Health < startingHealth/1.3f))
         {
             int hit = Random.Range(1, 10);
 
@@ -130,13 +130,13 @@ public class EncampmentHandler : MonoBehaviour
             }
             return;
         }
-        SetEnemyJobs(encampment.Obj);
+        SetEnemyJobs(encampment);
     }
 
     public void CheckForTrigger(Resource resource)
     {
         Encampment encampment = resource.Level;
-        if (encampment.OnField < 2 || resource.Quantity<40)
+        if (encampment.OnField < 2 || resource.Quantity<resourceHandling.startQuantity/2)
         {
             int hit = Random.Range(1, 10);
 
@@ -151,7 +151,7 @@ public class EncampmentHandler : MonoBehaviour
             }
             return;
         }
-        SetEnemyJobs(encampment.Obj);
+        SetEnemyJobs(encampment);
     }
 
 
@@ -269,9 +269,10 @@ public class EncampmentHandler : MonoBehaviour
     {
         foreach (GameObject r in spawnRes.GetAllResources())
         {
-            if (Vector3.Distance(r.transform.position, encampment.Obj.transform.position) < distanceToProtect)
+            if (r!=null && Vector3.Distance(r.transform.position, encampment.Obj.transform.position) < distanceToProtect)
             {
                 encampment.ClosestResources.Add(r);
+                r.GetComponent<Resource>().Level = encampment;
             }
         }
     }
