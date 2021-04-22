@@ -16,7 +16,7 @@ public class AutomotonAction : MonoBehaviour
     Rigidbody rb;
     int layer_mask;
 
-    public static bool endPhaseOne;
+    public bool endPhaseOne;
     public bool isSelected;
     public GameObject automoton, fog, footObject, fistObject, headObject, dustCloud, explosion, lazer;
     public Vector3 phaseOnePos, phaseTwoPos;
@@ -36,34 +36,22 @@ public class AutomotonAction : MonoBehaviour
     public int autoHealth;
     public int startingAutoHealth;
 
-
     private void Start()
     {
-        layer_mask = LayerMask.GetMask("Ignore Raycast");
-        robotAmbientSource.Play();
-        rb = GetComponent<Rigidbody>();
-        nv = GetComponent<NavMeshAgent>();
-        nv.speed = movementSpeed;
+        endPhaseOne = canAct = false;
         canMove = canRotate = isWalking = isSelected = false;
-        canLazer = canBarrage = true;
+        canLazer = canBarrage = false;
 
         phaseTwoPos = phaseOnePos = automoton.transform.position;
-        phaseTwoPos -= new Vector3(13.2f, -41.49f, 12.3f);
 
         anim = automoton.GetComponent<Animator>();
         aa = automoton.GetComponent<AutomotonAction>();
-        //aa.enabled = false;
-        endPhaseOne = canAct = true;
 
         footCollider = footObject.GetComponent<BoxCollider>();
         fistCollider = fistObject.GetComponent<BoxCollider>();
         footCollider.enabled = false;
         fistCollider.enabled = false;
-
-        DefaultControls();
-        //unitManager.PhaseTwoUnits();
         autoHealth = startingAutoHealth;
-        StartCoroutine(RaiseAuto());
     }
 
     private void LateUpdate()
@@ -74,6 +62,26 @@ public class AutomotonAction : MonoBehaviour
             Controls();
         }
         Movement();
+    }
+
+    public void StartAuto()
+    {
+        layer_mask = LayerMask.GetMask("Ignore Raycast");
+        robotAmbientSource.Play();
+        rb = GetComponent<Rigidbody>();
+        nv = GetComponent<NavMeshAgent>();
+        nv.speed = movementSpeed;
+        canLazer = canBarrage = true;
+
+        phaseTwoPos = phaseOnePos = automoton.transform.position;
+        phaseTwoPos -= new Vector3(13.2f, -41.49f, 12.3f);
+
+        endPhaseOne = canAct = true;
+
+        DefaultControls();
+        //unitManager.PhaseTwoUnits();
+        autoHealth = startingAutoHealth;
+        StartCoroutine(RaiseAuto());
     }
 
     RaycastHit Hit()
@@ -461,10 +469,7 @@ public class AutomotonAction : MonoBehaviour
     {
         autoHealth -= amount;
 
-        if(autoHealth >= startingAutoHealth*0.75f)
-        {
-        }
-        else if(autoHealth == startingAutoHealth*0.5f)
+        if(autoHealth == startingAutoHealth*0.5f)
         {
             audioHandler.PlayClip(gameObject, "robotAlarm");
         }
@@ -472,14 +477,18 @@ public class AutomotonAction : MonoBehaviour
         {
             audioHandler.PlayClip(gameObject, "robotAlarm");
         }
-        else if(autoHealth == 0)
+        else if(autoHealth <= 0)
         {
-            audioHandler.PlayClip(gameObject, "robotAlarm");
+            SpawnExplosion(gameObject);
+            audioHandler.PlayClipIgnore(gameObject, "explosion");
+            StartCoroutine(DeathSequence());
         }
         else
         {
+            //death
             //SpawnExplosion(gameObject);
-            audioHandler.PlayClipIgnore(gameObject, "smallEchoBoom");
+            //audioHandler.PlayClipIgnore(gameObject, "smallEchoBoom");
+            //StartCoroutine(DeathSequence());
         }
 
     }
@@ -507,5 +516,11 @@ public class AutomotonAction : MonoBehaviour
     {
         isSelected = set;
         transform.Find("Ring").GetComponent<SpriteRenderer>().color = c;
+    }
+
+    IEnumerator DeathSequence()
+    {
+        yield return new WaitForSeconds(3f);
+        SceneChanger.ReturnToMenu();
     }
 }

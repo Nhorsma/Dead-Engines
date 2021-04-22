@@ -93,7 +93,7 @@ public class SelectItems : MonoBehaviour
 					//UpdateUnitUI(hit.collider.gameObject.GetComponent<Unit>()); ////////////////////////////////////////// ------------------------------------->
 					ReadyClip();
                 }
-                if(hit.collider.CompareTag("Robot") && autoAction.enabled==true)
+                if(hit.collider.CompareTag("Robot") && autoAction.endPhaseOne==true)
                 {
                     autoAction.SetSeleted(true, selectedC);
                 }
@@ -251,7 +251,7 @@ public class SelectItems : MonoBehaviour
 
 				SetColor(currentUnit, true);
 			}
-            if (InRect(automaton.transform.position) && autoAction.enabled==true)
+            if (InRect(automaton.transform.position) && autoAction.endPhaseOne==true)
             { 
                 autoAction.SetSeleted(true, selectedC);
             }

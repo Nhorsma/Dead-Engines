@@ -135,8 +135,13 @@ public class EnemyHandler : MonoBehaviour
             }
             else if(enemy_data.Target.tag=="Robot")
             {
-                //discuss robot health being something static outside the AUtomotonAction script
-                //since that script isn't activated until the start of phase 2
+                if (enemy_data.Target.GetComponent<AutomotonAction>().autoHealth <= 0)
+                {
+                    AssignAnimation(enemy, "firing", false);
+                    enemy_data.Target = null;
+
+                    return;
+                }
             }
 
             //shooting
@@ -207,6 +212,7 @@ public class EnemyHandler : MonoBehaviour
                 Vector3 direction = targetPos - enemy.transform.position;
                 audioHandler.PlayClip(enemy, "smallLaz");
                 StartCoroutine(TrailOff(0.05f, enemy.transform.position, enemy_data.Target.transform.position));
+                automoton.GetComponent<AutomotonAction>().RecieveDamage(enemy_data.Attack);
             }
             PointTurret(enemy);
             StartCoroutine(FireCoolDown(enemy));

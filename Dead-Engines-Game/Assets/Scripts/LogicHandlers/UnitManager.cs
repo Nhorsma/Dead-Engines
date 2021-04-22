@@ -384,7 +384,7 @@ public class UnitManager : MonoBehaviour
         PlayReadyClip(unit);
         ResetJob(unit.GetComponent<Unit>());
 
-        if (!AutomotonAction.endPhaseOne)
+        if (!robot.GetComponent<AutomotonAction>().endPhaseOne)
         {
             unit.transform.position = FindSpotToSpawn(0);
             unit.SetActive(true);

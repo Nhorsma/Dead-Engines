@@ -22,7 +22,7 @@ public class StartPhaseTwo : MonoBehaviour
     {
         automatonAction = GameObject.FindGameObjectWithTag("Robot").GetComponent<AutomotonAction>();
         hunterHandler = GetComponent<HunterHandler>();
-        automatonAction.enabled = false;
+        //automatonAction.enabled = false;
         hunterHandler.enabled = false;
         endPhaseOne = false;
     }
@@ -47,8 +47,10 @@ public class StartPhaseTwo : MonoBehaviour
 	{
 		sphereThinner.enabled = false;	// so the automaton doesn't delete resources inadvertently
 		auto.activationButton.gameObject.SetActive(false);
-		autoObj.GetComponent<AutomotonAction>().enabled = true;
-		hunterHandler.enabled = true;
+        //autoObj.GetComponent<AutomotonAction>().enabled = true;
+        automatonAction.StartAuto();
+
+        hunterHandler.enabled = true;
 		//resourceHandling.SetNewResourceDeposits(spawnRes.GetAllResources());
 	}
 

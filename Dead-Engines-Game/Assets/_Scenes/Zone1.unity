@@ -5174,6 +5174,7 @@ MonoBehaviour:
   hudView: {fileID: 2075244116}
   g1: {fileID: 0}
   g2: {fileID: 0}
+  automaton: {fileID: 5905536743914566335}
 --- !u!114 &467610732
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -24645,7 +24646,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5905536743914566335}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 57d5ecc92ed93b94ba6e895526d7ae42, type: 3}
   m_Name: 
@@ -24654,6 +24655,7 @@ MonoBehaviour:
   movementSpeed: 8
   startTurnSpeed: 80
   turnSpeed: 80
+  endPhaseOne: 0
   isSelected: 0
   automoton: {fileID: 5905536743914566335}
   fog: {fileID: 1951739293}
