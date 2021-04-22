@@ -12,6 +12,11 @@ public class NewShrineClass : NewRoomClass
 
 	public Button assignButton;
 	public Button unassignButton;
+	public Button defaultEffect;
+	public Button unitSpeedEffect;
+
+	public Text activeText;
+	public Text multiplierText;
 
 	public RoomManager roomManager;
 
@@ -21,6 +26,13 @@ public class NewShrineClass : NewRoomClass
 		WorkerCapacity = 3;
 		Workers = new List<GameObject>();
 		ActiveEffect = "none";
+	}
+
+	public void Update()
+	{
+		capacityText.text = Workers.Count + " / " + WorkerCapacity;
+		activeText.text = "active effect: " + ActiveEffect;
+		multiplierText.text = "worship multiplier: " + roomManager.combinedShrineMultiplier + "x";
 	}
 
 	public NewShrineClass()
@@ -37,22 +49,17 @@ public class NewShrineClass : NewRoomClass
 		//delete from the collection???
 		this.Slot = oldSlot;
 		this.Type = "shrine";
-		nameText.text = "shr";
 		Debug.Log("replaced old room");
-		TurnOnButtons();
 		AddButtonEvents();
-	}
-
-	public void TurnOnButtons()
-	{
-		assignButton.gameObject.SetActive(true);
-		unassignButton.gameObject.SetActive(true);
 	}
 
 	public void AddButtonEvents()
 	{
 		assignButton.onClick.AddListener(delegate { roomManager.Assign(this.Type, this.Slot); });
 		unassignButton.onClick.AddListener(delegate { roomManager.Unassign(this.Type, this.Slot); });
+
+		defaultEffect.onClick.AddListener(delegate { roomManager.SetActiveEffect("none", this.Slot); });
+		unitSpeedEffect.onClick.AddListener(delegate { roomManager.SetActiveEffect("unitSpeed", this.Slot); });
 	}
 
 }

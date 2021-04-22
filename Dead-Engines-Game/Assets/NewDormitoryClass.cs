@@ -6,9 +6,21 @@ using UnityEngine.UI;
 public class NewDormitoryClass : NewRoomClass
 {
 
+	public RoomManager roomManager;
+
+	public void Start()
+	{
+		roomManager = FindObjectOfType<RoomManager>();
+	}
+
 	public NewDormitoryClass()
 	{
 
+	}
+
+	public void Update()
+	{
+		capacityText.text = roomManager.unitManager.units.Count.ToString() + " / " + roomManager.housingMax.ToString(); //not updating enough *shrug*
 	}
 
 	public void ReplaceOldRoom(int oldSlot)
@@ -17,7 +29,6 @@ public class NewDormitoryClass : NewRoomClass
 		this.Slot = oldSlot;
 		this.Type = "dormitory";
 		this.Level = 1;
-		nameText.text = "dor";
 		Debug.Log("replaced old room");
 	}
 

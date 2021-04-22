@@ -30,14 +30,8 @@ public class NewBarracksClass : NewRoomClass
 		//delete from the collection???
 		this.Slot = oldSlot;
 		this.Type = "barracks";
-		nameText.text = "bar";
 		Debug.Log("replaced old room");
 		AddButtonEvents();
-	}
-
-	public void TurnOnButtons()
-	{
-
 	}
 
 	public void AddButtonEvents()

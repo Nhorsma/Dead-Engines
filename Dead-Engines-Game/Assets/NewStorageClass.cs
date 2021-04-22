@@ -6,11 +6,21 @@ using UnityEngine.UI;
 public class NewStorageClass : NewRoomClass
 {
 
+	public RoomManager roomManager;
 
+	public void Start()
+	{
+		roomManager = FindObjectOfType<RoomManager>();
+	}
 
 	public NewStorageClass()
 	{
 
+	}
+
+	public void Update()
+	{
+		capacityText.text = ResourceHandling.storageUsed.ToString() + " / " + roomManager.storageMax.ToString();
 	}
 
 	public void ReplaceOldRoom(int oldSlot)
@@ -18,7 +28,6 @@ public class NewStorageClass : NewRoomClass
 		//delete from the collection???
 		this.Slot = oldSlot;
 		this.Type = "storage";
-		nameText.text = "sto";
 		Debug.Log("replaced old room");
 	}
 

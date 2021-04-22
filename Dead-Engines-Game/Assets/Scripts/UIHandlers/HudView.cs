@@ -15,10 +15,14 @@ public class HudView : MonoBehaviour
 
 	public GameObject hudPanel;
 	public Text objectName;
-	public Text objectInfo_1;
-	public Text objectInfo_2;
-	public Text healthNumber;
-	public Slider healthSlider;
+	public Text objectInfo_1; // health ------------------
+	public Text objectInfo_2; // attack ------------------
+	public Text objectInfo_3; // defense -----------------
+	public Text objectInfo_4; // armor piercing ----------
+	public Text objectInfo_5; // speed -------------------
+	public Text objectInfo_6; // current job -------------
+
+	public List<Image> unitSpecificIcons = new List<Image>();
 
 	// Start is called before the first frame update
 	void Start()
@@ -29,52 +33,82 @@ public class HudView : MonoBehaviour
 	public void UpdateUnit(Unit unit)
 	{
 		hudPanel.SetActive(true);
+		foreach (Image i in unitSpecificIcons)
+		{
+			i.gameObject.SetActive(true);
+		}
 		objectName.text = unit.UnitName;
-		objectInfo_1.text = unit.Job;
-		healthNumber.text = unit.Health.ToString();
-		healthSlider.maxValue = unit.Health; // fix
-		healthSlider.value = unit.Health;
+		objectInfo_1.text = unit.Health.ToString();
+		objectInfo_2.text = unit.Attack.ToString();
+		objectInfo_3.text = unit.Defense.ToString();
+		objectInfo_4.text = "x";
+		objectInfo_5.text = EffectConnector.unitSpeed.ToString();
+		objectInfo_6.text = unit.Job.ToString();
 	}
 
 	public void UpdateGroup(Unit unit)
 	{
 		hudPanel.SetActive(true);
+		foreach (Image i in unitSpecificIcons)
+		{
+			i.gameObject.SetActive(false);
+		}
 		objectName.text = "Unit Group";
-		objectInfo_1.text = unit.Job;
-		objectInfo_2.text = "Held Item";
-		healthNumber.text = " ";
-		healthSlider.maxValue = unit.Health; // fix
-		healthSlider.value = unit.Health;
+		objectInfo_1.text = "x";
+		objectInfo_2.text = "x";
+		objectInfo_3.text = "x";
+		objectInfo_4.text = "x";
+		objectInfo_5.text = "x";
+		objectInfo_6.text = "x";
 	}
 
 	public void UpdateEnemy(Enemy enemy)
 	{
 		hudPanel.SetActive(true);
+		foreach (Image i in unitSpecificIcons)
+		{
+			i.gameObject.SetActive(true);
+		}
 		objectName.text = enemy.name;
-		objectInfo_1.text = "Stats";
-		objectInfo_2.text = "Resource Drop";
-		healthSlider.maxValue = enemy.Health; // fix
-		healthSlider.value = enemy.Health;
+		objectInfo_1.text = enemy.Health.ToString();
+		objectInfo_2.text = enemy.Attack.ToString();
+		objectInfo_3.text = enemy.Defense.ToString();
+		objectInfo_4.text = "x";
+		objectInfo_5.text = "x";
+		objectInfo_6.text = "";
 	}
 
 	public void UpdateEncampment(Encampment camp)
 	{
 		hudPanel.SetActive(true);
+		foreach (Image i in unitSpecificIcons)
+		{
+			i.gameObject.SetActive(false);
+		}
+		unitSpecificIcons[0].gameObject.SetActive(true);
 		objectName.text = "Encampment";
-		objectInfo_1.text = "Stats";
-		objectInfo_2.text = "Resource Drop";
-		healthSlider.maxValue = camp.Health; // fix
-		healthSlider.value = camp.Health;
+		objectInfo_1.text = camp.Health.ToString();
+		objectInfo_2.text = "x";
+		objectInfo_3.text = "x";
+		objectInfo_4.text = "x";
+		objectInfo_5.text = "x";
+		objectInfo_6.text = "";
 	}
 
 	public void UpdateResource(Resource resource)
 	{
 		hudPanel.SetActive(true);
+		foreach (Image i in unitSpecificIcons)
+		{
+			i.gameObject.SetActive(false);
+		}
 		objectName.text = "Resource Deposit";
-		objectInfo_1.text = " ";
-		objectInfo_2.text = resource.Type;
-		healthSlider.maxValue = resource.Quantity; // fix
-		healthSlider.value = resource.Quantity;
+		objectInfo_1.text = resource.Type;
+		objectInfo_2.text = resource.Quantity.ToString();
+		objectInfo_3.text = "x";
+		objectInfo_4.text = "x";
+		objectInfo_5.text = "x";
+		objectInfo_6.text = "";
 	}
 
 	public void CloseBox()

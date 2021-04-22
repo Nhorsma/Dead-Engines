@@ -41,6 +41,9 @@ public class RoomManager : MonoBehaviour
 	public int housingMax = 3;
 	public int storageMax = 25;
 
+	public int combinedShrineMultiplier = 0;
+	public int combinedStudyMultiplier = 0;
+
 	void Start()
     {
 
@@ -445,7 +448,7 @@ public class RoomManager : MonoBehaviour
 	// worship and research methods only need to be called when their multiplier changes, or when a unit is assigned successfully. this will definitely save on horsepower
 	public void Worship()
 	{
-		int combinedMultiplier = 0;
+		combinedShrineMultiplier = 0;
 		List<string> effects = new List<string>();
 		effects.Clear();
 
@@ -454,18 +457,18 @@ public class RoomManager : MonoBehaviour
 			if (r.Type == "shrine")
 			{
 				Debug.Log("Shrine[" + r.Slot + "]: " + r.GetComponent<NewShrineClass>().Workers.Count + "x boost");
-				combinedMultiplier += r.GetComponent<NewShrineClass>().Workers.Count; //case for multiples of the same room
+				combinedShrineMultiplier += r.GetComponent<NewShrineClass>().Workers.Count; //case for multiples of the same room
 				effects.Add(r.GetComponent<NewShrineClass>().ActiveEffect);
 			}
 		}
-		Debug.Log("Total Shrine Multiplier: " + combinedMultiplier);
+		Debug.Log("Total Shrine Multiplier: " + combinedShrineMultiplier);
 
 		//calculate effects
 		foreach (string e in effects)
 		{
 			if (e == "unitSpeed")  //-----------------------> r.ActiveEffect will be set by a button that is activated once room is upgraded
 			{
-				EffectConnector.unitSpeed = EffectConnector.unitBaseSpeed + combinedMultiplier;
+				EffectConnector.unitSpeed = EffectConnector.unitBaseSpeed + combinedShrineMultiplier;
 			}
 			else if (e == "none")
 			{
@@ -478,7 +481,7 @@ public class RoomManager : MonoBehaviour
 	// need to clean
 	public void Research()
 	{
-		int combinedMultiplier = 0;
+		combinedStudyMultiplier = 0;
 		List<string> effects = new List<string>();
 		effects.Clear();
 
@@ -487,19 +490,19 @@ public class RoomManager : MonoBehaviour
 			if (r.Type == "study")
 			{
 				Debug.Log("Study[" + r.Slot + "]: " + r.GetComponent<NewStudyClass>().Workers.Count + "x boost");
-				combinedMultiplier += r.GetComponent<NewStudyClass>().Workers.Count; //case for multiples of the same room
+				combinedStudyMultiplier += r.GetComponent<NewStudyClass>().Workers.Count; //case for multiples of the same room
 				effects.Add(r.GetComponent<NewStudyClass>().ActiveEffect);
 			}
 
 		}
-		Debug.Log("Total Study Multiplier: " + combinedMultiplier);
+		Debug.Log("Total Study Multiplier: " + combinedStudyMultiplier);
 
 		//calculate effects
 		foreach (string e in effects)
 		{
 			if (e == "roomCost")    //-----------------------> r.ActiveEffect will be set by a button that is activated once room is upgraded
 			{
-				EffectConnector.roomCost = combinedMultiplier + 1;
+				EffectConnector.roomCost = combinedStudyMultiplier + 1;
 			}
 			else if (e == "none")
 			{
@@ -702,8 +705,16 @@ public class RoomManager : MonoBehaviour
 
 	public void UseClonery(Unit unit_data)
 	{
-		unitManager.CloneUnit(unit_data);
-		//pay cost
+		if (ResourceHandling.part >= 10)
+		{
+			unitManager.CloneUnit(unit_data);
+			ResourceHandling.part -= 10;
+		}
+		else
+		{
+			Debug.Log("Can't afford to clone a unit");
+		}
+
 	}
 
 	public bool CheckDormitories()

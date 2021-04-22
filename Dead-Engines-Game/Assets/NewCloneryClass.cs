@@ -30,14 +30,8 @@ public class NewCloneryClass : NewRoomClass
 		//delete from the collection???
 		this.Slot = oldSlot;
 		this.Type = "clonery";
-		nameText.text = "clo";
 		Debug.Log("replaced old room");
 		AddButtonEvents();
-	}
-
-	public void TurnOnButtons()
-	{
-
 	}
 
 	public void AddButtonEvents()
