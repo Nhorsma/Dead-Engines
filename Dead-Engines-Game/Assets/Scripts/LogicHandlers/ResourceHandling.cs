@@ -97,7 +97,7 @@ public class ResourceHandling : MonoBehaviour
 	{
         //int i = GetNumber(deposit);
         int i = deposit.GetComponent<Resource>().Id;
-        resourceData[i].Subtract(1);
+        resourceData[i].Subtract(amount);
 		if (resourceData[i].Quantity <= 0)
 		{
 			resourceObjects[i].SetActive(false);
@@ -137,47 +137,11 @@ public class ResourceHandling : MonoBehaviour
         {
             resourceData.Add(new Resource(newDeps[i].tag, startQuantity, i, newDeps[i]));
         }
-
-        /*
-		GameObject[] newDeposits = new GameObject[newDeps.Count];
-
-		for (int i = 0; i < newDeps.Count; i++)
-		{
-			newDeposits[i] = newDeps[i];
-		}
-
-        int[] newQuantity = new int[newDeposits.Length];
-        
-        for (int i = 0; i < newQuantity.Length; i++)
-        {
-            newQuantity[i] = startQuantity;
-        }
-        
-
-
-       
-        for (int i = 0; i < ; i++)
-        {
-            int id = GetNumber(resourceDeposits[i]);
-            int amount = resourceQuantities[id];
-            newQuantity[id] = amount;
-        }
-
-		resourceDeposits = newDeposits;
-		resourceQuantities = newQuantity;
-        */
     }
 
 
 	public int GetNumber(GameObject gm)
-	{/*
-		int i = 0;
-		while (i < resourceDeposits.Length && !resourceDeposits[i].Equals(gm))
-		{
-			i++;
-            }
-		return i;
-        */
+	{
         if(gm.GetComponent<Resource>()!=null)
             return gm.GetComponent<Resource>().Id;
         return -1;

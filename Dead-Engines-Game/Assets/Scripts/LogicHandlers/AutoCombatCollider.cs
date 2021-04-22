@@ -16,13 +16,14 @@ public class AutoCombatCollider : MonoBehaviour
     public bool canCollect;
 
     private void Awake()
-    {
+    {/*
         resourceHandling = FindObjectOfType<ResourceHandling>();
         encampmentHandler = FindObjectOfType<EncampmentHandler>();
         //enemyHandler = FindObjectOfType<EnemyHandler>();
         enemyHandler = (EnemyHandler)FindObjectOfType(typeof(EnemyHandler));
         hunterHandler = FindObjectOfType<HunterHandler>();
         audioHandler = FindObjectOfType<AudioHandler>();
+        */
     }
 
     void Update()
@@ -59,15 +60,18 @@ public class AutoCombatCollider : MonoBehaviour
             }
 			if (canCollect && other.gameObject.tag == "Metal")
 			{
-				resourceHandling.Extract(other.gameObject, 50);
                 int left = resourceHandling.resourceData[resourceHandling.GetNumber(other.gameObject)].Quantity;
-
-                if (left < 0)
-					ResourceHandling.metal -= left; //subtracting a negative is positive
-				else
-					ResourceHandling.metal += 50;
+                if (left>50)
+                {
+                    resourceHandling.Extract(other.gameObject, 50);
+                    ResourceHandling.metal += 50;
+                }
+                else
+                {
+                    resourceHandling.Extract(other.gameObject,left);
+                    ResourceHandling.metal += left;
+                }
                 canTrigger = false;
-
                 audioHandler.PlayClip(other.gameObject, "explosion");
                 hunterHandler.CheckSpawnHunter();
             }
