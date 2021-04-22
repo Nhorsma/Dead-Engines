@@ -155,11 +155,11 @@ public class AutomatonUI : MonoBehaviour
 
 		if (RoomManager.generatorRepaired && RoomManager.controllerRepaired)
 		{
-			activationButton.enabled = true;
+			activationButton.enabled = false;
 		}
 		else
 		{
-			activationButton.enabled = false;
+			activationButton.enabled = true;
 		}
 
 		//if (unitManager.units != null)

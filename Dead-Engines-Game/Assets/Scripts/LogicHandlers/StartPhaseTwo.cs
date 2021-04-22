@@ -50,7 +50,7 @@ public class StartPhaseTwo : MonoBehaviour
 		autoObj.GetComponent<AutomotonAction>().enabled = true;
 		hunterHandler.enabled = true;
 		selectItems.enabled = false;
-		resourceHandling.SetNewResourceDeposits(spawnRes.GetAllResources());
+		//resourceHandling.SetNewResourceDeposits(spawnRes.GetAllResources());
 	}
 
 }
