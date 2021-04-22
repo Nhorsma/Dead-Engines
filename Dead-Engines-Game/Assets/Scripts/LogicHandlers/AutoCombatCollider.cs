@@ -77,18 +77,21 @@ public class AutoCombatCollider : MonoBehaviour
             }
 			if (canCollect && other.gameObject.tag == "Electronics")
 			{
-				resourceHandling.Extract(other.gameObject, 50);
                 int left = resourceHandling.resourceData[resourceHandling.GetNumber(other.gameObject)].Quantity;
-
-                if (left < 0)
-					ResourceHandling.electronics -= left; //subtracting a negative is positive
-				else
-					ResourceHandling.electronics += 50;
+                if (left > 50)
+                {
+                    resourceHandling.Extract(other.gameObject, 50);
+                    ResourceHandling.electronics += 50;
+                }
+                else
+                {
+                    resourceHandling.Extract(other.gameObject, left);
+                    ResourceHandling.electronics += left;
+                }
                 canTrigger = false;
-
                 audioHandler.PlayClip(other.gameObject, "explosion");
-				hunterHandler.CheckSpawnHunter();
-			}
+                hunterHandler.CheckSpawnHunter();
+            }
 		}
     }
 
