@@ -115,7 +115,7 @@ public class EncampmentHandler : MonoBehaviour
 
     public void CheckForTrigger(Encampment encampment)
     { 
-        if (encampment.OnField < 2 && (encampment.Health < startingHealth/1.3f))
+        if (encampment.OnField < 2 && (encampment.Health < 95f))
         {
             int hit = Random.Range(1, 10);
 
