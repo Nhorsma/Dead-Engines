@@ -17,7 +17,7 @@ public class Enemy : MonoBehaviour
 	protected int health = 5;
 	protected int attack = 1;
     protected int defense = 1;
-    protected float walkingSpeed;
+    protected float walkingSpeed = 3f;
     protected bool armored = false;
 
 	protected float firingSpeed = 1f; // fishy

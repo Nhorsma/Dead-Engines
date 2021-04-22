@@ -168,10 +168,13 @@ public class HunterHandler : MonoBehaviour
                 }
                 if (h.GetComponent<Hunter>().CanRetreat && distance < tooCloseRange)//if very close, walk backwards
                 {
-                    BackUp(automaton.transform.position,h);
+                    //BackUp(automaton.transform.position,h);
+                    FindFlank(automaton.transform.position, h);
                 }
 
-                hunterTransform.forward = automaton.transform.position - h.transform.position - new Vector3(0,hunterTransform.forward.y,0);
+                Vector3 offset = automaton.transform.position - h.transform.position;
+                hunterTransform.forward = new Vector3(offset.x,0f,offset.z);
+                
             }
     }
 
