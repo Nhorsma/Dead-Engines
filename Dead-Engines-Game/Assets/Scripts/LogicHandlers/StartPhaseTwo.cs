@@ -49,7 +49,6 @@ public class StartPhaseTwo : MonoBehaviour
 		auto.activationButton.gameObject.SetActive(false);
 		autoObj.GetComponent<AutomotonAction>().enabled = true;
 		hunterHandler.enabled = true;
-		selectItems.enabled = false;
 		//resourceHandling.SetNewResourceDeposits(spawnRes.GetAllResources());
 	}
 

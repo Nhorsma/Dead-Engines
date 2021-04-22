@@ -27,7 +27,7 @@ public class SelectItems : MonoBehaviour
     Color selectedYellow = new Color32(255, 255, 0, 200);
 
     GameObject highlightThisUnit;
-    public GameObject g1, g2; 
+    public GameObject g1, g2, automaton; 
 
     Vector2 mouseFirst, mouseSecond;
     Vector3 squareStartPos;
@@ -251,7 +251,7 @@ public class SelectItems : MonoBehaviour
 
 				SetColor(currentUnit, true);
 			}
-            if (InRect(autoAction.gameObject.transform.position) && autoAction.enabled==true)
+            if (InRect(automaton.transform.position) && autoAction.enabled==true)
             { 
                 autoAction.SetSeleted(true, selectedC);
             }
