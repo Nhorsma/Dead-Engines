@@ -245,6 +245,7 @@ public class AutomotonAction : MonoBehaviour
             }
             if (canMove && walkTo != null)
             {
+                walkTo = new Vector3(walkTo.x, phaseTwoPos.y, walkTo.z);
                 Walk(walkTo);
             }
         }
@@ -483,14 +484,6 @@ public class AutomotonAction : MonoBehaviour
             audioHandler.PlayClipIgnore(gameObject, "explosion");
             StartCoroutine(DeathSequence());
         }
-        else
-        {
-            //death
-            //SpawnExplosion(gameObject);
-            //audioHandler.PlayClipIgnore(gameObject, "smallEchoBoom");
-            //StartCoroutine(DeathSequence());
-        }
-
     }
 
     void SpawnDust(GameObject obj)

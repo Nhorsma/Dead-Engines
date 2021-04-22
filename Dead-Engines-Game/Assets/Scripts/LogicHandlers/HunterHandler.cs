@@ -109,6 +109,7 @@ public class HunterHandler : MonoBehaviour
         hunterObj.GetComponent<Hunter>().Attack = 10;
         hunterObj.GetComponent<Hunter>().FiringSpeed = 6f;
         hunterObj.GetComponent<Hunter>().Target = automaton;
+        hunterObj.GetComponent<Hunter>().CanRetreat = true;
 
         hunterObj.transform.position = spawnPlace;
         hunterObj.transform.rotation = transform.rotation;
@@ -118,7 +119,8 @@ public class HunterHandler : MonoBehaviour
         hunterObj.GetComponent<NavMeshAgent>().speed = hunterObj.GetComponent<Hunter>().Speed;
 
         //hunterObj.GetComponent<SnoutBehavior>().pointTo = automaton;
-        hunterObj.GetComponent<Hunter>().FireFrom = hunterObj.GetComponent<SnoutBehavior>().GetJointSix();
+        hunterObj.GetComponent<Hunter>().FireFrom = hunterObj.transform.Find("FireFrom").gameObject;
+        //hunterObj.GetComponent<Hunter>().FireFrom = hunterObj.GetComponent<SnoutBehavior>().GetJointSix();
     }
 
 
@@ -169,7 +171,7 @@ public class HunterHandler : MonoBehaviour
                     BackUp(automaton.transform.position,h);
                 }
 
-                hunterTransform.forward = automaton.transform.position - h.transform.position;
+                hunterTransform.forward = automaton.transform.position - h.transform.position - new Vector3(0,hunterTransform.forward.y,0);
             }
     }
 

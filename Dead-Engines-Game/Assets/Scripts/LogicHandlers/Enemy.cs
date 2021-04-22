@@ -17,7 +17,8 @@ public class Enemy : MonoBehaviour
 	protected int health = 5;
 	protected int attack = 1;
     protected int defense = 1;
-	protected bool armored = false;
+    protected float walkingSpeed;
+    protected bool armored = false;
 
 	protected float firingSpeed = 1f; // fishy
 	protected bool justShot = false;
@@ -90,6 +91,12 @@ public class Enemy : MonoBehaviour
     {
         get { return firingSpeed; }
         set { firingSpeed = value; }
+    }
+
+    public float WalkingSpeed
+    {
+        get { return walkingSpeed; }
+        set { walkingSpeed = value; }
     }
 
     public int Id

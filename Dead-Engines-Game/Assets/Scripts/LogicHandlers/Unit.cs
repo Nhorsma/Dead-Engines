@@ -16,6 +16,7 @@ public class Unit : MonoBehaviour
     private bool armorPiercing = false;     //whether it can pierce armor
     private int attack = 2;
     private int defense = 1;
+    private float walkingSpeed;
     private float firingSpeed = 1f;
 
 	private string type = "standard";
@@ -89,6 +90,12 @@ public class Unit : MonoBehaviour
     {
         get { return defense; }
         set { defense = value; }
+    }
+
+    public float WalkingSpeed
+    {
+        get { return walkingSpeed; }
+        set { walkingSpeed = value; }
     }
 
     public float FiringSpeed
