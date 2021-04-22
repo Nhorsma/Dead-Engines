@@ -1429,6 +1429,9 @@ MonoBehaviour:
   roomPic: {fileID: 1107861418254902425}
   buildButton: {fileID: 1107861419651378112}
   upgradeButton: {fileID: 1107861418112034256}
+  assignButton: {fileID: 1107861419916606465}
+  unassignButton: {fileID: 1107861418193196886}
+  roomManager: {fileID: 0}
 --- !u!1 &1107861419916606467
 GameObject:
   m_ObjectHideFlags: 0

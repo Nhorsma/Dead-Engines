@@ -18,7 +18,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1107861418112034285
 RectTransform:
   m_ObjectHideFlags: 0
@@ -36,7 +36,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 67.899994, y: -70}
+  m_AnchoredPosition: {x: 76.3, y: -335.6}
   m_SizeDelta: {x: 50, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1107861418112034286
@@ -313,7 +313,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 85abe4f26f9779646b92cb59634ba349, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 7b29783bc441359408cdd0354dff831d, type: 3}
   m_Type: 0
   m_PreserveAspect: 1
   m_FillCenter: 1
@@ -1339,9 +1339,9 @@ GameObject:
   - component: {fileID: 1107861419891028848}
   - component: {fileID: 1107861419891028849}
   - component: {fileID: 1107861419891028850}
-  - component: {fileID: 5249173714928059887}
+  - component: {fileID: 813076281572139781}
   m_Layer: 5
-  m_Name: NewStudyTab
+  m_Name: NewBarracksTab
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1411,7 +1411,7 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &5249173714928059887
+--- !u!114 &813076281572139781
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1420,7 +1420,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1107861419891028852}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 227e280e67b910b459de0b1279571936, type: 3}
+  m_Script: {fileID: 11500000, guid: a857e8f76a0dbc44d91cf88a485e1638, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   roomTab: {fileID: 1107861419891028852}
@@ -1429,8 +1429,8 @@ MonoBehaviour:
   roomPic: {fileID: 1107861418254902425}
   buildButton: {fileID: 1107861419651378112}
   upgradeButton: {fileID: 1107861418112034256}
-  assignButton: {fileID: 1107861419916606465}
-  unassignButton: {fileID: 1107861418193196886}
+  doButton: {fileID: 1107861418112034256}
+  storeButton: {fileID: 1107861419916606465}
   roomManager: {fileID: 0}
 --- !u!1 &1107861419916606467
 GameObject:
@@ -1450,7 +1450,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1107861419916606466
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1468,7 +1468,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 202.5, y: -12.5}
+  m_AnchoredPosition: {x: 137.5, y: -335.6}
   m_SizeDelta: {x: 20, y: 20}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1107861419916606495

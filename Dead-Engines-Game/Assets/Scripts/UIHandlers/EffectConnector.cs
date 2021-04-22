@@ -30,8 +30,6 @@ public class EffectConnector : MonoBehaviour
     void Start()
     {
 		Recalculate();
-		//RecalculateRefineryStorage();
-		//RecalculateControllerGenerator();
     }
     
     void Update()

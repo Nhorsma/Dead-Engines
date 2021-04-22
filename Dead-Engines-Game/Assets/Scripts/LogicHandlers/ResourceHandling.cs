@@ -29,6 +29,8 @@ public class ResourceHandling : MonoBehaviour
     public List<GameObject> resourceObjects = new List<GameObject>();
     public List<Resource> resourceData = new List<Resource>();
 
+	public static int storageUsed = 0;
+
     void Start()
     {
 		resTranslator = spawnRes.GetAllResources();

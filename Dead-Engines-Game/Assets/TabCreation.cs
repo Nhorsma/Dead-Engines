@@ -11,6 +11,9 @@ public class TabCreation : MonoBehaviour
 	public NewShrineClass shrine;
 	public NewStudyClass study;
 	public NewInfirmaryClass infirmary;
+	public NewDormitoryClass dormitory;
+	public NewBarracksClass barracks;
+	public NewCloneryClass clonery;
 	public static List<NewRoomClass> rooms = new List<NewRoomClass>();
 
 	public RoomManager roomManager;
@@ -79,6 +82,21 @@ public class TabCreation : MonoBehaviour
 				var rep5 = Instantiate(infirmary, this.transform);
 				rep5.ReplaceOldRoom(slot);
 				rooms.Add(rep5);
+				break;
+			case "dormitory":
+				var rep6 = Instantiate(dormitory, this.transform);
+				rep6.ReplaceOldRoom(slot);
+				rooms.Add(rep6);
+				break;
+			case "barracks":
+				var rep7 = Instantiate(barracks, this.transform);
+				rep7.ReplaceOldRoom(slot);
+				rooms.Add(rep7);
+				break;
+			case "clonery":
+				var rep8 = Instantiate(clonery, this.transform);
+				rep8.ReplaceOldRoom(slot);
+				rooms.Add(rep8);
 				break;
 			default:
 				break;

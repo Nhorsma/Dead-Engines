@@ -3,12 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class NewStorageClass : NewRoomClass
+public class NewDormitoryClass : NewRoomClass
 {
 
-
-
-	public NewStorageClass()
+	public NewDormitoryClass()
 	{
 
 	}
@@ -17,11 +15,12 @@ public class NewStorageClass : NewRoomClass
 	{
 		//delete from the collection???
 		this.Slot = oldSlot;
-		this.Type = "storage";
-		nameText.text = "sto";
+		this.Type = "dormitory";
+		this.Level = 1;
+		nameText.text = "dor";
 		Debug.Log("replaced old room");
 	}
 
-	//allows for more inventory space in the robot
+	//allows for more units to live in robot
 
 }

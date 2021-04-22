@@ -13,9 +13,6 @@ public class RoomManager : MonoBehaviour
 
 	public GameObject autoObj;
 
-	// room data & tabs
-	//public List<Room> rooms = new List<Room>(); // room_data ------------------------------------> hopefully will become obsolete
-	//public List<GameObject> roomTabs = new List<GameObject>(); // the individual room panel ----->
 	public GameObject controllerTab;
 	public GameObject generatorTab;
 
@@ -41,14 +38,12 @@ public class RoomManager : MonoBehaviour
 	public static bool generatorRepaired = false;
 	public static bool controllerRepaired = false;
 
-	// need to clean
+	public int housingMax = 3;
+	public int storageMax = 25;
+
 	void Start()
     {
-		// might have a problem with list passing?
-		//InitializeRooms();
 
-		// this is actually important
-		//UpdateRoomDisplay();
 	}
 
     void Update()
@@ -63,14 +58,6 @@ public class RoomManager : MonoBehaviour
 	/// INITIALIZE --------------------------------------------------------------------------------------------------------------------------->
 	/// </summary>
 
-	//public void InitializeRooms()
-	//{
-	//	for (int i = 0; i < 17; i++)
-	//	{
-	//		rooms.Add(new Room("empty", i, 0));
-	//	}
-	//}
-
 	/// <summary>
 	/// MAIN FUNCTIONS --------------------------------------------------------------------------------------------------------------------------->
 	/// </summary>
@@ -81,9 +68,7 @@ public class RoomManager : MonoBehaviour
 		{
 			ResourceHandling.metal -= (int)CostData.build_refinery[2];
 			ResourceHandling.electronics -= (int)CostData.build_refinery[3];
-			//rooms[roomSlotClicked] = new Refinery(roomSlotClicked, 1);
 			tabCreation.Replace(roomSlotClicked, "refinery");
-			//setupRoom.Setup(rooms[roomSlotClicked]); // ->
 			UpdateIcon(roomSlotClicked, type);
 			//CalculateLimbStats();
 			PlayClip("wrench");
@@ -92,9 +77,7 @@ public class RoomManager : MonoBehaviour
 		{
 			ResourceHandling.metal -= (int)CostData.build_storage[2];
 			ResourceHandling.electronics -= (int)CostData.build_storage[3];
-			//rooms[roomSlotClicked] = new Storage(roomSlotClicked, 1);
 			tabCreation.Replace(roomSlotClicked, "storage");
-			//setupRoom.Setup(rooms[roomSlotClicked]);
 			UpdateIcon(roomSlotClicked, type);
 			//CalculateLimbStats();
 			PlayClip("wrench");
@@ -103,9 +86,7 @@ public class RoomManager : MonoBehaviour
 		{
 			ResourceHandling.metal -= (int)CostData.build_shrine[2];
 			ResourceHandling.electronics -= (int)CostData.build_shrine[3];
-			//rooms[roomSlotClicked] = new Shrine(roomSlotClicked, 1);
 			tabCreation.Replace(roomSlotClicked, "shrine");
-			//setupRoom.Setup(rooms[roomSlotClicked]);
 			UpdateIcon(roomSlotClicked, type);
 			//CalculateLimbStats();
 			PlayClip("wrench");
@@ -114,9 +95,7 @@ public class RoomManager : MonoBehaviour
 		{
 			ResourceHandling.metal -= (int)CostData.build_study[2];
 			ResourceHandling.electronics -= (int)CostData.build_study[3];
-			//rooms[roomSlotClicked] = new Study(roomSlotClicked, 1);
 			tabCreation.Replace(roomSlotClicked, "study");
-			//setupRoom.Setup(rooms[roomSlotClicked]);
 			UpdateIcon(roomSlotClicked, type);
 			//CalculateLimbStats();
 			PlayClip("wrench");
@@ -125,9 +104,7 @@ public class RoomManager : MonoBehaviour
 		{
 			ResourceHandling.metal -= 10;
 			ResourceHandling.electronics -= 10;
-			//rooms[roomSlotClicked] = new Infirmary(roomSlotClicked, 1);
 			tabCreation.Replace(roomSlotClicked, "infirmary");
-			//setupRoom.Setup(rooms[roomSlotClicked]);
 			UpdateIcon(roomSlotClicked, type);
 			//CalculateLimbStats();
 			PlayClip("wrench");
@@ -135,10 +112,8 @@ public class RoomManager : MonoBehaviour
 		else if (type == "dormitory" && ResourceHandling.metal >= 10 && ResourceHandling.electronics >= 10)
 		{
 			ResourceHandling.metal -= 10;
-			ResourceHandling.metal -= 10;
-			//rooms[roomSlotClicked] = new Dormitory(roomSlotClicked, 1);
-			tabCreation.Replace(roomSlotClicked, "refinery");
-			//setupRoom.Setup(rooms[roomSlotClicked]);
+			ResourceHandling.electronics -= 10;
+			tabCreation.Replace(roomSlotClicked, "dormitory");
 			UpdateIcon(roomSlotClicked, type);
 			//CalculateLimbStats();
 			PlayClip("wrench");
@@ -147,9 +122,7 @@ public class RoomManager : MonoBehaviour
 		{
 			ResourceHandling.metal -= 10;
 			ResourceHandling.electronics -= 10;
-			//rooms[roomSlotClicked] = new Barracks(roomSlotClicked, 1);
-			tabCreation.Replace(roomSlotClicked, "refinery");
-			//setupRoom.Setup(rooms[roomSlotClicked]);
+			tabCreation.Replace(roomSlotClicked, "barracks");
 			UpdateIcon(roomSlotClicked, type);
 			//CalculateLimbStats();
 			PlayClip("wrench");
@@ -158,9 +131,7 @@ public class RoomManager : MonoBehaviour
 		{
 			ResourceHandling.metal -= 10;
 			ResourceHandling.electronics -= 10;
-			//rooms[roomSlotClicked] = new Clonery(roomSlotClicked, 1);
-			tabCreation.Replace(roomSlotClicked, "refinery");
-			//setupRoom.Setup(rooms[roomSlotClicked]);
+			tabCreation.Replace(roomSlotClicked, "clonery");
 			UpdateIcon(roomSlotClicked, type);
 			//CalculateLimbStats();
 			PlayClip("wrench");
@@ -173,7 +144,6 @@ public class RoomManager : MonoBehaviour
 	}
 
 	//add infirmary stuff
-	//rewrite for new system
 	public void Assign(string roomType, int slot)
 	{
 		if (roomType != "infirmary")
@@ -196,7 +166,7 @@ public class RoomManager : MonoBehaviour
 							unit.GetComponent<Unit>().JobPos = autoObj;
 							unitManager.SetJobFromRoom(unit, roomType);
 							TabCreation.FindSlot(slot).GetComponent<NewRefinery>().Workers.Add(unit);
-							setupRoom.roomComponents[slot].capacity.text = TabCreation.FindSlot(slot).GetComponent<NewRefinery>().Workers.Count.ToString() + " / " + TabCreation.FindSlot(slot).GetComponent<NewRefinery>().WorkerCapacity.ToString();
+							//setupRoom.roomComponents[slot].capacity.text = TabCreation.FindSlot(slot).GetComponent<NewRefinery>().Workers.Count.ToString() + " / " + TabCreation.FindSlot(slot).GetComponent<NewRefinery>().WorkerCapacity.ToString();
 							Produce();
 							Debug.Log("Assigned [" + unit.GetComponent<Unit>().UnitName + "] to[" + roomType + "][" + slot + "]");
 						}
@@ -213,7 +183,7 @@ public class RoomManager : MonoBehaviour
 							unit.GetComponent<Unit>().JobPos = autoObj;
 							unitManager.SetJobFromRoom(unit, roomType);
 							TabCreation.FindSlot(slot).GetComponent<NewShrineClass>().Workers.Add(unit);
-							setupRoom.roomComponents[slot].capacity.text = TabCreation.FindSlot(slot).GetComponent<NewShrineClass>().Workers.Count.ToString() + " / " + TabCreation.FindSlot(slot).GetComponent<NewShrineClass>().WorkerCapacity.ToString();
+							//setupRoom.roomComponents[slot].capacity.text = TabCreation.FindSlot(slot).GetComponent<NewShrineClass>().Workers.Count.ToString() + " / " + TabCreation.FindSlot(slot).GetComponent<NewShrineClass>().WorkerCapacity.ToString();
 							Worship();
 							Debug.Log("Assigned [" + unit.GetComponent<Unit>().UnitName + "] to[" + roomType + "][" + slot + "]");
 						}
@@ -229,7 +199,7 @@ public class RoomManager : MonoBehaviour
 							unit.GetComponent<Unit>().JobPos = autoObj;
 							unitManager.SetJobFromRoom(unit, roomType);
 							TabCreation.FindSlot(slot).GetComponent<NewStudyClass>().Workers.Add(unit);
-							setupRoom.roomComponents[slot].capacity.text = TabCreation.FindSlot(slot).GetComponent<NewStudyClass>().Workers.Count.ToString() + " / " + TabCreation.FindSlot(slot).GetComponent<NewStudyClass>().WorkerCapacity.ToString();
+							//setupRoom.roomComponents[slot].capacity.text = TabCreation.FindSlot(slot).GetComponent<NewStudyClass>().Workers.Count.ToString() + " / " + TabCreation.FindSlot(slot).GetComponent<NewStudyClass>().WorkerCapacity.ToString();
 							Research();
 							Debug.Log("Assigned [" + unit.GetComponent<Unit>().UnitName + "] to[" + roomType + "][" + slot + "]");
 						}
@@ -262,7 +232,7 @@ public class RoomManager : MonoBehaviour
 					unit.GetComponent<Unit>().JobPos = autoObj;
 					unitManager.SetJobFromRoom(unit, roomType);
 					TabCreation.FindSlot(slot).GetComponent<NewInfirmaryClass>().Workers.Add(unit);
-					setupRoom.roomComponents[slot].capacity.text = TabCreation.FindSlot(slot).GetComponent<NewInfirmaryClass>().Workers.Count.ToString() + " / " + TabCreation.FindSlot(slot).GetComponent<NewInfirmaryClass>().WorkerCapacity.ToString();
+					//setupRoom.roomComponents[slot].capacity.text = TabCreation.FindSlot(slot).GetComponent<NewInfirmaryClass>().Workers.Count.ToString() + " / " + TabCreation.FindSlot(slot).GetComponent<NewInfirmaryClass>().WorkerCapacity.ToString();
 
 					Debug.Log("Assigned [" + unit.GetComponent<Unit>().UnitName + "] to[" + roomType + "][" + slot + "]");
 				}
@@ -275,7 +245,6 @@ public class RoomManager : MonoBehaviour
 		}
 	}
 
-	//rewrite for new system
 	//add infirmary stuff -> a variation for a timed unassign of sorts to mimic healing, maybe in unit manager?
 	public void Unassign(string roomType, int slot)
 	{
@@ -294,7 +263,7 @@ public class RoomManager : MonoBehaviour
 					unitManager.LeaveRoomJob(unit);
 					unitManager.TravelTo(unit, unit.transform.position, false, false);
 					TabCreation.FindSlot(slot).GetComponent<NewRefinery>().Workers.Remove(unit);
-					setupRoom.roomComponents[slot].capacity.text = TabCreation.FindSlot(slot).GetComponent<NewRefinery>().Workers.Count.ToString() + " / " + TabCreation.FindSlot(slot).GetComponent<NewRefinery>().WorkerCapacity.ToString();
+					//setupRoom.roomComponents[slot].capacity.text = TabCreation.FindSlot(slot).GetComponent<NewRefinery>().Workers.Count.ToString() + " / " + TabCreation.FindSlot(slot).GetComponent<NewRefinery>().WorkerCapacity.ToString();
 					Produce();
 					Debug.Log("Unassigned [" + unit.GetComponent<Unit>().UnitName + "] from [" + roomType + "][" + slot + "]");
 				}
@@ -312,7 +281,7 @@ public class RoomManager : MonoBehaviour
 					unitManager.LeaveRoomJob(unit);
 					unitManager.TravelTo(unit, unit.transform.position, false, false);
 					TabCreation.FindSlot(slot).GetComponent<NewShrineClass>().Workers.Remove(unit);
-					setupRoom.roomComponents[slot].capacity.text = TabCreation.FindSlot(slot).GetComponent<NewShrineClass>().Workers.Count.ToString() + " / " + TabCreation.FindSlot(slot).GetComponent<NewShrineClass>().WorkerCapacity.ToString();
+					//setupRoom.roomComponents[slot].capacity.text = TabCreation.FindSlot(slot).GetComponent<NewShrineClass>().Workers.Count.ToString() + " / " + TabCreation.FindSlot(slot).GetComponent<NewShrineClass>().WorkerCapacity.ToString();
 					Worship();
 					Debug.Log("Unassigned [" + unit.GetComponent<Unit>().UnitName + "] from [" + roomType + "][" + slot + "]");
 				}
@@ -330,7 +299,7 @@ public class RoomManager : MonoBehaviour
 					unitManager.LeaveRoomJob(unit);
 					unitManager.TravelTo(unit, unit.transform.position, false, false);
 					TabCreation.FindSlot(slot).GetComponent<NewStudyClass>().Workers.Remove(unit);
-					setupRoom.roomComponents[slot].capacity.text = TabCreation.FindSlot(slot).GetComponent<NewStudyClass>().Workers.Count.ToString() + " / " + TabCreation.FindSlot(slot).GetComponent<NewStudyClass>().WorkerCapacity.ToString();
+					//setupRoom.roomComponents[slot].capacity.text = TabCreation.FindSlot(slot).GetComponent<NewStudyClass>().Workers.Count.ToString() + " / " + TabCreation.FindSlot(slot).GetComponent<NewStudyClass>().WorkerCapacity.ToString();
 					Research();
 					Debug.Log("Unassigned [" + unit.GetComponent<Unit>().UnitName + "] from [" + roomType + "][" + slot + "]");
 				}
@@ -465,6 +434,7 @@ public class RoomManager : MonoBehaviour
 		}
 	}
 
+	//rewrite
 	public void Bedrest(int slot)
 	{
 		Assign("infirmary", slot);
@@ -479,11 +449,14 @@ public class RoomManager : MonoBehaviour
 		List<string> effects = new List<string>();
 		effects.Clear();
 
-		foreach (NewShrineClass r in TabCreation.rooms)
+		foreach (NewRoomClass r in TabCreation.rooms)
 		{
-			Debug.Log("Shrine[" + r.Slot + "]: " + r.Workers.Count + "x boost");
-			combinedMultiplier += r.Workers.Count; //case for multiples of the same room
-			effects.Add(r.ActiveEffect);
+			if (r.Type == "shrine")
+			{
+				Debug.Log("Shrine[" + r.Slot + "]: " + r.GetComponent<NewShrineClass>().Workers.Count + "x boost");
+				combinedMultiplier += r.GetComponent<NewShrineClass>().Workers.Count; //case for multiples of the same room
+				effects.Add(r.GetComponent<NewShrineClass>().ActiveEffect);
+			}
 		}
 		Debug.Log("Total Shrine Multiplier: " + combinedMultiplier);
 
@@ -509,11 +482,15 @@ public class RoomManager : MonoBehaviour
 		List<string> effects = new List<string>();
 		effects.Clear();
 
-		foreach (NewStudyClass r in TabCreation.rooms)
+		foreach (NewRoomClass r in TabCreation.rooms)
 		{
-			Debug.Log("Study[" + r.Slot + "]: " + r.Workers.Count + "x boost");
-			combinedMultiplier += r.Workers.Count; //case for multiples of the same room
-			effects.Add(r.ActiveEffect);
+			if (r.Type == "study")
+			{
+				Debug.Log("Study[" + r.Slot + "]: " + r.GetComponent<NewStudyClass>().Workers.Count + "x boost");
+				combinedMultiplier += r.GetComponent<NewStudyClass>().Workers.Count; //case for multiples of the same room
+				effects.Add(r.GetComponent<NewStudyClass>().ActiveEffect);
+			}
+
 		}
 		Debug.Log("Total Study Multiplier: " + combinedMultiplier);
 
@@ -537,16 +514,16 @@ public class RoomManager : MonoBehaviour
 	public void Produce()
 	{
 		EffectConnector.efficiency = 0;
-		foreach (NewRefinery r in TabCreation.rooms)
+		foreach (NewRoomClass r in TabCreation.rooms)
 		{
-			//if (r.Type == "refinery") //if r.Type == "refinery"
-			//{
-				if (r.Workers.Count > 0)
+			if (r.Type == "refinery")
+			{
+				if (r.GetComponent<NewRefinery>().Workers.Count > 0)
 				{
 					Debug.Log("Refinery[" + r.Slot + "]: Running");
-					EffectConnector.efficiency += r.Workers.Count;
+					EffectConnector.efficiency += r.GetComponent<NewRefinery>().Workers.Count;
 				}
-			//}
+			}
 		}
 		effectConnector.Recalculate();
 	}
@@ -706,6 +683,70 @@ public class RoomManager : MonoBehaviour
 			}
 		}
 		return false;
+	}
+
+	//for barracks and clonery
+	public Unit ChooseUnit(int unit_id)
+	{
+		return unitManager.units[unit_id].GetComponent<Unit>();
+	}
+
+	//find unit to change, then change
+	public void UseBarracks(Unit unit_data, string newType)
+	{
+		Debug.Log(unit_data.Attack + " " + unit_data.Defense);
+		unit_data.ChangeType(newType);
+		Debug.Log(unit_data.Attack + " " + unit_data.Defense);
+		//pay cost
+	}
+
+	public void UseClonery(Unit unit_data)
+	{
+		unitManager.CloneUnit(unit_data);
+		//pay cost
+	}
+
+	public bool CheckDormitories()
+	{
+		housingMax = 3;
+		foreach (NewRoomClass d in TabCreation.rooms)
+		{
+			if (d.Type == "dormitory")
+			{
+				Debug.Log("dorm count");
+				housingMax += 3 * d.Level;
+			}
+		}
+		Debug.Log(housingMax);
+		if (unitManager.units.Count < housingMax)
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
+
+	public bool CheckStorage()
+	{
+		storageMax = 25;
+		foreach (NewRoomClass s in TabCreation.rooms)
+		{
+			if (s.Type == "storage")
+			{
+				storageMax += 50 * s.Level;
+			}
+		}
+
+		if (ResourceHandling.storageUsed < storageMax)
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
 	}
 
 	public void CalculateLimbStats(int attack, int defense, int health)

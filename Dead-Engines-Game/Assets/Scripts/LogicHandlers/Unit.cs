@@ -18,7 +18,7 @@ public class Unit : MonoBehaviour
     private int defense = 1;
     private float firingSpeed = 1f;
 
-	private string type;
+	private string type = "standard";
 
 	public Unit()
 	{

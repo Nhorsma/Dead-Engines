@@ -320,22 +320,51 @@ public class UnitManager : MonoBehaviour
         }
     }
 
-    public void TakeInUnit()
-    {
-        GameObject wanderingUnit = (GameObject)Instantiate(Resources.Load(unitPrefab.name), FindSpotToSpawn(0), robot.transform.rotation);
+	public void TakeInUnit()
+	{
+		if (roomManager.CheckDormitories())
+		{
+			GameObject wanderingUnit = (GameObject)Instantiate(Resources.Load(unitPrefab.name), FindSpotToSpawn(0), robot.transform.rotation);
 
-        wanderingUnit.GetComponent<Unit>().Id = units.Count;
-        wanderingUnit.GetComponent<Unit>().UnitName = "U" + wanderingUnit.GetComponent<Unit>().Id.ToString();
+			wanderingUnit.GetComponent<Unit>().Id = units.Count;
+			wanderingUnit.GetComponent<Unit>().UnitName = "U" + wanderingUnit.GetComponent<Unit>().Id.ToString();
 
-        units.Add(wanderingUnit);
-        ShowGun(wanderingUnit, false,"Both");
+			units.Add(wanderingUnit);
+			ShowGun(wanderingUnit, false, "Both");
+		}
+		else
+		{
+			Debug.Log("BUILD MORE HOUSING");
+		}
+        
     }
 
-    /// <summary>
-    /// UTILITY FUNCTIONS --------------------------------------------------------------------------------------------------------------------------->
-    /// </summary>
+	public void CloneUnit(Unit unit_data)
+	{
+		if (roomManager.CheckDormitories())
+		{
+			GameObject clonedUnit = (GameObject)Instantiate(Resources.Load(unitPrefab.name), FindSpotToSpawn(0), robot.transform.rotation);
 
-    public void TravelTo(GameObject unit, Vector3 place, bool stop, bool randomize)
+			clonedUnit.GetComponent<Unit>().Id = units.Count;
+			clonedUnit.GetComponent<Unit>().UnitName = "U" + clonedUnit.GetComponent<Unit>().Id.ToString();
+			clonedUnit.GetComponent<Unit>().Type = unit_data.Type;
+
+			//this spawns it outside, needs to spawn inside!
+			units.Add(clonedUnit);
+			ShowGun(clonedUnit, false, "Both");
+			Debug.Log("cloned");
+		}
+		else
+		{
+			Debug.Log("BUILD MORE HOUSING");
+		}
+	}
+
+	/// <summary>
+	/// UTILITY FUNCTIONS --------------------------------------------------------------------------------------------------------------------------->
+	/// </summary>
+
+	public void TravelTo(GameObject unit, Vector3 place, bool stop, bool randomize)
     {
         if (unit.activeSelf == true && unit.GetComponent<NavMeshAgent>() != null && unit.GetComponent<NavMeshAgent>().isActiveAndEnabled)
         {
@@ -578,12 +607,16 @@ public class UnitManager : MonoBehaviour
     {
         ResourceHandling.metal++;
         audioHandler.PlayClip(robot, "dropOffClop");
-    }
+		//check for storage space, then do what?
+		ResourceHandling.storageUsed++;
+	}
     void AddElectronics()
     {
         ResourceHandling.electronics++;
         audioHandler.PlayClip(robot, "dropOffClop");
-    }
+		//check for storage space, then do what?
+		ResourceHandling.storageUsed++;
+	}
 
     public GameObject BulletTrail(Vector3 start, Vector3 end)
     {

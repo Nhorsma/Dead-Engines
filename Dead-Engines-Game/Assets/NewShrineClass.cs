@@ -10,6 +10,19 @@ public class NewShrineClass : NewRoomClass
 	private List<GameObject> workers;
 	private string activeEffect;
 
+	public Button assignButton;
+	public Button unassignButton;
+
+	public RoomManager roomManager;
+
+	public void Start()
+	{
+		roomManager = FindObjectOfType<RoomManager>();
+		WorkerCapacity = 3;
+		Workers = new List<GameObject>();
+		ActiveEffect = "none";
+	}
+
 	public NewShrineClass()
 	{
 
@@ -26,6 +39,20 @@ public class NewShrineClass : NewRoomClass
 		this.Type = "shrine";
 		nameText.text = "shr";
 		Debug.Log("replaced old room");
+		TurnOnButtons();
+		AddButtonEvents();
+	}
+
+	public void TurnOnButtons()
+	{
+		assignButton.gameObject.SetActive(true);
+		unassignButton.gameObject.SetActive(true);
+	}
+
+	public void AddButtonEvents()
+	{
+		assignButton.onClick.AddListener(delegate { roomManager.Assign(this.Type, this.Slot); });
+		unassignButton.onClick.AddListener(delegate { roomManager.Unassign(this.Type, this.Slot); });
 	}
 
 }
