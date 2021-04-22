@@ -9,7 +9,6 @@ public class LazerCollision : MonoBehaviour
     public EnemyHandler enemyHandler;
     public HunterHandler hunterHandler;
     public AudioHandler audioHandler;
-    public GameObject explosion;
 
     public float spawnBuffer, damage;
 
