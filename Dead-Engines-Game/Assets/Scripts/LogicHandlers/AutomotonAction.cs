@@ -201,7 +201,7 @@ public class AutomotonAction : MonoBehaviour
         }
     }
 
-    public void Walk(Vector3 position)
+    public void WalkStraight(Vector3 position)
     {
         //rb.MovePosition(position * movementSpeed * Time.deltaTime);
         transform.position = Vector3.MoveTowards(transform.position, position, movementSpeed * Time.deltaTime);
@@ -228,27 +228,36 @@ public class AutomotonAction : MonoBehaviour
             SetUpRotate(walkTo);
     }
 
+    void JobManagement()
+    {
+        if (jobObject != null)
+        {
+            Vector3 jobPos = jobObject.transform.position;
+            if ((jobObject.tag == "Metal" || jobObject.tag == "Electronics" || jobObject.tag == "Encampment") &&
+                Vector3.Distance(automoton.transform.position, jobPos) < 15f + automoton.transform.position.y - jobPos.y)
+            {
+                StartCoroutine(GroundPound());
+                jobObject = null;
+            }
+            else if (jobObject.tag == "Enemy" || jobObject.tag == "Hunter")
+            {
+                walkTo = new Vector3(jobPos.x, phaseTwoPos.y, jobPos.z);
+            }
+        }
+    }
+
     void Movement()
     {
-        if (jobObject != null && Vector3.Distance(automoton.transform.position, jobObject.transform.position) < 15f
-            + automoton.transform.position.y - jobObject.transform.position.y)
-        {
-            StartCoroutine(GroundPound());
-            jobObject = null;
-            
-        }
-        else
-        {
+            walkTo = new Vector3(walkTo.x, phaseTwoPos.y, walkTo.z);
+            JobManagement();
             if (canRotate && walkTo != null)
             {
                 Rotate();
             }
             if (canMove && walkTo != null)
             {
-                walkTo = new Vector3(walkTo.x, phaseTwoPos.y, walkTo.z);
-                Walk(walkTo);
+                WalkStraight(walkTo);
             }
-        }
     }
 
 

@@ -41,7 +41,8 @@ public class AutoCombatCollider : MonoBehaviour
             Debug.Log("stepping on " + other);
 			if (other.gameObject.tag == "Enemy")
 			{
-				other.gameObject.GetComponent<Enemy>().Health = 0;
+                enemyHandler.TakeDamage(100, other.gameObject);
+				//other.gameObject.GetComponent<Enemy>().Health = 0;
                 canTrigger = false;
             }
 			if (other.gameObject.tag == "Encampment")

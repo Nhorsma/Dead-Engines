@@ -24,10 +24,10 @@ public class LazerCollision : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-            Debug.Log("stepping on " + other);
+            Debug.Log("shooting " + other);
             if (other.gameObject.tag == "Enemy")
             {
-                other.gameObject.GetComponent<Enemy>().Health = 0;
+                enemyHandler.TakeDamage(100, other.gameObject);
             }
             if (other.gameObject.tag == "Encampment")
             {

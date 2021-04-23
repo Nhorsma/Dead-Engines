@@ -44,39 +44,34 @@ public class EnemyHandler : MonoBehaviour
         foreach (GameObject e in enemies)
         {
             Enemy enemy_data = e.GetComponent<Enemy>();
-            if (enemy_data.Health <= 0)
+            if (enemy_data.Health > 0)
             {
-                audioHandler.PlayClip(e, "enemyDead1");
-                enemies.Remove(e);
-                Destroy(e);
-                enemy_data.CampData.OnField--; // fishy
-                break;
-            }
-            if (enemy_data.Target != null)
-            {
-                Attack(e);
-            }
-            else if (enemy_data.CampData.EnemyJobs=="guard")
-            {
-                if (unitsTresspassing(enemy_data.CampObj) != null)
+                if (enemy_data.Target != null)
                 {
-                    if (enemy_data.Target == null)
+                    Attack(e);
+                }
+                else if (enemy_data.CampData.EnemyJobs == "guard")
+                {
+                    if (unitsTresspassing(enemy_data.CampObj) != null)
                     {
-                        TravelTo(e, unitsTresspassing(enemy_data.CampObj).transform.position, true, false);
+                        if (enemy_data.Target == null)
+                        {
+                            TravelTo(e, unitsTresspassing(enemy_data.CampObj).transform.position, true, false);
+                        }
                     }
+                    else
+                    {
+                        FindSpot(e);
+                    }
+                }
+                else if (enemy_data.CampData.EnemyJobs == "destroy")
+                {
+                    GoTowardsRobot(e);
                 }
                 else
                 {
                     FindSpot(e);
                 }
-            }
-            else if(enemy_data.CampData.EnemyJobs=="destroy")
-            {
-                GoTowardsRobot(e);
-            }
-            else
-            {
-                FindSpot(e);
             }
         }
     }
@@ -85,7 +80,7 @@ public class EnemyHandler : MonoBehaviour
     {
         foreach(GameObject u in unitManager.units)
         {
-            if(Vector3.Distance(u.transform.position,encampment.transform.position) < tresspassingRange)
+            if(encampment != null && Vector3.Distance(u.transform.position,encampment.transform.position) < tresspassingRange)
             {
                 return u;
             }
@@ -298,6 +293,31 @@ public class EnemyHandler : MonoBehaviour
         yield return new WaitForSeconds(time);
         spawnPool.poolDictionary["small"].Enqueue(t);
         t.SetActive(false);
+    }
+
+    public void TakeDamage(int amount, Enemy enemy_data)
+    {
+        enemy_data.Health -= amount;
+        if (enemy_data.Health <= 0)
+        {
+            audioHandler.PlayClip(enemy_data.gameObject, "enemyDead1");
+            enemies.Remove(enemy_data.gameObject);
+            enemy_data.CampData.OnField--; // fishy
+            Destroy(enemy_data.gameObject);
+        }
+    }
+
+    public void TakeDamage(int amount, GameObject enemy)
+    {
+        Enemy enemy_data = enemy.GetComponent<Enemy>();
+        enemy_data.Health -= amount;
+        if (enemy_data.Health <= 0)
+        {
+            audioHandler.PlayClip(enemy, "enemyDead1");
+            enemies.Remove(enemy);
+            enemy_data.CampData.OnField--; // fishy
+            Destroy(enemy);
+        }
     }
 
 

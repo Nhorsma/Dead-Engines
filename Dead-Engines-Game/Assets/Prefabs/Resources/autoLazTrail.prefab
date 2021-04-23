@@ -92,8 +92,8 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 1.3390846, y: 1.2212129, z: 1.4302444}
-  m_Center: {x: 0.005601883, y: 0.0011150837, z: 0.016458511}
+  m_Size: {x: 8.014361, y: 7.042595, z: 1.1177635}
+  m_Center: {x: -0.16788721, y: -0.35990572, z: -0.004091263}
 --- !u!114 &1191070214893636779
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -111,6 +111,5 @@ MonoBehaviour:
   enemyHandler: {fileID: 0}
   hunterHandler: {fileID: 0}
   audioHandler: {fileID: 0}
-  explosion: {fileID: 0}
   spawnBuffer: 1
   damage: 50
