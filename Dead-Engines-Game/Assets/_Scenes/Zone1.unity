@@ -11962,7 +11962,7 @@ MonoBehaviour:
   metal2: {fileID: 4460762400422899061, guid: ec96bf792d7c7524f82c917806f489cb, type: 3}
   electronics: {fileID: 8849693777513822540, guid: a0f0ed08341d7c44ba74309fa42dbc13,
     type: 3}
-  crater: {fileID: 8510683415502693747, guid: 678f3cdc62e431a44bfe3bd3a9ce502f, type: 3}
+  crater: {fileID: 75233478033589359, guid: 29b454b1ae92ab84a8c3d702f8be6071, type: 3}
   enemy: {fileID: 3500671454363015440, guid: 79a02ea539ec3c54ebab16eeef8dc84f, type: 3}
   thin_metal1: {fileID: 7422429180628986571, guid: fb022d89c8412e845925e5b3851fe4aa,
     type: 3}
