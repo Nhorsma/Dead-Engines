@@ -8,6 +8,7 @@ public class Hunter : Enemy
 	private bool walkingForward = false;
 	private bool walkingBackward = false;
     private bool canRetreat = false;
+    private bool canFlank = false;
 	private bool firing = false;
 	private bool isDead = false;
     private bool nextMove = true;
@@ -68,6 +69,12 @@ public class Hunter : Enemy
     {
         get { return canRetreat; }
         set { canRetreat = value; }
+    }
+
+    public bool CanFlank
+    {
+        get { return canFlank; }
+        set { canFlank = value; }
     }
 
     public bool NextMove

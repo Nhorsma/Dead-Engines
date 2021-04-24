@@ -5259,6 +5259,7 @@ MonoBehaviour:
   robotConfirm1: {fileID: 8300000, guid: 9faede8e29549084783c81fa193d714a, type: 3}
   robotConfirm2: {fileID: 8300000, guid: 62ec5201ebe5992458c62e1ca741d7bb, type: 3}
   robotAlarm: {fileID: 8300000, guid: 80bbb99b2868e6b4cbdf203b7ec9ec7a, type: 3}
+  enemyDetected: {fileID: 8300000, guid: 29d4c792753c221468d4ec2cb2628cee, type: 3}
   unitReady1: {fileID: 8300000, guid: 5c50c6726d22fdc4583834c823c61523, type: 3}
   unitReady2: {fileID: 8300000, guid: d9de8a7be7489b34fa4c10c2f6e3f862, type: 3}
   unitConfirm1: {fileID: 8300000, guid: 7c5852769ae1a8542b517f5684cc949d, type: 3}
@@ -14718,7 +14719,9 @@ MonoBehaviour:
   enemyHandler: {fileID: 467610734}
   hunterHandler: {fileID: 1822839396}
   audioHandler: {fileID: 467610736}
-  explosion: {fileID: 3118891267616825007, guid: 33b774b5819a306478e54bab16c216bb,
+  smallExplosion: {fileID: 3118891267616825007, guid: 33b774b5819a306478e54bab16c216bb,
+    type: 3}
+  bigExplosion: {fileID: 1000011797152326, guid: acf39d9f4addf294d93fa56fa373961b,
     type: 3}
   spawnBuffer: 3
   damage: 15
@@ -20410,8 +20413,8 @@ MonoBehaviour:
   enemyHandler: {fileID: 467610734}
   hunterHandler: {fileID: 1822839396}
   audioHandler: {fileID: 467610736}
-  explosion: {fileID: 3118891267616825007, guid: 33b774b5819a306478e54bab16c216bb,
-    type: 3}
+  smallExplosion: {fileID: 0}
+  bigExplosion: {fileID: 0}
   spawnBuffer: 3
   damage: 15
   canCollect: 1

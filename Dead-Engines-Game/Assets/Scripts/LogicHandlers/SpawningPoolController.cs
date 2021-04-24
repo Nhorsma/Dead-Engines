@@ -29,8 +29,8 @@ public class SpawningPoolController : MonoBehaviour
             for (int i = 0; i < pool.size; i++)
             {
                 GameObject obj = Instantiate(pool.prefab);
-                obj.SetActive(false);
                 tempPool.Enqueue(obj);
+                obj.SetActive(false);
             }
             poolDictionary.Add(pool.tag, tempPool);
         }

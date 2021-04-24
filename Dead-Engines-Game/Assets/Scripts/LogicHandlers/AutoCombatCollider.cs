@@ -9,22 +9,11 @@ public class AutoCombatCollider : MonoBehaviour
     public EnemyHandler enemyHandler;
     public HunterHandler hunterHandler;
     public AudioHandler audioHandler;
-    public GameObject explosion;
+    public GameObject smallExplosion, bigExplosion;
 
     public float spawnBuffer, damage;
 	bool canTrigger = false;
     public bool canCollect;
-
-    private void Awake()
-    {/*
-        resourceHandling = FindObjectOfType<ResourceHandling>();
-        encampmentHandler = FindObjectOfType<EncampmentHandler>();
-        //enemyHandler = FindObjectOfType<EnemyHandler>();
-        enemyHandler = (EnemyHandler)FindObjectOfType(typeof(EnemyHandler));
-        hunterHandler = FindObjectOfType<HunterHandler>();
-        audioHandler = FindObjectOfType<AudioHandler>();
-        */
-    }
 
     void Update()
 	{
@@ -42,7 +31,6 @@ public class AutoCombatCollider : MonoBehaviour
 			if (other.gameObject.tag == "Enemy")
 			{
                 enemyHandler.TakeDamage(100, other.gameObject);
-				//other.gameObject.GetComponent<Enemy>().Health = 0;
                 canTrigger = false;
             }
 			if (other.gameObject.tag == "Encampment")
@@ -50,13 +38,13 @@ public class AutoCombatCollider : MonoBehaviour
 				other.gameObject.GetComponent<Encampment>().Health -= 100;
 				encampmentHandler.BeDestroyed();
                 audioHandler.PlayClip(other.gameObject, "explosion");
-                SpawnExplosion(other.gameObject);
+                SpawnExplosion(other.gameObject,"big");
                 canTrigger = false;
             }
 			if (other.gameObject.tag == "Hunter")
 			{
 				hunterHandler.DealHunterDamage(other.gameObject, (int)damage);
-				SpawnExplosion(other.gameObject);
+				SpawnExplosion(other.gameObject,"big");
                 canTrigger = false;
             }
 			if (canCollect && other.gameObject.tag == "Metal")
@@ -96,9 +84,14 @@ public class AutoCombatCollider : MonoBehaviour
 		}
     }
 
-    void SpawnExplosion(GameObject obj)
+    void SpawnExplosion(GameObject obj, string size)
     {
-        var expl = (GameObject)Instantiate(Resources.Load(explosion.name), new Vector3(obj.transform.position.x, -7, obj.transform.position.z), Quaternion.Euler(90, 0, 0));
+        string type = "";
+        if (size == "big")
+            type = bigExplosion.name;
+        else
+            type = smallExplosion.name;
+        var expl = (GameObject)Instantiate(Resources.Load(type), new Vector3(obj.transform.position.x, -7, obj.transform.position.z), Quaternion.Euler(90, 0, 0));
         StartCoroutine(TrailOff(5, expl));
     }
 

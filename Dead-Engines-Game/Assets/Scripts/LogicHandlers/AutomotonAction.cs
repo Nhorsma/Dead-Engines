@@ -355,12 +355,7 @@ public class AutomotonAction : MonoBehaviour
         ContinueAnimations(false);
         anim.SetBool("inLaser", true);
         audioHandler.PlayClip(gameObject, "bigLaz");
-
-        //      while (anim.GetCurrentAnimatorStateInfo(0).normalizedTime < 1.0f)
-        //          yield return null;
         yield return new WaitForSeconds(2.7f);
-
-        //shoot lazer [here]
         ShootLaser();
 
         yield return new WaitForSeconds(2f);
@@ -376,37 +371,30 @@ public class AutomotonAction : MonoBehaviour
         Vector3 shootAt = walkTo;
         if (jobObject != null)
         {
-            shootAt = jobObject.transform.position;
+            shootAt = jobObject.transform.position+new Vector3(0,10,0);
         }
-        StartCoroutine(TrailOff("auto",0.5f, head, shootAt));
+        StartCoroutine(TrailOff("autoLaz",0.5f, head, shootAt));
     }
 
     IEnumerator TrailOff(string type, float time, Vector3 start, Vector3 end)
     {
         GameObject t = BulletTrail(type, start, end);
         yield return new WaitForSeconds(time);
-
-        if (type == "auto")
-            Destroy(t);
-        else
-            t.SetActive(false);
+        t.SetActive(false);
     }
 
     public GameObject BulletTrail(string type, Vector3 start, Vector3 end)
     {
         float x, y, z;
-        x = Random.Range(-1.2f, 1.2f);
-        y = Random.Range(-1.2f, 1.2f);
-        z = Random.Range(-1.2f, 1.2f);
+        x = Random.Range(-0.2f, 0.2f);
+        y = Random.Range(-0.2f, 0.2f);
+        z = Random.Range(-0.2f, 0.2f);
         Quaternion offset = Quaternion.Euler(x, y, z);
         Vector3 dif = (start - end) / 2;
         Quaternion angle = Quaternion.LookRotation(start - end);
 
         GameObject trail;
-        if (type == "auto")
-            trail = Instantiate(lazer);
-        else
-            trail = spawnPool.poolDictionary["trails"].Dequeue();
+        trail = spawnPool.poolDictionary[type].Dequeue();
 
         trail.transform.position = start - dif;
         trail.transform.rotation = angle * offset;

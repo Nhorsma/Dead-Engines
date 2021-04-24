@@ -3,7 +3,14 @@ guid: a9725c36d0d9e8f4e8de9d09ad56f426
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - resourceHandling: {instanceID: 0}
+  - encampmentHandler: {instanceID: 0}
+  - enemyHandler: {instanceID: 0}
+  - hunterHandler: {instanceID: 0}
+  - audioHandler: {instanceID: 0}
+  - bigExplosion: {fileID: 1000011797152326, guid: acf39d9f4addf294d93fa56fa373961b,
+      type: 3}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

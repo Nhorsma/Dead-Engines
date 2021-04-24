@@ -5,7 +5,7 @@ using UnityEngine;
 public class AudioHandler : MonoBehaviour
 {
     //robot
-    public AudioClip robotGound, robotAmbient, robotConfirm1, robotConfirm2, robotAlarm;
+    public AudioClip robotGound, robotAmbient, robotConfirm1, robotConfirm2, robotAlarm, enemyDetected;
 
     //units
     public AudioClip unitReady1, unitReady2, unitConfirm1, unitConfirm2, confirmPing, unitDead,

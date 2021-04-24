@@ -113,3 +113,5 @@ MonoBehaviour:
   audioHandler: {fileID: 0}
   spawnBuffer: 1
   damage: 50
+  bigExplosion: {fileID: 1000011797152326, guid: acf39d9f4addf294d93fa56fa373961b,
+    type: 3}

@@ -207,7 +207,9 @@ public class EnemyHandler : MonoBehaviour
                 Vector3 direction = targetPos - enemy.transform.position;
                 audioHandler.PlayClip(enemy, "smallLaz");
                 StartCoroutine(TrailOff(0.05f, enemy.transform.position, enemy_data.Target.transform.position));
-                automoton.GetComponent<AutomotonAction>().RecieveDamage(enemy_data.Attack);
+
+                if(!automoton.GetComponent<AutomotonAction>().endPhaseOne)
+                    automoton.GetComponent<AutomotonAction>().RecieveDamage(enemy_data.Attack);
             }
             PointTurret(enemy);
             StartCoroutine(FireCoolDown(enemy));

@@ -29,9 +29,9 @@ public class HunterHandler : MonoBehaviour
 
         if(Input.GetKeyDown(KeyCode.P))
         {
-            SpawnAnteater();
+            //SpawnAnteater();
             isDeployed = true;
-            //SpawnHunter();
+            SpawnHunter();
         }
     }
 
@@ -63,7 +63,7 @@ public class HunterHandler : MonoBehaviour
 				hunterObj.GetComponent<Hunter>().Health = 15;
 				hunterObj.GetComponent<Hunter>().Attack = 1;
                 hunterObj.GetComponent<Hunter>().FiringSpeed = 3.5f;
-                hunterObj.GetComponent<Hunter>().CanRetreat = true;
+                hunterObj.GetComponent<Hunter>().CanFlank = true;
 				break;
 			case 3:
 				hunterObj = (GameObject)Instantiate(h2);
@@ -131,16 +131,17 @@ public class HunterHandler : MonoBehaviour
             {
                 if (h == null)
                     break;
-
+                
                 if (!CheckIfAtDestination(h))
                     h.GetComponent<Hunter>().NextMove = false;
                 else
                     h.GetComponent<Hunter>().NextMove = true;
+                    
 
                 Transform hunterTransform = h.GetComponentInChildren<Transform>();
                 float distance = Vector3.Distance(h.transform.position, automaton.transform.position);
-
                 Animator anim = h.GetComponent<Animator>();
+
                 if (h.name.Equals(anteater.name+"(Clone)"))
                 {
                     anim = h.GetComponentInChildren<Animator>();
@@ -148,19 +149,16 @@ public class HunterHandler : MonoBehaviour
 
                 if (h.GetComponent<Hunter>().NextMove)
                 {
-                    if (distance > closeRange)
+                    if (distance > closeRange && !h.GetComponent<Hunter>().JustShot)
                     {
-                        GetClose(automaton.transform.position, h);
-                        anim.SetBool("isShooting", false);
-                        anim.SetBool("isWalking", true);
-
+                        GetClose(anim, automaton.transform.position, h);
                     }
                     else
                     {
-                        anim.SetBool("isShooting", true);
                         anim.SetBool("isWalking", false);
                         if (!h.GetComponent<Hunter>().JustShot)
                         {
+                            anim.SetBool("isShooting", true);
                             Fire(h, h.GetComponent<Hunter>());
                             StartCoroutine(FireCoolDown(h.GetComponent<Hunter>()));
                         }
@@ -168,8 +166,13 @@ public class HunterHandler : MonoBehaviour
                 }
                 if (h.GetComponent<Hunter>().CanRetreat && distance < tooCloseRange)//if very close, walk backwards
                 {
-                    //BackUp(automaton.transform.position,h);
-                    FindFlank(automaton.transform.position, h);
+                    h.GetComponent<Hunter>().JustShot = true;
+                    BackUp(anim, automaton.transform.position, h);
+                }
+                if (h.GetComponent<Hunter>().CanFlank && distance < tooCloseRange)//if very close, flank around
+                {
+                    h.GetComponent<Hunter>().JustShot = true;
+                    FindFlank(anim, automaton.transform.position, h);
                 }
 
                 Vector3 offset = automaton.transform.position - h.transform.position;
@@ -206,7 +209,7 @@ public class HunterHandler : MonoBehaviour
 			int hit = Random.Range(0, 2);
 			if (hit < chance)
 			{
-                audioHandler.PlayClip(Camera.main.gameObject, "enemyDetected");
+                audioHandler.PlayClipIgnore(Camera.main.gameObject, "enemyDetected");
                 SpawnHunter();
 				chance = 0;
 				isDeployed = true;
@@ -356,37 +359,30 @@ public class HunterHandler : MonoBehaviour
         return hunter.GetComponent<NavMeshAgent>().remainingDistance < 50f;
     }
 
-    void GetClose(Vector3 robot, GameObject hunter)
+    void GetClose(Animator anim, Vector3 robot, GameObject hunter)
     {
         Vector3 diff = (hunter.transform.position - robot) * 1 / 2;
         robot += diff;
         TravelTo(hunter,robot,false);
         Debug.Log("Getting Closer");
+        anim.SetBool("isShooting", false);
+        anim.SetBool("isWalking", true);
     }
 
-    void BackUp(Vector3 robot, GameObject hunter)
+    void BackUp(Animator anim, Vector3 robot, GameObject hunter)
     {
         /*
-        Vector3 difference = transform.position - backFrom;
-        Vector3 a = difference*2;
-        Vector3 b = a + backFrom;
-        //move to b
-        */
-
         Vector3 backUp = ((hunter.transform.position - robot) * 3) + robot;
         TravelTo(hunter, backUp, false);
         Debug.Log("Backign Up to "+backUp);
+        */
+        Vector3 backUp = hunter.transform.position - hunter.transform.forward * 10;
+        TravelTo(hunter, backUp, false);
+        Debug.Log("Backign Up to " + backUp);
     }
 
-    void FindFlank(Vector3 robot, GameObject hunter)
+    void FindFlank(Animator anim, Vector3 robot, GameObject hunter)
     {
-        /*
-        Vector3 difference = transform.position - backFrom;
-        Vector3 a = (difference/z,y,difference.x)
-        Vector3 b = a + backFrom;
-        //move to b
-        */
-
         Vector3 diff = hunter.transform.position - robot;
         Vector3 flank = new Vector3(diff.z, hunter.transform.position.y, diff.x);
         robot += flank;
