@@ -5155,7 +5155,7 @@ MonoBehaviour:
   resourceHandling: {fileID: 467610735}
   enemyHandler: {fileID: 467610734}
   encampmentHandler: {fileID: 467610733}
-  spawnPool: {fileID: 1102157339}
+  spawnPool: {fileID: 1822839401}
   roomManager: {fileID: 2075244114}
   audioHandler: {fileID: 467610736}
   robotPos: {x: 10, y: 3, z: 8}
@@ -5216,7 +5216,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   audioHandler: {fileID: 467610736}
   automoton: {fileID: 5905536743914566335}
-  spawnPool: {fileID: 1102157339}
+  spawnPool: {fileID: 1822839401}
   enemies: []
   stoppingDistance: 30
   shootingRange: 40
@@ -8128,6 +8128,87 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 765444587}
   m_CullTransparentMesh: 0
+--- !u!1 &775747805
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 775747807}
+  - component: {fileID: 775747806}
+  m_Layer: 0
+  m_Name: CrossHair
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!212 &775747806
+SpriteRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 775747805}
+  m_Enabled: 1
+  m_CastShadows: 0
+  m_ReceiveShadows: 0
+  m_DynamicOccludee: 1
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 0
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_Sprite: {fileID: 21300000, guid: 216f2bc200033f245a8cc8b708833b89, type: 3}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_FlipX: 0
+  m_FlipY: 0
+  m_DrawMode: 0
+  m_Size: {x: 60, y: 60}
+  m_AdaptiveModeThreshold: 0.5
+  m_SpriteTileMode: 0
+  m_WasSpriteAssigned: 1
+  m_MaskInteraction: 0
+  m_SpriteSortPoint: 0
+--- !u!4 &775747807
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 775747805}
+  m_LocalRotation: {x: 0.7071068, y: 0, z: 0, w: 0.7071068}
+  m_LocalPosition: {x: -45.108265, y: 126.1, z: 76.95413}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 9
+  m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
 --- !u!1 &776834734
 GameObject:
   m_ObjectHideFlags: 0
@@ -11921,7 +12002,6 @@ GameObject:
   - component: {fileID: 1102157337}
   - component: {fileID: 1102157338}
   - component: {fileID: 1102157336}
-  - component: {fileID: 1102157339}
   m_Layer: 0
   m_Name: Logic
   m_TagString: Untagged
@@ -12053,31 +12133,6 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   spawnRes: {fileID: 1102157336}
---- !u!114 &1102157339
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1102157334}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2c573fcdd309ef443910f141b68ffee3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  pools:
-  - tag: small
-    prefab: {fileID: 5961106698798059313, guid: 60dc6924f9da7974f84019a57441fa3d,
-      type: 3}
-    size: 30
-  - tag: hunterLaz
-    prefab: {fileID: 4267937178310715878, guid: dfba40c89d7e6264592f0e1b18da285b,
-      type: 3}
-    size: 10
-  - tag: autoLaz
-    prefab: {fileID: 3804134668651701739, guid: cff8647eb5cea8549a38ef01b846f5f2,
-      type: 3}
-    size: 2
 --- !u!1 &1107264130
 GameObject:
   m_ObjectHideFlags: 0
@@ -19554,6 +19609,7 @@ GameObject:
   - component: {fileID: 1822839398}
   - component: {fileID: 1822839399}
   - component: {fileID: 1822839400}
+  - component: {fileID: 1822839401}
   m_Layer: 0
   m_Name: logic block 3
   m_TagString: Untagged
@@ -19665,7 +19721,7 @@ MonoBehaviour:
   anteater: {fileID: 963534896745187385, guid: 2918e0da1528d924abc56e8aaed90160, type: 3}
   autoAction: {fileID: 5905536743914566333}
   audioHandler: {fileID: 467610736}
-  spawnPool: {fileID: 1102157339}
+  spawnPool: {fileID: 1822839401}
   deployedHunters: []
   spawnRadius: 200
   stoppingDistance: 0
@@ -19816,6 +19872,31 @@ MonoBehaviour:
   leftLegStats: 
   rightLegStats: 
   performedUpdate: 0
+--- !u!114 &1822839401
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1822839391}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2c573fcdd309ef443910f141b68ffee3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  pools:
+  - tag: small
+    prefab: {fileID: 5961106698798059313, guid: 60dc6924f9da7974f84019a57441fa3d,
+      type: 3}
+    size: 30
+  - tag: hunterLaz
+    prefab: {fileID: 4267937178310715878, guid: dfba40c89d7e6264592f0e1b18da285b,
+      type: 3}
+    size: 10
+  - tag: autoLaz
+    prefab: {fileID: 3804134668651701739, guid: cff8647eb5cea8549a38ef01b846f5f2,
+      type: 3}
+    size: 2
 --- !u!1 &1839191713
 GameObject:
   m_ObjectHideFlags: 0
@@ -24567,6 +24648,7 @@ MonoBehaviour:
   explosion: {fileID: 3118891267616825007, guid: 33b774b5819a306478e54bab16c216bb,
     type: 3}
   lazer: {fileID: 3804134668651701739, guid: cff8647eb5cea8549a38ef01b846f5f2, type: 3}
+  crossHair: {fileID: 775747805}
   phaseOnePos: {x: 0, y: 0, z: 0}
   phaseTwoPos: {x: 0, y: 0, z: 0}
   climbOut: {fileID: 0}
@@ -24574,7 +24656,7 @@ MonoBehaviour:
   unitManager: {fileID: 467610732}
   robotAmbientSource: {fileID: 8015631915230817966}
   audioHandler: {fileID: 467610736}
-  spawnPool: {fileID: 1102157339}
+  spawnPool: {fileID: 1822839401}
   hunterHandler: {fileID: 0}
   encampHandler: {fileID: 0}
   autoHealth: 0

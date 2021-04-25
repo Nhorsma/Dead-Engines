@@ -18,7 +18,7 @@ public class AutomotonAction : MonoBehaviour
 
     public bool endPhaseOne;
     public bool isSelected;
-    public GameObject automoton, fog, footObject, fistObject, headObject, dustCloud, explosion, lazer;
+    public GameObject automoton, fog, footObject, fistObject, headObject, dustCloud, explosion, lazer, crossHair;
     public Vector3 phaseOnePos, phaseTwoPos;
     public Animation climbOut;
     public AutomotonAction aa;
@@ -61,6 +61,7 @@ public class AutomotonAction : MonoBehaviour
             RightClick();
             Controls();
         }
+        CrossHairControl();
         Movement();
     }
 
@@ -101,7 +102,9 @@ public class AutomotonAction : MonoBehaviour
         {
             if (Hit().collider.gameObject.tag == "Metal" ||
                 Hit().collider.gameObject.tag == "Electronics" ||
-                Hit().collider.gameObject.tag == "Encampment")
+                Hit().collider.gameObject.tag == "Encampment"   ||
+                Hit().collider.gameObject.tag == "Hunter"   ||
+                Hit().collider.gameObject.tag == "Enemy")
             {
                 SetJob(Hit().collider.gameObject);
             }
@@ -371,7 +374,7 @@ public class AutomotonAction : MonoBehaviour
         Vector3 shootAt = walkTo;
         if (jobObject != null)
         {
-            shootAt = jobObject.transform.position+new Vector3(0,10,0);
+            shootAt = jobObject.GetComponent<BoxCollider>().bounds.center;
         }
         StartCoroutine(TrailOff("autoLaz",0.5f, head, shootAt));
     }
@@ -380,16 +383,12 @@ public class AutomotonAction : MonoBehaviour
     {
         GameObject t = BulletTrail(type, start, end);
         yield return new WaitForSeconds(time);
+        spawnPool.poolDictionary[type].Enqueue(t);
         t.SetActive(false);
     }
 
     public GameObject BulletTrail(string type, Vector3 start, Vector3 end)
     {
-        float x, y, z;
-        x = Random.Range(-0.2f, 0.2f);
-        y = Random.Range(-0.2f, 0.2f);
-        z = Random.Range(-0.2f, 0.2f);
-        Quaternion offset = Quaternion.Euler(x, y, z);
         Vector3 dif = (start - end) / 2;
         Quaternion angle = Quaternion.LookRotation(start - end);
 
@@ -397,7 +396,7 @@ public class AutomotonAction : MonoBehaviour
         trail = spawnPool.poolDictionary[type].Dequeue();
 
         trail.transform.position = start - dif;
-        trail.transform.rotation = angle * offset;
+        trail.transform.rotation = angle;
         trail.SetActive(true);
 
         trail.transform.localScale = new Vector3(1f, 1f, Vector3.Distance(start, end));
@@ -512,5 +511,19 @@ public class AutomotonAction : MonoBehaviour
     {
         yield return new WaitForSeconds(3f);
         SceneChanger.ReturnToMenu();
+    }
+
+    void CrossHairControl()
+    {
+        if(jobObject!=null)
+        {
+            crossHair.SetActive(true);
+            Vector3 job = jobObject.transform.position;
+            crossHair.transform.position = new Vector3(job.x, -5, job.z);
+        }
+        else
+        {
+            crossHair.SetActive(false);
+        }
     }
 }

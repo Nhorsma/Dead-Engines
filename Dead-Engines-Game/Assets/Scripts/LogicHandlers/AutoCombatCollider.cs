@@ -43,7 +43,7 @@ public class AutoCombatCollider : MonoBehaviour
             }
 			if (other.gameObject.tag == "Hunter")
 			{
-				hunterHandler.DealHunterDamage(other.gameObject, (int)damage);
+				hunterHandler.DealHunterDamage(other.gameObject, 100);
 				SpawnExplosion(other.gameObject,"big");
                 canTrigger = false;
             }
@@ -92,7 +92,7 @@ public class AutoCombatCollider : MonoBehaviour
         else
             type = smallExplosion.name;
         var expl = (GameObject)Instantiate(Resources.Load(type), new Vector3(obj.transform.position.x, -7, obj.transform.position.z), Quaternion.Euler(90, 0, 0));
-        StartCoroutine(TrailOff(5, expl));
+        StartCoroutine(TrailOff(3, expl));
     }
 
     IEnumerator HitSomething()

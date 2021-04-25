@@ -131,11 +131,17 @@ public class HunterHandler : MonoBehaviour
             {
                 if (h == null)
                     break;
-                
+
                 if (!CheckIfAtDestination(h))
+                {
                     h.GetComponent<Hunter>().NextMove = false;
+                    h.GetComponent<Animator>().SetBool("isWalking", true);
+                }
                 else
+                {
                     h.GetComponent<Hunter>().NextMove = true;
+                    h.GetComponent<Animator>().SetBool("isWalking", false);
+                }
                     
 
                 Transform hunterTransform = h.GetComponentInChildren<Transform>();
@@ -151,11 +157,11 @@ public class HunterHandler : MonoBehaviour
                 {
                     if (distance > closeRange && !h.GetComponent<Hunter>().JustShot)
                     {
+                        anim.SetBool("isBackingUp", false);
                         GetClose(anim, automaton.transform.position, h);
                     }
                     else
                     {
-                        anim.SetBool("isWalking", false);
                         if (!h.GetComponent<Hunter>().JustShot)
                         {
                             anim.SetBool("isShooting", true);
@@ -167,11 +173,13 @@ public class HunterHandler : MonoBehaviour
                 if (h.GetComponent<Hunter>().CanRetreat && distance < tooCloseRange)//if very close, walk backwards
                 {
                     h.GetComponent<Hunter>().JustShot = true;
+                    anim.SetBool("isBackingUp", true);
                     BackUp(anim, automaton.transform.position, h);
                 }
                 if (h.GetComponent<Hunter>().CanFlank && distance < tooCloseRange)//if very close, flank around
                 {
                     h.GetComponent<Hunter>().JustShot = true;
+                    anim.SetBool("isBackingUp", false);
                     FindFlank(anim, automaton.transform.position, h);
                 }
 
@@ -258,7 +266,7 @@ public class HunterHandler : MonoBehaviour
 	}
 
 	public void DealHunterDamage(GameObject hunter, int amount) //fishy
-    {
+    {/*
         Hunter hunter_data = deployedHunters[0].GetComponent<Hunter>();
         foreach (GameObject h in deployedHunters)
         {
@@ -268,6 +276,8 @@ public class HunterHandler : MonoBehaviour
                 break;
             }
         }
+        */
+        Hunter hunter_data = hunter.GetComponent<Hunter>();
         hunter_data.Health-=amount;
         Debug.Log("shots recieved");
         HunterDeath(hunter, hunter_data);
@@ -277,21 +287,6 @@ public class HunterHandler : MonoBehaviour
     {
         if (hunter_data.Health <= 0)
         {
-            int i = -1;
-            for (int j = 0; j < deployedHunters.Count; j++)
-            {
-                if (deployedHunters[j] == (hunter_data))
-                {
-                    i = j;
-                    break;
-                }
-            }
-
-            if (i == -1)
-			{
-				return;
-			}
-
 			deployedHunters.Remove(hunter);
             audioHandler.PlayClip(hunter, "explosion");
             Destroy(hunter);
@@ -371,14 +366,9 @@ public class HunterHandler : MonoBehaviour
 
     void BackUp(Animator anim, Vector3 robot, GameObject hunter)
     {
-        /*
+        
         Vector3 backUp = ((hunter.transform.position - robot) * 3) + robot;
         TravelTo(hunter, backUp, false);
-        Debug.Log("Backign Up to "+backUp);
-        */
-        Vector3 backUp = hunter.transform.position - hunter.transform.forward * 10;
-        TravelTo(hunter, backUp, false);
-        Debug.Log("Backign Up to " + backUp);
     }
 
     void FindFlank(Animator anim, Vector3 robot, GameObject hunter)
@@ -387,6 +377,5 @@ public class HunterHandler : MonoBehaviour
         Vector3 flank = new Vector3(diff.z, hunter.transform.position.y, diff.x);
         robot += flank;
         TravelTo(hunter, robot, false);
-        Debug.Log("Flanking");
     }
 }

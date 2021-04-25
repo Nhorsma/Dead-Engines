@@ -9,6 +9,7 @@ public class LazerCollision : MonoBehaviour
     public EnemyHandler enemyHandler;
     public HunterHandler hunterHandler;
     public AudioHandler audioHandler;
+    public GameObject automaton;
 
     public float spawnBuffer, damage;
     public GameObject bigExplosion;
@@ -17,20 +18,24 @@ public class LazerCollision : MonoBehaviour
     {
         resourceHandling = FindObjectOfType<ResourceHandling>();
         encampmentHandler = FindObjectOfType<EncampmentHandler>();
-        //enemyHandler = FindObjectOfType<EnemyHandler>();
-        enemyHandler = (EnemyHandler)FindObjectOfType(typeof(EnemyHandler));
+        enemyHandler = FindObjectOfType<EnemyHandler>();
         hunterHandler = FindObjectOfType<HunterHandler>();
         audioHandler = FindObjectOfType<AudioHandler>();
+        automaton = GameObject.FindGameObjectWithTag("Robot");
+
+        damage = 100f;
+        Physics.IgnoreCollision(automaton.GetComponent<BoxCollider>(), automaton.transform.root.GetComponent<BoxCollider>());
     }
 
     private void OnTriggerEnter(Collider other)
     {
-            Debug.Log("shooting " + other);
+        Physics.IgnoreCollision(automaton.GetComponent<BoxCollider>(), automaton.transform.root.GetComponent<BoxCollider>());
+        Debug.Log("lazer to " + other);
             if (other.gameObject.tag == "Enemy")
             {
                 enemyHandler.TakeDamage(100, other.gameObject);
-            audioHandler.PlayClipIgnore(other.gameObject, "explosion");
-            SpawnExplosion(other.gameObject);
+                audioHandler.PlayClipIgnore(other.gameObject, "explosion");
+                SpawnExplosion(other.gameObject);
             }
             if (other.gameObject.tag == "Encampment")
             {
@@ -49,9 +54,8 @@ public class LazerCollision : MonoBehaviour
 
     void SpawnExplosion(GameObject obj)
     {
-
         var expl = (GameObject)Instantiate(Resources.Load("BigExplosionEffect"), new Vector3(obj.transform.position.x, -7, obj.transform.position.z), Quaternion.Euler(90, 0, 0));
-        StartCoroutine(TrailOff(5, expl));
+        StartCoroutine(TrailOff(3, expl));
     }
 
     IEnumerator TrailOff(float time, GameObject explosion)
