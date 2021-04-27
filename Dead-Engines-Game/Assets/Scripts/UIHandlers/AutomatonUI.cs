@@ -11,6 +11,7 @@ public class AutomatonUI : MonoBehaviour
 	public List<GameObject> tabs = new List<GameObject>();
 	public RoomManager roomManager;
 	public UnitManager unitManager;
+	public LimbTabber limbTabber;
 
 	//tab 1 stuff
     public Text metalText;
@@ -126,6 +127,37 @@ public class AutomatonUI : MonoBehaviour
 		else if (auto_main.activeSelf == true)
 		{
 			tabs[1].SetActive(false);
+			auto_main.SetActive(false);
+		}
+	}
+
+	public void OpenLimbSystemTab()
+	{
+		for (int i = 0; i < tabs.Count; i++)
+		{
+			if (i != 3) // limb system tab index
+			{
+				tabs[i].SetActive(false);
+			}
+		}
+		foreach (GameObject o in limbTabber.limbTabs)
+		{
+			o.SetActive(false);
+		}
+
+		if (auto_main.activeSelf == false && tabs[3].activeSelf == false)
+		{
+			tabs[3].SetActive(true);
+			auto_main.SetActive(true);
+		}
+		else if (auto_main.activeSelf == true && tabs[3].activeSelf == false)
+		{
+			Debug.Log("hit");
+			tabs[3].SetActive(true);
+		}
+		else if (auto_main.activeSelf == true)
+		{
+			tabs[3].SetActive(false);
 			auto_main.SetActive(false);
 		}
 	}

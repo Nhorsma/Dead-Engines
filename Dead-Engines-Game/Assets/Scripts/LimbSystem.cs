@@ -16,7 +16,7 @@ public class LimbSystem : MonoBehaviour
 
     void Start()
     {
-        for (int i = 0; i < 3; i++)
+        for (int i = 0; i < 2; i++)
 		{
 			headStats.Add(1);
 			torsoStats.Add(1);
