@@ -29,9 +29,9 @@ public class HunterHandler : MonoBehaviour
 
         if(Input.GetKeyDown(KeyCode.P))
         {
-            //SpawnAnteater();
+            SpawnAnteater();
             isDeployed = true;
-            SpawnHunter();
+            //SpawnHunter();
         }
     }
 
@@ -132,26 +132,28 @@ public class HunterHandler : MonoBehaviour
                 if (h == null)
                     break;
 
+                Animator anim = h.GetComponent<Animator>();
+                Debug.Log(h.name);
+                if (h.name.Equals(anteater.name + "(Clone)"))
+                {
+                    Debug.Log("getting anteater animation");
+                    anim = h.GetComponentInChildren<Animator>();
+                }
+
                 if (!CheckIfAtDestination(h))
                 {
                     h.GetComponent<Hunter>().NextMove = false;
-                    h.GetComponent<Animator>().SetBool("isWalking", true);
+                    anim.SetBool("isWalking", true);
                 }
                 else
                 {
                     h.GetComponent<Hunter>().NextMove = true;
-                    h.GetComponent<Animator>().SetBool("isWalking", false);
+                    anim.SetBool("isWalking", false);
                 }
                     
 
                 Transform hunterTransform = h.GetComponentInChildren<Transform>();
                 float distance = Vector3.Distance(h.transform.position, automaton.transform.position);
-                Animator anim = h.GetComponent<Animator>();
-
-                if (h.name.Equals(anteater.name+"(Clone)"))
-                {
-                    anim = h.GetComponentInChildren<Animator>();
-                }
 
                 if (h.GetComponent<Hunter>().NextMove)
                 {
@@ -183,8 +185,11 @@ public class HunterHandler : MonoBehaviour
                     FindFlank(anim, automaton.transform.position, h);
                 }
 
-                Vector3 offset = automaton.transform.position - h.transform.position;
-                hunterTransform.forward = new Vector3(offset.x,0f,offset.z);
+                if (h.name != anteater.name + "(Clone)")
+                {
+                    Vector3 offset = automaton.transform.position - h.transform.position;
+                    hunterTransform.forward = new Vector3(offset.x, 0f, offset.z);
+                }
                 
             }
     }

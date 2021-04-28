@@ -332,6 +332,7 @@ GameObject:
   - component: {fileID: 4484421922898435958}
   - component: {fileID: 5605635196790160352}
   - component: {fileID: 892236682729146428}
+  - component: {fileID: 3426121502641499163}
   m_Layer: 0
   m_Name: Anteater_Boss
   m_TagString: Untagged
@@ -501,6 +502,26 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &3426121502641499163
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 963534896745187385}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b7f573ab69b10904bb8b160ffa26af07, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  pointTo: {fileID: 0}
+  joints:
+  - {fileID: 1805658550958259496}
+  - {fileID: 4206859971346714347}
+  - {fileID: 2363371900518814772}
+  - {fileID: 8742503284409471642}
+  - {fileID: 1160092570034537806}
+  - {fileID: 1235933293492956050}
 --- !u!1 &994385375108210980
 GameObject:
   m_ObjectHideFlags: 0

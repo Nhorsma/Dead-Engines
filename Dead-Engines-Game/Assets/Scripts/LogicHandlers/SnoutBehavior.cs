@@ -7,6 +7,10 @@ public class SnoutBehavior : MonoBehaviour
     public GameObject pointTo;
     public GameObject[] joints;
 
+    private void Start()
+    {
+        pointTo = GameObject.FindGameObjectWithTag("Robot");
+    }
 
     void Update()
     {
