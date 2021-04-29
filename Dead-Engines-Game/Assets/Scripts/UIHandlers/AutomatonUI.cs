@@ -131,6 +131,34 @@ public class AutomatonUI : MonoBehaviour
 		}
 	}
 
+	public void OpenUnitViewTab()
+	{
+		for (int i = 0; i < tabs.Count; i++)
+		{
+			if (i != 4) // unit view tab index
+			{
+				tabs[i].SetActive(false);
+			}
+		}
+
+		if (auto_main.activeSelf == false && tabs[4].activeSelf == false) //if neither are turned on, turn both on
+		{
+			tabs[4].SetActive(true);
+			auto_main.SetActive(true);
+		}
+		else if (auto_main.activeSelf == true && tabs[4].activeSelf == false) //if main content is on but tab is off, turn on tab only
+		{
+			Debug.Log("hit");
+			tabs[4].SetActive(true);
+		}
+		else if (auto_main.activeSelf == true) // last - if main content and tab are both on, turn both off
+		{
+			tabs[4].SetActive(false);
+			auto_main.SetActive(false);
+		}
+
+	}
+
 	public void OpenLimbSystemTab()
 	{
 		for (int i = 0; i < tabs.Count; i++)
