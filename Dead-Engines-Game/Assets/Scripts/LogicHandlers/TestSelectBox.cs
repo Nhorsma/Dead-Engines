@@ -11,22 +11,23 @@ public class TestSelectBox : MonoBehaviour
     // https://answers.unity.com/questions/1575087/how-can-i-draw-a-box-ingame.html
 
     public Texture drawBox;
+    public SelectItems selectItems;
 
 	bool dragging = false;
 	Rect selectionBox;
-	Vector3 initialMousePosition;
-	Vector3 currentMousePosition;
+	Vector2 initialMousePosition;
+	Vector2 currentMousePosition;
 	Event e;
 
-	void OnGUI()
+    void OnGUI()
 	{
 		e = Event.current;
         if (e.type == EventType.MouseDrag)
 		{
-			if (!dragging)
+			if (!dragging && !selectItems.IsPointerOverUIElement())
 			{
 				dragging = true;
-				initialMousePosition = e.mousePosition;
+				initialMousePosition = new Vector2(e.mousePosition.x, Screen.height-selectItems.mouseFirst.y);
 			}
 		}
         if (e.type == EventType.MouseUp)
@@ -35,12 +36,9 @@ public class TestSelectBox : MonoBehaviour
 		}
         if (dragging)
 		{
-			currentMousePosition = e.mousePosition;
+            currentMousePosition = e.mousePosition;
 			selectionBox = new Rect(initialMousePosition.x, initialMousePosition.y, currentMousePosition.x - initialMousePosition.x, currentMousePosition.y - initialMousePosition.y);
-            //GUI.color = Color.white;
-            GUI.Box(selectionBox, GUIContent.none);
-            //GUI.DrawTexture(selectionBox, drawBox);
-            
+            GUI.Box(selectionBox, GUIContent.none);           
         }
 	}
 }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 
 public class SelectItems : MonoBehaviour
 {
@@ -19,6 +20,7 @@ public class SelectItems : MonoBehaviour
 
 	public HudView hudView;
 
+    int UILayer;
     Color normalC = new Color32(250, 250, 250, 200);
     Color highLightedC = new Color32(255, 0, 255, 200);
     Color selectedC = new Color32(255, 255, 0, 200);
@@ -29,7 +31,7 @@ public class SelectItems : MonoBehaviour
     GameObject highlightThisUnit;
     public GameObject g1, g2, automaton; 
 
-    Vector2 mouseFirst, mouseSecond;
+    public Vector2 mouseFirst, mouseSecond;
     Vector3 squareStartPos;
     Vector3 squareEndPos;
     Vector3 TL, TR, BL, BR;
@@ -44,6 +46,7 @@ public class SelectItems : MonoBehaviour
         unitManager = this.gameObject.GetComponent<UnitManager>(); // why
         selectionSquareTrans = selectionSquare.rectTransform;
         mouseSecond = mouseFirst = Input.mousePosition;
+        UILayer = LayerMask.NameToLayer("UI");
     }
 
     private void Update()
@@ -81,7 +84,7 @@ public class SelectItems : MonoBehaviour
     {
         if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit, Mathf.Infinity))
         {
-            if (!hasCreatedSquare)
+            if (!hasCreatedSquare && !IsPointerOverUIElement())
             {
 				ClearAll(false);
                 if (hit.collider.CompareTag("Friendly") && !UnitManager.selectedUnits.Contains(hit.collider.gameObject) && hit.collider.gameObject.activeInHierarchy)
@@ -180,14 +183,22 @@ public class SelectItems : MonoBehaviour
         mouseSecond = Input.mousePosition;
         if (mouseFirst != mouseSecond)
         {
+            if (IsPointerOverUIElement() && !hasCreatedSquare)
+            {
+                mouseFirst = new Vector3(mouseSecond.x, mouseFirst.y);
+            }
+            else
+            {
                 squareStartPos = mouseFirst;
                 squareEndPos = mouseSecond;
                 hasCreatedSquare = true;
+            }
         }
         else
         {
-            hasCreatedSquare = false;
+                hasCreatedSquare = false;
         }
+        Debug.Log(mouseFirst + " vs " + mouseSecond);
     }
 
 
@@ -235,14 +246,16 @@ public class SelectItems : MonoBehaviour
 		{
 			GameObject currentUnit = unitManager.units[i];
 
-			//Is this unit within the square
+            //Is this unit within the square
 			if (InRect(currentUnit.transform.position) && currentUnit.activeInHierarchy)
 			{
 				//currentUnit.GetComponentInChildren<SpriteRenderer>().color = selectedC;
 				SetColor(currentUnit, false);
 
 				UnitManager.selectedUnits.Add(currentUnit);
-				ReadyClip();
+
+                if(!IsPointerOverUIElement())
+				    ReadyClip();
 			}
 			//Otherwise deselect the unit if it's not in the square
 			else
@@ -353,6 +366,34 @@ public class SelectItems : MonoBehaviour
             gameObj.GetComponentInChildren<SpriteRenderer>().color = selectedC;
             unitManager.SetJobCircleColor(gameObj.GetComponent<Unit>(), selectedYellow);
         }
+    }
+
+    public bool IsPointerOverUIElement()
+    {
+        return IsPointerOverUIElement(GetEventSystemRaycastResults());
+    }
+
+    //Returns 'true' if we touched or hovering on Unity UI element.
+    private bool IsPointerOverUIElement(List<RaycastResult> eventSystemRaysastResults)
+    {
+        for (int index = 0; index < eventSystemRaysastResults.Count; index++)
+        {
+            RaycastResult curRaysastResult = eventSystemRaysastResults[index];
+            if (curRaysastResult.gameObject.layer == UILayer)
+                return true;
+        }
+        return false;
+    }
+
+
+    //Gets all event system raycast results of current mouse or touch position.
+    static List<RaycastResult> GetEventSystemRaycastResults()
+    {
+        PointerEventData eventData = new PointerEventData(EventSystem.current);
+        eventData.position = Input.mousePosition;
+        List<RaycastResult> raysastResults = new List<RaycastResult>();
+        EventSystem.current.RaycastAll(eventData, raysastResults);
+        return raysastResults;
     }
 
 }
