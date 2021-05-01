@@ -7576,7 +7576,7 @@ MonoBehaviour:
   resourceHandling: {fileID: 467610735}
   enemyHandler: {fileID: 467610734}
   encampmentHandler: {fileID: 467610733}
-  spawnPool: {fileID: 1822839401}
+  spawnPool: {fileID: 0}
   roomManager: {fileID: 2075244114}
   audioHandler: {fileID: 467610736}
   robotPos: {x: 10, y: 3, z: 8}
@@ -7611,6 +7611,7 @@ MonoBehaviour:
   resourceHandling: {fileID: 467610735}
   automaton: {fileID: 5905536743914566335}
   audioHandler: {fileID: 467610736}
+  spawnPool: {fileID: 1822839401}
   startSpawnTime: 0
   spawnTime: 10
   spawnDistance: 5
@@ -20381,6 +20382,7 @@ MonoBehaviour:
     type: 3}
   bigExplosion: {fileID: 1000011797152326, guid: acf39d9f4addf294d93fa56fa373961b,
     type: 3}
+  spawnPool: {fileID: 0}
   spawnBuffer: 3
   damage: 15
   canCollect: 1
@@ -27579,10 +27581,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pools:
-  - tag: small
+  - tag: bulletTrail
     prefab: {fileID: 5961106698798059313, guid: 60dc6924f9da7974f84019a57441fa3d,
       type: 3}
-    size: 30
+    size: 20
   - tag: hunterLaz
     prefab: {fileID: 4267937178310715878, guid: dfba40c89d7e6264592f0e1b18da285b,
       type: 3}
@@ -27591,6 +27593,9 @@ MonoBehaviour:
     prefab: {fileID: 3804134668651701739, guid: cff8647eb5cea8549a38ef01b846f5f2,
       type: 3}
     size: 2
+  - tag: explosion
+    prefab: {fileID: 1000011797152326, guid: acf39d9f4addf294d93fa56fa373961b, type: 3}
+    size: 3
 --- !u!114 &1822839402
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -28462,6 +28467,7 @@ MonoBehaviour:
   audioHandler: {fileID: 467610736}
   smallExplosion: {fileID: 0}
   bigExplosion: {fileID: 0}
+  spawnPool: {fileID: 1822839401}
   spawnBuffer: 3
   damage: 15
   canCollect: 1
@@ -35359,6 +35365,75 @@ Transform:
   m_Father: {fileID: 8007336588868125906}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1001 &8794550610044103880
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 8794550610721127213, guid: f1a897e1ed8213a42a33a61f4cb36d14,
+        type: 3}
+      propertyPath: m_Name
+      value: Anteater Activator
+      objectReference: {fileID: 0}
+    - target: {fileID: 8794550610721127215, guid: f1a897e1ed8213a42a33a61f4cb36d14,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 8794550610721127215, guid: f1a897e1ed8213a42a33a61f4cb36d14,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -7.3
+      objectReference: {fileID: 0}
+    - target: {fileID: 8794550610721127215, guid: f1a897e1ed8213a42a33a61f4cb36d14,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -12
+      objectReference: {fileID: 0}
+    - target: {fileID: 8794550610721127215, guid: f1a897e1ed8213a42a33a61f4cb36d14,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8794550610721127215, guid: f1a897e1ed8213a42a33a61f4cb36d14,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8794550610721127215, guid: f1a897e1ed8213a42a33a61f4cb36d14,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8794550610721127215, guid: f1a897e1ed8213a42a33a61f4cb36d14,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8794550610721127215, guid: f1a897e1ed8213a42a33a61f4cb36d14,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 8794550610721127215, guid: f1a897e1ed8213a42a33a61f4cb36d14,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8794550610721127215, guid: f1a897e1ed8213a42a33a61f4cb36d14,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8794550610721127215, guid: f1a897e1ed8213a42a33a61f4cb36d14,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: f1a897e1ed8213a42a33a61f4cb36d14, type: 3}
 --- !u!33 &8827312258495983823
 MeshFilter:
   m_ObjectHideFlags: 0
