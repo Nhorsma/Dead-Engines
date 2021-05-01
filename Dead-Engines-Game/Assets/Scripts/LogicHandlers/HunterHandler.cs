@@ -100,7 +100,7 @@ public class HunterHandler : MonoBehaviour
         }
 	}
 
-    void SpawnAnteater()
+    public void SpawnAnteater()
     {
         Vector3 spawnPlace = automaton.transform.position + RandomSpawnPoint();
         GameObject hunterObj = Instantiate(anteater);

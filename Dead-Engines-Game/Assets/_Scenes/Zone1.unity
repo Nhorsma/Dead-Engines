@@ -7611,7 +7611,6 @@ MonoBehaviour:
   resourceHandling: {fileID: 467610735}
   automaton: {fileID: 5905536743914566335}
   audioHandler: {fileID: 467610736}
-  spawnPool: {fileID: 1822839401}
   startSpawnTime: 0
   spawnTime: 10
   spawnDistance: 5
@@ -20382,7 +20381,6 @@ MonoBehaviour:
     type: 3}
   bigExplosion: {fileID: 1000011797152326, guid: acf39d9f4addf294d93fa56fa373961b,
     type: 3}
-  spawnPool: {fileID: 0}
   spawnBuffer: 3
   damage: 15
   canCollect: 1
@@ -27581,7 +27579,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pools:
-  - tag: bulletTrail
+  - tag: small
     prefab: {fileID: 5961106698798059313, guid: 60dc6924f9da7974f84019a57441fa3d,
       type: 3}
     size: 20
@@ -28467,7 +28465,6 @@ MonoBehaviour:
   audioHandler: {fileID: 467610736}
   smallExplosion: {fileID: 0}
   bigExplosion: {fileID: 0}
-  spawnPool: {fileID: 1822839401}
   spawnBuffer: 3
   damage: 15
   canCollect: 1

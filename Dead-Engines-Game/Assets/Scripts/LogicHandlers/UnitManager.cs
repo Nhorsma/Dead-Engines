@@ -610,6 +610,7 @@ public class UnitManager : MonoBehaviour
 		//check for storage space, then do what?
 		ResourceHandling.storageUsed++;
 	}
+
     void AddElectronics()
     {
         ResourceHandling.electronics++;
