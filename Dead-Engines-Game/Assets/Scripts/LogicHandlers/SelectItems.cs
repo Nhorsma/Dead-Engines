@@ -198,7 +198,6 @@ public class SelectItems : MonoBehaviour
         {
                 hasCreatedSquare = false;
         }
-        Debug.Log(mouseFirst + " vs " + mouseSecond);
     }
 
 

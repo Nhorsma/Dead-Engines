@@ -271,22 +271,11 @@ public class HunterHandler : MonoBehaviour
 	}
 
 	public void DealHunterDamage(GameObject hunter, int amount) //fishy
-    {/*
-        Hunter hunter_data = deployedHunters[0].GetComponent<Hunter>();
-        foreach (GameObject h in deployedHunters)
-        {
-            if (h.GetComponent<Hunter>() != null && h.Equals(hunter_data))
-            {
-                hunter_data = h.GetComponent<Hunter>();
-                break;
-            }
-        }
-        */
+    {
         Hunter hunter_data = hunter.GetComponent<Hunter>();
         hunter_data.Health-=amount;
         Debug.Log("shots recieved");
         HunterDeath(hunter, hunter_data);
-
     }
     public void HunterDeath(GameObject hunter, Hunter hunter_data)
     {
@@ -294,6 +283,12 @@ public class HunterHandler : MonoBehaviour
         {
 			deployedHunters.Remove(hunter);
             audioHandler.PlayClip(hunter, "explosion");
+
+            if(hunter.name==anteater.name+"(Clone)")
+            {
+                StartCoroutine(WinSequence(5));
+            }
+            
             Destroy(hunter);
 
 			if (deployedHunters.Count <= 0)
@@ -382,5 +377,11 @@ public class HunterHandler : MonoBehaviour
         Vector3 flank = new Vector3(diff.z, hunter.transform.position.y, diff.x);
         robot += flank;
         TravelTo(hunter, robot, false);
+    }
+
+    IEnumerator WinSequence(float time)
+    {
+        yield return new WaitForSeconds(time);
+        SceneChanger.ReturnToMenu();
     }
 }

@@ -55,7 +55,8 @@ public class LazerCollision : MonoBehaviour
     void SpawnExplosion(GameObject obj)
     {
         var expl = (GameObject)Instantiate(Resources.Load("BigExplosionEffect"), new Vector3(obj.transform.position.x, -7, obj.transform.position.z), Quaternion.Euler(90, 0, 0));
-        StartCoroutine(TrailOff(3, expl));
+        expl.transform.localScale = obj.GetComponent<BoxCollider>().bounds.size*0.8f;
+        StartCoroutine(TrailOff(1.5f, expl));
     }
 
     IEnumerator TrailOff(float time, GameObject explosion)

@@ -478,7 +478,7 @@ public class AutomotonAction : MonoBehaviour
         {
             SpawnExplosion(gameObject);
             audioHandler.PlayClipIgnore(gameObject, "explosion");
-            StartCoroutine(DeathSequence());
+            StartCoroutine(DeathSequence(3));
         }
     }
 
@@ -507,9 +507,9 @@ public class AutomotonAction : MonoBehaviour
         transform.Find("Ring").GetComponent<SpriteRenderer>().color = c;
     }
 
-    IEnumerator DeathSequence()
+    IEnumerator DeathSequence(float time)
     {
-        yield return new WaitForSeconds(3f);
+        yield return new WaitForSeconds(time);
         SceneChanger.ReturnToMenu();
     }
 

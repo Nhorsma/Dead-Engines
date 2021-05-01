@@ -91,8 +91,9 @@ public class AutoCombatCollider : MonoBehaviour
             type = bigExplosion.name;
         else
             type = smallExplosion.name;
-        var expl = (GameObject)Instantiate(Resources.Load(type), new Vector3(obj.transform.position.x, -7, obj.transform.position.z), Quaternion.Euler(90, 0, 0));
-        StartCoroutine(TrailOff(3, expl));
+         GameObject expl = (GameObject)Instantiate(Resources.Load(type), new Vector3(obj.transform.position.x, -7, obj.transform.position.z), Quaternion.Euler(90, 0, 0));
+        expl.transform.localScale = obj.GetComponent<Renderer>().bounds.size;
+        StartCoroutine(TrailOff(2, expl));
     }
 
     IEnumerator HitSomething()
