@@ -7611,6 +7611,7 @@ MonoBehaviour:
   resourceHandling: {fileID: 467610735}
   automaton: {fileID: 5905536743914566335}
   audioHandler: {fileID: 467610736}
+  spawnPool: {fileID: 1822839401}
   startSpawnTime: 0
   spawnTime: 10
   spawnDistance: 5

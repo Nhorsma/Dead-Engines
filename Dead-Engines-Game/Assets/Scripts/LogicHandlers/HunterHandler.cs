@@ -282,6 +282,7 @@ public class HunterHandler : MonoBehaviour
         if (hunter_data.Health <= 0)
         {
 			deployedHunters.Remove(hunter);
+            StartCoroutine(TrailOff("explosion", 3f, hunter, hunter.transform.position, hunter.transform.position));
             audioHandler.PlayClip(hunter, "explosion");
 
             if(hunter.name==anteater.name+"(Clone)")
@@ -311,7 +312,7 @@ public class HunterHandler : MonoBehaviour
             Vector3 direction = hunter_data.Target.transform.position - hunter.transform.position;
             audioHandler.PlayClipIgnore(hunter, "railGun");
 
-            StartCoroutine(TrailOff(0.07f, hunter_data.FireFrom.transform.position, hunter_data.Target.transform.position + new Vector3(0, 50, 0)));
+            StartCoroutine(TrailOff("hunterLaz", 0.07f, hunter,hunter_data.FireFrom.transform.position, hunter_data.Target.transform.position + new Vector3(0, 50, 0)));
 
             autoAction.RecieveDamage(hunter_data.Attack);
         }
@@ -323,29 +324,36 @@ public class HunterHandler : MonoBehaviour
 		hunter_data.JustShot = false;
 	}
 
-    public GameObject BulletTrail(Vector3 start, Vector3 end)
+    public GameObject BulletTrail(string type, GameObject obj, Vector3 start, Vector3 end)
     {
-        float x, y, z;
-        x = Random.Range(-1.2f, 1.2f);
-        y = Random.Range(-1.2f, 1.2f);
-        z = Random.Range(-1.2f, 1.2f);
-        Quaternion offset = Quaternion.Euler(x, y, z);
-        Vector3 dif = (start - end) / 2;
-        Quaternion angle = Quaternion.LookRotation(start - end);
+        GameObject trail = spawnPool.poolDictionary[type].Dequeue();
+        if (type == "hunterLaz")
+        {
+            float x, y, z;
+            x = Random.Range(-1.2f, 1.2f);
+            y = Random.Range(-1.2f, 1.2f);
+            z = Random.Range(-1.2f, 1.2f);
+            Quaternion offset = Quaternion.Euler(x, y, z);
+            Vector3 dif = (start - end) / 2;
+            Quaternion angle = Quaternion.LookRotation(start - end);
 
-        GameObject trail = spawnPool.poolDictionary["hunterLaz"].Dequeue();
-        trail.transform.position = start - dif;
-        trail.transform.rotation = angle * offset;
+            trail.transform.position = start - dif;
+            trail.transform.rotation = angle * offset;
+            trail.transform.localScale = new Vector3(0.5f, 0.5f, Vector3.Distance(start, end));
+        }
+        else
+        {
+            trail.transform.position = start;
+            trail.transform.localScale = obj.GetComponent<BoxCollider>().bounds.size * 0.8f;
+        }
         trail.SetActive(true);
-
-        trail.transform.localScale = new Vector3(0.5f, 0.5f, Vector3.Distance(start, end));
         return trail;
     }
-    IEnumerator TrailOff(float time, Vector3 start, Vector3 end)
+    IEnumerator TrailOff(string type, float time, GameObject obj, Vector3 start, Vector3 end)
     {
-        GameObject t = BulletTrail(start, end);
+        GameObject t = BulletTrail(type, obj, start, end);
         yield return new WaitForSeconds(time);
-        spawnPool.poolDictionary["hunterLaz"].Enqueue(t);
+        spawnPool.poolDictionary[type].Enqueue(t);
         t.SetActive(false);
     }
 

@@ -15,6 +15,7 @@ public class EncampmentHandler : MonoBehaviour
     public ResourceHandling resourceHandling;
     public GameObject automaton;
     public AudioHandler audioHandler;
+    public SpawningPoolController spawnPool;
 
     public float startSpawnTime,spawnTime, spawnDistance; //
     public bool startSpawning;
@@ -71,6 +72,7 @@ public class EncampmentHandler : MonoBehaviour
 			if (encampments[i].Health <= 0)
 			{
                 audioHandler.PlayClip(encampments[i].Obj, "explosion");
+                StartCoroutine(TrailOff(3f, encampments[i].Obj));
 				startSpawning = false;
 				encampments[i].Obj.SetActive(false);
 				//encamps[i] = null;
@@ -281,5 +283,21 @@ public class EncampmentHandler : MonoBehaviour
     {
         int i = Random.Range(0, encampment.ClosestResources.Count);
         return encampment.ClosestResources[i];
+    }
+
+    public GameObject Explosion(GameObject obj)
+    {
+        GameObject trail = spawnPool.poolDictionary["explosion"].Dequeue();
+        trail.transform.position = obj.transform.position;
+        trail.transform.localScale = obj.GetComponent<BoxCollider>().bounds.size * 0.8f;
+        trail.SetActive(true);
+        return trail;
+    }
+    IEnumerator TrailOff(float time, GameObject obj)
+    {
+        GameObject t = Explosion(obj);
+        yield return new WaitForSeconds(time);
+        spawnPool.poolDictionary["explosion"].Enqueue(t);
+        t.SetActive(false);
     }
 }

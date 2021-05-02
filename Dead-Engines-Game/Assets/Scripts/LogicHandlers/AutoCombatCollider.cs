@@ -38,13 +38,11 @@ public class AutoCombatCollider : MonoBehaviour
 				other.gameObject.GetComponent<Encampment>().Health -= 100;
 				encampmentHandler.BeDestroyed();
                 audioHandler.PlayClip(other.gameObject, "explosion");
-                SpawnExplosion(other.gameObject,"big");
                 canTrigger = false;
             }
 			if (other.gameObject.tag == "Hunter")
 			{
 				hunterHandler.DealHunterDamage(other.gameObject, 100);
-				SpawnExplosion(other.gameObject,"big");
                 canTrigger = false;
             }
 			if (canCollect && other.gameObject.tag == "Metal")
@@ -84,31 +82,11 @@ public class AutoCombatCollider : MonoBehaviour
 		}
     }
 
-    void SpawnExplosion(GameObject obj, string size)
-    {
-        string type = "";
-        if (size == "big")
-            type = bigExplosion.name;
-        else
-            type = smallExplosion.name;
-         GameObject expl = (GameObject)Instantiate(Resources.Load(type), new Vector3(obj.transform.position.x, -7, obj.transform.position.z), Quaternion.Euler(90, 0, 0));
-        expl.transform.localScale = obj.GetComponent<Renderer>().bounds.size;
-        StartCoroutine(TrailOff(2, expl));
-    }
-
     IEnumerator HitSomething()
     {
         canTrigger = false;
         yield return new WaitForSeconds(spawnBuffer);
         canTrigger = true;
     }
-
-    IEnumerator TrailOff(float time, GameObject explosion)
-    {
-        explosion.GetComponent<ParticleSystem>().Play();
-        yield return new WaitForSeconds(time);
-        Destroy(explosion);
-    }
-
 
 }
