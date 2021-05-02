@@ -109,7 +109,7 @@ public class HunterHandler : MonoBehaviour
         hunterObj.GetComponent<Hunter>().Attack = 10;
         hunterObj.GetComponent<Hunter>().FiringSpeed = 6f;
         hunterObj.GetComponent<Hunter>().Target = automaton;
-        hunterObj.GetComponent<Hunter>().CanRetreat = true;
+        hunterObj.GetComponent<Hunter>().CanFlank = true;
 
         hunterObj.transform.position = spawnPlace;
         hunterObj.transform.rotation = transform.rotation;

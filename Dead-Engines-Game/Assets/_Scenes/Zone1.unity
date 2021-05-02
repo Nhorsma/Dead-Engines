@@ -7576,7 +7576,7 @@ MonoBehaviour:
   resourceHandling: {fileID: 467610735}
   enemyHandler: {fileID: 467610734}
   encampmentHandler: {fileID: 467610733}
-  spawnPool: {fileID: 0}
+  spawnPool: {fileID: 1822839401}
   roomManager: {fileID: 2075244114}
   audioHandler: {fileID: 467610736}
   robotPos: {x: 10, y: 3, z: 8}
