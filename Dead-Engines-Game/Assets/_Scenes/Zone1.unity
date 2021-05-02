@@ -27583,7 +27583,7 @@ MonoBehaviour:
   - tag: small
     prefab: {fileID: 5961106698798059313, guid: 60dc6924f9da7974f84019a57441fa3d,
       type: 3}
-    size: 20
+    size: 50
   - tag: hunterLaz
     prefab: {fileID: 4267937178310715878, guid: dfba40c89d7e6264592f0e1b18da285b,
       type: 3}
@@ -34058,8 +34058,9 @@ MonoBehaviour:
   robotAmbientSource: {fileID: 8015631915230817966}
   audioHandler: {fileID: 467610736}
   spawnPool: {fileID: 1822839401}
-  hunterHandler: {fileID: 0}
-  encampHandler: {fileID: 0}
+  hunterHandler: {fileID: 1822839396}
+  encampHandler: {fileID: 467610733}
+  enemyHandler: {fileID: 467610734}
   autoHealth: 0
   startingAutoHealth: 100
 --- !u!114 &5905536743914566334

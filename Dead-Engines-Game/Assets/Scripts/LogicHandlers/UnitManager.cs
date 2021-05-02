@@ -467,53 +467,59 @@ public class UnitManager : MonoBehaviour
         audioHandler.PlayClip(unit, "smallGun");
 
             StartCoroutine(TrailOff(0.05f, unit.transform.position, unit.GetComponent<Unit>().JobPos.transform.position));
-            if (unit.GetComponent<Unit>().JobPos.tag == "Enemy")
+        if (unit.GetComponent<Unit>().JobPos.tag == "Enemy")
+        {
+            Enemy enemy_target = unit.GetComponent<Unit>().JobPos.GetComponent<Enemy>();
+            if (enemy_target == null || enemy_target.Health <= 0)
             {
-                Enemy enemy_target = unit.GetComponent<Unit>().JobPos.GetComponent<Enemy>();
-                if (enemy_target == null || enemy_target.Health <= 0)
+                ResetJob(unit.GetComponent<Unit>());
+            }
+            else
+            {
+                if (enemy_target.Armored && !unit_data.Piercing)
                 {
-                    ResetJob(unit.GetComponent<Unit>());
+                    //enemy_target.Health -= 1;
+                    enemyHandler.TakeDamage(1, enemy_target);
                 }
                 else
                 {
-                    if(enemy_target.Armored && !unit_data.Piercing)
-                        enemy_target.Health -= 1;
-                    else
-                        enemy_target.Health -= CalculateDamage(unit_data.Attack, enemy_target.Defense);
+                    enemyHandler.TakeDamage(CalculateDamage(unit_data.Attack, enemy_target.Defense),enemy_target);
                 }
+
             }
-            else if (unit.GetComponent<Unit>().JobPos.tag == "Encampment")
-            {
-                Encampment encampmentTarget = unit.GetComponent<Unit>().JobPos.GetComponent<Encampment>();
+        }
+        else if (unit.GetComponent<Unit>().JobPos.tag == "Encampment")
+        {
+            Encampment encampmentTarget = unit.GetComponent<Unit>().JobPos.GetComponent<Encampment>();
             encampmentTarget.Health -= unit_data.Attack;
             encampmentHandler.CheckForTrigger(unit.GetComponent<Unit>().JobPos.GetComponent<Encampment>());
 
-                if (unit.GetComponent<Unit>().JobPos.GetComponent<Encampment>().Health <= unit_data.Attack) // fishy
-                {
-                    gameObject.GetComponent<EncampmentHandler>().BeDestroyed();
-                    ResetJob(unit.GetComponent<Unit>());
-                }
-                else
-                {
-                    gameObject.GetComponent<EncampmentHandler>().BeDestroyed();
-                    unit.GetComponent<Unit>().JobPos.GetComponent<Encampment>().Health -= unit_data.Attack; //fishy
-                }
-            }
-            else if (unit.GetComponent<Unit>().JobPos.tag == "Hunter")
+            if (unit.GetComponent<Unit>().JobPos.GetComponent<Encampment>().Health <= unit_data.Attack) // fishy
             {
-                Hunter hunter_target = unit.GetComponent<Unit>().JobPos.GetComponent<Hunter>();
-                if (hunter_target == null || hunter_target.Health <= 0)
-                {
-                    ResetJob(unit.GetComponent<Unit>());
-                }
-                else
-                {
-                    if (hunter_target.Armored && !unit_data.Piercing)
-                        hunter_target.Health -= 1;
-                    else
-                        hunter_target.Health -= CalculateDamage(unit_data.Attack, hunter_target.Defense);
-                }
+                gameObject.GetComponent<EncampmentHandler>().BeDestroyed();
+                ResetJob(unit.GetComponent<Unit>());
             }
+            else
+            {
+                gameObject.GetComponent<EncampmentHandler>().BeDestroyed();
+                unit.GetComponent<Unit>().JobPos.GetComponent<Encampment>().Health -= unit_data.Attack; //fishy
+            }
+        }
+        else if (unit.GetComponent<Unit>().JobPos.tag == "Hunter")
+        {
+            Hunter hunter_target = unit.GetComponent<Unit>().JobPos.GetComponent<Hunter>();
+            if (hunter_target == null || hunter_target.Health <= 0)
+            {
+                ResetJob(unit.GetComponent<Unit>());
+            }
+            else
+            {
+                if (hunter_target.Armored && !unit_data.Piercing)
+                    hunter_target.Health -= 1;
+                else
+                    hunter_target.Health -= CalculateDamage(unit_data.Attack, hunter_target.Defense);
+            }
+        }
             StartCoroutine(FireCoolDown(unit.GetComponent<Unit>()));
     }
     IEnumerator FireCoolDown(Unit unit_data)
@@ -590,18 +596,6 @@ public class UnitManager : MonoBehaviour
             ResetJob(unit.GetComponent<Unit>());
         }
     }
-
-    /*
-    int GetResourceID(GameObject clickedObj)
-    {
-        for (int i = 0; i < resourceHandling.resourceDeposits.Length; i++)
-        {
-            if (resourceHandling.resourceDeposits[i] == clickedObj)
-                return i;
-        }
-        return -1;
-    }
-    */
 
     void AddMetal()
     {

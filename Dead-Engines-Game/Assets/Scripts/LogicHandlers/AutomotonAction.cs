@@ -28,6 +28,7 @@ public class AutomotonAction : MonoBehaviour
     public SpawningPoolController spawnPool;
     public HunterHandler hunterHandler;
     public EncampmentHandler encampHandler;
+    public EnemyHandler enemyHandler;
 
     KeyCode move_q, move_w, move_e, move_r;
     Collider footCollider, fistCollider;
@@ -237,7 +238,7 @@ public class AutomotonAction : MonoBehaviour
         {
             Vector3 jobPos = jobObject.transform.position;
             if ((jobObject.tag == "Metal" || jobObject.tag == "Electronics" || jobObject.tag == "Encampment") &&
-                Vector3.Distance(automoton.transform.position, jobPos) < 15f + automoton.transform.position.y - jobPos.y)
+                Vector3.Distance(automoton.transform.position, jobPos) < 20f + automoton.transform.position.y - jobPos.y)
             {
                 StartCoroutine(GroundPound());
                 jobObject = null;
@@ -429,7 +430,23 @@ public class AutomotonAction : MonoBehaviour
         for (int i = 0; i < 10; i++)
         {
             yield return new WaitForSeconds(0.15f);
-            StartCoroutine(TrailOff("trails",0.05f, transform.position + new Vector3(0, 50f, 0), shootAt));
+            StartCoroutine(TrailOff("small",0.05f, transform.position + new Vector3(0, 50f, 0), shootAt));
+            if(jobObject!=null)
+            {
+                if(jobObject.tag == "Hunter")
+                {
+                    hunterHandler.DealHunterDamage(jobObject, 5);
+                }
+                else if(jobObject.tag == "Encampment")
+                {
+                    jobObject.GetComponent<Encampment>().Health -= 5;
+                    encampHandler.BeDestroyed();
+                }
+                else if(jobObject.tag == "Enemy")
+                {
+                    enemyHandler.TakeDamage(5,jobObject.GetComponent<Enemy>());
+                }
+            }
         }
     }
 
