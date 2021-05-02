@@ -88,6 +88,7 @@ public class UnitManager : MonoBehaviour
                 Hit().collider.gameObject.tag == "Electronics" ||
                 Hit().collider.gameObject.tag == "Enemy" ||
                 Hit().collider.gameObject.tag == "Encampment" ||
+                Hit().collider.gameObject.tag == "Crater" ||
                 Hit().collider.gameObject.tag == "Hunter")
             {
                 SetJobOfSelected(Hit().collider.gameObject);
@@ -111,6 +112,7 @@ public class UnitManager : MonoBehaviour
             return;
 
         if (clickedObj.tag == "Metal" ||
+            clickedObj.tag == "Crater" ||
             clickedObj.tag == "Electronics")
         {
             int ri = resourceHandling.GetNumber(clickedObj);
@@ -162,7 +164,7 @@ public class UnitManager : MonoBehaviour
                 {
                     Combat(u); //
                 }
-                else if (unit_data.Job.Equals("ExtractionMetal") || unit_data.Job.Equals("ExtractionElectronics"))
+                else if (unit_data.Job.Equals("ExtractionMetal") || unit_data.Job.Equals("ExtractionElectronics") || unit_data.Job.Equals("ExtractionCrater"))
                 {
                     Extraction(u, resourceHandling.GetNumber(unit_data.JobPos), unit_data.Job); //
                 }
@@ -281,6 +283,11 @@ public class UnitManager : MonoBehaviour
             {
                 AddElectronics();
                 Debug.Log("Got electronics");
+            }
+            else if (resource.Equals("ExtractionCrater"))
+            {
+                AddElectronics();
+                Debug.Log("Got Data");
             }
             unit_data.JustDroppedOff = (true);
             TravelTo(unit, unit_data.JobPos.transform.position, false, false);
@@ -612,6 +619,12 @@ public class UnitManager : MonoBehaviour
 		//check for storage space, then do what?
 		ResourceHandling.storageUsed++;
 	}
+    void AddData()
+    {
+        ResourceHandling.data++;
+        audioHandler.PlayClip(robot, "dropOffClop");
+        ResourceHandling.storageUsed++;
+    }
 
     public GameObject BulletTrail(Vector3 start, Vector3 end)
     {
@@ -651,7 +664,7 @@ public class UnitManager : MonoBehaviour
         {
             SetJobCircleColor(unit_data, enemyRed);
         }
-        else if (unit_data.JobPos != null && (unit_data.JobPos.tag == "Metal" || unit_data.JobPos.tag == "Electronics"))
+        else if (unit_data.JobPos != null && (unit_data.JobPos.tag == "Metal" || unit_data.JobPos.tag == "Electronics" || unit_data.JobPos.tag == "Crater"))
         {
             SetJobCircleColor(unit_data, resourceGreen);
         }

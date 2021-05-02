@@ -6,6 +6,8 @@ public class ResourceHandling : MonoBehaviour
 {
     public static int metal;
     public static int electronics;
+    public static int oil;
+    public static int data;
 
 	public static int plate;
 	public static int bolt;
