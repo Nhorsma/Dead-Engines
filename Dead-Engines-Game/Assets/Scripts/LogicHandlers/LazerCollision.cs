@@ -47,13 +47,22 @@ public class LazerCollision : MonoBehaviour
                 hunterHandler.DealHunterDamage(other.gameObject, (int)damage);
                 audioHandler.PlayClipIgnore(other.gameObject, "explosion");
             }
+            if(other.gameObject.tag == "Metal" ||
+            other.gameObject.tag == "Electronics" ||
+            other.gameObject.tag == "Oil")
+        {
+            resourceHandling.resourceData[resourceHandling.GetNumber(other.gameObject)].Quantity = 0;
+            other.gameObject.SetActive(false);
+            SpawnExplosion(other.gameObject);
+        }
     }
-    /*
+
+
     void SpawnExplosion(GameObject obj)
     {
         var expl = (GameObject)Instantiate(Resources.Load("BigExplosionEffect"), new Vector3(obj.transform.position.x, -7, obj.transform.position.z), Quaternion.Euler(90, 0, 0));
         expl.transform.localScale = obj.GetComponent<BoxCollider>().bounds.size*0.8f;
-        StartCoroutine(TrailOff(1.5f, expl));
+        StartCoroutine(TrailOff(2f, expl));
     }
 
     IEnumerator TrailOff(float time, GameObject explosion)
@@ -62,5 +71,4 @@ public class LazerCollision : MonoBehaviour
         yield return new WaitForSeconds(time);
         Destroy(explosion);
     }
-    */
 }

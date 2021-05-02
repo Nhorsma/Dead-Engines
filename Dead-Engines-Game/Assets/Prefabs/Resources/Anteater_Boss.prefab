@@ -368,7 +368,7 @@ NavMeshAgent:
   m_GameObject: {fileID: 963534896745187385}
   m_Enabled: 1
   m_AgentTypeID: 0
-  m_Radius: 13.49
+  m_Radius: 4.1
   m_Speed: 10
   m_Acceleration: 8
   avoidancePriority: 50
@@ -1851,8 +1851,10 @@ GameObject:
   - component: {fileID: 7272708944883846343}
   - component: {fileID: 585062061477865665}
   - component: {fileID: 8448211873142328218}
+  - component: {fileID: 8535160580036711610}
+  - component: {fileID: 6791154255201888065}
   m_Layer: 0
-  m_Name: pasted__pCube2
+  m_Name: Left Foot
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1919,6 +1921,41 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+--- !u!65 &8535160580036711610
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4321267366938115348}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 0
+  serializedVersion: 2
+  m_Size: {x: 6.9662504, y: 3.4863276, z: 2.180944}
+  m_Center: {x: 0.10524535, y: -1.2832392, z: -0.01404183}
+--- !u!114 &6791154255201888065
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4321267366938115348}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a9725c36d0d9e8f4e8de9d09ad56f426, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  resourceHandling: {fileID: 0}
+  encampmentHandler: {fileID: 0}
+  enemyHandler: {fileID: 0}
+  hunterHandler: {fileID: 0}
+  audioHandler: {fileID: 0}
+  automaton: {fileID: 0}
+  spawnBuffer: 5
+  damage: 100
+  bigExplosion: {fileID: 1000011797152326, guid: acf39d9f4addf294d93fa56fa373961b,
+    type: 3}
 --- !u!1 &4609535493440931019
 GameObject:
   m_ObjectHideFlags: 0
@@ -2576,8 +2613,10 @@ GameObject:
   - component: {fileID: 2865106603114750521}
   - component: {fileID: 3832880484898668798}
   - component: {fileID: 8697116898100156396}
+  - component: {fileID: 1716595866256112735}
+  - component: {fileID: 8745978230601930943}
   m_Layer: 0
-  m_Name: pCube2
+  m_Name: Right Foot
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2644,6 +2683,41 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+--- !u!65 &1716595866256112735
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6117844923149404059}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 0
+  serializedVersion: 2
+  m_Size: {x: 6.9662466, y: 3.4863272, z: 2.180944}
+  m_Center: {x: 0.105249204, y: -1.2832359, z: -0.014036081}
+--- !u!114 &8745978230601930943
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6117844923149404059}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a9725c36d0d9e8f4e8de9d09ad56f426, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  resourceHandling: {fileID: 0}
+  encampmentHandler: {fileID: 0}
+  enemyHandler: {fileID: 0}
+  hunterHandler: {fileID: 0}
+  audioHandler: {fileID: 0}
+  automaton: {fileID: 0}
+  spawnBuffer: 5
+  damage: 100
+  bigExplosion: {fileID: 1000011797152326, guid: acf39d9f4addf294d93fa56fa373961b,
+    type: 3}
 --- !u!1 &6129034718609932594
 GameObject:
   m_ObjectHideFlags: 0
