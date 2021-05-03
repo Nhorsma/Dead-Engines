@@ -4,27 +4,28 @@ using UnityEngine;
 
 public class AudioController : MonoBehaviour
 {
-    public AudioSource[] audioSources;
-    public AudioSource cameraSource;
-    public AudioSource encampmentSource;
-    public AudioSource musicSource;
+    AudioSource[] audioSources;
+    AudioSource[] SFXSources;
 
-    public AudioClip ambientMusic;
+    public AudioSource musicSource;
 
     private void Start()
     {
-        audioSources = FindObjectsOfType(typeof(AudioSource)) as AudioSource[];
-        musicSource.clip = ambientMusic;
+        UpdateAudioHandlers();
     }
 
-    public void volumeUI(float vol)
+    public void UpdateAudioHandlers()
     {
-        cameraSource.volume = vol;
+        audioSources = FindObjectsOfType(typeof(AudioSource)) as AudioSource[];       
     }
 
-    public void volumeEncamp(float vol)
+    public void volumeSFX(float vol)
     {
-        encampmentSource.volume = vol;
+        foreach(AudioSource audio in SFXSources)
+        {
+            if(audio.gameObject.tag != "MusicPlayer")
+                audio.volume = vol;
+        }
     }
 
     public void volumeMusic(float vol)

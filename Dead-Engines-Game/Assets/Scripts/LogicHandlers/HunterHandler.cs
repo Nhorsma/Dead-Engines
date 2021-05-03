@@ -333,12 +333,14 @@ public class HunterHandler : MonoBehaviour
             x = Random.Range(-1.2f, 1.2f);
             y = Random.Range(-1.2f, 1.2f);
             z = Random.Range(-1.2f, 1.2f);
-            Quaternion offset = Quaternion.Euler(x, y, z);
+            //Quaternion offset = Quaternion.Euler(x, y, z);
+            Vector3 offset = new Vector3(x, y, z);
             Vector3 dif = (start - end) / 2;
             Quaternion angle = Quaternion.LookRotation(start - end);
 
             trail.transform.position = start - dif;
-            trail.transform.rotation = angle * offset;
+            trail.transform.rotation = angle; //* offset
+            end += offset;
             trail.transform.localScale = new Vector3(0.5f, 0.5f, Vector3.Distance(start, end));
         }
         else

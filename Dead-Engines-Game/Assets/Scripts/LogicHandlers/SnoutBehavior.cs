@@ -17,16 +17,14 @@ public class SnoutBehavior : MonoBehaviour
         var relativePos = pointTo.transform.position - transform.position;
         var forward = transform.right;
         var angle = Vector3.Angle(relativePos, forward)-90;//the -90 is for correcting weird angles, 0 should be infront of it
-        Debug.Log(angle);
         Quaternion newAngle;
 
-        for (int i=0;i<6;i++)
+        for(int i=joints.Length-1;i>=0;i--)
         {
-            newAngle = joints[i].transform.rotation;
-            if (Mathf.Abs(-angle * i / 2) < 30)
-                newAngle = Quaternion.Euler(0, -angle * i / 2, 0);
-
-            joints[i].transform.rotation = newAngle;
+            newAngle = joints[i].transform.localRotation;
+            if (Mathf.Abs(angle) < 90)
+                newAngle = Quaternion.Euler(0, -angle / joints.Length, 0);
+            joints[i].transform.localRotation = newAngle;
         }
     }
 

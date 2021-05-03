@@ -430,7 +430,7 @@ public class AutomotonAction : MonoBehaviour
         for (int i = 0; i < 10; i++)
         {
             yield return new WaitForSeconds(0.15f);
-            StartCoroutine(TrailOff("small",0.05f, transform.position + new Vector3(0, 50f, 0), shootAt));
+            StartCoroutine(TrailOff("unitLaz",0.05f, transform.position + new Vector3(0, 50f, 0), shootAt));
             if(jobObject!=null)
             {
                 if(jobObject.tag == "Hunter")

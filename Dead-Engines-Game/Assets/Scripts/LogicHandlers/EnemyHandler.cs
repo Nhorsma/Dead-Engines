@@ -280,20 +280,20 @@ public class EnemyHandler : MonoBehaviour
         Vector3 dif = (start - end) / 2;
         Quaternion angle = Quaternion.LookRotation(start - end);
 
-        GameObject trail = spawnPool.poolDictionary["small"].Dequeue();
+        GameObject trail = spawnPool.poolDictionary["enemyLaz"].Dequeue();
         trail.transform.position = start - dif;
         trail.transform.rotation = angle * offset;
         trail.SetActive(true);
         //GameObject trail = (GameObject)Instantiate(Resources.Load("BulletTrail"), start - dif, angle * offset);
 
-        trail.transform.localScale = new Vector3(0.05f, 0.05f, Vector3.Distance(start, end));
+        trail.transform.localScale = new Vector3(0.15f, 0.15f, Vector3.Distance(start, end));
         return trail;
     }
     IEnumerator TrailOff(float time, Vector3 start, Vector3 end)
     {
         GameObject t = BulletTrail(start, end);
         yield return new WaitForSeconds(time);
-        spawnPool.poolDictionary["small"].Enqueue(t);
+        spawnPool.poolDictionary["enemyLaz"].Enqueue(t);
         t.SetActive(false);
     }
 

@@ -34,7 +34,7 @@ public class UnitManager : MonoBehaviour
 
     Color enemyRed = new Color32(207, 67, 74, 100);
     Color resourceGreen = new Color32(69, 207, 69, 100);
-    Color selectedYellow = new Color32(255, 255, 0, 100);
+    Color selectedYellow = new Color32(255, 255, 0, 200);
     NavMeshAgent nv;
 
     void Start()
@@ -125,7 +125,7 @@ public class UnitManager : MonoBehaviour
                 SetAnimation(u, "inCombat", false);
                 unit_data.JobPos = (clickedObj); // fishy
                 unit_data.JustDroppedOff = (true);
-
+                SetJobCircleColor(unit_data, selectedYellow);
                 TravelTo(units[unit_data.Id], unit_data.JobPos.transform.position, false, false);
             }
         }
@@ -137,13 +137,13 @@ public class UnitManager : MonoBehaviour
                 ResetJob(unit_data);
                 unit_data.Job = "Combat";
                 SetAnimation(u, "inCombat", true);
-
                 unit_data.JobPos = clickedObj; // fishy
-
+                SetJobCircleColor(unit_data, selectedYellow);
                 TravelTo(units[unit_data.Id], unit_data.JobPos.transform.position, true, true);
             }
         }
         audioHandler.PlayClip(clickedObj, "confirmPing");
+
         Debug.Log("CLicked Thing: " + clickedObj+", " +clickedObj.tag);
     }
 
@@ -636,26 +636,29 @@ public class UnitManager : MonoBehaviour
         Vector3 dif = (start - end) / 2;
         Quaternion angle = Quaternion.LookRotation(start - end);
 
-        GameObject trail = spawnPool.poolDictionary["small"].Dequeue();
+        GameObject trail = spawnPool.poolDictionary["unitLaz"].Dequeue();
         trail.transform.position = start - dif;
         trail.transform.rotation = angle * offset;
         trail.SetActive(true);
 
-        trail.transform.localScale = new Vector3(0.05f, 0.05f, Vector3.Distance(start, end));
+        trail.transform.localScale = new Vector3(0.15f, 0.15f, Vector3.Distance(start, end));
         return trail;
     }
     IEnumerator TrailOff(float time, Vector3 start, Vector3 end)
     {
         GameObject t = BulletTrail(start, end);
         yield return new WaitForSeconds(time);
-        spawnPool.poolDictionary["small"].Enqueue(t);
+        spawnPool.poolDictionary["unitLaz"].Enqueue(t);
         t.SetActive(false);
     }
+
+
     public void SetJobCircleColor(Unit unit_data, Color colorChange)
     {
-        if (unit_data.JobPos != null && unit_data.JobPos.GetComponentInChildren<SpriteRenderer>() != null)
+        if (unit_data!=null && unit_data.JobPos != null && unit_data.JobPos.transform.Find("Ring") != null)
         {
-            unit_data.JobPos.GetComponentInChildren<SpriteRenderer>().color = colorChange;
+            //unit_data.JobPos.GetComponentInChildren<SpriteRenderer>().color = colorChange;
+            unit_data.JobPos.transform.Find("Ring").GetComponent<SpriteRenderer>().color = colorChange;
         }
     }
     public void ResetColor(Unit unit_data)

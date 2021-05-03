@@ -91,8 +91,6 @@ public class SelectItems : MonoBehaviour
                 {
                     UnitManager.selectedUnits.Add(hit.collider.gameObject);
                     SetColor(hit.collider.gameObject, false);
-					//hit.collider.gameObject.GetComponentInChildren<SpriteRenderer>().color = selectedC;
-
 					//UpdateUnitUI(hit.collider.gameObject.GetComponent<Unit>()); ////////////////////////////////////////// ------------------------------------->
 					ReadyClip();
                 }
@@ -352,17 +350,19 @@ public class SelectItems : MonoBehaviour
 
     void SetColor(GameObject gameObj, bool reset)
     {
-        if (gameObj.GetComponentInChildren<SpriteRenderer>()==null)
+        if (gameObj.transform.Find("Ring")==null)
             return;
         
         if(reset)
         {
-            gameObj.GetComponentInChildren<SpriteRenderer>().color = normalC;
+            //gameObj.GetComponentInChildren<SpriteRenderer>().color = normalC;
+            gameObj.transform.Find("Ring").GetComponent<SpriteRenderer>().color = normalC;
             unitManager.ResetColor(gameObj.GetComponent<Unit>());
         }
         else
         {
-            gameObj.GetComponentInChildren<SpriteRenderer>().color = selectedC;
+            //gameObj.GetComponentInChildren<SpriteRenderer>().color = selectedC;
+            gameObj.transform.Find("Ring").GetComponent<SpriteRenderer>().color = selectedC;
             unitManager.SetJobCircleColor(gameObj.GetComponent<Unit>(), selectedYellow);
         }
     }

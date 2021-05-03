@@ -292,7 +292,7 @@ GameObject:
   - component: {fileID: 2068548042285882388}
   - component: {fileID: 3341426740083633060}
   m_Layer: 0
-  m_Name: whiteCircle
+  m_Name: Ring
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
