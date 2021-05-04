@@ -411,16 +411,19 @@ public class UnitManager : MonoBehaviour
 
     public void SetJobFromRoom(GameObject unit, string roomJob)
     {
-        audioHandler.PlayClip(unit, "confirmPing");
-        ShowGun(unit, false, "Both");
-        TravelTo(unit, robotPos, false, false);
+        if (!robot.GetComponent<AutomotonAction>().endPhaseOne || (robot.GetComponent<AutomotonAction>().endPhaseOne && robot.GetComponent<AutomotonAction>().isCrouched))
+        {
+            audioHandler.PlayClip(unit, "confirmPing");
+            ShowGun(unit, false, "Both");
+            TravelTo(unit, robotPos, false, false);
+        }
     }
     public void LeaveRoomJob(GameObject unit)
     {
         PlayReadyClip(unit);
         ResetJob(unit.GetComponent<Unit>());
 
-        if (!robot.GetComponent<AutomotonAction>().endPhaseOne)
+        if (!robot.GetComponent<AutomotonAction>().endPhaseOne || (robot.GetComponent<AutomotonAction>().endPhaseOne && robot.GetComponent<AutomotonAction>().isCrouched))
         {
             unit.transform.position = FindSpotToSpawn(0);
             unit.SetActive(true);
@@ -461,12 +464,16 @@ public class UnitManager : MonoBehaviour
 		}
 		return null;
 	}
+
+
 	void ResetJob(Unit unit_data)
     {
         ResetColor(unit_data);
         unit_data.Job = "none";
         unit_data.JobPos = null;
     }
+
+
     void Fire(GameObject unit)
     {
         Unit unit_data = unit.GetComponent<Unit>();
@@ -536,6 +543,8 @@ public class UnitManager : MonoBehaviour
         yield return new WaitForSeconds(unitFireCooldown + extratime);
         unit_data.JustShot = false;
     }
+
+
     int CalculateDamage(int attack, int defense)
     {
         int dmg = attack - defense;
@@ -577,6 +586,7 @@ public class UnitManager : MonoBehaviour
         yield return new WaitForSeconds(temp_downtime);
         unit.GetComponent<Unit>().CanSpawn = true;
     }
+
     void SetSpawnedUnitInfo(GameObject unit, bool isSpawned)
     {
         if (!isSpawned)

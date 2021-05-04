@@ -151,7 +151,7 @@ public class RoomManager : MonoBehaviour
 	{
 		if (roomType != "infirmary")
 		{
-			if (unitManager.ReturnJoblessUnit() == null)
+			if (unitManager.ReturnJoblessUnit() == null || (autoObj.GetComponent<AutomotonAction>().endPhaseOne && !autoObj.GetComponent<AutomotonAction>().isCrouched))
 			{
 				Debug.Log("No worker available");
 				return;
@@ -254,7 +254,8 @@ public class RoomManager : MonoBehaviour
 		switch (roomType)
 		{
 			case "refinery":
-				if (TabCreation.FindSlot(slot).GetComponent<NewRefinery>().Workers.Count == 0)
+				if (TabCreation.FindSlot(slot).GetComponent<NewRefinery>().Workers.Count == 0
+                    || (autoObj.GetComponent<AutomotonAction>().endPhaseOne && !autoObj.GetComponent<AutomotonAction>().isCrouched))
 				{
 					Debug.Log("No worker to unassign");
 					return;

@@ -17,7 +17,7 @@ public class AutomotonAction : MonoBehaviour
     int layer_mask;
 
     public bool endPhaseOne;
-    public bool isSelected;
+    public bool isSelected, isCrouched;
     public GameObject automoton, fog, footObject, fistObject, headObject, dustCloud, explosion, lazer, crossHair;
     public Vector3 phaseOnePos, phaseTwoPos;
     public Animation climbOut;
@@ -30,7 +30,7 @@ public class AutomotonAction : MonoBehaviour
     public EncampmentHandler encampHandler;
     public EnemyHandler enemyHandler;
 
-    KeyCode move_q, move_w, move_e, move_r;
+    KeyCode move_q, move_w, move_e, move_r, move_f;
     Collider footCollider, fistCollider;
     GameObject jobObject;
 
@@ -40,7 +40,7 @@ public class AutomotonAction : MonoBehaviour
     private void Start()
     {
         endPhaseOne = canAct = false;
-        canMove = canRotate = isWalking = isSelected = false;
+        canMove = canRotate = isWalking = isSelected = isCrouched = false;
         canLazer = canBarrage = false;
 
         phaseTwoPos = phaseOnePos = automoton.transform.position;
@@ -62,6 +62,7 @@ public class AutomotonAction : MonoBehaviour
             RightClick();
             Controls();
         }
+
         CrossHairControl();
         Movement();
     }
@@ -105,7 +106,8 @@ public class AutomotonAction : MonoBehaviour
                 Hit().collider.gameObject.tag == "Electronics" ||
                 Hit().collider.gameObject.tag == "Encampment"   ||
                 Hit().collider.gameObject.tag == "Hunter"   ||
-                Hit().collider.gameObject.tag == "Enemy")
+                Hit().collider.gameObject.tag == "Enemy" ||
+                Hit().collider.gameObject.tag == "Oil")
             {
                 SetJob(Hit().collider.gameObject);
             }
@@ -247,6 +249,11 @@ public class AutomotonAction : MonoBehaviour
             {
                 walkTo = new Vector3(jobPos.x, phaseTwoPos.y, jobPos.z);
             }
+            else if(jobObject.tag == "Oil" && Vector3.Distance(automoton.transform.position, jobPos) < 15f + automoton.transform.position.y - jobPos.y)
+            {
+                StartCoroutine(CrouchDown(7));
+                jobObject = null;
+            }
         }
     }
 
@@ -287,6 +294,7 @@ public class AutomotonAction : MonoBehaviour
         move_w = KeyCode.W;
         move_e = KeyCode.E;
         move_r = KeyCode.R;
+        move_f = KeyCode.F;
     }
 
 
@@ -309,6 +317,13 @@ public class AutomotonAction : MonoBehaviour
             if(canBarrage && Input.GetKeyDown(move_r))
             {
                 StartCoroutine(GunBarrage());
+            }
+            if(Input.GetKeyDown(move_f))
+            {
+                if (!isCrouched)
+                    StartCoroutine(CrouchDown());
+                else
+                    StartCoroutine(CrouchUp());
             }
         }
     }
@@ -348,6 +363,40 @@ public class AutomotonAction : MonoBehaviour
         anim.SetBool("Punch", false);
         fistCollider.enabled = false;
         fistCollider.enabled = false;
+        ContinueAnimations(true);
+        canAct = true;
+    }
+
+    IEnumerator CrouchDown()
+    {
+        canAct = false;
+        isCrouched = true;
+        audioHandler.PlayClip(Camera.main.gameObject, "robotConfirm2");
+        ContinueAnimations(false);
+        anim.SetBool("isCrouching", true);
+        yield return new WaitForSeconds(3f);
+        canAct = true;
+    }
+
+    IEnumerator CrouchDown(float time)
+    {
+        canAct = false;
+        isCrouched = true;
+        audioHandler.PlayClip(Camera.main.gameObject, "robotConfirm2");
+        ContinueAnimations(false);
+        anim.SetBool("isCrouching", true);
+        fistCollider.enabled = true;
+        yield return new WaitForSeconds(time);
+        StartCoroutine(CrouchUp());
+        fistCollider.enabled = false;
+    }
+
+    IEnumerator CrouchUp()
+    {
+        canAct = false;
+        isCrouched = false;
+        anim.SetBool("isCrouching", false);
+        yield return new WaitForSeconds(3f);
         ContinueAnimations(true);
         canAct = true;
     }
