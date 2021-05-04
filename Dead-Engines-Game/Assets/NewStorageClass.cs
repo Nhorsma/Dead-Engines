@@ -28,6 +28,9 @@ public class NewStorageClass : NewRoomClass
 		//delete from the collection???
 		this.Slot = oldSlot;
 		this.Type = "storage";
+		this.Health = 25;
+		this.Defense = 5;
+		this.Other = "moreStorage";
 		Debug.Log("replaced old room");
 	}
 

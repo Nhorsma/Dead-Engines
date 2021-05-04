@@ -30,6 +30,9 @@ public class NewBarracksClass : NewRoomClass
 		//delete from the collection???
 		this.Slot = oldSlot;
 		this.Type = "barracks";
+		this.Health = 0;
+		this.Defense = 15;
+		this.Other = "handFeetBoost";
 		Debug.Log("replaced old room");
 		AddButtonEvents();
 	}

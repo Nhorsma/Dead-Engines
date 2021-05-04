@@ -49,6 +49,9 @@ public class NewStudyClass : NewRoomClass
 		//delete from the collection???
 		this.Slot = oldSlot;
 		this.Type = "study";
+		this.Health = 50;
+		this.Defense = 10;
+		this.Other = "artilleryBoost";
 		Debug.Log("replaced old room");
 		AddButtonEvents();
 	}

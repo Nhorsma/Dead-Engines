@@ -1,11 +1,11 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class LimbSystem : MonoBehaviour
 {
 
-	public List<int> headStats = new List<int>();
 	public List<int> torsoStats = new List<int>();
 	public List<int> leftArmStats = new List<int>();
 	public List<int> rightArmStats = new List<int>();
@@ -14,16 +14,29 @@ public class LimbSystem : MonoBehaviour
 
 	public bool performedUpdate = false;
 
-    void Start()
+	public RoomManager roomManager;
+
+	public Room[] torso = new Room[5];
+	public Room[] leftArm = new Room[3];
+	public Room[] rightArm = new Room[3];
+	public Room[] leftLeg = new Room[3];
+	public Room[] rightLeg = new Room[3];
+
+	public Text torsoHealth, torsoDefense;
+	public Text leftArmHealth, leftArmDefense;
+	public Text rightArmHealth, rightArmDefense;
+	public Text leftLegHealth, leftLegDefense;
+	public Text rightLegHealth, rightLegDefense;
+
+	void Start()
     {
         for (int i = 0; i < 2; i++)
 		{
-			headStats.Add(1);
-			torsoStats.Add(1);
-			leftArmStats.Add(1);
-			rightArmStats.Add(1);
-			leftLegStats.Add(1);
-			rightLegStats.Add(1);
+			torsoStats.Add(0);
+			leftArmStats.Add(0);
+			rightArmStats.Add(0);
+			leftLegStats.Add(0);
+			rightLegStats.Add(0);
 		}
     }
 
@@ -32,7 +45,7 @@ public class LimbSystem : MonoBehaviour
 		if (performedUpdate)
 		{
 			//update relevant UI
-			//recalculate combined numbers
+			UpdateLimbDisplay();
 			Debug.Log("performedUpdate");
 			performedUpdate = false;
 		}
@@ -43,33 +56,28 @@ public class LimbSystem : MonoBehaviour
 		//}
     }
 
-	public int CheckAttack(string part)
+	public void UpdateLimbDisplay()
 	{
-		switch (part)
-		{
-			case "head":
-				return headStats[0];
-			case "torso":
-				return torsoStats[0];
-			case "leftArm":
-				return leftArmStats[0];
-			case "rightArm":
-				return rightArmStats[0];
-			case "leftLeg":
-				return leftLegStats[0];
-			case "rightLeg":
-				return rightLegStats[0];
-			default:
-				return 0;
-		}
+		torsoHealth.text = torsoStats[0].ToString();
+		torsoDefense.text = torsoStats[1].ToString();
+
+		leftArmHealth.text = leftArmStats[0].ToString();
+		leftArmDefense.text = leftArmStats[1].ToString();
+
+		rightArmHealth.text = rightArmStats[0].ToString();
+		rightArmDefense.text = rightArmStats[1].ToString();
+
+		leftLegHealth.text = leftLegStats[0].ToString();
+		leftLegDefense.text = leftLegStats[1].ToString();
+
+		rightLegHealth.text = rightLegStats[0].ToString();
+		rightLegDefense.text = rightLegStats[1].ToString();
 	}
 
 	public int CheckDefense(string part)
 	{
 		switch (part)
 		{
-			case "head":
-				return headStats[1];
 			case "torso":
 				return torsoStats[1];
 			case "leftArm":
@@ -89,47 +97,18 @@ public class LimbSystem : MonoBehaviour
 	{
 		switch (part)
 		{
-			case "head":
-				return headStats[2];
 			case "torso":
-				return torsoStats[2];
+				return torsoStats[0];
 			case "leftArm":
-				return leftArmStats[2];
+				return leftArmStats[0];
 			case "rightArm":
-				return rightArmStats[2];
+				return rightArmStats[0];
 			case "leftLeg":
-				return leftLegStats[2];
+				return leftLegStats[0];
 			case "rightLeg":
-				return rightLegStats[2];
+				return rightLegStats[0];
 			default:
 				return 0;
-		}
-	}
-
-	public void ChangeAttack(string part, int delta)
-	{
-		switch (part)
-		{
-			case "head":
-				headStats[0] += delta;
-				break;
-			case "torso":
-				torsoStats[0] += delta;
-				break;
-			case "leftArm":
-				leftArmStats[0] += delta;
-				break;
-			case "rightArm":
-				rightArmStats[0] += delta;
-				break;
-			case "leftLeg":
-				leftLegStats[0] += delta;
-				break;
-			case "rightLeg":
-				rightLegStats[0] += delta;
-				break;
-			default:
-				break;
 		}
 	}
 
@@ -137,9 +116,6 @@ public class LimbSystem : MonoBehaviour
 	{
 		switch (part)
 		{
-			case "head":
-				headStats[1] += delta;
-				break;
 			case "torso":
 				torsoStats[1] += delta;
 				break;
@@ -164,23 +140,20 @@ public class LimbSystem : MonoBehaviour
 	{
 		switch (part)
 		{
-			case "head":
-				headStats[2] += delta;
-				break;
 			case "torso":
-				torsoStats[2] += delta;
+				torsoStats[0] += delta;
 				break;
 			case "leftArm":
-				leftArmStats[2] += delta;
+				leftArmStats[0] += delta;
 				break;
 			case "rightArm":
-				rightArmStats[2] += delta;
+				rightArmStats[0] += delta;
 				break;
 			case "leftLeg":
-				leftLegStats[2] += delta;
+				leftLegStats[0] += delta;
 				break;
 			case "rightLeg":
-				rightLegStats[2] += delta;
+				rightLegStats[0] += delta;
 				break;
 			default:
 				break;

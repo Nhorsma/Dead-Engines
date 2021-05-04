@@ -29,6 +29,9 @@ public class NewDormitoryClass : NewRoomClass
 		this.Slot = oldSlot;
 		this.Type = "dormitory";
 		this.Level = 1;
+		this.Health = 25;
+		this.Defense = 5;
+		this.Other = "moreHousing";
 		Debug.Log("replaced old room");
 	}
 

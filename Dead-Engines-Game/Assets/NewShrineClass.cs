@@ -49,6 +49,9 @@ public class NewShrineClass : NewRoomClass
 		//delete from the collection???
 		this.Slot = oldSlot;
 		this.Type = "shrine";
+		this.Health = 50;
+		this.Defense = 10;
+		this.Other = "laserBoost";
 		Debug.Log("replaced old room");
 		AddButtonEvents();
 	}

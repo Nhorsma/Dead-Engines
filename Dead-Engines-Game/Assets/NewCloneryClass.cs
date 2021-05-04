@@ -30,6 +30,9 @@ public class NewCloneryClass : NewRoomClass
 		//delete from the collection???
 		this.Slot = oldSlot;
 		this.Type = "clonery";
+		this.Health = -50;
+		this.Defense = 10;
+		this.Other = "none";
 		Debug.Log("replaced old room");
 		AddButtonEvents();
 	}

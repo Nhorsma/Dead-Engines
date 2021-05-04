@@ -22,7 +22,10 @@ public class NewInfirmaryClass : NewRoomClass
 		//delete from the collection???
 		this.Slot = oldSlot;
 		this.Type = "infirmary";
-		nameText.text = "inf";
+		nameText.text = "infirmary";
+		this.Health = 100;
+		this.Defense = -5;
+		this.Other = "none";
 		Debug.Log("replaced old room");
 	}
 

@@ -73,7 +73,7 @@ public class RoomManager : MonoBehaviour
 			ResourceHandling.electronics -= (int)CostData.build_refinery[3];
 			tabCreation.Replace(roomSlotClicked, "refinery");
 			UpdateIcon(roomSlotClicked, type);
-			//CalculateLimbStats();
+			CalculateLimbStats(TabCreation.FindSlot(roomSlotClicked).Health, TabCreation.FindSlot(roomSlotClicked).Defense, roomSlotClicked);
 			PlayClip("wrench");
 		}
 		else if (type == "storage" && ResourceHandling.metal >= CostData.build_storage[2] && ResourceHandling.electronics >= CostData.build_storage[3])
@@ -82,7 +82,7 @@ public class RoomManager : MonoBehaviour
 			ResourceHandling.electronics -= (int)CostData.build_storage[3];
 			tabCreation.Replace(roomSlotClicked, "storage");
 			UpdateIcon(roomSlotClicked, type);
-			//CalculateLimbStats();
+			CalculateLimbStats(TabCreation.FindSlot(roomSlotClicked).Health, TabCreation.FindSlot(roomSlotClicked).Defense, roomSlotClicked);
 			PlayClip("wrench");
 		}
 		else if (type == "shrine" && ResourceHandling.metal >= CostData.build_shrine[2] && ResourceHandling.electronics >= CostData.build_shrine[3])
@@ -91,7 +91,7 @@ public class RoomManager : MonoBehaviour
 			ResourceHandling.electronics -= (int)CostData.build_shrine[3];
 			tabCreation.Replace(roomSlotClicked, "shrine");
 			UpdateIcon(roomSlotClicked, type);
-			//CalculateLimbStats();
+			CalculateLimbStats(TabCreation.FindSlot(roomSlotClicked).Health, TabCreation.FindSlot(roomSlotClicked).Defense, roomSlotClicked);
 			PlayClip("wrench");
 		}
 		else if (type == "study" && ResourceHandling.metal >= CostData.build_study[2] && ResourceHandling.electronics >= CostData.build_study[3])
@@ -100,7 +100,7 @@ public class RoomManager : MonoBehaviour
 			ResourceHandling.electronics -= (int)CostData.build_study[3];
 			tabCreation.Replace(roomSlotClicked, "study");
 			UpdateIcon(roomSlotClicked, type);
-			//CalculateLimbStats();
+			CalculateLimbStats(TabCreation.FindSlot(roomSlotClicked).Health, TabCreation.FindSlot(roomSlotClicked).Defense, roomSlotClicked);
 			PlayClip("wrench");
 		}
 		else if (type == "infirmary" && ResourceHandling.metal >= 10 && ResourceHandling.electronics >= 10)
@@ -109,7 +109,7 @@ public class RoomManager : MonoBehaviour
 			ResourceHandling.electronics -= 10;
 			tabCreation.Replace(roomSlotClicked, "infirmary");
 			UpdateIcon(roomSlotClicked, type);
-			//CalculateLimbStats();
+			CalculateLimbStats(TabCreation.FindSlot(roomSlotClicked).Health, TabCreation.FindSlot(roomSlotClicked).Defense, roomSlotClicked);
 			PlayClip("wrench");
 		}
 		else if (type == "dormitory" && ResourceHandling.metal >= 10 && ResourceHandling.electronics >= 10)
@@ -118,7 +118,8 @@ public class RoomManager : MonoBehaviour
 			ResourceHandling.electronics -= 10;
 			tabCreation.Replace(roomSlotClicked, "dormitory");
 			UpdateIcon(roomSlotClicked, type);
-			//CalculateLimbStats();
+			Debug.Log("HEALTH + DEFENSE :  " + TabCreation.FindSlot(roomSlotClicked).Health + "  " + TabCreation.FindSlot(roomSlotClicked).Defense);
+			CalculateLimbStats(TabCreation.FindSlot(roomSlotClicked).Health, TabCreation.FindSlot(roomSlotClicked).Defense, roomSlotClicked);
 			PlayClip("wrench");
 		}
 		else if (type == "barracks" && ResourceHandling.metal >= 10 && ResourceHandling.electronics >= 10)
@@ -127,7 +128,7 @@ public class RoomManager : MonoBehaviour
 			ResourceHandling.electronics -= 10;
 			tabCreation.Replace(roomSlotClicked, "barracks");
 			UpdateIcon(roomSlotClicked, type);
-			//CalculateLimbStats();
+			CalculateLimbStats(TabCreation.FindSlot(roomSlotClicked).Health, TabCreation.FindSlot(roomSlotClicked).Defense, roomSlotClicked);
 			PlayClip("wrench");
 		}
 		else if (type == "clonery" && ResourceHandling.metal >= 10 && ResourceHandling.electronics >= 10)
@@ -136,7 +137,7 @@ public class RoomManager : MonoBehaviour
 			ResourceHandling.electronics -= 10;
 			tabCreation.Replace(roomSlotClicked, "clonery");
 			UpdateIcon(roomSlotClicked, type);
-			//CalculateLimbStats();
+			CalculateLimbStats(TabCreation.FindSlot(roomSlotClicked).Health, TabCreation.FindSlot(roomSlotClicked).Defense, roomSlotClicked);
 			PlayClip("wrench");
 		}
 		else
@@ -761,11 +762,32 @@ public class RoomManager : MonoBehaviour
 		}
 	}
 
-	public void CalculateLimbStats(int attack, int defense, int health)
+	public void CalculateLimbStats(int health, int defense, int slot)
 	{
+		string limbToUpdate = "";
+
 		//determine limb from slot
-		string limbToUpdate = "limb";
-		limbSystem.ChangeAttack(limbToUpdate, attack);
+		if (slot < 5) //0-4 torso
+		{
+			limbToUpdate = "torso";
+		}
+		else if (slot < 8) //5-7 rightarm
+		{
+			limbToUpdate = "rightArm";
+		}
+		else if (slot < 11) //8-10 leftarm
+		{
+			limbToUpdate = "leftArm";
+		}
+		else if (slot < 14) //11-13 rightleg
+		{
+			limbToUpdate = "rightLeg";
+		}
+		else if (slot < 17) //left leg
+		{
+			limbToUpdate = "leftLeg";
+		}
+
 		limbSystem.ChangeDefense(limbToUpdate, defense);
 		limbSystem.ChangeHealth(limbToUpdate, health);
 		limbSystem.performedUpdate = true;
