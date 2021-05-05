@@ -25,7 +25,7 @@ public class EncampmentHandler : MonoBehaviour
     public GameObject enemy_model1, enemy_model2, enemy_model3;
     Enemy enemy_type_1 = new Enemy(5, 1, 1, 1.5f, false);
     Enemy enemy_type_2 = new Enemy(10, 2, 2, 0.5f, false);
-    Enemy enemy_type_3 = new Enemy(50, 3, 3, 3f, true);
+    Enemy enemy_type_3 = new Enemy(20, 3, 3, 3f, true);
 
     void Start()
     {
@@ -236,7 +236,7 @@ public class EncampmentHandler : MonoBehaviour
         }
         if(resourceHandling.resourcesLeft <= 2)
         {
-            if (encampment_data.Health < startingHealth / 3 || quantity < (resourceHandling.startQuantity / 2))
+            if (encampment_data.Health < startingHealth / 4 || quantity < (resourceHandling.startQuantity / 2))
                 deployment[2] = enemy_model3.name;
             else
                 deployment[2] = enemy_model2.name;

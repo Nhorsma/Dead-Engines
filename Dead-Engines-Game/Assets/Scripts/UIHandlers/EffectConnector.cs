@@ -47,7 +47,7 @@ public class EffectConnector : MonoBehaviour
 			u.GetComponent<NavMeshAgent>().speed = unitSpeed;
 		}
 		unitManager.unitFireCooldown = unitFiringRate;
-		unitManager.downTime -= unitRecoveryTime;
+		//unitManager.downTime -= unitRecoveryTime;
 
 		//study related
 		//CostData.ChangeRoomCost();

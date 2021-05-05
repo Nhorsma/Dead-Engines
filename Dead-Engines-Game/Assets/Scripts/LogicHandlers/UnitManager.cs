@@ -471,6 +471,7 @@ public class UnitManager : MonoBehaviour
         ResetColor(unit_data);
         unit_data.Job = "none";
         unit_data.JobPos = null;
+        ShowGun(unit_data.gameObject, false, "Both");
     }
 
 
@@ -585,6 +586,7 @@ public class UnitManager : MonoBehaviour
 
         yield return new WaitForSeconds(temp_downtime);
 		unit.GetComponent<Unit>().CanSpawn = true; // -------------> here, instantly respawns
+
 	}
 
     void SetSpawnedUnitInfo(GameObject unit, bool isSpawned)
