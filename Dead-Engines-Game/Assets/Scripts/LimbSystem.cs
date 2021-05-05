@@ -14,19 +14,21 @@ public class LimbSystem : MonoBehaviour
 
 	public bool performedUpdate = false;
 
-	public RoomManager roomManager;
-
-	public Room[] torso = new Room[5];
-	public Room[] leftArm = new Room[3];
-	public Room[] rightArm = new Room[3];
-	public Room[] leftLeg = new Room[3];
-	public Room[] rightLeg = new Room[3];
-
 	public Text torsoHealth, torsoDefense;
+	public List<string> torsoStrings = new List<string>();
+	public List<Text> torsoRooms = new List<Text>();
 	public Text leftArmHealth, leftArmDefense;
+	public List<string> leftArmStrings = new List<string>();
+	public List<Text> leftArmRooms = new List<Text>();
 	public Text rightArmHealth, rightArmDefense;
+	public List<string> rightArmStrings = new List<string>();
+	public List<Text> rightArmRooms = new List<Text>();
 	public Text leftLegHealth, leftLegDefense;
+	public List<string> leftLegStrings = new List<string>();
+	public List<Text> leftLegRooms = new List<Text>();
 	public Text rightLegHealth, rightLegDefense;
+	public List<string> rightLegStrings = new List<string>();
+	public List<Text> rightLegRooms = new List<Text>();
 
 	void Start()
     {
@@ -38,7 +40,7 @@ public class LimbSystem : MonoBehaviour
 			leftLegStats.Add(0);
 			rightLegStats.Add(0);
 		}
-    }
+	}
 
     void Update()
     {
@@ -72,6 +74,8 @@ public class LimbSystem : MonoBehaviour
 
 		rightLegHealth.text = rightLegStats[0].ToString();
 		rightLegDefense.text = rightLegStats[1].ToString();
+
+		UpdateLimbRooms();
 	}
 
 	public int CheckDefense(string part)
@@ -157,6 +161,52 @@ public class LimbSystem : MonoBehaviour
 				break;
 			default:
 				break;
+		}
+	}
+
+	public void UpdateLimbRooms()
+	{
+		torsoStrings.Clear();
+		rightArmStrings.Clear();
+		leftArmStrings.Clear();
+		rightLegStrings.Clear();
+		leftLegStrings.Clear();
+
+		for (int i = 0; i < 17; i++)
+		{
+			if (i < 5) //0-4 torso
+			{
+				torsoStrings.Add(TabCreation.FindSlot(i).Type.ToString() + ": " + TabCreation.FindSlot(i).Health.ToString() + " health, " + TabCreation.FindSlot(i).Defense.ToString() + " defense");
+			}
+			else if (i < 8) //5-7 rightarm
+			{
+				rightArmStrings.Add(TabCreation.FindSlot(i).Type.ToString() + ": " + TabCreation.FindSlot(i).Health.ToString() + " health, " + TabCreation.FindSlot(i).Defense.ToString() + " defense");
+			}
+			else if (i < 11) //8-10 leftarm
+			{
+				leftArmStrings.Add(TabCreation.FindSlot(i).Type.ToString() + ": " + TabCreation.FindSlot(i).Health.ToString() + " health, " + TabCreation.FindSlot(i).Defense.ToString() + " defense");
+			}
+			else if (i < 14) //11-13 rightleg
+			{
+				rightLegStrings.Add(TabCreation.FindSlot(i).Type.ToString() + ": " + TabCreation.FindSlot(i).Health.ToString() + " health, " + TabCreation.FindSlot(i).Defense.ToString() + " defense");
+			}
+			else if (i < 17) //left leg
+			{
+				leftLegStrings.Add(TabCreation.FindSlot(i).Type.ToString() + ": " + TabCreation.FindSlot(i).Health.ToString() + " health, " + TabCreation.FindSlot(i).Defense.ToString() + " defense");
+			}
+		}
+
+		for (int i = 0; i < 5; i++)
+		{
+			Debug.Log(torsoStrings[i]);
+			torsoRooms[i].text = torsoStrings[i];
+			if (i < 3)
+			{
+				leftArmRooms[i].text = leftArmStrings[i];
+				rightArmRooms[i].text = rightArmStrings[i];
+				leftLegRooms[i].text = leftLegStrings[i];
+				rightLegRooms[i].text = rightLegStrings[i];
+			}
 		}
 	}
 
