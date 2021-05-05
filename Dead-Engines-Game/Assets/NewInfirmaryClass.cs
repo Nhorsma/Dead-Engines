@@ -9,6 +9,21 @@ public class NewInfirmaryClass : NewRoomClass
 	private int workerCapacity;
 	private List<GameObject> workers;
 
+	public void Start()
+	{
+		WorkerCapacity = 3;
+		Workers = new List<GameObject>();
+	}
+
+	public void Update()
+	{
+		if (Workers.Count > 0)
+		{
+			capacityText.text = "unit : " + Workers[0].GetComponent<Unit>().Id;
+		}
+
+	}
+
 	public NewInfirmaryClass()
 	{
 

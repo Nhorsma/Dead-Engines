@@ -444,7 +444,6 @@ public class RoomManager : MonoBehaviour
 	public void Bedrest(int slot)
 	{
 		Assign("infirmary", slot);
-		
 	}
 
 	// need to clean
@@ -675,13 +674,14 @@ public class RoomManager : MonoBehaviour
 	//rewrite
 	public bool CheckInfirmary()
 	{
-		foreach (NewRoomClass r in TabCreation.rooms) //broken on purpose >:)
+		foreach (NewRoomClass r in TabCreation.rooms)
 		{
 			if (r.Type == "infirmary")
 			{
 				if (r.GetComponent<NewInfirmaryClass>().Workers.Count < r.GetComponent<NewInfirmaryClass>().WorkerCapacity)
 				{
 					Debug.Log("checked infirmary");
+					Assign("infirmary", r.Slot);
 					return true;
 				}
 			}

@@ -584,8 +584,8 @@ public class UnitManager : MonoBehaviour
             temp_downtime = downTime / 2;
 
         yield return new WaitForSeconds(temp_downtime);
-        unit.GetComponent<Unit>().CanSpawn = true;
-    }
+		unit.GetComponent<Unit>().CanSpawn = true; // -------------> here, instantly respawns
+	}
 
     void SetSpawnedUnitInfo(GameObject unit, bool isSpawned)
     {
@@ -596,12 +596,9 @@ public class UnitManager : MonoBehaviour
             SetAnimation(unit, "knockedOut", true);
             audioHandler.PlayClip(unit, "unitDead");
             unit.GetComponent<NavMeshAgent>().enabled = false;
-
-            if (roomManager.CheckInfirmary())
-                unit.GetComponent<Unit>().Job = "infirmary";
-            else
-                unit.GetComponent<Unit>().Job = "dead";
+            unit.GetComponent<Unit>().Job = "dead";
             unit.GetComponent<Unit>().JobPos = null;
+			roomManager.CheckInfirmary();
         }
         else
         {
