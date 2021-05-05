@@ -67,75 +67,76 @@ public class RoomManager : MonoBehaviour
 
 	public void Build(string type)
 	{
-		if (type == "refinery" && ResourceHandling.metal >= CostData.build_refinery[2] && ResourceHandling.electronics >= CostData.build_refinery[3])
+		if (type == "dormitory" && ResourceHandling.metal >= ChangeRoomCost(10) && ResourceHandling.electronics >= ChangeRoomCost(10))
 		{
-			ResourceHandling.metal -= (int)CostData.build_refinery[2];
-			ResourceHandling.electronics -= (int)CostData.build_refinery[3];
-			tabCreation.Replace(roomSlotClicked, "refinery");
-			UpdateIcon(roomSlotClicked, type);
-			CalculateLimbStats(TabCreation.FindSlot(roomSlotClicked).Health, TabCreation.FindSlot(roomSlotClicked).Defense, roomSlotClicked);
-			PlayClip("wrench");
-		}
-		else if (type == "storage" && ResourceHandling.metal >= CostData.build_storage[2] && ResourceHandling.electronics >= CostData.build_storage[3])
-		{
-			ResourceHandling.metal -= (int)CostData.build_storage[2];
-			ResourceHandling.electronics -= (int)CostData.build_storage[3];
-			tabCreation.Replace(roomSlotClicked, "storage");
-			UpdateIcon(roomSlotClicked, type);
-			CalculateLimbStats(TabCreation.FindSlot(roomSlotClicked).Health, TabCreation.FindSlot(roomSlotClicked).Defense, roomSlotClicked);
-			PlayClip("wrench");
-		}
-		else if (type == "shrine" && ResourceHandling.metal >= CostData.build_shrine[2] && ResourceHandling.electronics >= CostData.build_shrine[3])
-		{
-			ResourceHandling.metal -= (int)CostData.build_shrine[2];
-			ResourceHandling.electronics -= (int)CostData.build_shrine[3];
-			tabCreation.Replace(roomSlotClicked, "shrine");
-			UpdateIcon(roomSlotClicked, type);
-			CalculateLimbStats(TabCreation.FindSlot(roomSlotClicked).Health, TabCreation.FindSlot(roomSlotClicked).Defense, roomSlotClicked);
-			PlayClip("wrench");
-		}
-		else if (type == "study" && ResourceHandling.metal >= CostData.build_study[2] && ResourceHandling.electronics >= CostData.build_study[3])
-		{
-			ResourceHandling.metal -= (int)CostData.build_study[2];
-			ResourceHandling.electronics -= (int)CostData.build_study[3];
-			tabCreation.Replace(roomSlotClicked, "study");
-			UpdateIcon(roomSlotClicked, type);
-			CalculateLimbStats(TabCreation.FindSlot(roomSlotClicked).Health, TabCreation.FindSlot(roomSlotClicked).Defense, roomSlotClicked);
-			PlayClip("wrench");
-		}
-		else if (type == "infirmary" && ResourceHandling.metal >= 10 && ResourceHandling.electronics >= 10)
-		{
-			ResourceHandling.metal -= 10;
-			ResourceHandling.electronics -= 10;
-			tabCreation.Replace(roomSlotClicked, "infirmary");
-			UpdateIcon(roomSlotClicked, type);
-			CalculateLimbStats(TabCreation.FindSlot(roomSlotClicked).Health, TabCreation.FindSlot(roomSlotClicked).Defense, roomSlotClicked);
-			PlayClip("wrench");
-		}
-		else if (type == "dormitory" && ResourceHandling.metal >= 10 && ResourceHandling.electronics >= 10)
-		{
-			ResourceHandling.metal -= 10;
-			ResourceHandling.electronics -= 10;
+			ResourceHandling.metal -= (int)ChangeRoomCost(10);
+			ResourceHandling.electronics -= (int)ChangeRoomCost(10);
 			tabCreation.Replace(roomSlotClicked, "dormitory");
 			UpdateIcon(roomSlotClicked, type);
 			Debug.Log("HEALTH + DEFENSE :  " + TabCreation.FindSlot(roomSlotClicked).Health + "  " + TabCreation.FindSlot(roomSlotClicked).Defense);
 			CalculateLimbStats(TabCreation.FindSlot(roomSlotClicked).Health, TabCreation.FindSlot(roomSlotClicked).Defense, roomSlotClicked);
 			PlayClip("wrench");
 		}
-		else if (type == "barracks" && ResourceHandling.metal >= 10 && ResourceHandling.electronics >= 10)
+		else if (type == "storage" && ResourceHandling.metal >= ChangeRoomCost(10) && ResourceHandling.electronics >= ChangeRoomCost(10))
 		{
-			ResourceHandling.metal -= 10;
-			ResourceHandling.electronics -= 10;
+			ResourceHandling.metal -= (int)ChangeRoomCost(10);
+			ResourceHandling.electronics -= (int)ChangeRoomCost(10);
+			tabCreation.Replace(roomSlotClicked, "storage");
+			UpdateIcon(roomSlotClicked, type);
+			CalculateLimbStats(TabCreation.FindSlot(roomSlotClicked).Health, TabCreation.FindSlot(roomSlotClicked).Defense, roomSlotClicked);
+			PlayClip("wrench");
+		}
+		else if (type == "infirmary" && ResourceHandling.metal >= ChangeRoomCost(20) && ResourceHandling.electronics >= ChangeRoomCost(20))
+		{
+			ResourceHandling.metal -= (int)ChangeRoomCost(20);
+			ResourceHandling.electronics -= (int)ChangeRoomCost(20);
+			tabCreation.Replace(roomSlotClicked, "infirmary");
+			UpdateIcon(roomSlotClicked, type);
+			CalculateLimbStats(TabCreation.FindSlot(roomSlotClicked).Health, TabCreation.FindSlot(roomSlotClicked).Defense, roomSlotClicked);
+			PlayClip("wrench");
+		}
+
+		else if (type == "barracks" && ResourceHandling.metal >= ChangeRoomCost(30) && ResourceHandling.electronics >= ChangeRoomCost(10))
+		{
+			ResourceHandling.metal -= (int)ChangeRoomCost(30);
+			ResourceHandling.electronics -= (int)ChangeRoomCost(10);
 			tabCreation.Replace(roomSlotClicked, "barracks");
 			UpdateIcon(roomSlotClicked, type);
 			CalculateLimbStats(TabCreation.FindSlot(roomSlotClicked).Health, TabCreation.FindSlot(roomSlotClicked).Defense, roomSlotClicked);
 			PlayClip("wrench");
 		}
-		else if (type == "clonery" && ResourceHandling.metal >= 10 && ResourceHandling.electronics >= 10)
+		else if (type == "clonery" && ResourceHandling.metal >= ChangeRoomCost(10) && ResourceHandling.electronics >= ChangeRoomCost(30))
 		{
-			ResourceHandling.metal -= 10;
-			ResourceHandling.electronics -= 10;
+			ResourceHandling.metal -= (int)ChangeRoomCost(10);
+			ResourceHandling.electronics -= (int)ChangeRoomCost(30);
 			tabCreation.Replace(roomSlotClicked, "clonery");
+			UpdateIcon(roomSlotClicked, type);
+			CalculateLimbStats(TabCreation.FindSlot(roomSlotClicked).Health, TabCreation.FindSlot(roomSlotClicked).Defense, roomSlotClicked);
+			PlayClip("wrench");
+		}
+		else if (type == "refinery" && ResourceHandling.metal >= ChangeRoomCost(50) && ResourceHandling.electronics >= ChangeRoomCost(50))
+		{
+			ResourceHandling.metal -= (int)ChangeRoomCost(50);
+			ResourceHandling.electronics -= (int)ChangeRoomCost(50);
+			tabCreation.Replace(roomSlotClicked, "refinery");
+			UpdateIcon(roomSlotClicked, type);
+			CalculateLimbStats(TabCreation.FindSlot(roomSlotClicked).Health, TabCreation.FindSlot(roomSlotClicked).Defense, roomSlotClicked);
+			PlayClip("wrench");
+		}
+		else if (type == "shrine" && ResourceHandling.board >= ChangeRoomCost(15) && ResourceHandling.data >= ChangeRoomCost(3))
+		{
+			ResourceHandling.board -= (int)ChangeRoomCost(15);
+			ResourceHandling.data -= (int)ChangeRoomCost(3);
+			tabCreation.Replace(roomSlotClicked, "shrine");
+			UpdateIcon(roomSlotClicked, type);
+			CalculateLimbStats(TabCreation.FindSlot(roomSlotClicked).Health, TabCreation.FindSlot(roomSlotClicked).Defense, roomSlotClicked);
+			PlayClip("wrench");
+		}
+		else if (type == "study" && ResourceHandling.part >= ChangeRoomCost(15) && ResourceHandling.data >= ChangeRoomCost(3))
+		{
+			ResourceHandling.part -= (int)ChangeRoomCost(15);
+			ResourceHandling.data -= (int)ChangeRoomCost(3);
+			tabCreation.Replace(roomSlotClicked, "study");
 			UpdateIcon(roomSlotClicked, type);
 			CalculateLimbStats(TabCreation.FindSlot(roomSlotClicked).Health, TabCreation.FindSlot(roomSlotClicked).Defense, roomSlotClicked);
 			PlayClip("wrench");
@@ -339,7 +340,7 @@ public class RoomManager : MonoBehaviour
 					for (int i = 0; i < howMany; i++)
 					{
 						ResourceHandling.bolt++;
-						ResourceHandling.metal -= (CostData.metal_bolt - efficiencyBonus);
+						ResourceHandling.metal -= (1 - efficiencyBonus);
 					}
 				}
 				else if (what == "plate")
@@ -347,7 +348,7 @@ public class RoomManager : MonoBehaviour
 					for (int i = 0; i < howMany; i++)
 					{
 						ResourceHandling.plate++;
-						ResourceHandling.metal -= (CostData.metal_plate - efficiencyBonus);
+						ResourceHandling.metal -= (2 - efficiencyBonus);
 					}
 				}
 				else if (what == "part")
@@ -355,8 +356,8 @@ public class RoomManager : MonoBehaviour
 					for (int i = 0; i < howMany; i++)
 					{
 						ResourceHandling.part++;
-						ResourceHandling.bolt -= (CostData.special_part[0] - efficiencyBonus);
-						ResourceHandling.plate -= (CostData.special_part[1] - efficiencyBonus);
+						ResourceHandling.bolt -= (2 - efficiencyBonus);
+						ResourceHandling.plate -= (3 - efficiencyBonus);
 					}
 				}
 				else if (what == "wire")
@@ -364,7 +365,7 @@ public class RoomManager : MonoBehaviour
 					for (int i = 0; i < howMany; i++)
 					{
 						ResourceHandling.wire++;
-						ResourceHandling.electronics -= (CostData.electronics_wire - efficiencyBonus);
+						ResourceHandling.electronics -= (1 - efficiencyBonus);
 					}
 				}
 				else if (what == "chip")
@@ -372,7 +373,7 @@ public class RoomManager : MonoBehaviour
 					for (int i = 0; i < howMany; i++)
 					{
 						ResourceHandling.chip++;
-						ResourceHandling.electronics -= (CostData.electronics_chip - efficiencyBonus);
+						ResourceHandling.electronics -= (2 - efficiencyBonus);
 					}
 				}
 				else if (what == "board")
@@ -380,8 +381,8 @@ public class RoomManager : MonoBehaviour
 					for (int i = 0; i < howMany; i++)
 					{
 						ResourceHandling.board++;
-						ResourceHandling.wire -= (CostData.special_board[0] - efficiencyBonus);
-						ResourceHandling.chip -= (CostData.special_board[1] - efficiencyBonus);
+						ResourceHandling.wire -= (3 - efficiencyBonus);
+						ResourceHandling.chip -= (2 - efficiencyBonus);
 					}
 				}
 				PlayClip("hammer");
@@ -559,25 +560,22 @@ public class RoomManager : MonoBehaviour
 		auto.OpenBuildTab();
 	}
 
-	// this will need to get moved to SetupRoom once I make it a functional room
 	public void RepairGenerator()
 	{
-		if (ResourceHandling.metal >= CostData.repair_generator)
+		if (ResourceHandling.metal >= 50)
 		{
-			ResourceHandling.metal -= CostData.repair_generator;
+			ResourceHandling.metal -= 50;
 			generatorRepaired = true;
 			generatorTab.GetComponent<RoomComponents>().build.gameObject.SetActive(false);
-			generatorTab.GetComponent<RoomComponents>().pic.sprite = generatorRepairedSprite;
 		}
 	}
 	public void RepairController()
 	{
-		if (ResourceHandling.electronics >= CostData.repair_controller)
+		if (ResourceHandling.electronics >= 50)
 		{
-			ResourceHandling.electronics -= CostData.repair_controller;
+			ResourceHandling.electronics -= 50;
 			controllerRepaired = true;
 			controllerTab.GetComponent<RoomComponents>().build.gameObject.SetActive(false);
-			controllerTab.GetComponent<RoomComponents>().pic.sprite = controllerRepairedSprite;
 		}
 	}
 
@@ -677,12 +675,13 @@ public class RoomManager : MonoBehaviour
 	//rewrite
 	public bool CheckInfirmary()
 	{
-		foreach (NewShrineClass r in TabCreation.rooms) //broken on purpose >:)
+		foreach (NewRoomClass r in TabCreation.rooms) //broken on purpose >:)
 		{
 			if (r.Type == "infirmary")
 			{
-				if (r.Workers.Count < r.WorkerCapacity)
+				if (r.GetComponent<NewInfirmaryClass>().Workers.Count < r.GetComponent<NewInfirmaryClass>().WorkerCapacity)
 				{
+					Debug.Log("checked infirmary");
 					return true;
 				}
 			}
@@ -707,10 +706,11 @@ public class RoomManager : MonoBehaviour
 
 	public void UseClonery(Unit unit_data)
 	{
-		if (ResourceHandling.part >= 10)
+		if (ResourceHandling.metal >= 10 && ResourceHandling.electronics >= 10)
 		{
 			unitManager.CloneUnit(unit_data);
-			ResourceHandling.part -= 10;
+			ResourceHandling.metal -= 10;
+			ResourceHandling.electronics -= 10;
 		}
 		else
 		{
@@ -791,6 +791,15 @@ public class RoomManager : MonoBehaviour
 		limbSystem.ChangeDefense(limbToUpdate, defense);
 		limbSystem.ChangeHealth(limbToUpdate, health);
 		limbSystem.performedUpdate = true;
+	}
+
+	public float ChangeRoomCost(float num)
+	{
+		//change metal cost, 0 is original cost and 2 is new cost
+		num = num * ((11 - EffectConnector.roomCost) / 10);
+		num = Mathf.RoundToInt(num); // -> is this necessary???
+		//Debug.Log(num.ToString());
+		return num;
 	}
 
 	//this is a debug function for testing only!

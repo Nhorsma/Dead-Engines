@@ -50,7 +50,7 @@ public class EffectConnector : MonoBehaviour
 		unitManager.downTime -= unitRecoveryTime;
 
 		//study related
-		CostData.ChangeRoomCost();
+		//CostData.ChangeRoomCost();
 		//unitManager.unitDamage = unitWeaponDamage;
 
 		//refinery related
