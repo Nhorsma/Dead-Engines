@@ -20084,13 +20084,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1332624965}
-  m_LocalRotation: {x: -0, y: 0.38268343, z: -0, w: 0.92387956}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1515195784}
   m_RootOrder: 2
-  m_LocalEulerAnglesHint: {x: 0, y: 45, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!65 &1332624967
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -20102,8 +20102,8 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 770.0736, y: 219.26566, z: 27.466736}
-  m_Center: {x: 11.946713, y: 109.13283, z: -357.84872}
+  m_Size: {x: 1669.4075, y: 219.26566, z: 39.045166}
+  m_Center: {x: -10.959564, y: 109.13283, z: -797.0864}
 --- !u!65 &1332624968
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -20115,8 +20115,8 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 740.78735, y: 219.26566, z: 38.09668}
-  m_Center: {x: 1.4702443, y: 109.13283, z: 389.8444}
+  m_Size: {x: 1759.7148, y: 219.26566, z: 26.91809}
+  m_Center: {x: -13.374786, y: 109.13283, z: 767.0821}
 --- !u!65 &1332624969
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -20128,8 +20128,8 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 13.206665, y: 219.26566, z: 799.04364}
-  m_Center: {x: 364.87338, y: 109.13283, z: 26.159363}
+  m_Size: {x: 45.403687, y: 219.26566, z: 1703.8491}
+  m_Center: {x: 776.38605, y: 109.13283, z: 20.10556}
 --- !u!65 &1332624970
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -20141,8 +20141,8 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 19.184906, y: 219.26566, z: 891.7965}
-  m_Center: {x: -354.72495, y: 109.13283, z: -39.02631}
+  m_Size: {x: 42.860596, y: 219.26566, z: 1769.7749}
+  m_Center: {x: -780.3241, y: 109.13283, z: 28.158691}
 --- !u!54 &1332624971
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -36058,6 +36058,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 5301347721258817489, guid: f1a897e1ed8213a42a33a61f4cb36d14,
+        type: 3}
+      propertyPath: handler
+      value: 
+      objectReference: {fileID: 1822839396}
     - target: {fileID: 8794550610721127213, guid: f1a897e1ed8213a42a33a61f4cb36d14,
         type: 3}
       propertyPath: m_Name
