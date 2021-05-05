@@ -30,10 +30,11 @@ public class LazerCollision : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         Physics.IgnoreCollision(automaton.GetComponent<BoxCollider>(), automaton.transform.root.GetComponent<BoxCollider>());
+        AutomotonAction autoAction = automaton.GetComponent<AutomotonAction>();
         Debug.Log("lazer to " + other);
             if (other.gameObject.tag == "Enemy")
             {
-                enemyHandler.TakeDamage(100, other.gameObject);
+                enemyHandler.TakeDamage(autoAction.lazerDamage, other.gameObject);
                 audioHandler.PlayClipIgnore(other.gameObject, "explosion");
             }
             if (other.gameObject.tag == "Encampment")
@@ -44,7 +45,7 @@ public class LazerCollision : MonoBehaviour
             }
             if (other.gameObject.tag == "Hunter")
             {
-                hunterHandler.DealHunterDamage(other.gameObject, (int)damage);
+                hunterHandler.DealHunterDamage(other.gameObject, autoAction.lazerDamage);
                 audioHandler.PlayClipIgnore(other.gameObject, "explosion");
             }
             if(other.gameObject.tag == "Metal" ||

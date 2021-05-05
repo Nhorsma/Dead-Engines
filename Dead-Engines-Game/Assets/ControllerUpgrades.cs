@@ -12,6 +12,7 @@ public class ControllerUpgrades : MonoBehaviour
 	public Button wellOiledButton;
 	public Button reinforcedButton;
 	public Button overclockedButton;
+    public AutomotonAction automotonAction;
 
 	//don't be scared to put script references here!
 
@@ -33,7 +34,7 @@ public class ControllerUpgrades : MonoBehaviour
 			ResourceHandling.chip -= 10;
 			ResourceHandling.board -= 5;
 			ResourceHandling.data -= 3;
-			//set laser availability to true
+            automotonAction.canLazer = true;
 		}
 		else
 		{
@@ -48,8 +49,8 @@ public class ControllerUpgrades : MonoBehaviour
 			ResourceHandling.plate -= 10;
 			ResourceHandling.part -= 5;
 			ResourceHandling.data -= 3;
-			//set artillery availability to true
-		}
+            automotonAction.canBarrage = true;
+        }
 		else
 		{
 			Debug.Log("Not enough resources to build artillery");
@@ -63,7 +64,7 @@ public class ControllerUpgrades : MonoBehaviour
 			ResourceHandling.board -= 10;
 			ResourceHandling.part -= 10;
 			ResourceHandling.data -= 5;
-			//set automaton fuel multiplier to .5
+            automotonAction.wellOiled = true;
 		}
 		else
 		{
@@ -77,7 +78,7 @@ public class ControllerUpgrades : MonoBehaviour
 		{
 			ResourceHandling.part -= 20;
 			ResourceHandling.data -= 5;
-			//set automaton def multiplier to 2
+            automotonAction.reinforced = true;
 		}
 		else
 		{
@@ -91,8 +92,10 @@ public class ControllerUpgrades : MonoBehaviour
 		{
 			ResourceHandling.board -= 20;
 			ResourceHandling.data -= 5;
-			//set automaton sprint availability to true
-		}
+            automotonAction.movementSpeed = automotonAction.fastMovementSpeed;
+            automotonAction.anim.speed = automotonAction.fastMovementSpeed/automotonAction.startMovementSpeed;
+            automotonAction.overclocked = true;
+        }
 		else
 		{
 			Debug.Log("Not enough resources to upgrade to Overclocked");

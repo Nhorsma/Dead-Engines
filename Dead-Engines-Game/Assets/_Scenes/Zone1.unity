@@ -7926,6 +7926,7 @@ MonoBehaviour:
   machineGun: {fileID: 8300000, guid: dcdf6c887dd4d7d4da0067176ffdf015, type: 3}
   railGun: {fileID: 8300000, guid: 951b372f5a4c9034da5b380f12d74eec, type: 3}
   smallEchoBoom: {fileID: 8300000, guid: ab79cda6bf716024cbb91a9b4e9fd70d, type: 3}
+  error: {fileID: 8300000, guid: 2987a47a1130cf44abfd1d14c267d138, type: 3}
 --- !u!1 &486244830
 GameObject:
   m_ObjectHideFlags: 0
@@ -20747,6 +20748,7 @@ MonoBehaviour:
   enemyHandler: {fileID: 467610734}
   hunterHandler: {fileID: 1822839396}
   audioHandler: {fileID: 467610736}
+  autoAction: {fileID: 5905536743914566333}
   smallExplosion: {fileID: 3118891267616825007, guid: 33b774b5819a306478e54bab16c216bb,
     type: 3}
   bigExplosion: {fileID: 1000011797152326, guid: acf39d9f4addf294d93fa56fa373961b,
@@ -28968,6 +28970,7 @@ MonoBehaviour:
   enemyHandler: {fileID: 467610734}
   hunterHandler: {fileID: 1822839396}
   audioHandler: {fileID: 467610736}
+  autoAction: {fileID: 5905536743914566333}
   smallExplosion: {fileID: 0}
   bigExplosion: {fileID: 0}
   spawnBuffer: 3
@@ -31500,6 +31503,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dbeb58b4c46868d4794c5892224c6e58, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  refineryCode: 
+  storageCode: 
+  shrineCode: 
+  studyCode: 
+  dormitoryCode: 
+  infirmaryCode: 
+  barracksCode: 
+  cloneryCode: 
+  generatorCode: 
+  controllerCode: 
+  lasersCode: 
+  artilleryCode: 
+  wellOiledCode: 
+  reinforcedCode: 
+  overclockedCode: 
 --- !u!114 &2075244111
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -34687,11 +34705,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   anim: {fileID: 5905536743914566306}
   movementSpeed: 8
+  startMovementSpeed: 8
+  fastMovementSpeed: 12
+  slowMovementSpeed: 5
   startTurnSpeed: 80
   turnSpeed: 80
   endPhaseOne: 0
   isSelected: 0
   isCrouched: 0
+  canAct: 0
+  canLazer: 0
+  canBarrage: 0
+  overclocked: 0
+  wellOiled: 0
+  reinforced: 0
   automoton: {fileID: 5905536743914566335}
   fog: {fileID: 1951739293}
   footObject: {fileID: 1378175255}
@@ -34716,6 +34743,13 @@ MonoBehaviour:
   enemyHandler: {fileID: 467610734}
   autoHealth: 0
   startingAutoHealth: 200
+  lazerDamage: 50
+  gunDamage: 5
+  meleeDamage: 20
+  lazerCost: 10
+  stompCost: 3
+  punchCost: 3
+  barrageCost: 3
 --- !u!114 &5905536743914566334
 MonoBehaviour:
   m_ObjectHideFlags: 0

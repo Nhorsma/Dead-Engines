@@ -7,9 +7,9 @@ public class AutomotonAction : MonoBehaviour
 {
     public Animator anim;
 
-    public float movementSpeed, startTurnSpeed, turnSpeed;
+    public float movementSpeed, startMovementSpeed, fastMovementSpeed, slowMovementSpeed, startTurnSpeed, turnSpeed;
     private float startAngle, target, ny;
-    private bool canMove,canRotate, isWalking, rotLeft, rotRight, canAct, canLazer, canBarrage;
+    private bool canMove, canRotate, isWalking, rotLeft, rotRight, hasEnoughFuel;
     private bool tempmove, temprotate, tempwalking, tempLeft, tempRight;
     Vector3 pos, walkTo;
     NavMeshAgent nv;
@@ -17,7 +17,7 @@ public class AutomotonAction : MonoBehaviour
     int layer_mask;
 
     public bool endPhaseOne;
-    public bool isSelected, isCrouched;
+    public bool isSelected, isCrouched, canAct, canLazer, canBarrage, overclocked, wellOiled, reinforced;
     public GameObject automoton, fog, footObject, fistObject, headObject, dustCloud, explosion, lazer, crossHair;
     public Vector3 phaseOnePos, phaseTwoPos;
     public Animation climbOut;
@@ -29,6 +29,7 @@ public class AutomotonAction : MonoBehaviour
     public HunterHandler hunterHandler;
     public EncampmentHandler encampHandler;
     public EnemyHandler enemyHandler;
+ //   public ControllerUpgrades controlUpgrades;
 
     KeyCode move_q, move_w, move_e, move_r, move_f;
     Collider footCollider, fistCollider;
@@ -36,13 +37,14 @@ public class AutomotonAction : MonoBehaviour
 
     public int autoHealth;
     public int startingAutoHealth;
+    public int lazerDamage, gunDamage, meleeDamage, lazerCost, stompCost, punchCost, barrageCost;
 
     private void Start()
     {
         endPhaseOne = canAct = false;
         canMove = canRotate = isWalking = isSelected = isCrouched = false;
-        canLazer = canBarrage = false;
-
+        canLazer = canBarrage = overclocked = wellOiled = reinforced = false;
+        movementSpeed = startMovementSpeed;
         phaseTwoPos = phaseOnePos = automoton.transform.position;
 
         anim = automoton.GetComponent<Animator>();
@@ -62,9 +64,18 @@ public class AutomotonAction : MonoBehaviour
             RightClick();
             Controls();
         }
-
         CrossHairControl();
         Movement();
+        HaveEnoughOil();
+
+        if (Input.GetKeyDown(KeyCode.Alpha9))
+        {
+            movementSpeed = startMovementSpeed * 10;
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha8))
+        {
+            autoHealth = 1000;
+        }
     }
 
     public void StartAuto()
@@ -78,8 +89,7 @@ public class AutomotonAction : MonoBehaviour
 
         phaseTwoPos = phaseOnePos = automoton.transform.position;
         phaseTwoPos -= new Vector3(13.2f, -41.49f, 12.3f);
-
-        endPhaseOne = canAct = true;
+        endPhaseOne = canAct = hasEnoughFuel = true;
 
         DefaultControls();
         //unitManager.PhaseTwoUnits();
@@ -302,21 +312,34 @@ public class AutomotonAction : MonoBehaviour
     {
         if (canAct)
         {
+            int fuel = ResourceHandling.oil;
             if (Input.GetKeyDown(move_q))
             {
-                StartCoroutine(GroundPound());
+                if (fuel >= stompCost)
+                    StartCoroutine(GroundPound());
+                else
+                    audioHandler.PlayClip(Camera.main.gameObject, "error");
             }
             if (Input.GetKeyDown(move_w))
             {
-                StartCoroutine(Punch());
+                if (fuel >= punchCost)
+                    StartCoroutine(Punch());
+                else
+                    audioHandler.PlayClip(Camera.main.gameObject, "error");
             }
             if (canLazer && Input.GetKeyDown(move_e))
             {
-                StartCoroutine(Laser());
+                if (fuel >= lazerCost)
+                    StartCoroutine(Laser());
+                else
+                    audioHandler.PlayClip(Camera.main.gameObject, "error");
             }
             if(canBarrage && Input.GetKeyDown(move_r))
             {
-                StartCoroutine(GunBarrage());
+                if (fuel >= barrageCost)
+                    StartCoroutine(GunBarrage());
+                else
+                    audioHandler.PlayClip(Camera.main.gameObject, "error");
             }
             if(Input.GetKeyDown(move_f))
             {
@@ -330,6 +353,7 @@ public class AutomotonAction : MonoBehaviour
 
     IEnumerator GroundPound()
     {
+        SpendOil(stompCost);
         canAct = false;
         audioHandler.PlayClip(Camera.main.gameObject, "robotConfirm2");
         ContinueAnimations(false);
@@ -350,6 +374,7 @@ public class AutomotonAction : MonoBehaviour
 
     IEnumerator Punch()
     {
+        SpendOil(punchCost);
         canAct = false;
         audioHandler.PlayClip(Camera.main.gameObject, "robotConfirm2");
         ContinueAnimations(false);
@@ -403,6 +428,7 @@ public class AutomotonAction : MonoBehaviour
 
     IEnumerator Laser()
     {
+        SpendOil(lazerCost);
         canAct = false;
         audioHandler.PlayClip(Camera.main.gameObject, "robotConfirm2");
         ContinueAnimations(false);
@@ -455,6 +481,7 @@ public class AutomotonAction : MonoBehaviour
 
     IEnumerator GunBarrage()
     {
+        SpendOil(barrageCost);
         canAct = false;
         audioHandler.PlayClip(Camera.main.gameObject, "robotConfirm2");
         yield return new WaitForSeconds(0.75f);
@@ -484,7 +511,7 @@ public class AutomotonAction : MonoBehaviour
             {
                 if(jobObject.tag == "Hunter")
                 {
-                    hunterHandler.DealHunterDamage(jobObject, 5);
+                    hunterHandler.DealHunterDamage(jobObject, gunDamage);
                 }
                 else if(jobObject.tag == "Encampment")
                 {
@@ -493,7 +520,7 @@ public class AutomotonAction : MonoBehaviour
                 }
                 else if(jobObject.tag == "Enemy")
                 {
-                    enemyHandler.TakeDamage(5,jobObject.GetComponent<Enemy>());
+                    enemyHandler.TakeDamage(gunDamage,jobObject.GetComponent<Enemy>());
                 }
             }
         }
@@ -577,6 +604,47 @@ public class AutomotonAction : MonoBehaviour
     {
         yield return new WaitForSeconds(time);
         SceneChanger.ReturnToMenu();
+    }
+
+    public void SpendOil(float amount)
+    {
+        if(wellOiled)
+        {
+            amount *= 0.5f;
+        }
+
+        if(ResourceHandling.oil > amount)
+        {
+            ResourceHandling.oil -= (int)amount;
+        }
+        else
+        {
+            ResourceHandling.oil = 0;
+        }
+    }
+
+    public void HaveEnoughOil()
+    {
+        if(ResourceHandling.oil <= 0)
+        {
+            hasEnoughFuel = false;
+            movementSpeed = slowMovementSpeed;
+            anim.speed = slowMovementSpeed / startMovementSpeed;
+        }
+        else
+        {
+            hasEnoughFuel = true;
+            if(overclocked)
+            {
+                movementSpeed = fastMovementSpeed;
+                anim.speed = 1;
+            }
+            else
+            {
+                movementSpeed = startMovementSpeed;
+                anim.speed = fastMovementSpeed / startMovementSpeed;
+            }
+        }
     }
 
     void CrossHairControl()

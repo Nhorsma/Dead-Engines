@@ -9,6 +9,7 @@ public class AutoCombatCollider : MonoBehaviour
     public EnemyHandler enemyHandler;
     public HunterHandler hunterHandler;
     public AudioHandler audioHandler;
+    public AutomotonAction autoAction;
     public GameObject smallExplosion, bigExplosion;
 
     public float spawnBuffer, damage;
@@ -30,19 +31,19 @@ public class AutoCombatCollider : MonoBehaviour
             Debug.Log("stepping on " + other);
             if (other.gameObject.tag == "Enemy")
             {
-                enemyHandler.TakeDamage(100, other.gameObject);
+                enemyHandler.TakeDamage(autoAction.meleeDamage, other.gameObject);
                 canTrigger = false;
             }
             if (other.gameObject.tag == "Encampment")
             {
                 other.gameObject.GetComponent<Encampment>().Health -= 100;
                 encampmentHandler.BeDestroyed();
-                audioHandler.PlayClip(other.gameObject, "explosion");
+                audioHandler.PlayClip(other.gameObject, "pickaxeClang");
                 canTrigger = false;
             }
             if (other.gameObject.tag == "Hunter")
             {
-                hunterHandler.DealHunterDamage(other.gameObject, 100);
+                hunterHandler.DealHunterDamage(other.gameObject, autoAction.meleeDamage);
                 canTrigger = false;
             }
             if (canCollect && other.gameObject.tag == "Metal")
@@ -59,7 +60,7 @@ public class AutoCombatCollider : MonoBehaviour
                     ResourceHandling.metal += left;
                 }
                 canTrigger = false;
-                audioHandler.PlayClip(other.gameObject, "explosion");
+                audioHandler.PlayClip(other.gameObject, "pickaxeClang");
                 hunterHandler.CheckSpawnHunter();
             }
             if (canCollect && other.gameObject.tag == "Electronics")
@@ -76,7 +77,7 @@ public class AutoCombatCollider : MonoBehaviour
                     ResourceHandling.electronics += left;
                 }
                 canTrigger = false;
-                audioHandler.PlayClip(other.gameObject, "explosion");
+                audioHandler.PlayClip(other.gameObject, "pickaxeClang");
                 hunterHandler.CheckSpawnHunter();
             }
             if (canCollect && other.gameObject.tag == "Oil")
@@ -93,7 +94,7 @@ public class AutoCombatCollider : MonoBehaviour
                     ResourceHandling.oil += left;
                 }
                 canTrigger = false;
-                audioHandler.PlayClip(other.gameObject, "explosion");
+                audioHandler.PlayClip(other.gameObject, "pickaxeClang");
                 hunterHandler.CheckSpawnHunter();
             }
         }

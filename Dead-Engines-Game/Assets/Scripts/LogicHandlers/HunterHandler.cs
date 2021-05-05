@@ -31,7 +31,6 @@ public class HunterHandler : MonoBehaviour
         {
             SpawnAnteater();
             isDeployed = true;
-            //SpawnHunter();
         }
     }
 
@@ -44,7 +43,7 @@ public class HunterHandler : MonoBehaviour
 
 	GameObject SetHunter() //fishy
 	{
-		int r = Random.Range(1, 4);
+		int r = Random.Range(1, 3);
 		GameObject hunterObj = h1.gameObject;
 
 		switch (r)
@@ -60,7 +59,7 @@ public class HunterHandler : MonoBehaviour
 			case 2:
 				hunterObj = (GameObject)Instantiate(h2);
 				hunterObj.GetComponent<Hunter>().Speed = 15f;
-				hunterObj.GetComponent<Hunter>().Health = 15;
+				hunterObj.GetComponent<Hunter>().Health = 20;
 				hunterObj.GetComponent<Hunter>().Attack = 1;
                 hunterObj.GetComponent<Hunter>().FiringSpeed = 3.5f;
                 hunterObj.GetComponent<Hunter>().CanFlank = true;
@@ -68,7 +67,7 @@ public class HunterHandler : MonoBehaviour
 			case 3:
 				hunterObj = (GameObject)Instantiate(h2);
 				hunterObj.GetComponent<Hunter>().Speed = 10f;
-				hunterObj.GetComponent<Hunter>().Health = 50;
+				hunterObj.GetComponent<Hunter>().Health = 60;
 				hunterObj.GetComponent<Hunter>().Attack = 3;
                 hunterObj.GetComponent<Hunter>().FiringSpeed = 5f;
                 break;
@@ -105,7 +104,7 @@ public class HunterHandler : MonoBehaviour
         Vector3 spawnPlace = automaton.transform.position + RandomSpawnPoint();
         GameObject hunterObj = Instantiate(anteater);
         hunterObj.GetComponent<Hunter>().Speed = 20f;
-        hunterObj.GetComponent<Hunter>().Health = 10;
+        hunterObj.GetComponent<Hunter>().Health = 100;
         hunterObj.GetComponent<Hunter>().Attack = 10;
         hunterObj.GetComponent<Hunter>().FiringSpeed = 6f;
         hunterObj.GetComponent<Hunter>().Target = automaton;
@@ -117,10 +116,7 @@ public class HunterHandler : MonoBehaviour
         deployedHunters.Add(hunterObj);
         hunterObj.GetComponent<Hunter>().Id = 100;
         hunterObj.GetComponent<NavMeshAgent>().speed = hunterObj.GetComponent<Hunter>().Speed;
-
-        //hunterObj.GetComponent<SnoutBehavior>().pointTo = automaton;
         hunterObj.GetComponent<Hunter>().FireFrom = hunterObj.transform.Find("FireFrom").gameObject;
-        //hunterObj.GetComponent<Hunter>().FireFrom = hunterObj.GetComponent<SnoutBehavior>().GetJointSix();
     }
 
 
