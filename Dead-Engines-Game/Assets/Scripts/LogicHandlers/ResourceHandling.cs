@@ -52,6 +52,12 @@ public class ResourceHandling : MonoBehaviour
 			electronics += 100;
             oil += 100;
             data += 100;
+			chip += 100;
+			part += 100;
+			board += 100;
+			plate += 100;
+			bolt += 100;
+			wire += 100;
 		}
 	}
 

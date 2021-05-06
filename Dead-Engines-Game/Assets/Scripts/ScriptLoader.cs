@@ -1,7 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEditor.AI;
 
 public class ScriptLoader : MonoBehaviour
 {
@@ -66,8 +65,6 @@ public class ScriptLoader : MonoBehaviour
 		Debug.Log("buffer complete");
 
 		spawnRes.TurnOffThinners();
-
-		//NavMeshBuilder.BuildNavMesh();
 
 		Debug.Log("end loading");
 
