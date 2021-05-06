@@ -36138,6 +36138,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Anteater Activator
       objectReference: {fileID: 0}
+    - target: {fileID: 8794550610721127214, guid: f1a897e1ed8213a42a33a61f4cb36d14,
+        type: 3}
+      propertyPath: m_IsTrigger
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8794550610721127215, guid: f1a897e1ed8213a42a33a61f4cb36d14,
         type: 3}
       propertyPath: m_LocalPosition.x

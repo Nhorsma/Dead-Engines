@@ -8,7 +8,7 @@ public class AnteaterSpawner : MonoBehaviour
 
     private void Start()
     {
-        handler = FindObjectOfType<HunterHandler>();
+   //     handler = FindObjectOfType<HunterHandler>();
     }
 
     private void OnCollisionEnter(Collision collision)
