@@ -50,7 +50,7 @@ public class HunterHandler : MonoBehaviour
 		{
 			case 1:
 				hunterObj = (GameObject)Instantiate(h1);
-				hunterObj.GetComponent<Hunter>().Speed = 10f;
+				hunterObj.GetComponent<Hunter>().Speed = 5f;
 				hunterObj.GetComponent<Hunter>().Health = 20;
 				hunterObj.GetComponent<Hunter>().Attack = 2;
                 hunterObj.GetComponent<Hunter>().FiringSpeed = 2f;
@@ -65,7 +65,7 @@ public class HunterHandler : MonoBehaviour
                 hunterObj.GetComponent<Hunter>().CanFlank = true;
 				break;
 			case 3:
-				hunterObj = (GameObject)Instantiate(h2);
+				hunterObj = (GameObject)Instantiate(h3);
 				hunterObj.GetComponent<Hunter>().Speed = 10f;
 				hunterObj.GetComponent<Hunter>().Health = 60;
 				hunterObj.GetComponent<Hunter>().Attack = 3;

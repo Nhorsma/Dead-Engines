@@ -10,6 +10,7 @@ public class RoomManager : MonoBehaviour
 	public UnitManager unitManager;
 	public LimbSystem limbSystem;
 	public TabCreation tabCreation;
+	public UnitInfoCreation unitInfoCreation;
 
 	public GameObject autoObj;
 
@@ -174,6 +175,7 @@ public class RoomManager : MonoBehaviour
 							//setupRoom.roomComponents[slot].capacity.text = TabCreation.FindSlot(slot).GetComponent<NewRefinery>().Workers.Count.ToString() + " / " + TabCreation.FindSlot(slot).GetComponent<NewRefinery>().WorkerCapacity.ToString();
 							Produce();
 							Debug.Log("Assigned [" + unit.GetComponent<Unit>().UnitName + "] to[" + roomType + "][" + slot + "]");
+							unitInfoCreation.UpdateUnitInfo();
 						}
 						else
 						{
@@ -191,6 +193,7 @@ public class RoomManager : MonoBehaviour
 							//setupRoom.roomComponents[slot].capacity.text = TabCreation.FindSlot(slot).GetComponent<NewShrineClass>().Workers.Count.ToString() + " / " + TabCreation.FindSlot(slot).GetComponent<NewShrineClass>().WorkerCapacity.ToString();
 							Worship();
 							Debug.Log("Assigned [" + unit.GetComponent<Unit>().UnitName + "] to[" + roomType + "][" + slot + "]");
+							unitInfoCreation.UpdateUnitInfo();
 						}
 						else
 						{
@@ -207,6 +210,7 @@ public class RoomManager : MonoBehaviour
 							//setupRoom.roomComponents[slot].capacity.text = TabCreation.FindSlot(slot).GetComponent<NewStudyClass>().Workers.Count.ToString() + " / " + TabCreation.FindSlot(slot).GetComponent<NewStudyClass>().WorkerCapacity.ToString();
 							Research();
 							Debug.Log("Assigned [" + unit.GetComponent<Unit>().UnitName + "] to[" + roomType + "][" + slot + "]");
+							unitInfoCreation.UpdateUnitInfo();
 						}
 						else
 						{
@@ -240,6 +244,7 @@ public class RoomManager : MonoBehaviour
 					//setupRoom.roomComponents[slot].capacity.text = TabCreation.FindSlot(slot).GetComponent<NewInfirmaryClass>().Workers.Count.ToString() + " / " + TabCreation.FindSlot(slot).GetComponent<NewInfirmaryClass>().WorkerCapacity.ToString();
 
 					Debug.Log("Assigned [" + unit.GetComponent<Unit>().UnitName + "] to[" + roomType + "][" + slot + "]");
+					unitInfoCreation.UpdateUnitInfo();
 				}
 				else
 				{
@@ -272,6 +277,7 @@ public class RoomManager : MonoBehaviour
 					//setupRoom.roomComponents[slot].capacity.text = TabCreation.FindSlot(slot).GetComponent<NewRefinery>().Workers.Count.ToString() + " / " + TabCreation.FindSlot(slot).GetComponent<NewRefinery>().WorkerCapacity.ToString();
 					Produce();
 					Debug.Log("Unassigned [" + unit.GetComponent<Unit>().UnitName + "] from [" + roomType + "][" + slot + "]");
+					unitInfoCreation.UpdateUnitInfo();
 				}
 				break;
 			case "shrine":
@@ -290,6 +296,7 @@ public class RoomManager : MonoBehaviour
 					//setupRoom.roomComponents[slot].capacity.text = TabCreation.FindSlot(slot).GetComponent<NewShrineClass>().Workers.Count.ToString() + " / " + TabCreation.FindSlot(slot).GetComponent<NewShrineClass>().WorkerCapacity.ToString();
 					Worship();
 					Debug.Log("Unassigned [" + unit.GetComponent<Unit>().UnitName + "] from [" + roomType + "][" + slot + "]");
+					unitInfoCreation.UpdateUnitInfo();
 				}
 				break;
 			case "study":
@@ -308,6 +315,7 @@ public class RoomManager : MonoBehaviour
 					//setupRoom.roomComponents[slot].capacity.text = TabCreation.FindSlot(slot).GetComponent<NewStudyClass>().Workers.Count.ToString() + " / " + TabCreation.FindSlot(slot).GetComponent<NewStudyClass>().WorkerCapacity.ToString();
 					Research();
 					Debug.Log("Unassigned [" + unit.GetComponent<Unit>().UnitName + "] from [" + roomType + "][" + slot + "]");
+					unitInfoCreation.UpdateUnitInfo();
 				}
 				break;
 			default:
@@ -537,9 +545,13 @@ public class RoomManager : MonoBehaviour
 	/// UTILITY FUNCTIONS --------------------------------------------------------------------------------------------------------------------------->
 	/// </summary>
 
-	//rewrite
 	public void OpenRoom(int clickedSlot)
 	{
+		//if (TabCreation.FindSlot(clickedSlot).Type == "barracks")
+		//{
+		//	TabCreation.FindSlot(clickedSlot).GetComponent<NewBarracksClass>().UpdateUnitInfo();
+		//}
+
 		TabCreation.FindSlot(clickedSlot).roomTab.SetActive(true);
 		//Debug.Log("Current tab " + clickedSlot);
 	}
@@ -565,7 +577,7 @@ public class RoomManager : MonoBehaviour
 		{
 			ResourceHandling.metal -= 50;
 			generatorRepaired = true;
-			generatorTab.GetComponent<RoomComponents>().build.gameObject.SetActive(false);
+			generatorTab.GetComponent<NewGeneratorClass>().ToggleText();
 		}
 	}
 	public void RepairController()
@@ -574,7 +586,7 @@ public class RoomManager : MonoBehaviour
 		{
 			ResourceHandling.electronics -= 50;
 			controllerRepaired = true;
-			controllerTab.GetComponent<RoomComponents>().build.gameObject.SetActive(false);
+			controllerTab.GetComponent<NewControllerClass>().ToggleButtons();
 		}
 	}
 

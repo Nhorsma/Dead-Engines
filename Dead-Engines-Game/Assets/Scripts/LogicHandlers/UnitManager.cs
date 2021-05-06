@@ -12,6 +12,7 @@ public class UnitManager : MonoBehaviour
     public SpawningPoolController spawnPool;
     public RoomManager roomManager;
     public AudioHandler audioHandler;
+	public UnitInfoCreation unitInfoCreation;
 
     public Vector3 robotPos;
     public GameObject robot;
@@ -93,7 +94,8 @@ public class UnitManager : MonoBehaviour
             {
                 SetJobOfSelected(Hit().collider.gameObject);
                 selectItems.hudView.UpdateUnit(selectedUnits[0].GetComponent<Unit>());
-            }
+				unitInfoCreation.UpdateUnitInfo();
+			}
             else
             {
                 MoveAllSelected();
@@ -338,6 +340,7 @@ public class UnitManager : MonoBehaviour
 
 			units.Add(wanderingUnit);
 			ShowGun(wanderingUnit, false, "Both");
+			unitInfoCreation.UpdateUnitInfo();
 		}
 		else
 		{
@@ -360,6 +363,7 @@ public class UnitManager : MonoBehaviour
 			units.Add(clonedUnit);
 			ShowGun(clonedUnit, false, "Both");
 			Debug.Log("cloned");
+			unitInfoCreation.UpdateUnitInfo();
 		}
 		else
 		{

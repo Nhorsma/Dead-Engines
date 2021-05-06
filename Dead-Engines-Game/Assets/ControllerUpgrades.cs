@@ -7,11 +7,7 @@ public class ControllerUpgrades : MonoBehaviour
 {
 
 	//need the buttons to be able to turn off/disable
-	public Button buildLasersButton;
-	public Button buildArtilleryButton;
-	public Button wellOiledButton;
-	public Button reinforcedButton;
-	public Button overclockedButton;
+	public NewControllerClass controller;
     public AutomotonAction automotonAction;
 
 	//don't be scared to put script references here!
@@ -35,6 +31,8 @@ public class ControllerUpgrades : MonoBehaviour
 			ResourceHandling.board -= 5;
 			ResourceHandling.data -= 3;
             automotonAction.canLazer = true;
+			controller.lasersButton.gameObject.SetActive(false);
+			controller.laserText.text = "laser installed [E]";
 		}
 		else
 		{
@@ -50,6 +48,8 @@ public class ControllerUpgrades : MonoBehaviour
 			ResourceHandling.part -= 5;
 			ResourceHandling.data -= 3;
             automotonAction.canBarrage = true;
+			controller.artilleryButton.gameObject.SetActive(false);
+			controller.artilleryText.text = "artillery installed [R]";
         }
 		else
 		{
@@ -65,6 +65,8 @@ public class ControllerUpgrades : MonoBehaviour
 			ResourceHandling.part -= 10;
 			ResourceHandling.data -= 5;
             automotonAction.wellOiled = true;
+			controller.wellOiledButton.gameObject.SetActive(false);
+			controller.oiledText.text = "+ fuel efficiency installed";
 		}
 		else
 		{
@@ -79,6 +81,8 @@ public class ControllerUpgrades : MonoBehaviour
 			ResourceHandling.part -= 20;
 			ResourceHandling.data -= 5;
             automotonAction.reinforced = true;
+			controller.reinforcedButton.gameObject.SetActive(false);
+			controller.reinforcedText.text = "+ defense installed";
 		}
 		else
 		{
@@ -95,6 +99,8 @@ public class ControllerUpgrades : MonoBehaviour
             automotonAction.movementSpeed = automotonAction.fastMovementSpeed;
             automotonAction.anim.speed = automotonAction.fastMovementSpeed/automotonAction.startMovementSpeed;
             automotonAction.overclocked = true;
+			controller.overclockedButton.gameObject.SetActive(false);
+			controller.overclockedText.text = "+ speed installed";
         }
 		else
 		{

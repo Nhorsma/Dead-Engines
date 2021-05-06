@@ -11,6 +11,8 @@ public class UnitInfoCreation : MonoBehaviour
 	public GameObject job_prefab;
 	public GameObject scrollContent;
 
+	public List<GameObject> contentToClear = new List<GameObject>();
+
     void Start()
     {
 		UpdateUnitInfo();
@@ -24,6 +26,17 @@ public class UnitInfoCreation : MonoBehaviour
 
 	public void UpdateUnitInfo()
 	{
+		
+		foreach (Transform child in scrollContent.transform) // help from someone else on the unity forum!
+		{
+			contentToClear.Add(child.gameObject);
+		}
+
+		for (int i = 0; i < contentToClear.Count; i++)
+		{
+			Destroy(contentToClear[i]);
+		}
+
 		foreach (GameObject u in unitManager.units)
 		{
 			var id = Instantiate(id_prefab, scrollContent.transform);

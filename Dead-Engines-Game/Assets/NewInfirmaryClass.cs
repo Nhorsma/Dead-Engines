@@ -9,6 +9,8 @@ public class NewInfirmaryClass : NewRoomClass
 	private int workerCapacity;
 	private List<GameObject> workers;
 
+	public Text recoveryText;
+
 	public void Start()
 	{
 		WorkerCapacity = 3;
@@ -17,11 +19,8 @@ public class NewInfirmaryClass : NewRoomClass
 
 	public void Update()
 	{
-		if (Workers.Count > 0)
-		{
-			capacityText.text = "unit : " + Workers[0].GetComponent<Unit>().Id;
-		}
-
+		capacityText.text = Workers.Count + " / " + WorkerCapacity;
+		recoveryText.text = "recovery time: " + EffectConnector.unitRecoveryTime/2 + "s";
 	}
 
 	public NewInfirmaryClass()
@@ -34,7 +33,6 @@ public class NewInfirmaryClass : NewRoomClass
 
 	public void ReplaceOldRoom(int oldSlot)
 	{
-		//delete from the collection???
 		this.Slot = oldSlot;
 		this.Type = "infirmary";
 		nameText.text = "infirmary";
