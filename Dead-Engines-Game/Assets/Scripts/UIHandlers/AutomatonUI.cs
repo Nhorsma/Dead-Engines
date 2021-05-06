@@ -26,6 +26,10 @@ public class AutomatonUI : MonoBehaviour
 	// also handles HUD now
 	public Text hudMetal;
 	public Text hudElectronics;
+	public Text hudStorage;
+	public Text hudHousing;
+	public Text hudOil;
+	public Text hudData;
 
 	public GameObject debugPanel;
 	public static List<Text> debugText= new List<Text>();
@@ -45,6 +49,10 @@ public class AutomatonUI : MonoBehaviour
 		electronicsText.text = " ";
 		hudMetal.text = " ";
 		hudElectronics.text = " ";
+		hudStorage.text = " ";
+		hudHousing.text = " ";
+		hudOil.text = " ";
+		hudData.text = " ";
 
 		debugText.Add(debug1);
 		debugText.Add(debug2);
@@ -212,6 +220,10 @@ public class AutomatonUI : MonoBehaviour
 
 		hudMetal.text = "Metal: " + ResourceHandling.metal;
 		hudElectronics.text = "Electronics: " + ResourceHandling.electronics;
+		hudHousing.text = "Housing: " + unitManager.units.Count + " / " + roomManager.housingMax;
+		hudStorage.text = "Storage: " + ResourceHandling.storageUsed + " / " + roomManager.storageMax;
+		hudOil.text = "Fuel: " + ResourceHandling.oil;
+		hudData.text = "Ancient Data: " + ResourceHandling.data;
 
 		if (RoomManager.generatorRepaired && RoomManager.controllerRepaired)
 		{

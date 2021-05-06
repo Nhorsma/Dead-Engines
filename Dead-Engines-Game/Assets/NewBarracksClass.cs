@@ -11,18 +11,17 @@ public class NewBarracksClass : NewRoomClass
 	public GameObject id_prefab;
 	public GameObject type_prefab;
 
-	RoomManager roomManager;
-	//UnitManager unitManager;
+	public RoomManager roomManager;
+	public UnitManager unitManager;
 
-	//public GameObject scrollContent;
+	public GameObject scrollContent;
 
-	//public string setType = "standard";
-	//public Text indicator;
+	public string setType = "standard";
+	public Text indicator;
 
-	public void Start()
+	public void Update()
 	{
-		roomManager = FindObjectOfType<RoomManager>();
-		//unitManager = FindObjectOfType<UnitManager>();
+		
 	}
 
 	public NewBarracksClass()
@@ -39,51 +38,55 @@ public class NewBarracksClass : NewRoomClass
 		this.Defense = 15;
 		this.Other = "handFeetBoost";
 		Debug.Log("replaced old room");
-		//UpdateUnitInfo();
+		roomManager = FindObjectOfType<RoomManager>();
+		unitManager = FindObjectOfType<UnitManager>();
+		UpdateUnitInfo();
 	}
 
-	//public void UpdateUnitInfo()
-	//{
+	public void UpdateUnitInfo()
+	{
 
-	//	foreach (Transform child in scrollContent.transform) // help from someone else on the unity forum!
-	//	{
-	//		contentToClear.Add(child.gameObject);
-	//	}
+		foreach (Transform child in scrollContent.transform) // help from someone else on the unity forum!
+		{
+			contentToClear.Add(child.gameObject);
+		}
 
-	//	for (int i = 0; i < contentToClear.Count; i++)
-	//	{
-	//		Destroy(contentToClear[i]);
-	//	}
+		for (int i = 0; i < contentToClear.Count; i++)
+		{
+			Destroy(contentToClear[i]);
+		}
 
-	//	Debug.Log(unitManager.units.Count);
-	//	foreach (GameObject u in unitManager.units)
-	//	{
-	//		var id = Instantiate(id_prefab, scrollContent.transform);
-	//		id.GetComponent<Text>().text = u.GetComponent<Unit>().Id.ToString();
-	//		var type = Instantiate(type_prefab, scrollContent.transform);
-	//		type.GetComponent<Text>().text = u.GetComponent<Unit>().Type.ToString();
-	//		var retrain = Instantiate(retrain_prefab, scrollContent.transform);
-	//		retrain.GetComponent<Button>().onClick.AddListener(delegate { roomManager.UseBarracks(u.GetComponent<Unit>(), setType); });
-	//	}
-	//}
+		//Debug.Log(roomManager.efficiency);
+		//Debug.Log(unitManager.units.Count);
 
-	//public void SetType(string type)
-	//{
-	//	if (type == "standard")
-	//	{
-	//		setType = "standard";
-	//		indicator.text = "S";
-	//	}
-	//	else if (type == "turtle")
-	//	{
-	//		setType = "turtle";
-	//		indicator.text = "D";
-	//	}
-	//	else if (type == "ambusher")
-	//	{
-	//		setType = "ambusher";
-	//		indicator.text = "A";
-	//	}
-	//}
+		foreach (GameObject u in unitManager.units)
+		{
+			var id = Instantiate(id_prefab, scrollContent.transform);
+			id.GetComponent<Text>().text = u.GetComponent<Unit>().Id.ToString();
+			var type = Instantiate(type_prefab, scrollContent.transform);
+			type.GetComponent<Text>().text = u.GetComponent<Unit>().Type.ToString();
+			var retrain = Instantiate(retrain_prefab, scrollContent.transform);
+			retrain.GetComponent<Button>().onClick.AddListener(delegate { roomManager.UseBarracks(u.GetComponent<Unit>(), setType, this.Slot); });
+		}
+	}
+
+	public void SetType(string type)
+	{
+		if (type == "standard")
+		{
+			setType = "standard";
+			indicator.text = "current: standard";
+		}
+		else if (type == "defensive")
+		{
+			setType = "defensive";
+			indicator.text = "current: defensive";
+		}
+		else if (type == "ambusher")
+		{
+			setType = "ambusher";
+			indicator.text = "current: ambusher";
+		}
+	}
 
 }

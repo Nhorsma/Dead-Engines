@@ -73,9 +73,20 @@ public class ResourceHandling : MonoBehaviour
 				{
 					resourceObjects.Add(o);
 					resourceData.Add(o.GetComponent<Resource>());
-					resourceData[tick].Quantity = startQuantity;
 					resourceData[tick].Id = tick;
 					resourceData[tick].Type = resourceObjects[tick].tag;
+					if (o.GetComponent<Resource>().Type == "Crater")
+					{
+						resourceData[tick].Quantity = 1;
+					}
+					else if (o.GetComponent<Resource>().Type == "Oil")
+					{
+						resourceData[tick].Quantity = 50;
+					}
+					else
+					{
+						resourceData[tick].Quantity = startQuantity;
+					}
 					tick++;
 				}
 			}

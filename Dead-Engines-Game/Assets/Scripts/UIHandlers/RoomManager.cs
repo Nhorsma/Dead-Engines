@@ -547,10 +547,10 @@ public class RoomManager : MonoBehaviour
 
 	public void OpenRoom(int clickedSlot)
 	{
-		//if (TabCreation.FindSlot(clickedSlot).Type == "barracks")
-		//{
-		//	TabCreation.FindSlot(clickedSlot).GetComponent<NewBarracksClass>().UpdateUnitInfo();
-		//}
+		if (TabCreation.FindSlot(clickedSlot).Type == "barracks")
+		{
+			TabCreation.FindSlot(clickedSlot).GetComponent<NewBarracksClass>().UpdateUnitInfo();
+		}
 
 		TabCreation.FindSlot(clickedSlot).roomTab.SetActive(true);
 		//Debug.Log("Current tab " + clickedSlot);
@@ -708,12 +708,17 @@ public class RoomManager : MonoBehaviour
 	}
 
 	//find unit to change, then change
-	public void UseBarracks(Unit unit_data, string newType)
+	public void UseBarracks(Unit unit_data, string newType, int slot)
 	{
-		Debug.Log(unit_data.Attack + " " + unit_data.Defense);
-		unit_data.ChangeType(newType);
-		Debug.Log(unit_data.Attack + " " + unit_data.Defense);
-		//pay cost
+		if (newType != unit_data.Type)
+		{
+			Debug.Log(unit_data.Attack + " " + unit_data.Defense);
+			unit_data.ChangeType(newType);
+			Debug.Log(unit_data.Attack + " " + unit_data.Defense);
+			TabCreation.FindSlot(slot).GetComponent<NewBarracksClass>().UpdateUnitInfo();
+			ResourceHandling.metal -= 3;
+			ResourceHandling.electronics -= 3;
+		}
 	}
 
 	public void UseClonery(Unit unit_data)

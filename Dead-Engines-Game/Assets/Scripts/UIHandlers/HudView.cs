@@ -54,27 +54,30 @@ public class HudView : MonoBehaviour
 			i.gameObject.SetActive(false);
 		}
 		objectName.text = "Unit Group";
-		objectInfo_1.text = "x";
-		objectInfo_2.text = "x";
-		objectInfo_3.text = "x";
-		objectInfo_4.text = "x";
-		objectInfo_5.text = "x";
-		objectInfo_6.text = "x";
+		objectInfo_1.text = "";
+		objectInfo_2.text = "";
+		objectInfo_3.text = "";
+		objectInfo_4.text = "";
+		objectInfo_5.text = "";
+		objectInfo_6.text = "";
 	}
 
 	public void UpdateEnemy(Enemy enemy)
 	{
 		hudPanel.SetActive(true);
-		foreach (Image i in unitSpecificIcons)
-		{
-			i.gameObject.SetActive(true);
-		}
+
+		unitSpecificIcons[0].gameObject.SetActive(true);
+		unitSpecificIcons[1].gameObject.SetActive(true);
+		unitSpecificIcons[2].gameObject.SetActive(true);
+		unitSpecificIcons[3].gameObject.SetActive(false);
+		unitSpecificIcons[4].gameObject.SetActive(false);
+
 		objectName.text = enemy.name;
 		objectInfo_1.text = enemy.Health.ToString();
 		objectInfo_2.text = enemy.Attack.ToString();
 		objectInfo_3.text = enemy.Defense.ToString();
-		objectInfo_4.text = "x";
-		objectInfo_5.text = "x";
+		objectInfo_4.text = "";
+		objectInfo_5.text = "";
 		objectInfo_6.text = "";
 	}
 
@@ -86,12 +89,13 @@ public class HudView : MonoBehaviour
 			i.gameObject.SetActive(false);
 		}
 		unitSpecificIcons[0].gameObject.SetActive(true);
+
 		objectName.text = "Encampment";
 		objectInfo_1.text = camp.Health.ToString();
-		objectInfo_2.text = "x";
-		objectInfo_3.text = "x";
-		objectInfo_4.text = "x";
-		objectInfo_5.text = "x";
+		objectInfo_2.text = "";
+		objectInfo_3.text = "";
+		objectInfo_4.text = "";
+		objectInfo_5.text = "";
 		objectInfo_6.text = "";
 	}
 
@@ -102,13 +106,15 @@ public class HudView : MonoBehaviour
 		{
 			i.gameObject.SetActive(false);
 		}
+		unitSpecificIcons[0].gameObject.SetActive(true);
+
 		objectName.text = "Resource Deposit";
-		objectInfo_1.text = resource.Type;
-		objectInfo_2.text = resource.Quantity.ToString();
-		objectInfo_3.text = "x";
-		objectInfo_4.text = "x";
-		objectInfo_5.text = "x";
-		objectInfo_6.text = "";
+		objectInfo_1.text = resource.Quantity.ToString();
+		objectInfo_2.text = "";
+		objectInfo_3.text = "";
+		objectInfo_4.text = "";
+		objectInfo_5.text = "";
+		objectInfo_6.text = "Type: " + resource.Type;
 	}
 
 	public void CloseBox()

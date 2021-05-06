@@ -120,7 +120,7 @@ public class Unit : MonoBehaviour
 			Defense = 2;
 			Health = 10;
 		}
-		else if (Type == "turtle")
+		else if (Type == "defensive")
 		{
 			Attack = 1;
 			Defense = 5;
